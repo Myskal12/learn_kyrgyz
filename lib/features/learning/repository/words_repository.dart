@@ -1,0 +1,24 @@
+import '../../../core/services/firebase_service.dart';
+import '../../../data/models/word_model.dart';
+
+class WordsRepository {
+  WordsRepository(this._service);
+
+  final FirebaseService _service;
+  final Map<String, List<WordModel>> _cache = {};
+
+  Future<List<WordModel>> fetchWordsByCategory(String categoryId) async {
+    final words = await _service.fetchWordsByCategory(categoryId);
+    _cache[categoryId] = words;
+    return words;
+  }
+
+  List<WordModel> getCachedWords(String categoryId) {
+    if (_cache.containsKey(categoryId)) {
+      return _cache[categoryId]!;
+    }
+    return _service.getCachedWords(categoryId);
+  }
+
+  List<WordModel> get allWords => _service.allWords;
+}
