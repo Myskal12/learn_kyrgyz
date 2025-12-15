@@ -1,65 +1,140 @@
-# Firebase Integration Guide (Future Work)
+# Firebase Guide (Learn Kyrgyz)
 
-The current build intentionally runs **offline** and ships with mocked services.  
-When you are ready to reconnect Firebase, follow the steps below.
+This app uses Firebase for authentication, vocabulary content, quizzes, and synced progress:
 
-## 1. Enable packages
+- `firebase_core`
+- `firebase_auth`
+- `cloud_firestore`
+- `google_sign_in`
 
-1. In `pubspec.yaml`, uncomment the Firebase dependencies ( `firebase_core`, `firebase_auth`, `cloud_firestore` ).
-2. Run `flutter pub get`.
+The Firestore schema below matches the JSON formats used in `tools/firestore` (words / sentences / quiz).
 
-## 2. Create Firebase projects
+## 1) FlutterFire setup
 
-1. Visit [console.firebase.google.com](https://console.firebase.google.com) and create a new project (e.g., `learn-kyrgyz`).
-2. Add Android and/or iOS apps:
-   - Android: use your package id (e.g., `com.example.learnkyrgyz`). Download the generated `google-services.json` and place it under `android/app/`.
-   - iOS: use your bundle id, download `GoogleService-Info.plist` and add it to `ios/Runner/`.
+1. Generate `lib/firebase_options.dart`:
+   - `flutterfire configure --project <your-project-id>`
+2. Android:
+   - Keep `android/app/google-services.json` in place.
+   - Register SHA-1/SHA-256 in Firebase Console (Project settings → Android app) for Google Sign-In.
+3. iOS:
+   - Add `ios/Runner/GoogleService-Info.plist` and run `pod install` after dependency changes.
 
-## 3. Configure FlutterFire
+## 2) Enable Firebase products
 
-1. Install the CLI once: `dart pub global activate flutterfire_cli`.
-2. From the project root, run `flutterfire configure` and select the Firebase project + platforms.  
-   This command generates `firebase_options.dart` with API keys for each platform.
-3. Import and initialize in `lib/main.dart`:
+- Authentication → Sign-in method: enable **Email/Password** and **Google**
+- Firestore Database: create a database in **Native mode**
 
-```dart
-import 'firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
+## 3) Firestore collections
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(App());
+### `words` (vocabulary)
+
+Recommended: use a stable document id (e.g., `water`, `hello`) so the app can track progress per word.
+
+Fields:
+
+- `en` (string, required) — English word
+- `ky` (string, required) — Kyrgyz translation
+- `transcription_en` (string, optional)
+- `transcription_ky` (string, optional)
+- `level` (number, optional, default 1)
+- `category` (string, required) — used to group words into lessons
+
+Example:
+
+```json
+{
+  "id": "water",
+  "en": "water",
+  "ky": "суу",
+  "transcription_en": "[ˈwɔːtər]",
+  "transcription_ky": "[суу]",
+  "level": 1,
+  "category": "basic"
 }
 ```
 
-## 4. Wire services
+### `sentences` (example sentences)
 
-* **Authentication**  
-  - Replace the mock `AuthRepository` methods with calls to `FirebaseAuth.instance.signInWithEmailAndPassword` / `createUserWithEmailAndPassword`.
-  - Persist the logged-in user id and feed it to `ProgressProvider` for per-user stats.
+Fields:
 
-* **Firestore data**  
-  - Move the mock `FirebaseService` data into Firestore collections (e.g., `categories`, `words`, `progress`).
-  - Update `fetchCategories()` and `fetchWordsByCategory()` to read snapshots from Firestore and cache them locally for offline use.
+- `en` (string, required)
+- `ky` (string, required)
+- `highlight` (string, optional) — the highlighted word/phrase (for UI emphasis)
+- `word_en` (string, optional) — linked vocabulary item (English)
+- `word_ky` (string, optional) — linked vocabulary item (Kyrgyz)
+- `wordId` (string, optional) — linked vocabulary document id (recommended)
+- `level` (number, optional, default 1)
+- `category` (string, required)
 
-* **User progress**  
-  - Instead of storing JSON in `SharedPreferences`, write documents under `users/{uid}/progress`.
-  - Keep offline caching with `LocalStorageService` as a fallback or for guest mode.
+Example:
 
-## 5. Android + iOS build tweaks
+```json
+{
+  "en": "This is water",
+  "ky": "Бул суу",
+  "highlight": "water",
+  "word_en": "water",
+  "word_ky": "суу",
+  "level": 1,
+  "category": "basic"
+}
+```
 
-* Android:
-  - Ensure `android/build.gradle` and `android/app/build.gradle` still apply the `com.google.gms.google-services` plugin (already set in the template).
-  - Confirm `minSdkVersion` meets the requirements of the latest Firebase SDKs (usually 21+).
+### `quiz` (multiple-choice quizzes)
 
-* iOS:
-  - Run `pod install` inside the `ios` directory after enabling Firebase packages.
+Fields:
 
-## 6. Testing
+- `type` (string, required) — currently the app supports `choose_translation`
+- `question` (string, required) — prompt (usually English)
+- `correct` (string, required) — correct answer (usually Kyrgyz)
+- `options` (array of strings, required) — must include `correct`
+- `level` (number, optional, default 1)
+- `category` (string, required)
+- `wordId` (string, optional) — linked vocabulary document id (recommended)
 
-* Use `flutterfire configure --project=<project-id>` to target staging/production.
-* Run `flutter run` on each platform and monitor the logs for `Firebase`, `Auth`, and `Firestore` errors.
-* Consider seeding Firestore with the word/category collections using the Firebase console or automated scripts before launching.
+Example:
 
-> **Note**: Keep the offline mocks handy. You can wrap Firebase calls in repositories and inject either the mock service or the live service depending on build flavor or a simple toggle.
+```json
+{
+  "type": "choose_translation",
+  "question": "water",
+  "correct": "суу",
+  "options": ["суу", "жетимиш", "же", "эртең"],
+  "level": 1,
+  "category": "basic"
+}
+```
+
+### `users` (profile + leaderboard)
+
+Document id: `users/<uid>`
+
+- `nickname` (string, optional)
+- `avatar` (string, optional)
+- `totalMastered` (number, optional)
+- `totalSessions` (number, optional)
+- `accuracy` (number, optional)
+
+### `userProgress` (synced progress)
+
+Document id: `userProgress/<uid>`
+
+- `correctByWordId` (map<string, number>)
+- `seenByWordId` (map<string, number>)
+- `streakDays` (number)
+- `lastSessionAt` (timestamp)
+- `updatedAt` (timestamp)
+
+## 4) Bulk upload (recommended)
+
+Use the helper scripts in `tools/firestore` to generate and upload large datasets:
+
+- `tools/firestore/README.md`
+- `tools/firestore/generate_collections.js`
+- `tools/firestore/upload.js`
+
+## 5) Troubleshooting
+
+- Empty UI: confirm collection names match exactly (`words`, `sentences`, `quiz`).
+- Google Sign-In fails on Android: ensure SHA-1/SHA-256 are added in Firebase Console and the device has Google Play Services.
+- Permission denied: relax Firestore rules for development (at least allow reads for your content collections) and tighten for production.

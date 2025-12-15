@@ -8,10 +8,26 @@ class StudyPlanScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tasks = [
-      _StudyTask(title: 'Карточкаларды кайталоо', description: 'Күнүнө 10 жаңы сөз карап чык.', duration: '10 мүнөт'),
-      _StudyTask(title: 'Тыңдоо', description: 'Үн жазмаларды угуп, туура айтууга аракеттен.', duration: '5 мүнөт'),
-      _StudyTask(title: 'Жазуу', description: 'Үч сүйлөм кыргызча жаз.', duration: '7 мүнөт'),
-      _StudyTask(title: 'Квиз', description: 'Бир тез тест өт.', duration: '5 мүнөт'),
+      _StudyTask(
+        title: 'Карточкаларды кайталоо',
+        description: 'Күнүнө 10 жаңы сөздү кайталаңыз.',
+        duration: '10 мүнөт',
+      ),
+      _StudyTask(
+        title: 'Жазуу',
+        description: 'Жаңы сөздөр менен 2-3 сүйлөм түзүңүз.',
+        duration: '5 мүнөт',
+      ),
+      _StudyTask(
+        title: 'Угуу',
+        description: 'Аудио угуп, айтылышын кайталаңыз.',
+        duration: '7 мүнөт',
+      ),
+      _StudyTask(
+        title: 'Квиз',
+        description: 'Кыска квиз менен өзүңүздү текшериңиз.',
+        duration: '5 мүнөт',
+      ),
     ];
 
     return Scaffold(
@@ -21,7 +37,9 @@ class StudyPlanScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final task = tasks[index];
           return Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+            ),
             child: ListTile(
               title: Text(task.title, style: AppTextStyles.title),
               subtitle: Text(task.description),
@@ -37,7 +55,11 @@ class StudyPlanScreen extends StatelessWidget {
 }
 
 class _StudyTask {
-  const _StudyTask({required this.title, required this.description, required this.duration});
+  const _StudyTask({
+    required this.title,
+    required this.description,
+    required this.duration,
+  });
   final String title;
   final String description;
   final String duration;

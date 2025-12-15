@@ -9,7 +9,9 @@ import '../../profile/providers/progress_provider.dart';
 import '../providers/categories_provider.dart';
 
 class CategoriesScreen extends StatefulWidget {
-  const CategoriesScreen({super.key});
+  const CategoriesScreen({super.key, this.showAppBar = true});
+
+  final bool showAppBar;
 
   @override
   State<CategoriesScreen> createState() => _CategoriesScreenState();
@@ -27,177 +29,165 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     final wordsRepo = context.read<WordsRepository>();
-    return Scaffold(
-      body: SafeArea(
+    final header = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('1-деңгээл', style: AppTextStyles.caption),
+        const SizedBox(height: 4),
+        Text(
+          'Негизги сөздөр жана темалар',
+          style: AppTextStyles.heading.copyWith(fontSize: 24),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Сабакты тандап, карточкаларды жана тапшырмаларды улантыңыз.',
+          style: AppTextStyles.body.copyWith(color: AppColors.muted),
+        ),
+      ],
+    );
+
+    final content = Container(
+      color: AppColors.background,
+      child: SafeArea(
         child: Consumer2<CategoriesProvider, ProgressProvider>(
           builder: (context, categories, progress, _) {
+            if (categories.categories.isEmpty && categories.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
             return RefreshIndicator(
-              onRefresh: categories.load,
-              child: CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    floating: true,
-                    title: Text('Категориялар', style: AppTextStyles.title),
-                    actions: [
-                      IconButton(
-                        icon: const Icon(Icons.person),
-                        onPressed: () => context.push('/profile'),
-                      ),
-                    ],
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      child: Text(
-                        'Ар бир темадагы сөздөрдү бүтүрүп, жетишкендигиңди байкап тур!',
-                        style: AppTextStyles.body.copyWith(color: AppColors.muted),
-                      ),
-                    ),
-                  ),
-                  if (categories.isLoading)
-                    const SliverFillRemaining(
-                      child: Center(child: CircularProgressIndicator()),
-                    )
-                  else
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      sliver: SliverGrid(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: MediaQuery.of(context).size.width > 700 ? 3 : 2,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                          childAspectRatio: .9,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final category = categories.categories[index];
-                            final words = wordsRepo.getCachedWords(category.id);
-                            final mastery = progress.completionForCategory(words);
-                            final exposure = progress.exposureForCategory(words);
-                            return _CategoryCard(
-                              title: category.title,
-                              description: category.description,
-                              progress: mastery,
-                              exposure: exposure,
-                              wordsCount: category.wordsCount,
-                              onTap: () => context.push('/flashcards/${category.id}'),
-                              onQuiz: () => context.push('/quiz/${category.id}'),
-                            );
-                          },
-                          childCount: categories.categories.length,
-                        ),
-                      ),
-                    ),
-                ],
+              onRefresh: () => categories.load(force: true),
+              child: ListView.separated(
+                padding: const EdgeInsets.all(20),
+                itemCount: categories.categories.length + 1,
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [header, const SizedBox(height: 16)],
+                    );
+                  }
+                  final lessonIndex = index - 1;
+                  final category = categories.categories[lessonIndex];
+                  final words = wordsRepo.getCachedWords(category.id);
+                  final mastery = progress.completionForCategory(words);
+                  final unlockThreshold = lessonIndex * 5;
+                  final locked =
+                      lessonIndex > 0 &&
+                      progress.totalWordsMastered < unlockThreshold;
+                  final completed = mastery >= 0.9;
+                  return _LessonCard(
+                    index: lessonIndex + 1,
+                    title: category.title,
+                    subtitle: category.description,
+                    locked: locked,
+                    completed: completed,
+                    onTap: locked
+                        ? null
+                        : () => context.push('/flashcards/${category.id}'),
+                  );
+                },
               ),
             );
           },
         ),
       ),
     );
+
+    if (widget.showAppBar) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Уроктор')),
+        body: content,
+      );
+    }
+
+    return content;
   }
 }
 
-class _CategoryCard extends StatelessWidget {
-  const _CategoryCard({
+class _LessonCard extends StatelessWidget {
+  const _LessonCard({
+    required this.index,
     required this.title,
-    required this.description,
-    required this.progress,
-    required this.exposure,
-    required this.wordsCount,
-    required this.onTap,
-    required this.onQuiz,
+    required this.subtitle,
+    this.locked = false,
+    this.completed = false,
+    this.onTap,
   });
 
+  final int index;
   final String title;
-  final String description;
-  final double progress;
-  final double exposure;
-  final int wordsCount;
-  final VoidCallback onTap;
-  final VoidCallback onQuiz;
+  final String subtitle;
+  final bool locked;
+  final bool completed;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(24),
-      child: InkWell(
+    final statusIcon = locked
+        ? Icons.lock_outline
+        : completed
+        ? Icons.check_circle
+        : Icons.play_arrow_rounded;
+    final statusColor = locked
+        ? AppColors.muted
+        : completed
+        ? AppColors.success
+        : AppColors.primary;
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 300),
+      opacity: locked ? 0.6 : 1,
+      child: Material(
+        color: AppColors.accent.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(24),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                backgroundColor: AppColors.primary.withValues(alpha: 0.08),
-                child: Text(title.isNotEmpty ? title[0] : '?', style: AppTextStyles.title),
-              ),
-              const SizedBox(height: 12),
-              Text(title, style: AppTextStyles.title),
-              const SizedBox(height: 4),
-              Text(description, maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.muted),
-              const Spacer(),
-              Text('$wordsCount сөз', style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600)),
-              const SizedBox(height: 6),
-              _ProgressLabel(label: 'Даяр', percent: progress),
-              _ProgressLabel(label: 'Көргөн', percent: exposure, color: AppColors.warning),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: onTap,
-                      child: const Text('Карточка'),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(24),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: Colors.white,
+                  foregroundColor: AppColors.primary,
+                  child: Text(
+                    index.toString().padLeft(2, '0'),
+                    style: AppTextStyles.title.copyWith(
+                      color: AppColors.primary,
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    onPressed: onQuiz,
-                    icon: const Icon(Icons.quiz),
-                    tooltip: 'Квиз',
-                  )
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: AppTextStyles.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: AppTextStyles.body.copyWith(
+                          color: AppColors.muted,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Icon(statusIcon, color: statusColor),
+              ],
+            ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class _ProgressLabel extends StatelessWidget {
-  const _ProgressLabel({
-    required this.label,
-    required this.percent,
-    this.color = AppColors.accent,
-  });
-
-  final String label;
-  final double percent;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: AppTextStyles.muted),
-        const SizedBox(height: 4),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: LinearProgressIndicator(
-            minHeight: 6,
-            value: percent,
-            backgroundColor: AppColors.bg,
-            valueColor: AlwaysStoppedAnimation(color),
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text('${(percent * 100).round()}%', style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600)),
-      ],
     );
   }
 }

@@ -1,3 +1,3 @@
 class Constants {
-static const appName = 'English from Kyrgyz';
+  static const appName = 'English from Kyrgyz';
 }

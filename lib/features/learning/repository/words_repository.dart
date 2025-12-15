@@ -21,4 +21,21 @@ class WordsRepository {
   }
 
   List<WordModel> get allWords => _service.allWords;
+
+  WordModel? findByEnglish(String english) {
+    final lower = english.toLowerCase();
+    for (final word in allWords) {
+      if (word.english.toLowerCase() == lower) {
+        return word;
+      }
+    }
+    return null;
+  }
+
+  WordModel? findById(String id) {
+    for (final word in allWords) {
+      if (word.id == id) return word;
+    }
+    return null;
+  }
 }

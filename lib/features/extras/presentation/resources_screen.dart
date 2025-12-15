@@ -9,18 +9,19 @@ class ResourcesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final resources = [
       _ResourceCard(
-        title: 'Кырг. сөздүк',
-        description: 'Кыргызча-англисче онлайн сөздүктө сөздөрдү изде.',
+        title: 'Онлайн сөздүк',
+        description: 'Киргизче-англисче сөздөрдү табуу үчүн ишенимдүү ресурс.',
         url: 'https://sozdik.example',
       ),
       _ResourceCard(
-        title: 'Ырлар плейлист',
-        description: 'Кыргыз ырлары аркылуу тилди угуп үйрөн.',
+        title: 'Подкасттар',
+        description:
+            'Кулакка жагымдуу аудио эпизоддор менен угуу көндүмүн бекемдеңиз.',
         url: 'https://music.example',
       ),
       _ResourceCard(
         title: 'Видео сабактар',
-        description: 'YouTube каналында жандуу сүйлөшүүлөр.',
+        description: 'YouTube плейлисти: темага жараша кыска видеолор.',
         url: 'https://video.example',
       ),
     ];
@@ -39,9 +40,9 @@ class ResourcesScreen extends StatelessWidget {
               subtitle: Text(item.description),
               trailing: const Icon(Icons.open_in_new),
               onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('URL: ${item.url}')),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text('URL: ${item.url}')));
               },
             ),
           );
@@ -52,7 +53,11 @@ class ResourcesScreen extends StatelessWidget {
 }
 
 class _ResourceCard {
-  const _ResourceCard({required this.title, required this.description, required this.url});
+  const _ResourceCard({
+    required this.title,
+    required this.description,
+    required this.url,
+  });
   final String title;
   final String description;
   final String url;

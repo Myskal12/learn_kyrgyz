@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
-import '../../../data/models/category_model.dart';
-import '../../../core/services/firebase_service.dart';
 
+import '../../../core/services/firebase_service.dart';
+import '../../../data/models/category_model.dart';
 
 class CategoriesProvider extends ChangeNotifier {
-final FirebaseService _service;
-List<CategoryModel> _categories = [];
-bool _loading = false;
+  CategoriesProvider(this._service);
 
+  final FirebaseService _service;
 
-CategoriesProvider(this._service);
+  List<CategoryModel> _categories = [];
+  bool _loading = false;
 
+  List<CategoryModel> get categories => _categories;
+  bool get isLoading => _loading;
 
-List<CategoryModel> get categories => _categories;
-bool get isLoading => _loading;
-
-
-Future<void> load() async {
-_loading = true;
-notifyListeners();
-_categories = await _service.fetchCategories();
-_loading = false;
-notifyListeners();
-}
+  Future<void> load({bool force = false}) async {
+    if (_loading) return;
+    if (!force && _categories.isNotEmpty) return;
+    _loading = true;
+    notifyListeners();
+    try {
+      _categories = await _service.fetchCategories();
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
 }

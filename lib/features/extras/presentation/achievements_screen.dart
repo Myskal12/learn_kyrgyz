@@ -12,23 +12,23 @@ class AchievementsScreen extends StatelessWidget {
     final progress = context.watch<ProgressProvider>();
     final trophies = [
       _Achievement(
-        title: 'Башталгыч',
-        description: '5 сөздү үйрөн.',
+        title: 'Алгачкы жылдыз',
+        description: '5 сөздү жаттадыңыз.',
         unlocked: progress.totalWordsMastered >= 5,
       ),
       _Achievement(
-        title: 'Орто жол',
-        description: '15 сөздү өздөштүр.',
+        title: 'Туруктуу үйрөнүүчү',
+        description: '15 сөздү үйрөндүңүз.',
         unlocked: progress.totalWordsMastered >= 15,
       ),
       _Achievement(
-        title: 'Чыныгы устат',
-        description: '30дан ашык сөздү бил.',
+        title: 'Чоң секирик',
+        description: '30 сөздү топтодуңуз.',
         unlocked: progress.totalWordsMastered >= 30,
       ),
       _Achievement(
-        title: 'Квиз чебери',
-        description: 'Квизнен 80% жыйынтык.',
+        title: 'Так жооптор',
+        description: 'Тактык 80% же андан жогору.',
         unlocked: progress.accuracyPercent >= 80,
       ),
     ];
@@ -43,14 +43,18 @@ class AchievementsScreen extends StatelessWidget {
           final item = trophies[index];
           return ListTile(
             tileColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             leading: Icon(
               item.unlocked ? Icons.emoji_events : Icons.lock_outline,
               color: item.unlocked ? Colors.amber : Colors.grey,
             ),
             title: Text(item.title, style: AppTextStyles.title),
             subtitle: Text(item.description),
-            trailing: item.unlocked ? const Icon(Icons.check, color: Colors.green) : null,
+            trailing: item.unlocked
+                ? const Icon(Icons.check, color: Colors.green)
+                : null,
           );
         },
       ),
@@ -59,7 +63,11 @@ class AchievementsScreen extends StatelessWidget {
 }
 
 class _Achievement {
-  const _Achievement({required this.title, required this.description, required this.unlocked});
+  const _Achievement({
+    required this.title,
+    required this.description,
+    required this.unlocked,
+  });
   final String title;
   final String description;
   final bool unlocked;
