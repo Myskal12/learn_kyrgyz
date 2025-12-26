@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/quiz_question_model.dart';
 import '../../learning/repository/words_repository.dart';
 import '../../profile/providers/progress_provider.dart';
@@ -24,6 +25,7 @@ class QuizProvider extends ChangeNotifier {
   int _mainWrong = 0;
   int _reviewCorrect = 0;
   int _reviewWrong = 0;
+  LearningDirection _direction = LearningDirection.enToKy;
 
   List<QuizQuestionModel> _questions = [];
   List<QuizQuestionModel> _originalQuestions = [];
@@ -81,7 +83,10 @@ class QuizProvider extends ChangeNotifier {
     _optionsCache.clear();
     notifyListeners();
 
-    final questions = await _quizRepository.fetchQuestions(categoryId);
+    final questions = await _quizRepository.fetchQuestions(
+      categoryId,
+      direction: _direction,
+    );
     _questions = List.of(questions);
     _originalQuestions = List.of(_questions);
     _resetOptions();
@@ -90,6 +95,14 @@ class QuizProvider extends ChangeNotifier {
       _stage = QuizStage.summary;
     }
     notifyListeners();
+  }
+
+  Future<void> startWithDirection(
+    String categoryId,
+    LearningDirection direction,
+  ) async {
+    _direction = direction;
+    await start(categoryId);
   }
 
   void _resetOptions() {
@@ -144,7 +157,9 @@ class QuizProvider extends ChangeNotifier {
   void _markProgress(QuizQuestionModel question, bool mastered) {
     final word = question.wordId != null
         ? _wordsRepository.findById(question.wordId!)
-        : _wordsRepository.findByEnglish(question.question);
+        : (_direction == LearningDirection.kyToEn
+            ? _wordsRepository.findByKyrgyz(question.question)
+            : _wordsRepository.findByEnglish(question.question));
     if (word == null) return;
     if (mastered) {
       _progress.markWordMastered(word.id);

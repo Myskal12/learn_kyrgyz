@@ -3,8 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/services/firebase_service.dart';
+import '../../../core/providers/settings_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
+import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/user_profile_model.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../providers/progress_provider.dart';
@@ -97,7 +99,7 @@ class _ProfileHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: const [
           BoxShadow(
@@ -219,19 +221,22 @@ class _StatCard extends StatelessWidget {
 class _PreferenceButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsProvider>();
+    final themeLabel = settings.isDark ? 'Theme: Dark' : 'Theme: Light';
+    final directionLabel = 'Direction: ${settings.direction.label}';
     return Wrap(
       spacing: 12,
       runSpacing: 12,
       children: [
         _PreferenceButton(
           icon: Icons.translate,
-          label: 'Тилди алмаштыруу',
-          onTap: () {},
+          label: directionLabel,
+          onTap: settings.toggleDirection,
         ),
         _PreferenceButton(
-          icon: Icons.light_mode,
-          label: 'Тема: жарык',
-          onTap: () {},
+          icon: settings.isDark ? Icons.dark_mode : Icons.light_mode,
+          label: themeLabel,
+          onTap: settings.toggleTheme,
         ),
       ],
     );

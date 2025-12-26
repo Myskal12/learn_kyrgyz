@@ -32,6 +32,16 @@ class WordsRepository {
     return null;
   }
 
+  WordModel? findByKyrgyz(String kyrgyz) {
+    final lower = kyrgyz.toLowerCase();
+    for (final word in allWords) {
+      if (word.kyrgyz.toLowerCase() == lower) {
+        return word;
+      }
+    }
+    return null;
+  }
+
   WordModel? findById(String id) {
     for (final word in allWords) {
       if (word.id == id) return word;

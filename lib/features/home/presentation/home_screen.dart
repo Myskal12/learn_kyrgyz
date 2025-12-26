@@ -263,7 +263,7 @@ class _ProgressInfo extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
         boxShadow: const [
           BoxShadow(
@@ -308,7 +308,7 @@ class _MiniLessonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white,
+      color: AppColors.surface,
       borderRadius: BorderRadius.circular(20),
       child: InkWell(
         onTap: onTap,
@@ -403,7 +403,7 @@ class _QuickLink extends StatelessWidget {
         width: targetWidth,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(color: AppColors.accent.withValues(alpha: 0.5)),
         ),

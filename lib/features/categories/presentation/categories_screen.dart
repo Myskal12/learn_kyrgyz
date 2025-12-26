@@ -96,7 +96,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
     if (widget.showAppBar) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Уроктор')),
+        appBar: AppBar(title: const Text('Сабактар')),
         body: content,
       );
     }
@@ -149,7 +149,7 @@ class _LessonCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 28,
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.surface,
                   foregroundColor: AppColors.primary,
                   child: Text(
                     index.toString().padLeft(2, '0'),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../profile/providers/progress_provider.dart';
 
@@ -42,7 +43,7 @@ class AchievementsScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = trophies[index];
           return ListTile(
-            tileColor: Colors.white,
+            tileColor: AppColors.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),

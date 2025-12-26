@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/providers/learning_session_provider.dart';
+import '../../../core/providers/settings_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
+import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/quiz_question_model.dart';
 import '../providers/quiz_provider.dart';
 
@@ -16,6 +18,8 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
+  LearningDirection? _lastDirection;
+
   @override
   void initState() {
     super.initState();
@@ -25,13 +29,29 @@ class _QuizScreenState extends State<QuizScreen> {
           widget.categoryId,
         );
       }
-      context.read<QuizProvider>().start(widget.categoryId);
+      final direction = context.read<SettingsProvider>().direction;
+      _lastDirection = direction;
+      context.read<QuizProvider>().startWithDirection(
+            widget.categoryId,
+            direction,
+          );
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final isQuick = widget.categoryId.isEmpty;
+    final direction = context.watch<SettingsProvider>().direction;
+    if (_lastDirection != direction) {
+      _lastDirection = direction;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        context.read<QuizProvider>().startWithDirection(
+              widget.categoryId,
+              direction,
+            );
+      });
+    }
     return Scaffold(
       backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
@@ -73,7 +93,10 @@ class _QuizScreenState extends State<QuizScreen> {
                       ),
                       const SizedBox(height: 12),
                       FilledButton(
-                        onPressed: () => quiz.start(widget.categoryId),
+                        onPressed: () => quiz.startWithDirection(
+                          widget.categoryId,
+                          direction,
+                        ),
                         child: const Text('Кайра жүктөө'),
                       ),
                     ],

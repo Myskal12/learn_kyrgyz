@@ -42,6 +42,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
         subtitle: category.description,
         remaining: remaining,
         onReview: () => GoRouter.of(context).push('/flashcards/${category.id}'),
+        onSentenceBuilder: () =>
+            GoRouter.of(context).push('/sentence-builder/${category.id}'),
         onQuiz: () => GoRouter.of(context).push('/quiz/${category.id}'),
       );
     }).toList();
@@ -68,7 +70,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.surface,
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Text(
@@ -96,7 +98,7 @@ class _HintCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: const [
           BoxShadow(
@@ -124,6 +126,12 @@ class _HintCard extends StatelessWidget {
                 icon: Icons.visibility,
                 label: 'Сөздү көрсөт',
                 onTap: () => GoRouter.of(context).push('/flashcards/basic'),
+              ),
+              _PracticeAction(
+                icon: Icons.view_week_rounded,
+                label: 'Сүйлөм түзүү',
+                onTap: () =>
+                    GoRouter.of(context).push('/sentence-builder/basic'),
               ),
               _PracticeAction(
                 icon: Icons.lightbulb,
@@ -176,6 +184,7 @@ class _PracticeItem extends StatelessWidget {
     required this.subtitle,
     required this.remaining,
     required this.onReview,
+    required this.onSentenceBuilder,
     required this.onQuiz,
   });
 
@@ -183,6 +192,7 @@ class _PracticeItem extends StatelessWidget {
   final String subtitle;
   final int remaining;
   final VoidCallback onReview;
+  final VoidCallback onSentenceBuilder;
   final VoidCallback onQuiz;
 
   @override
@@ -190,7 +200,7 @@ class _PracticeItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
       ),
@@ -238,6 +248,20 @@ class _PracticeItem extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              onPressed: onSentenceBuilder,
+              icon: const Icon(Icons.view_week_rounded),
+              label: const Text('Сүйлөм түзүү'),
+            ),
           ),
         ],
       ),

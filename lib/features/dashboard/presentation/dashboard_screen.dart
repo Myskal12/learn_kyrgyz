@@ -40,7 +40,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book_rounded),
-            label: 'Уроктор',
+            label: 'Сабактар',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.science_rounded),

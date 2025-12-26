@@ -1,4 +1,5 @@
 import '../../../core/services/firebase_service.dart';
+import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/quiz_question_model.dart';
 import '../../learning/repository/words_repository.dart';
 import '../../../data/models/word_model.dart';
@@ -12,20 +13,41 @@ class QuizRepository {
   Future<List<QuizQuestionModel>> fetchQuestions(
     String categoryId, {
     int limit = 20,
+    LearningDirection direction = LearningDirection.enToKy,
   }) async {
     final remote = await _firebase.fetchQuizQuestions(categoryId, limit: limit);
     if (remote.isNotEmpty) {
       return remote
-          .map((q) => _normalizeRemoteQuestion(q, categoryId))
+          .map((q) => _normalizeRemoteQuestion(q, categoryId, direction))
           .toList();
     }
-    return _fallbackFromWords(categoryId, limit: limit);
+    return _fallbackFromWords(categoryId, limit: limit, direction: direction);
   }
 
   QuizQuestionModel _normalizeRemoteQuestion(
     QuizQuestionModel question,
     String categoryId,
+    LearningDirection direction,
   ) {
+    if (direction == LearningDirection.kyToEn) {
+      final word = _resolveWord(question);
+      if (word == null) {
+        return _normalizeRemoteQuestion(
+          question,
+          categoryId,
+          LearningDirection.enToKy,
+        );
+      }
+      return QuizQuestionModel(
+        id: question.id,
+        question: word.kyrgyz,
+        correct: word.english,
+        options: _buildEnglishOptions(word),
+        category: question.category.isNotEmpty ? question.category : categoryId,
+        level: question.level,
+        wordId: word.id,
+      );
+    }
     final deduped = <String>{};
     for (final option in question.options) {
       final trimmed = option.trim();
@@ -70,6 +92,7 @@ class QuizRepository {
   List<QuizQuestionModel> _fallbackFromWords(
     String categoryId, {
     required int limit,
+    required LearningDirection direction,
   }) {
     final words = List<WordModel>.of(
       _wordsRepository.getCachedWords(categoryId),
@@ -79,19 +102,28 @@ class QuizRepository {
     }
     words.shuffle();
     final selected = words.take(limit).toList();
-    return selected
-        .map(
-          (word) => QuizQuestionModel(
-            id: word.id,
-            question: word.english,
-            correct: word.kyrgyz,
-            options: _buildOptions(word),
-            category: categoryId,
-            level: 1,
-            wordId: word.id,
-          ),
-        )
-        .toList();
+    return selected.map((word) {
+      if (direction == LearningDirection.kyToEn) {
+        return QuizQuestionModel(
+          id: word.id,
+          question: word.kyrgyz,
+          correct: word.english,
+          options: _buildEnglishOptions(word),
+          category: categoryId,
+          level: 1,
+          wordId: word.id,
+        );
+      }
+      return QuizQuestionModel(
+        id: word.id,
+        question: word.english,
+        correct: word.kyrgyz,
+        options: _buildOptions(word),
+        category: categoryId,
+        level: 1,
+        wordId: word.id,
+      );
+    }).toList();
   }
 
   List<String> _buildOptions(WordModel word) {
@@ -108,5 +140,30 @@ class QuizRepository {
     }
     options.shuffle();
     return options;
+  }
+
+  List<String> _buildEnglishOptions(WordModel word) {
+    final pool =
+        _wordsRepository.allWords.where((w) => w.id != word.id).toList()
+          ..shuffle();
+    final options = <String>[word.english];
+    for (final candidate in pool) {
+      if (options.length >= 4) break;
+      options.add(candidate.english);
+    }
+    while (options.length < 4) {
+      options.add(word.english);
+    }
+    options.shuffle();
+    return options;
+  }
+
+  WordModel? _resolveWord(QuizQuestionModel question) {
+    final wordId = question.wordId;
+    if (wordId != null && wordId.isNotEmpty) {
+      return _wordsRepository.findById(wordId);
+    }
+    return _wordsRepository.findByEnglish(question.question) ??
+        _wordsRepository.findByKyrgyz(question.correct);
   }
 }

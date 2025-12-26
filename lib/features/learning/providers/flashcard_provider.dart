@@ -83,6 +83,10 @@ class FlashcardProvider extends ChangeNotifier {
       if (fallback.isNotEmpty && !map.containsKey(fallback)) {
         map[fallback] = sentence;
       }
+      final fallbackKy = sentence.wordKy.trim();
+      if (fallbackKy.isNotEmpty && !map.containsKey(fallbackKy)) {
+        map[fallbackKy] = sentence;
+      }
     }
     return map;
   }

@@ -8,6 +8,7 @@ import '../features/extras/presentation/achievements_screen.dart';
 import '../features/extras/presentation/resources_screen.dart';
 import '../features/extras/presentation/study_plan_screen.dart';
 import '../features/learning/presentation/flashcard_screen.dart';
+import '../features/learning/presentation/sentence_builder_screen.dart';
 import '../features/profile/presentation/leaderboard_screen.dart';
 import '../features/profile/presentation/profile_screen.dart';
 import '../features/profile/presentation/profile_settings_screen.dart';
@@ -27,6 +28,12 @@ final GoRouter router = GoRouter(
       path: '/flashcards/:categoryId',
       builder: (context, state) =>
           FlashcardScreen(categoryId: state.pathParameters['categoryId']!),
+    ),
+    GoRoute(
+      path: '/sentence-builder/:categoryId',
+      builder: (context, state) => SentenceBuilderScreen(
+        categoryId: state.pathParameters['categoryId']!,
+      ),
     ),
     GoRoute(
       path: '/quiz/:categoryId',

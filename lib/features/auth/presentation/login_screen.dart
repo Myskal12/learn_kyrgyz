@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../providers/auth_provider.dart';
 
@@ -34,10 +35,10 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Card(
-                elevation: 0,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
+                Card(
+                  elevation: 0,
+                  color: AppColors.surface,
+                  shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Padding(
@@ -193,7 +194,7 @@ class _AuthField extends StatelessWidget {
         prefixIcon: Icon(icon),
         labelText: label,
         filled: true,
-        fillColor: Colors.white,
+        fillColor: AppColors.surface,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
       ),
     );

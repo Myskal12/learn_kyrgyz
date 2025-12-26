@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/services/firebase_service.dart';
+import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../data/models/user_profile_model.dart';
 
@@ -60,7 +61,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   margin: const EdgeInsets.only(bottom: 12),
                   child: ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: Colors.white,
+                      backgroundColor: AppColors.surface,
                       child: Text(
                         user.avatar,
                         style: const TextStyle(fontSize: 20),

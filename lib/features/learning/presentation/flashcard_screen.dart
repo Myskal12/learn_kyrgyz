@@ -3,8 +3,10 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/providers/learning_session_provider.dart';
+import '../../../core/providers/settings_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
+import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/sentence_model.dart';
 import '../../../data/models/word_model.dart';
 import '../providers/flashcard_provider.dart';
@@ -41,8 +43,9 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     super.dispose();
   }
 
-  Future<void> _speak(String text) async {
+  Future<void> _speak(String text, {required bool isEnglish}) async {
     if (text.isEmpty) return;
+    await _tts.setLanguage(isEnglish ? 'en-US' : 'ky-KG');
     await _tts.stop();
     await _tts.speak(text);
   }
@@ -64,6 +67,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
             if (word == null) {
               return const Center(child: Text('Сөздөр табылган жок.'));
             }
+            final direction = context.watch<SettingsProvider>().direction;
+            final isEnToKy = direction == LearningDirection.enToKy;
+            final prompt = isEnToKy ? word.english : word.kyrgyz;
+            final speechText = isEnToKy ? word.kyrgyz : word.english;
             final total = provider.stage == FlashcardStage.learning
                 ? provider.totalWords
                 : provider.mistakes.length;
@@ -106,9 +113,14 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                         key: ValueKey(word.id),
                         word: word,
                         sentence: provider.currentSentence,
+                        direction: direction,
+                        prompt: prompt,
                         showTranslation: provider.showTranslation,
                         onReveal: provider.reveal,
-                        onSpeak: () => _speak(word.kyrgyz),
+                        onSpeak: () => _speak(
+                          speechText,
+                          isEnglish: !isEnToKy,
+                        ),
                       ),
                     ),
                   ),
@@ -151,6 +163,8 @@ class _Flashcard extends StatelessWidget {
     super.key,
     required this.word,
     this.sentence,
+    required this.direction,
+    required this.prompt,
     required this.showTranslation,
     required this.onReveal,
     required this.onSpeak,
@@ -158,6 +172,8 @@ class _Flashcard extends StatelessWidget {
 
   final WordModel word;
   final SentenceModel? sentence;
+  final LearningDirection direction;
+  final String prompt;
   final bool showTranslation;
   final VoidCallback onReveal;
   final VoidCallback onSpeak;
@@ -197,7 +213,7 @@ class _Flashcard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              word.english,
+              prompt,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 36,
@@ -216,7 +232,11 @@ class _Flashcard extends StatelessWidget {
                 style: AppTextStyles.body.copyWith(color: Colors.white70),
                 textAlign: TextAlign.center,
               ),
-              secondChild: _TranslationDetails(word: word, sentence: sentence),
+              secondChild: _TranslationDetails(
+                word: word,
+                sentence: sentence,
+                direction: direction,
+              ),
             ),
           ],
         ),
@@ -226,25 +246,36 @@ class _Flashcard extends StatelessWidget {
 }
 
 class _TranslationDetails extends StatelessWidget {
-  const _TranslationDetails({required this.word, required this.sentence});
+  const _TranslationDetails({
+    required this.word,
+    required this.sentence,
+    required this.direction,
+  });
 
   final WordModel word;
   final SentenceModel? sentence;
+  final LearningDirection direction;
 
   @override
   Widget build(BuildContext context) {
-    final transcription = word.transcriptionKy.isNotEmpty
-        ? word.transcriptionKy
+    final isEnToKy = direction == LearningDirection.enToKy;
+    final transcription = isEnToKy
+        ? (word.transcriptionKy.isNotEmpty
+            ? word.transcriptionKy
+            : word.transcription)
         : word.transcription;
     final exampleKy = word.example.trim().isNotEmpty
         ? word.example
         : (sentence?.ky ?? '');
     final exampleEn = sentence?.en ?? '';
+    final primary = isEnToKy ? word.kyrgyz : word.english;
+    final examplePrimary = isEnToKy ? exampleKy : exampleEn;
+    final exampleSecondary = isEnToKy ? exampleEn : exampleKy;
 
     return Column(
       children: [
         Text(
-          word.kyrgyz,
+          primary,
           style: const TextStyle(color: Colors.white, fontSize: 28),
           textAlign: TextAlign.center,
         ),
@@ -256,7 +287,7 @@ class _TranslationDetails extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ],
-        if (exampleKy.isNotEmpty || exampleEn.isNotEmpty) ...[
+        if (examplePrimary.isNotEmpty || exampleSecondary.isNotEmpty) ...[
           const SizedBox(height: 14),
           Container(
             padding: const EdgeInsets.all(14),
@@ -267,16 +298,16 @@ class _TranslationDetails extends StatelessWidget {
             ),
             child: Column(
               children: [
-                if (exampleKy.isNotEmpty)
+                if (examplePrimary.isNotEmpty)
                   Text(
-                    exampleKy,
+                    examplePrimary,
                     style: AppTextStyles.body.copyWith(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
-                if (exampleEn.isNotEmpty) ...[
+                if (exampleSecondary.isNotEmpty) ...[
                   const SizedBox(height: 6),
                   Text(
-                    exampleEn,
+                    exampleSecondary,
                     style: AppTextStyles.muted.copyWith(
                       color: Colors.white.withValues(alpha: 0.7),
                     ),
@@ -310,7 +341,7 @@ class _FlashcardSummary extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(24),
               boxShadow: const [
                 BoxShadow(
