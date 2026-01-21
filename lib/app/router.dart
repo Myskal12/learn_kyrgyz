@@ -21,12 +21,12 @@ final GoRouter router = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
-    GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
-    GoRoute(path: '/signup', builder: (context, state) => RegisterScreen()),
-    GoRoute(path: '/practice', builder: (context, state) => PracticeScreen()),
+    GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+    GoRoute(path: '/signup', builder: (context, state) => const RegisterScreen()),
+    GoRoute(path: '/practice', builder: (context, state) => const PracticeScreen()),
     GoRoute(
       path: '/categories',
-      builder: (context, state) => CategoriesScreen(),
+      builder: (context, state) => const CategoriesScreen(),
     ),
     GoRoute(
       path: '/lesson',
@@ -65,7 +65,7 @@ final GoRouter router = GoRouter(
       path: '/progress',
       builder: (context, state) => const ProgressScreen(),
     ),
-    GoRoute(path: '/profile', builder: (context, state) => ProfileScreen()),
+    GoRoute(path: '/profile', builder: (context, state) => const ProfileScreen()),
     GoRoute(
       path: '/settings',
       builder: (context, state) => const ProfileSettingsScreen(),
