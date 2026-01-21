@@ -338,6 +338,7 @@ class FirebaseService {
   ];
 
   final Map<String, List<WordModel>> _wordsCache = {};
+  final Map<String, List<WordModel>> _immutableWordsCache = {};
   final Map<String, List<SentenceModel>> _sentencesCache = {};
   List<CategoryModel> _categoriesCache = [];
 
@@ -422,6 +423,7 @@ class FirebaseService {
             });
       if (words.isNotEmpty) {
         _wordsCache[categoryId] = words;
+        _immutableWordsCache.remove(categoryId);
         return words;
       }
     } catch (e) {
@@ -465,10 +467,15 @@ class FirebaseService {
   List<SentenceModel> getCachedSentences(String categoryId) =>
       List<SentenceModel>.unmodifiable(_sentencesCache[categoryId] ?? const []);
 
-  List<WordModel> getCachedWords(String categoryId) =>
-      List<WordModel>.unmodifiable(
-        _wordsCache[categoryId] ?? _words[categoryId] ?? const [],
-      );
+  List<WordModel> getCachedWords(String categoryId) {
+    if (_immutableWordsCache.containsKey(categoryId)) {
+      return _immutableWordsCache[categoryId]!;
+    }
+    final source = _wordsCache[categoryId] ?? _words[categoryId] ?? const [];
+    final immutable = List<WordModel>.unmodifiable(source);
+    _immutableWordsCache[categoryId] = immutable;
+    return immutable;
+  }
 
   List<WordModel> get allWords {
     final source = _wordsCache.values.isNotEmpty
