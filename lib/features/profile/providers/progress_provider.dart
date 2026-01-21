@@ -23,6 +23,10 @@ class ProgressProvider extends ChangeNotifier {
   bool _loaded = false;
   bool get isLoaded => _loaded;
 
+  // Cache for O(1) access to totals
+  int _cachedTotalExposures = 0;
+  int _cachedTotalCorrect = 0;
+
   Future<void> load() async {
     if (_loaded) return;
     final raw = await _storage.getString(_storageKey);
@@ -35,19 +39,33 @@ class ProgressProvider extends ChangeNotifier {
       }
     }
     _loaded = true;
+    _recalculateTotals();
     notifyListeners();
   }
 
   Future<void> reset() async {
     _progress = UserProgressModel(userId: _remoteUid ?? 'guest');
     _loaded = true;
+    _recalculateTotals();
     await _persist();
+  }
+
+  void _recalculateTotals() {
+    _cachedTotalExposures = _progress.seenByWordId.values.fold(
+      0,
+      (p, v) => p + v,
+    );
+    _cachedTotalCorrect = _progress.correctByWordId.values.fold(
+      0,
+      (p, v) => p + v,
+    );
   }
 
   void markWordSeen(String wordId) {
     _touchSession();
     final current = _progress.seenByWordId[wordId] ?? 0;
     _progress.seenByWordId[wordId] = current + 1;
+    _cachedTotalExposures++;
     _persist();
   }
 
@@ -55,6 +73,7 @@ class ProgressProvider extends ChangeNotifier {
     markWordSeen(wordId);
     final current = _progress.correctByWordId[wordId] ?? 0;
     _progress.correctByWordId[wordId] = current + 1;
+    _cachedTotalCorrect++;
     _persist();
   }
 
@@ -62,19 +81,12 @@ class ProgressProvider extends ChangeNotifier {
 
   int get totalWordsMastered => _progress.correctByWordId.length;
 
-  int get totalReviewSessions =>
-      _progress.seenByWordId.values.fold(0, (prev, value) => prev + value);
+  int get totalReviewSessions => _cachedTotalExposures;
 
   int get accuracyPercent {
-    final exposures = _progress.seenByWordId.values.fold(
-      0,
-      (prev, value) => prev + value,
-    );
+    final exposures = _cachedTotalExposures;
     if (exposures == 0) return 0;
-    final masteredCount = _progress.correctByWordId.values.fold(
-      0,
-      (prev, value) => prev + value,
-    );
+    final masteredCount = _cachedTotalCorrect;
     return ((masteredCount / exposures) * 100).round();
   }
 
@@ -128,6 +140,7 @@ class ProgressProvider extends ChangeNotifier {
     final remote = await _firebase.fetchUserProgress(uid);
     if (remote != null) {
       _progress = remote;
+      _recalculateTotals();
       await _persist();
     } else {
       _progress = _progress.copyWith(userId: uid);
