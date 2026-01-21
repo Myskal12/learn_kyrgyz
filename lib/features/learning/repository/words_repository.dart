@@ -2,14 +2,22 @@ import '../../../core/services/firebase_service.dart';
 import '../../../data/models/word_model.dart';
 
 class WordsRepository {
-  WordsRepository(this._service);
+  WordsRepository(this._service) {
+    for (final word in _service.allWords) {
+      _idMap[word.id] = word;
+    }
+  }
 
   final FirebaseService _service;
   final Map<String, List<WordModel>> _cache = {};
+  final Map<String, WordModel> _idMap = {};
 
   Future<List<WordModel>> fetchWordsByCategory(String categoryId) async {
     final words = await _service.fetchWordsByCategory(categoryId);
     _cache[categoryId] = words;
+    for (final word in words) {
+      _idMap[word.id] = word;
+    }
     return words;
   }
 
@@ -43,9 +51,6 @@ class WordsRepository {
   }
 
   WordModel? findById(String id) {
-    for (final word in allWords) {
-      if (word.id == id) return word;
-    }
-    return null;
+    return _idMap[id];
   }
 }
