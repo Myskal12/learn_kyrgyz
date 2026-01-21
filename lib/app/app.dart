@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/providers/learning_session_provider.dart';
 import '../core/providers/settings_provider.dart';
@@ -20,10 +21,12 @@ import '../features/quiz/providers/quiz_provider.dart';
 import 'router.dart';
 
 class App extends StatelessWidget {
-  App({super.key});
+  final SharedPreferences prefs;
+
+  App({super.key, required this.prefs});
 
   final FirebaseService firebaseService = FirebaseService();
-  final LocalStorageService localStorageService = LocalStorageService();
+  late final LocalStorageService localStorageService = LocalStorageService(prefs);
 
   @override
   Widget build(BuildContext context) {
