@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/providers/app_providers.dart';
 import '../../../core/services/firebase_service.dart';
 import '../../../core/services/local_storage_service.dart';
 import '../../../data/models/user_progress_model.dart';
@@ -181,3 +183,11 @@ class ProgressProvider extends ChangeNotifier {
     super.dispose();
   }
 }
+
+final progressProvider = ChangeNotifierProvider<ProgressProvider>((ref) {
+  final storage = ref.read(localStorageServiceProvider);
+  final firebase = ref.read(firebaseServiceProvider);
+  final provider = ProgressProvider(storage, firebase);
+  unawaited(provider.load());
+  return provider;
+});

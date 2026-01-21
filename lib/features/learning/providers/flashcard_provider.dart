@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/providers/app_providers.dart';
 import '../../../data/models/sentence_model.dart';
 import '../../../data/models/word_model.dart';
 import '../../profile/providers/progress_provider.dart';
@@ -160,3 +162,11 @@ class FlashcardProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+final flashcardProvider = ChangeNotifierProvider<FlashcardProvider>((ref) {
+  return FlashcardProvider(
+    ref.read(wordsRepositoryProvider),
+    ref.read(sentencesRepositoryProvider),
+    ref.read(progressProvider),
+  );
+});

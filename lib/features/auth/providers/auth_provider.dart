@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/providers/app_providers.dart';
 import '../../../core/services/firebase_service.dart';
 import '../repository/auth_repository.dart';
 
@@ -110,3 +112,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 }
+
+final authProvider = ChangeNotifierProvider<AuthProvider>((ref) {
+  return AuthProvider(ref.read(firebaseServiceProvider));
+});

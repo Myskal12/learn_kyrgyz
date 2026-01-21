@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/providers/app_providers.dart';
 import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/quiz_question_model.dart';
 import '../../learning/repository/words_repository.dart';
@@ -226,3 +228,11 @@ class QuizProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+final quizProvider = ChangeNotifierProvider<QuizProvider>((ref) {
+  return QuizProvider(
+    ref.read(quizRepositoryProvider),
+    ref.read(wordsRepositoryProvider),
+    ref.read(progressProvider),
+  );
+});

@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../core/providers/learning_session_provider.dart';
-import '../../../core/providers/settings_provider.dart';
+import '../../../app/providers/learning_direction_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../core/utils/learning_direction.dart';
+import '../../../shared/widgets/app_button.dart';
+import '../../../shared/widgets/app_shell.dart';
 import '../../../data/models/sentence_model.dart';
 import '../../../data/models/word_model.dart';
 import '../providers/flashcard_provider.dart';
 
-class FlashcardScreen extends StatefulWidget {
+class FlashcardScreen extends ConsumerStatefulWidget {
   const FlashcardScreen({required this.categoryId, super.key});
   final String categoryId;
 
   @override
-  State<FlashcardScreen> createState() => _FlashcardScreenState();
+  ConsumerState<FlashcardScreen> createState() => _FlashcardScreenState();
 }
 
-class _FlashcardScreenState extends State<FlashcardScreen> {
+class _FlashcardScreenState extends ConsumerState<FlashcardScreen> {
   late final FlutterTts _tts;
 
   @override
@@ -30,10 +33,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       ..setPitch(1.0)
       ..setSpeechRate(0.4);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<LearningSessionProvider>().setLastCategoryId(
-        widget.categoryId,
-      );
-      context.read<FlashcardProvider>().load(widget.categoryId);
+      ref
+          .read(learningSessionProvider)
+          .setLastCategoryId(widget.categoryId);
+      ref.read(flashcardProvider).load(widget.categoryId);
     });
   }
 
@@ -52,107 +55,107 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Карточкалар')),
-      body: SafeArea(
-        child: Consumer<FlashcardProvider>(
-          builder: (context, provider, _) {
-            if (provider.isLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (provider.stage == FlashcardStage.completed) {
-              return _FlashcardSummary(provider: provider);
-            }
-            final word = provider.current;
-            if (word == null) {
-              return const Center(child: Text('Сөздөр табылган жок.'));
-            }
-            final direction = context.watch<SettingsProvider>().direction;
-            final isEnToKy = direction == LearningDirection.enToKy;
-            final prompt = isEnToKy ? word.english : word.kyrgyz;
-            final speechText = isEnToKy ? word.kyrgyz : word.english;
-            final total = provider.stage == FlashcardStage.learning
-                ? provider.totalWords
-                : provider.mistakes.length;
-            final progressValue = total == 0
-                ? 0.0
-                : (provider.index + 1) / total.toDouble();
-
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return AppShell(
+      title: 'Карточкалар',
+      subtitle: 'Сөздөрдү бекемдөө',
+      activeTab: AppTab.learn,
+      child: Builder(
+        builder: (context) {
+          final provider = ref.watch(flashcardProvider);
+          if (provider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (provider.stage == FlashcardStage.completed) {
+            return _FlashcardSummary(provider: provider);
+          }
+          final word = provider.current;
+          if (word == null) {
+            return const Center(child: Text('Сөздөр табылган жок.'));
+          }
+          final direction = ref.watch(learningDirectionProvider);
+          final isEnToKy = direction == LearningDirection.enToKy;
+          final prompt = isEnToKy ? word.english : word.kyrgyz;
+          final speechText = isEnToKy ? word.kyrgyz : word.english;
+          final total = provider.stage == FlashcardStage.learning
+              ? provider.totalWords
+              : provider.mistakes.length;
+          return ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        provider.stage == FlashcardStage.learning
-                            ? '1-айлампа'
-                            : 'Ката сөздөр',
-                        style: AppTextStyles.body,
-                      ),
-                      const Spacer(),
-                      Text(
-                        '${provider.index + 1}/$total',
-                        style: AppTextStyles.title,
-                      ),
-                    ],
+                  Text(
+                    'Карточкалар',
+                    style: AppTextStyles.heading.copyWith(fontSize: 28),
                   ),
-                  const SizedBox(height: 8),
-                  LinearProgressIndicator(
-                    value: progressValue,
-                    minHeight: 8,
-                    backgroundColor: AppColors.background,
-                    valueColor: const AlwaysStoppedAnimation(AppColors.primary),
-                  ),
-                  const SizedBox(height: 24),
-                  Expanded(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 350),
-                      child: _Flashcard(
-                        key: ValueKey(word.id),
-                        word: word,
-                        sentence: provider.currentSentence,
-                        direction: direction,
-                        prompt: prompt,
-                        showTranslation: provider.showTranslation,
-                        onReveal: provider.reveal,
-                        onSpeak: () => _speak(
-                          speechText,
-                          isEnglish: !isEnToKy,
-                        ),
-                      ),
+                  const Spacer(),
+                  Text(
+                    '${provider.index + 1} / $total',
+                    style: AppTextStyles.body.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.muted,
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () => provider.markAnswer(false),
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                          ),
-                          child: const Text('Кыйын болду'),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: FilledButton(
-                          onPressed: () => provider.markAnswer(true),
-                          style: FilledButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                          ),
-                          child: const Text('Түшүндүм'),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),
-            );
-          },
-        ),
+              const SizedBox(height: 6),
+              Text(
+                'Басып, котормосун көрөсүз',
+                style: AppTextStyles.muted,
+              ),
+              const SizedBox(height: 20),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 350),
+                child: _Flashcard(
+                  key: ValueKey(word.id),
+                  word: word,
+                  sentence: provider.currentSentence,
+                  direction: direction,
+                  prompt: prompt,
+                  showTranslation: provider.showTranslation,
+                  onReveal: provider.reveal,
+                  onSpeak: () => _speak(
+                    speechText,
+                    isEnglish: !isEnToKy,
+                  ),
+                )
+                    .animate()
+                    .fadeIn(duration: 200.ms, curve: Curves.easeOut)
+                    .scale(
+                      begin: const Offset(0.98, 0.98),
+                      end: const Offset(1.0, 1.0),
+                    ),
+              ),
+              const SizedBox(height: 16),
+              _ProgressDots(
+                total: total,
+                currentIndex: provider.index,
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: AppButton(
+                      variant: AppButtonVariant.outlined,
+                      fullWidth: true,
+                      onPressed: () => provider.markAnswer(false),
+                      child: const Text('Кыйын болду'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: AppButton(
+                      variant: AppButtonVariant.success,
+                      fullWidth: true,
+                      onPressed: () => provider.markAnswer(true),
+                      child: const Text('Түшүндүм'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -183,53 +186,83 @@ class _Flashcard extends StatelessWidget {
     return GestureDetector(
       onTap: onReveal,
       child: Container(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(28),
+        constraints: const BoxConstraints(minHeight: 320),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          gradient: const LinearGradient(
-            colors: [AppColors.primary, Color(0xFF7F0E12)],
+          borderRadius: BorderRadius.circular(28),
+          gradient: LinearGradient(
+            colors: [AppColors.primary, AppColors.accent],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Colors.black26,
-              blurRadius: 20,
-              offset: Offset(0, 10),
+              color: const Color.fromRGBO(31, 31, 31, 0.16),
+              blurRadius: 30,
+              offset: Offset(0, 16),
             ),
           ],
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Align(
               alignment: Alignment.topRight,
-              child: IconButton(
-                icon: const Icon(Icons.volume_up, color: Colors.white),
-                onPressed: onSpeak,
-                tooltip: 'Угуу',
+              child: InkWell(
+                onTap: onSpeak,
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.volume_up,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
               ),
             ),
-            const SizedBox(height: 12),
-            Text(
-              prompt,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
+            Column(
+              children: [
+                Text(
+                  prompt,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                if (showTranslation) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    direction == LearningDirection.enToKy
+                        ? word.transcriptionKy.isNotEmpty
+                            ? word.transcriptionKy
+                            : word.transcription
+                        : word.transcription,
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.9),
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ],
             ),
-            const SizedBox(height: 24),
             AnimatedCrossFade(
               duration: const Duration(milliseconds: 250),
               crossFadeState: showTranslation
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
               firstChild: Text(
-                'Таптап котормосун көрүү үчүн карточканы басыңыз.',
-                style: AppTextStyles.body.copyWith(color: Colors.white70),
+                'Басып, котормосун көрөсүз',
+                style: AppTextStyles.body.copyWith(color: Colors.white60),
                 textAlign: TextAlign.center,
               ),
               secondChild: _TranslationDetails(
@@ -259,11 +292,6 @@ class _TranslationDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isEnToKy = direction == LearningDirection.enToKy;
-    final transcription = isEnToKy
-        ? (word.transcriptionKy.isNotEmpty
-            ? word.transcriptionKy
-            : word.transcription)
-        : word.transcription;
     final exampleKy = word.example.trim().isNotEmpty
         ? word.example
         : (sentence?.ky ?? '');
@@ -279,22 +307,14 @@ class _TranslationDetails extends StatelessWidget {
           style: const TextStyle(color: Colors.white, fontSize: 28),
           textAlign: TextAlign.center,
         ),
-        if (transcription.isNotEmpty) ...[
-          const SizedBox(height: 6),
-          Text(
-            transcription,
-            style: const TextStyle(color: Colors.white70),
-            textAlign: TextAlign.center,
-          ),
-        ],
         if (examplePrimary.isNotEmpty || exampleSecondary.isNotEmpty) ...[
           const SizedBox(height: 14),
           Container(
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+              color: Colors.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
             ),
             child: Column(
               children: [
@@ -331,7 +351,7 @@ class _FlashcardSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -343,7 +363,7 @@ class _FlashcardSummary extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.surface,
               borderRadius: BorderRadius.circular(24),
-              boxShadow: const [
+              boxShadow: [
                 BoxShadow(
                   color: AppColors.cardShadow,
                   blurRadius: 20,
@@ -393,20 +413,49 @@ class _FlashcardSummary extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-          FilledButton(
+          AppButton(
+            fullWidth: true,
             onPressed: provider.restart,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 14),
-              child: Text('Карточкаларды кайра өтүү'),
-            ),
+            child: const Text('Карточкаларды кайра өтүү'),
           ),
-          const SizedBox(height: 8),
-          TextButton(
+          const SizedBox(height: 12),
+          AppButton(
+            fullWidth: true,
+            variant: AppButtonVariant.outlined,
             onPressed: () => Navigator.pop(context),
             child: const Text('Категорияга кайтуу'),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ProgressDots extends StatelessWidget {
+  const _ProgressDots({required this.total, required this.currentIndex});
+
+  final int total;
+  final int currentIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(total, (index) {
+        final active = index == currentIndex;
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          height: 8,
+          width: active ? 28 : 8,
+          decoration: BoxDecoration(
+            color: active
+                ? AppColors.primary
+                : AppColors.muted.withValues(alpha: 0.3),
+            borderRadius: BorderRadius.circular(999),
+          ),
+        );
+      }),
     );
   }
 }

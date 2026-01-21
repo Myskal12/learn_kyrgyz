@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/providers/app_providers.dart';
 import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/sentence_model.dart';
 import '../../profile/providers/progress_provider.dart';
@@ -233,3 +235,12 @@ class SentenceBuilderProvider extends ChangeNotifier {
     }
   }
 }
+
+final sentenceBuilderProvider =
+    ChangeNotifierProvider<SentenceBuilderProvider>((ref) {
+  return SentenceBuilderProvider(
+    ref.read(sentencesRepositoryProvider),
+    ref.read(wordsRepositoryProvider),
+    ref.read(progressProvider),
+  );
+});

@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/providers/app_providers.dart';
 import '../../../core/services/firebase_service.dart';
 import '../../../core/services/local_storage_service.dart';
 import '../../../data/models/user_profile_model.dart';
@@ -140,3 +142,9 @@ class UserProfileProvider extends ChangeNotifier {
     super.dispose();
   }
 }
+
+final userProfileProvider = ChangeNotifierProvider<UserProfileProvider>((ref) {
+  final firebase = ref.read(firebaseServiceProvider);
+  final storage = ref.read(localStorageServiceProvider);
+  return UserProfileProvider(firebase, storage);
+});

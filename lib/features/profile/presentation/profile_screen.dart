@@ -1,215 +1,266 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
-import '../../../core/services/firebase_service.dart';
-import '../../../core/providers/settings_provider.dart';
+import '../../../app/providers/learning_direction_provider.dart';
+import '../../../app/providers/theme_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../core/utils/learning_direction.dart';
-import '../../../data/models/user_profile_model.dart';
-import '../../auth/providers/auth_provider.dart';
+import '../../../shared/widgets/app_button.dart';
+import '../../../shared/widgets/app_card.dart';
+import '../../../shared/widgets/app_shell.dart';
 import '../providers/progress_provider.dart';
 import '../providers/user_profile_provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key, this.embedded = false});
 
   final bool embedded;
 
   @override
-  Widget build(BuildContext context) {
-    final auth = context.watch<AuthProvider>();
-    final progress = context.watch<ProgressProvider>();
-    final profileProvider = context.watch<UserProfileProvider>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileProvider = ref.watch(userProfileProvider);
     final profile = profileProvider.profile;
-    final firebase = context.read<FirebaseService>();
+    final progress = ref.watch(progressProvider);
+    final direction = ref.watch(learningDirectionProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
-    final body = ListView(
-      padding: const EdgeInsets.all(20),
-      children: [
-        _ProfileHeader(
-          profile: profile,
-          isGuest: profileProvider.isGuest,
-          onEdit: profileProvider.isGuest
-              ? null
-              : () => context.push('/settings'),
-        ),
-        const SizedBox(height: 20),
-        _StatsGrid(progress: progress),
-        const SizedBox(height: 20),
-        _PreferenceButtons(),
-        const SizedBox(height: 24),
-        _LeaderboardPreview(firebase: firebase),
-        const SizedBox(height: 24),
-        FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
-            ),
-          ),
-          onPressed: auth.logged
-              ? () => auth.logout()
-              : () => context.push('/login'),
-          child: Text(auth.logged ? 'Чыгуу' : 'Кирүү'),
-        ),
-        const SizedBox(height: 12),
-        OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
-            ),
-          ),
-          onPressed: () => progress.reset(),
-          child: const Text('Прогрессти тазалоо'),
-        ),
-      ],
-    );
+    final themeLabel = themeMode == ThemeMode.dark
+        ? 'Караңгы'
+        : themeMode == ThemeMode.light
+            ? 'Жарык'
+            : 'Авто';
 
-    if (embedded) {
-      return Container(
-        color: AppColors.background,
-        child: SafeArea(child: body),
-      );
-    }
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('Профиль')),
-      body: SafeArea(child: body),
-    );
-  }
-}
-
-class _ProfileHeader extends StatelessWidget {
-  const _ProfileHeader({
-    required this.profile,
-    required this.isGuest,
-    this.onEdit,
-  });
-
-  final UserProfileModel profile;
-  final bool isGuest;
-  final VoidCallback? onEdit;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.cardShadow,
-            blurRadius: 20,
-            offset: Offset(0, 12),
-          ),
-        ],
-      ),
-      child: Row(
+    return AppShell(
+      title: 'Профиль',
+      subtitle: 'Жеке маалымат',
+      activeTab: AppTab.profile,
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         children: [
-          CircleAvatar(
-            radius: 36,
-            backgroundColor: AppColors.accent.withValues(alpha: 0.2),
-            child: Text(profile.avatar, style: const TextStyle(fontSize: 28)),
+          Text('Профиль', style: AppTextStyles.heading.copyWith(fontSize: 28)),
+          const SizedBox(height: 6),
+          Text(
+            'Сиздин прогресс жана жеке жөндөөлөр',
+            style: AppTextStyles.body.copyWith(color: AppColors.muted),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          const SizedBox(height: 20),
+          AppCard(
+            padding: const EdgeInsets.all(24),
+            child: Row(
               children: [
-                Text(profile.nickname, style: AppTextStyles.title),
-                const SizedBox(height: 4),
-                Text(
-                  isGuest ? 'Конок режиминде' : 'Аккаунт синхрондолгон',
-                  style: AppTextStyles.muted,
+                Container(
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [AppColors.primary, AppColors.accent],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    profile.avatar,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(profile.nickname, style: AppTextStyles.title),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Башталгыч деңгээл · ${progress.streakDays} күн катар',
+                        style: AppTextStyles.muted,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-          if (onEdit != null)
-            IconButton(
-              onPressed: onEdit,
-              icon: const Icon(Icons.edit),
-              tooltip: 'Өзгөртүү',
+          const SizedBox(height: 20),
+          Text(
+            'Статистика',
+            style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _StatCard(
+                  value: progress.totalWordsMastered.toString(),
+                  label: 'Сөздөр',
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _StatCard(
+                  value: progress.totalReviewSessions.toString(),
+                  label: 'Тесттер',
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _StatCard(
+                  value: progress.streakDays.toString(),
+                  label: 'Күн',
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Рейтинг',
+            style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 12),
+          AppCard(
+            padding: const EdgeInsets.all(16),
+            onTap: () => context.push('/leaderboard'),
+            child: Row(
+              children: [
+                _CircleIcon(icon: Icons.emoji_events, color: AppColors.primary),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Сиз 24-орундасыз',
+                        style: AppTextStyles.body.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Жуманын топ 10 максатына 80 упай калды',
+                        style: AppTextStyles.muted,
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right, color: AppColors.muted),
+              ],
             ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Параметрлер',
+            style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 12),
+          AppCard(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    _CircleIcon(icon: Icons.translate, color: AppColors.primary),
+                    const SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Тил багыты',
+                          style: AppTextStyles.body.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(direction.label, style: AppTextStyles.muted),
+                      ],
+                    ),
+                  ],
+                ),
+                _MiniAction(
+                  label: 'Өзгөртүү',
+                  onTap: () => ref
+                      .read(learningDirectionProvider.notifier)
+                      .toggleDirection(),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          AppCard(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    _CircleIcon(icon: Icons.sunny, color: AppColors.accent),
+                    const SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Тема',
+                          style: AppTextStyles.body.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(themeLabel, style: AppTextStyles.muted),
+                      ],
+                    ),
+                  ],
+                ),
+                _MiniAction(
+                  label: 'Өзгөртүү',
+                  onTap: () =>
+                      ref.read(themeModeProvider.notifier).toggleTheme(),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          AppButton(
+            variant: AppButtonVariant.outlined,
+            fullWidth: true,
+            onPressed: () => context.push('/settings'),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.settings, size: 18),
+                SizedBox(width: 8),
+                Text('Жөндөөлөрдү ачуу'),
+              ],
+            ),
+          ),
         ],
       ),
-    );
-  }
-}
-
-class _StatsGrid extends StatelessWidget {
-  const _StatsGrid({required this.progress});
-
-  final ProgressProvider progress;
-
-  @override
-  Widget build(BuildContext context) {
-    final cards = [
-      _StatCard(
-        icon: Icons.menu_book_rounded,
-        label: 'Сөздөр',
-        value: progress.totalWordsMastered.toString(),
-      ),
-      _StatCard(
-        icon: Icons.quiz,
-        label: 'Тесттер',
-        value: progress.totalReviewSessions.toString(),
-      ),
-      _StatCard(
-        icon: Icons.local_fire_department,
-        label: 'Streak',
-        value: '${progress.streakDays} күн',
-      ),
-    ];
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isCompact = constraints.maxWidth < 520;
-        final width = isCompact
-            ? constraints.maxWidth
-            : (constraints.maxWidth - 24) / 3;
-        return Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: cards
-              .map((card) => SizedBox(width: width, child: card))
-              .toList(),
-        );
-      },
     );
   }
 }
 
 class _StatCard extends StatelessWidget {
-  const _StatCard({
-    required this.icon,
-    required this.label,
-    required this.value,
-  });
+  const _StatCard({required this.value, required this.label});
 
-  final IconData icon;
-  final String label;
   final String value;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.accent.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(20),
-      ),
+    return AppCard(
+      padding: const EdgeInsets.all(14),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: AppColors.primary),
-          const SizedBox(height: 12),
-          Text(value, style: AppTextStyles.title),
+          Text(
+            value,
+            style: AppTextStyles.title.copyWith(fontSize: 20),
+          ),
           const SizedBox(height: 4),
           Text(label, style: AppTextStyles.muted),
         ],
@@ -218,106 +269,48 @@ class _StatCard extends StatelessWidget {
   }
 }
 
-class _PreferenceButtons extends StatelessWidget {
+class _CircleIcon extends StatelessWidget {
+  const _CircleIcon({required this.icon, required this.color});
+
+  final IconData icon;
+  final Color color;
+
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsProvider>();
-    final themeLabel = settings.isDark ? 'Theme: Dark' : 'Theme: Light';
-    final directionLabel = 'Direction: ${settings.direction.label}';
-    return Wrap(
-      spacing: 12,
-      runSpacing: 12,
-      children: [
-        _PreferenceButton(
-          icon: Icons.translate,
-          label: directionLabel,
-          onTap: settings.toggleDirection,
-        ),
-        _PreferenceButton(
-          icon: settings.isDark ? Icons.dark_mode : Icons.light_mode,
-          label: themeLabel,
-          onTap: settings.toggleTheme,
-        ),
-      ],
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color.withValues(alpha: 0.15),
+      ),
+      child: Icon(icon, color: color, size: 20),
     );
   }
 }
 
-class _PreferenceButton extends StatelessWidget {
-  const _PreferenceButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
+class _MiniAction extends StatelessWidget {
+  const _MiniAction({required this.label, required this.onTap});
 
-  final IconData icon;
   final String label;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton.icon(
-      style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: AppColors.mutedSurface,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Text(
+          label,
+          style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.w600),
+        ),
       ),
-      onPressed: onTap,
-      icon: Icon(icon),
-      label: Text(label),
-    );
-  }
-}
-
-class _LeaderboardPreview extends StatelessWidget {
-  const _LeaderboardPreview({required this.firebase});
-
-  final FirebaseService firebase;
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: firebase.fetchLeaderboard(limit: 3),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        final data = snapshot.data ?? const <UserProfileModel>[];
-        if (data.isEmpty) {
-          return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text('Лидерборд даярдалууда.', style: AppTextStyles.body),
-            ),
-          );
-        }
-        return Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Column(
-            children: [
-              ListTile(
-                title: const Text('Лидерборд'),
-                trailing: TextButton(
-                  onPressed: () => context.push('/leaderboard'),
-                  child: const Text('Баарын көрүү'),
-                ),
-              ),
-              for (final user in data)
-                ListTile(
-                  leading: CircleAvatar(child: Text(user.avatar)),
-                  title: Text(user.nickname),
-                  subtitle: Text(
-                    'Үйрөнгөн: ${user.totalMastered} | Тактык: ${user.accuracy}%',
-                  ),
-                ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

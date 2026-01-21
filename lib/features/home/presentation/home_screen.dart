@@ -1,153 +1,279 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 import '../../../core/providers/learning_session_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
+import '../../../shared/widgets/app_button.dart';
+import '../../../shared/widgets/app_card.dart';
+import '../../../shared/widgets/app_shell.dart';
 import '../../categories/providers/categories_provider.dart';
 import '../../profile/providers/progress_provider.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CategoriesProvider>().load();
-      context.read<ProgressProvider>().load();
-      context.read<LearningSessionProvider>().load();
+      ref.read(categoriesProvider).load();
+      ref.read(progressProvider).load();
+      ref.read(learningSessionProvider).load();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final progress = context.watch<ProgressProvider>();
-    final categories = context.watch<CategoriesProvider>();
-    final session = context.watch<LearningSessionProvider>();
-
+    final progress = ref.watch(progressProvider);
+    final categories = ref.watch(categoriesProvider);
+    final session = ref.watch(learningSessionProvider);
     final featured = categories.categories.take(3).toList();
-    final lastCategoryId = session.lastCategoryId;
+    final lastCategoryId = session.lastCategoryId ?? 'basic';
 
-    return Container(
-      color: AppColors.background,
-      child: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            _HeroBanner(onStartLesson: () => context.push('/categories')),
-            const SizedBox(height: 20),
-            _ProgressRow(progress: progress),
-            const SizedBox(height: 20),
-            FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+    final fallbackTopics = [
+      _TopicCardData(
+        title: 'Саламдашуу жана таанышуу',
+        subtitle: '3/8 сабактар',
+        colors: [AppColors.primary, const Color(0xFFF7C15C)],
+        icon: Icons.menu_book,
+      ),
+      _TopicCardData(
+        title: 'Күнүмдүк сүйлөшүү',
+        subtitle: '2/6 сабактар',
+        colors: [AppColors.accent, const Color(0xFFB71C1C)],
+        icon: Icons.gps_fixed,
+      ),
+      _TopicCardData(
+        title: 'Саякат жана багыт',
+        subtitle: '1/5 сабактар',
+        colors: [const Color(0xFF1976D2), const Color(0xFF1565C0)],
+        icon: Icons.emoji_events,
+      ),
+    ];
+
+    final topics = featured.isEmpty
+        ? fallbackTopics
+        : featured
+            .map(
+              (item) => _TopicCardData(
+                title: item.title,
+                subtitle: item.description,
+                colors: [AppColors.primary, const Color(0xFFF7C15C)],
+                icon: Icons.menu_book,
+                route: '/flashcards/${item.id}',
+              ),
+            )
+            .toList();
+
+    return AppShell(
+      title: 'Үйрөнүү',
+      subtitle: 'Күндүк практика',
+      activeTab: AppTab.learn,
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        children: [
+          AppCard(
+            gradient: true,
+            padding: const EdgeInsets.all(32),
+            child: Stack(
+              children: [
+                const Positioned.fill(child: _HeroBackdrop()),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _HeroChip(),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Үйрөнүү башта',
+                      style: AppTextStyles.heading.copyWith(
+                        color: Colors.white,
+                        fontSize: 30,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Күндүк практика менен ийгиликке жетиңиз',
+                      style: AppTextStyles.body.copyWith(
+                        color: Colors.white.withValues(alpha: 0.9),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    _HeroButton(
+                      label: 'Жаңы сабак',
+                      onTap: () => context.push('/categories'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _StatCard(
+                  icon: Icons.local_fire_department,
+                  iconColor: AppColors.accent,
+                  value: progress.streakDays.toString(),
+                  label: 'Күн',
                 ),
               ),
-              onPressed: () => context.push(
-                (lastCategoryId == null || lastCategoryId.isEmpty)
-                    ? '/categories'
-                    : '/flashcards/$lastCategoryId',
+              const SizedBox(width: 12),
+              Expanded(
+                child: _StatCard(
+                  icon: Icons.menu_book,
+                  iconColor: AppColors.primary,
+                  value: progress.totalWordsMastered.toString(),
+                  label: 'Сөздөр',
+                ),
               ),
-              child: const Text(
-                'Улантуу',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _StatCard(
+                  icon: Icons.gps_fixed,
+                  iconColor: AppColors.success,
+                  value: '${progress.accuracyPercent}%',
+                  label: 'Тактык',
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          AppButton(
+            fullWidth: true,
+            onPressed: () => context.push('/flashcards/$lastCategoryId'),
+            child: const Text('Улантуу'),
+          ),
+          const SizedBox(height: 24),
+          Text('Активдүү темалар', style: AppTextStyles.title),
+          const SizedBox(height: 12),
+          ...topics.map(
+            (topic) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: AppCard(
+                padding: const EdgeInsets.all(16),
+                onTap: () => context.push(topic.route ?? '/categories'),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: LinearGradient(
+                          colors: topic.colors,
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: Icon(topic.icon, color: Colors.white, size: 24),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            topic.title,
+                            style: AppTextStyles.body.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            topic.subtitle,
+                            style: AppTextStyles.muted,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(Icons.chevron_right, color: AppColors.muted),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 28),
-            Text('Активдүү темалар', style: AppTextStyles.title),
-            const SizedBox(height: 12),
-            if (categories.isLoading && featured.isEmpty)
-              const Center(child: CircularProgressIndicator())
-            else
-              ...featured.map(
-                (item) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: _MiniLessonCard(
-                    title: item.title,
-                    subtitle: item.description,
-                    onTap: () => context.push('/flashcards/${item.id}'),
-                  ),
-                ),
-              ),
-            const SizedBox(height: 12),
-            const _QuickLinks(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _HeroBanner extends StatelessWidget {
-  const _HeroBanner({required this.onStartLesson});
-
-  final VoidCallback onStartLesson;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.primary, Color(0xFFE53935)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.cardShadow,
-            blurRadius: 20,
-            offset: Offset(0, 12),
           ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          const Positioned.fill(child: _PatternOverlay()),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          const SizedBox(height: 12),
+          Text('Тез шилтемелер', style: AppTextStyles.title),
+          const SizedBox(height: 12),
+          Row(
             children: [
-              Text(
-                'Үйрөнө башта',
-                style: AppTextStyles.heading.copyWith(
-                  color: Colors.white,
-                  fontSize: 30,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Бүгүн 10 мүнөт жетиштүү. Кыска тапшырмалар менен тилди бекемде.',
-                style: AppTextStyles.body.copyWith(color: Colors.white70),
-              ),
-              const SizedBox(height: 18),
-              FilledButton.tonal(
-                style: FilledButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: AppColors.primary,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 12,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+              Expanded(
+                child: AppCard(
+                  padding: const EdgeInsets.all(16),
+                  onTap: () => context.push('/quiz/basic'),
+                  child: Column(
+                    children: [
+                      _QuickIcon(
+                        icon: Icons.flash_on,
+                        color: AppColors.accent,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Экспресс-квиз',
+                        style: AppTextStyles.body.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                 ),
-                onPressed: onStartLesson,
-                child: const Text(
-                  'Жаңы сабак',
-                  style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: AppCard(
+                  padding: const EdgeInsets.all(16),
+                  onTap: () => context.push('/flashcards/$lastCategoryId'),
+                  child: Column(
+                    children: [
+                      _QuickIcon(
+                        icon: Icons.menu_book,
+                        color: AppColors.primary,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Карточкалар',
+                        style: AppTextStyles.body.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: AppCard(
+                  padding: const EdgeInsets.all(16),
+                  onTap: () => context.push('/leaderboard'),
+                  child: Column(
+                    children: [
+                      _QuickIcon(
+                        icon: Icons.emoji_events,
+                        color: AppColors.success,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Рейтинг',
+                        style: AppTextStyles.body.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -158,196 +284,75 @@ class _HeroBanner extends StatelessWidget {
   }
 }
 
-class _PatternOverlay extends StatelessWidget {
-  const _PatternOverlay();
+class _HeroBackdrop extends StatelessWidget {
+  const _HeroBackdrop();
 
   @override
   Widget build(BuildContext context) {
-    return IgnorePointer(child: CustomPaint(painter: _PatternPainter()));
-  }
-}
-
-class _PatternPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.08)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-
-    final path = Path();
-    const waveHeight = 20.0;
-    const waveLength = 60.0;
-    for (double y = 10; y < size.height; y += 40) {
-      path
-        ..reset()
-        ..moveTo(0, y);
-      for (double x = 0; x <= size.width; x += waveLength) {
-        path.quadraticBezierTo(
-          x + waveLength / 4,
-          y - waveHeight,
-          x + waveLength / 2,
-          y,
-        );
-        path.quadraticBezierTo(
-          x + 3 * waveLength / 4,
-          y + waveHeight,
-          x + waveLength,
-          y,
-        );
-      }
-      canvas.drawPath(path, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-class _ProgressRow extends StatelessWidget {
-  const _ProgressRow({required this.progress});
-
-  final ProgressProvider progress;
-
-  @override
-  Widget build(BuildContext context) {
-    final items = [
-      _ProgressInfo(
-        icon: Icons.local_fire_department,
-        label: 'Streak',
-        value: '${progress.streakDays} күн',
+    return Align(
+      alignment: Alignment.topRight,
+      child: Opacity(
+        opacity: 0.12,
+        child: Container(
+          width: 160,
+          height: 160,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+          ),
+        ),
       ),
-      _ProgressInfo(
-        icon: Icons.menu_book_rounded,
-        label: 'Сөздөр',
-        value: progress.totalWordsMastered.toString(),
-      ),
-      _ProgressInfo(
-        icon: Icons.verified_rounded,
-        label: 'Тактык',
-        value: '${progress.accuracyPercent}%',
-      ),
-    ];
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isCompact = constraints.maxWidth < 520;
-        final width = isCompact
-            ? constraints.maxWidth
-            : (constraints.maxWidth - 24) / 3;
-        return Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: items
-              .map((item) => SizedBox(width: width, child: item))
-              .toList(),
-        );
-      },
     );
   }
 }
 
-class _ProgressInfo extends StatelessWidget {
-  const _ProgressInfo({
-    required this.icon,
-    required this.label,
-    required this.value,
-  });
-
-  final IconData icon;
-  final String label;
-  final String value;
-
+class _HeroChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.cardShadow,
-            blurRadius: 14,
-            offset: Offset(0, 8),
-          ),
-        ],
+        color: Colors.white.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.4),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: AppColors.primary),
-          ),
-          const SizedBox(height: 10),
-          Text(value, style: AppTextStyles.title.copyWith(fontSize: 18)),
-          const SizedBox(height: 4),
-          Text(label, style: AppTextStyles.muted),
-        ],
+      child: Text(
+        'Күндүк максат',
+        style: AppTextStyles.body.copyWith(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
 }
 
-class _MiniLessonCard extends StatelessWidget {
-  const _MiniLessonCard({
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
+class _HeroButton extends StatelessWidget {
+  const _HeroButton({required this.label, required this.onTap});
 
-  final String title;
-  final String subtitle;
+  final String label;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.surface,
-      borderRadius: BorderRadius.circular(20),
+      color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.accent.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Icon(Icons.menu_book_rounded),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: AppTextStyles.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: AppTextStyles.muted,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.chevron_right_rounded),
-            ],
+        borderRadius: BorderRadius.circular(18),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.9),
+            borderRadius: BorderRadius.circular(18),
+          ),
+          child: Text(
+            label,
+            style: AppTextStyles.body.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppColors.textDark,
+            ),
           ),
         ),
       ),
@@ -355,73 +360,83 @@ class _MiniLessonCard extends StatelessWidget {
   }
 }
 
-class _QuickLinks extends StatelessWidget {
-  const _QuickLinks();
-
-  @override
-  Widget build(BuildContext context) {
-    final links = [
-      _QuickLink(
-        icon: Icons.flash_on,
-        label: 'Экспресс-квиз',
-        onTap: () => context.push('/quick-quiz'),
-      ),
-      _QuickLink(
-        icon: Icons.auto_stories,
-        label: 'Карточкалар',
-        onTap: () => context.push('/categories'),
-      ),
-      _QuickLink(
-        icon: Icons.emoji_events,
-        label: 'Лидерборд',
-        onTap: () => context.push('/leaderboard'),
-      ),
-    ];
-
-    return Wrap(spacing: 12, runSpacing: 12, children: links);
-  }
-}
-
-class _QuickLink extends StatelessWidget {
-  const _QuickLink({
+class _StatCard extends StatelessWidget {
+  const _StatCard({
     required this.icon,
+    required this.iconColor,
+    required this.value,
     required this.label,
-    required this.onTap,
   });
 
   final IconData icon;
+  final Color iconColor;
+  final String value;
   final String label;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final width = (MediaQuery.of(context).size.width - 64) / 2;
-    final targetWidth = width < 160 ? double.infinity : width;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: targetWidth,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppColors.accent.withValues(alpha: 0.5)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: AppColors.primary),
-            const SizedBox(width: 10),
-            Flexible(
-              child: Text(
-                label,
-                style: AppTextStyles.body,
-                overflow: TextOverflow.ellipsis,
-              ),
+    return AppCard(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: iconColor.withValues(alpha: 0.12),
             ),
-          ],
-        ),
+            child: Icon(icon, color: iconColor, size: 20),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            value,
+            style: AppTextStyles.title.copyWith(fontSize: 20),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.w500),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
+}
+
+class _QuickIcon extends StatelessWidget {
+  const _QuickIcon({required this.icon, required this.color});
+
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color.withValues(alpha: 0.12),
+      ),
+      child: Icon(icon, color: color, size: 20),
+    );
+  }
+}
+
+class _TopicCardData {
+  const _TopicCardData({
+    required this.title,
+    required this.subtitle,
+    required this.colors,
+    required this.icon,
+    this.route,
+  });
+
+  final String title;
+  final String subtitle;
+  final List<Color> colors;
+  final IconData icon;
+  final String? route;
 }

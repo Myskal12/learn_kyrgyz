@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/providers/learning_direction_provider.dart';
 import '../../../core/providers/learning_session_provider.dart';
-import '../../../core/providers/settings_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/quiz_question_model.dart';
+import '../../../shared/widgets/app_button.dart';
+import '../../../shared/widgets/app_shell.dart';
+import '../../../shared/widgets/app_top_nav.dart';
 import '../providers/quiz_provider.dart';
 
-class QuizScreen extends StatefulWidget {
+class QuizScreen extends ConsumerStatefulWidget {
   const QuizScreen({super.key, required this.categoryId});
   final String categoryId;
 
   @override
-  State<QuizScreen> createState() => _QuizScreenState();
+  ConsumerState<QuizScreen> createState() => _QuizScreenState();
 }
 
-class _QuizScreenState extends State<QuizScreen> {
+class _QuizScreenState extends ConsumerState<QuizScreen> {
   LearningDirection? _lastDirection;
 
   @override
@@ -25,131 +28,130 @@ class _QuizScreenState extends State<QuizScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.categoryId.isNotEmpty) {
-        context.read<LearningSessionProvider>().setLastCategoryId(
-          widget.categoryId,
-        );
+        ref
+            .read(learningSessionProvider)
+            .setLastCategoryId(widget.categoryId);
       }
-      final direction = context.read<SettingsProvider>().direction;
+      final direction = ref.read(learningDirectionProvider);
       _lastDirection = direction;
-      context.read<QuizProvider>().startWithDirection(
-            widget.categoryId,
-            direction,
-          );
+      ref.read(quizProvider).startWithDirection(widget.categoryId, direction);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final isQuick = widget.categoryId.isEmpty;
-    final direction = context.watch<SettingsProvider>().direction;
+    final direction = ref.watch(learningDirectionProvider);
     if (_lastDirection != direction) {
       _lastDirection = direction;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        context.read<QuizProvider>().startWithDirection(
-              widget.categoryId,
-              direction,
-            );
+        ref.read(quizProvider).startWithDirection(widget.categoryId, direction);
       });
     }
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: Text(isQuick ? 'Экспресс-квиз' : 'Квиз'),
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.white,
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppColors.primary, Color(0xFF7F0E12)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: SafeArea(
-          child: Consumer<QuizProvider>(
-            builder: (context, quiz, _) {
-              if (quiz.isLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(color: Colors.white),
-                );
-              }
-              if (quiz.isSummary) {
-                return _QuizSummary(provider: quiz);
-              }
+    final quiz = ref.watch(quizProvider);
 
-              final question = quiz.currentQuestion;
-              if (question == null) {
-                return Center(
+    return AppShell(
+      title: isQuick ? 'Экспресс-квиз' : 'Квиз',
+      subtitle: 'Кыска текшерүү',
+      activeTab: AppTab.learn,
+      tone: AppTopNavTone.dark,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Container(
+            width: double.infinity,
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.primary, AppColors.accent],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Builder(
+              builder: (context) {
+                if (quiz.isLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(color: Colors.white),
+                  );
+                }
+                if (quiz.isSummary) {
+                  return _QuizSummary(provider: quiz);
+                }
+
+                final question = quiz.currentQuestion;
+                if (question == null) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Бул категория үчүн суроолор табылган жок.',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 12),
+                        AppButton(
+                          variant: AppButtonVariant.accent,
+                          onPressed: () => quiz.startWithDirection(
+                            widget.categoryId,
+                            direction,
+                          ),
+                          child: const Text('Кайра жүктөө'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text(
-                        'Бул категория үчүн суроолор табылган жок.',
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 12),
-                      FilledButton(
-                        onPressed: () => quiz.startWithDirection(
-                          widget.categoryId,
-                          direction,
-                        ),
-                        child: const Text('Кайра жүктөө'),
-                      ),
-                    ],
-                  ),
-                );
-              }
-
-              return Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-                child: Column(
-                  children: [
-                    Text(
-                      'Суроо ${quiz.index + 1} / ${quiz.totalQuestions}',
-                      style: AppTextStyles.body.copyWith(color: Colors.white70),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 12),
-                    LinearProgressIndicator(
-                      value: quiz.progress,
-                      minHeight: 8,
-                      backgroundColor: Colors.white.withValues(alpha: 0.22),
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                        AppColors.accent,
-                      ),
-                    ),
-                    const SizedBox(height: 28),
-                    Expanded(
-                      child: Center(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 520),
-                          child: _QuizBody(
-                            question: question,
-                            answered: quiz.answered,
-                            selected: quiz.selected,
-                            options: quiz.options,
-                            correct: question.correct,
-                            onSelect: quiz.selectAnswer,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Суроо ${quiz.index + 1} / ${quiz.totalQuestions}',
+                            style: AppTextStyles.body.copyWith(
+                              color: Colors.white70,
+                            ),
                           ),
+                          Text(
+                            '${(quiz.progress * 100).round()}%',
+                            style: AppTextStyles.body.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      LinearProgressIndicator(
+                        value: quiz.progress,
+                        minHeight: 8,
+                        backgroundColor: Colors.white.withValues(alpha: 0.2),
+                        valueColor:
+                            const AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                      const SizedBox(height: 24),
+                      Expanded(
+                        child: _QuizBody(
+                          question: question,
+                          answered: quiz.answered,
+                          selected: quiz.selected,
+                          options: quiz.options,
+                          correct: question.correct,
+                          onSelect: quiz.selectAnswer,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 18),
-                    SizedBox(
-                      width: double.infinity,
-                      child: FilledButton(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.accent,
-                          foregroundColor: AppColors.textDark,
-                          padding: const EdgeInsets.symmetric(vertical: 18),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                        ),
+                      const SizedBox(height: 16),
+                      AppButton(
+                        variant: AppButtonVariant.accent,
+                        size: AppButtonSize.lg,
+                        fullWidth: true,
+                        disabled: !quiz.answered && quiz.selected == null,
                         onPressed: quiz.answered
                             ? quiz.nextQuestion
                             : (quiz.selected == null ? null : quiz.submit),
@@ -157,21 +159,17 @@ class _QuizScreenState extends State<QuizScreen> {
                           quiz.answered
                               ? 'Кийинки'
                               : (quiz.selected == null
-                                    ? 'Жоопту тандаңыз'
-                                    : 'Текшерүү'),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                          ),
+                                  ? 'Жоопту тандаңыз'
+                                  : 'Текшерүү'),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }
@@ -204,11 +202,10 @@ class _QuizBody extends StatelessWidget {
             question.question,
             style: AppTextStyles.heading.copyWith(
               color: Colors.white,
-              fontSize: 30,
+              fontSize: 26,
             ),
-            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: 18),
           ...options.asMap().entries.map((entry) {
             final index = entry.key;
             final option = entry.value;
@@ -253,45 +250,43 @@ class _AnswerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color background = Colors.white;
-    Color border = Colors.black.withValues(alpha: 0.12);
     Color text = AppColors.textDark;
+    Color circleBackground = AppColors.mutedSurface;
+    Color circleText = AppColors.textDark;
     IconData? icon;
+    Border? border;
     final optionLabel = String.fromCharCode(65 + (index % 26));
 
     if (showResult) {
       if (isCorrect) {
-        background = AppColors.success.withValues(alpha: 0.18);
-        border = AppColors.success;
+        background = AppColors.success;
         text = Colors.white;
-        icon = Icons.check_circle;
+        circleBackground = Colors.white.withValues(alpha: 0.2);
+        circleText = Colors.white;
+        icon = Icons.check;
       } else if (selected) {
-        background = AppColors.error.withValues(alpha: 0.18);
-        border = AppColors.error;
+        background = AppColors.accent;
         text = Colors.white;
-        icon = Icons.cancel;
+        circleBackground = Colors.white.withValues(alpha: 0.2);
+        circleText = Colors.white;
+        icon = Icons.close;
       } else {
-        background = Colors.white.withValues(alpha: 0.92);
-        border = Colors.black.withValues(alpha: 0.12);
+        background = Colors.white.withValues(alpha: 0.4);
+        text = AppColors.muted;
+        circleBackground = AppColors.muted.withValues(alpha: 0.2);
+        circleText = AppColors.muted;
       }
     } else if (selected) {
-      background = AppColors.accent.withValues(alpha: 0.85);
-      border = AppColors.accent;
+      border = Border.all(color: Colors.white.withValues(alpha: 0.5), width: 3);
     }
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 180),
-      constraints: const BoxConstraints(minHeight: 68),
+      constraints: const BoxConstraints(minHeight: 72),
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: border, width: 2),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.cardShadow,
-            blurRadius: 16,
-            offset: Offset(0, 10),
-          ),
-        ],
+        border: border,
       ),
       child: Material(
         color: Colors.transparent,
@@ -304,20 +299,22 @@ class _AnswerButton extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 34,
-                  height: 34,
+                  width: 44,
+                  height: 44,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: border, width: 2),
+                    color: circleBackground,
                   ),
-                  child: Text(
-                    optionLabel,
-                    style: AppTextStyles.caption.copyWith(
-                      color: text,
-                      fontSize: 14,
-                    ),
-                  ),
+                  child: icon != null
+                      ? Icon(icon, color: circleText, size: 22)
+                      : Text(
+                          optionLabel,
+                          style: AppTextStyles.caption.copyWith(
+                            color: circleText,
+                            fontSize: 14,
+                          ),
+                        ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -330,10 +327,6 @@ class _AnswerButton extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (icon != null) ...[
-                  const SizedBox(width: 12),
-                  Icon(icon, color: text),
-                ],
               ],
             ),
           ),
@@ -371,7 +364,7 @@ class _QuizSummary extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(24),
-              boxShadow: const [
+              boxShadow: [
                 BoxShadow(
                   color: AppColors.cardShadow,
                   blurRadius: 20,
@@ -390,7 +383,7 @@ class _QuizSummary extends StatelessWidget {
                 _SummaryRow(
                   label: 'Негизги: ката',
                   value: provider.incorrectAnswers.toString(),
-                  color: AppColors.error,
+                  color: AppColors.accent,
                 ),
                 if (provider.reviewCorrectAnswers +
                         provider.reviewIncorrectAnswers >
@@ -405,7 +398,7 @@ class _QuizSummary extends StatelessWidget {
                   _SummaryRow(
                     label: 'Кайра окуу: ката',
                     value: provider.reviewIncorrectAnswers.toString(),
-                    color: AppColors.error,
+                    color: AppColors.accent,
                   ),
                 ],
                 const Divider(height: 32),
@@ -438,42 +431,61 @@ class _QuizSummary extends StatelessWidget {
               spacing: 10,
               runSpacing: 10,
               children: mistakes
-                  .map((q) => Chip(label: Text('${q.question} → ${q.correct}')))
+                  .map(
+                    (q) => Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        '${q.question} - ${q.correct}',
+                        style: AppTextStyles.caption.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
                   .toList(),
             ),
             const SizedBox(height: 18),
           ],
-          FilledButton.icon(
-            style: FilledButton.styleFrom(
-              backgroundColor: AppColors.accent,
-              foregroundColor: AppColors.textDark,
-              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
-            ),
+          AppButton(
+            variant: AppButtonVariant.accent,
+            fullWidth: true,
             onPressed: provider.restartFull,
-            icon: const Icon(Icons.refresh),
-            label: const Text('Квизди кайра баштоо'),
-          ),
-          const SizedBox(height: 12),
-          OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.white,
-              side: const BorderSide(color: Colors.white54),
-              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.refresh, size: 18, color: Colors.white),
+                SizedBox(width: 8),
+                Text('Квизди кайра баштоо'),
+              ],
             ),
-            onPressed: mistakes.isEmpty ? null : provider.reviewMistakesAgain,
-            icon: const Icon(Icons.replay),
-            label: const Text('Каталарды кайра өтүү'),
           ),
           const SizedBox(height: 12),
-          TextButton(
+          AppButton(
+            variant: AppButtonVariant.outlined,
+            fullWidth: true,
+            disabled: mistakes.isEmpty,
+            onPressed: mistakes.isEmpty ? null : provider.reviewMistakesAgain,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.replay, size: 18),
+                SizedBox(width: 8),
+                Text('Каталарды кайра өтүү'),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          AppButton(
+            variant: AppButtonVariant.outlined,
+            fullWidth: true,
             onPressed: () => Navigator.of(context).pop(),
-            style: TextButton.styleFrom(foregroundColor: Colors.white),
             child: const Text('Артка кайтуу'),
           ),
         ],

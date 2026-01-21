@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/providers/learning_direction_provider.dart';
 import '../../../core/providers/learning_session_provider.dart';
-import '../../../core/providers/settings_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/sentence_model.dart';
+import '../../../shared/widgets/app_button.dart';
+import '../../../shared/widgets/app_card.dart';
+import '../../../shared/widgets/app_chip.dart';
+import '../../../shared/widgets/app_shell.dart';
 import '../providers/sentence_builder_provider.dart';
 
-class SentenceBuilderScreen extends StatefulWidget {
+class SentenceBuilderScreen extends ConsumerStatefulWidget {
   const SentenceBuilderScreen({super.key, required this.categoryId});
 
   final String categoryId;
 
   @override
-  State<SentenceBuilderScreen> createState() => _SentenceBuilderScreenState();
+  ConsumerState<SentenceBuilderScreen> createState() =>
+      _SentenceBuilderScreenState();
 }
 
-class _SentenceBuilderScreenState extends State<SentenceBuilderScreen> {
+class _SentenceBuilderScreenState
+    extends ConsumerState<SentenceBuilderScreen> {
   LearningDirection? _lastDirection;
 
   @override
@@ -26,13 +32,13 @@ class _SentenceBuilderScreenState extends State<SentenceBuilderScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.categoryId.isNotEmpty) {
-        context.read<LearningSessionProvider>().setLastCategoryId(
-          widget.categoryId,
-        );
+        ref
+            .read(learningSessionProvider)
+            .setLastCategoryId(widget.categoryId);
       }
-      final direction = context.read<SettingsProvider>().direction;
+      final direction = ref.read(learningDirectionProvider);
       _lastDirection = direction;
-      context.read<SentenceBuilderProvider>().load(
+      ref.read(sentenceBuilderProvider).load(
             widget.categoryId,
             direction: direction,
           );
@@ -41,260 +47,258 @@ class _SentenceBuilderScreenState extends State<SentenceBuilderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Sentence Builder')),
-      body: SafeArea(
-        child: Consumer<SentenceBuilderProvider>(
-          builder: (context, provider, _) {
-            final direction = context.watch<SettingsProvider>().direction;
-            if (_lastDirection != direction) {
-              _lastDirection = direction;
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (!mounted) return;
-                context.read<SentenceBuilderProvider>().setDirection(direction);
-              });
-            }
-            if (provider.isLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (provider.isCompleted) {
-              return _SentenceBuilderSummary(provider: provider);
-            }
-            final sentence = provider.current;
-            if (sentence == null) {
-              return _EmptyState(
-                onReload: () => provider.load(
-                  widget.categoryId,
+    final provider = ref.watch(sentenceBuilderProvider);
+    final direction = ref.watch(learningDirectionProvider);
+
+    return AppShell(
+      title: 'Сүйлөм түзүү',
+      subtitle: 'Сүйлөмдөрдү түзүү',
+      activeTab: AppTab.learn,
+      child: Builder(
+        builder: (context) {
+          if (_lastDirection != direction) {
+            _lastDirection = direction;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!mounted) return;
+              ref.read(sentenceBuilderProvider).setDirection(direction);
+            });
+          }
+          if (provider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (provider.isCompleted) {
+            return _SentenceBuilderSummary(provider: provider);
+          }
+          final sentence = provider.current;
+          if (sentence == null) {
+            return _EmptyState(
+              onReload: () => provider.load(
+                widget.categoryId,
+                direction: direction,
+              ),
+            );
+          }
+          final isEnToKy = direction == LearningDirection.enToKy;
+          final prompt = isEnToKy ? sentence.en : sentence.ky;
+
+          return ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            children: [
+              Text(
+                'Сүйлөм түзүү',
+                style: AppTextStyles.heading.copyWith(fontSize: 28),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Туура тартипте сөздөрдү жайгаштырыңыз',
+                style: AppTextStyles.body.copyWith(color: AppColors.muted),
+              ),
+              const SizedBox(height: 20),
+              _ProgressHeader(
+                current: provider.index + 1,
+                total: provider.totalSentences,
+                progress: provider.progress,
+              ),
+              const SizedBox(height: 20),
+              AppCard(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Котормосу:', style: AppTextStyles.muted),
+                    const SizedBox(height: 12),
+                    _PromptChips(prompt: prompt),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Сиздин сүйлөмүңүз:',
+                style: AppTextStyles.body.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              AppCard(
+                padding: const EdgeInsets.all(16),
+                child: provider.selectedTokens.isEmpty
+                    ? Center(
+                        child: Text(
+                          'Сөздөрдү тандаңыз...',
+                          style: AppTextStyles.muted,
+                        ),
+                      )
+                    : Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: provider.selectedTokens
+                            .map(
+                              (token) => AppChip(
+                                label: token.text,
+                                variant: AppChipVariant.primary,
+                                onRemove: provider.answered
+                                    ? null
+                                    : () => provider.removeToken(token),
+                              ),
+                            )
+                            .toList(),
+                      ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Сөздөр банкы:',
+                style: AppTextStyles.body.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: provider.availableTokens.map((token) {
+                  final isUsed = provider.selectedTokens
+                      .any((selected) => selected.id == token.id);
+                  return Opacity(
+                    opacity: isUsed ? 0.3 : 1,
+                    child: AppChip(
+                      label: token.text,
+                      variant: AppChipVariant.defaultChip,
+                      onTap: provider.answered || isUsed
+                          ? null
+                          : () => provider.selectToken(token),
+                    ),
+                  );
+                }).toList(),
+              ),
+              if (provider.answered) ...[
+                const SizedBox(height: 16),
+                _ResultCard(
+                  sentence: sentence,
+                  isCorrect: provider.lastCorrect,
                   direction: direction,
                 ),
-              );
-            }
-            final isEnToKy = direction == LearningDirection.enToKy;
-            final prompt = isEnToKy ? sentence.en : sentence.ky;
-            final targetLabel = isEnToKy
-                ? 'Build the Kyrgyz sentence'
-                : 'Build the English sentence';
-
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              ],
+              const SizedBox(height: 20),
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        'Sentence ${provider.index + 1}/${provider.totalSentences}',
-                        style: AppTextStyles.body,
-                      ),
-                      const Spacer(),
-                      Text(
-                        '${(provider.progress * 100).round()}%',
-                        style: AppTextStyles.title,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  LinearProgressIndicator(
-                    value: provider.progress,
-                    minHeight: 8,
-                    backgroundColor: AppColors.background,
-                    valueColor: const AlwaysStoppedAnimation(AppColors.primary),
-                  ),
-                  const SizedBox(height: 24),
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            prompt,
-                            style: AppTextStyles.heading.copyWith(fontSize: 28),
-                            textAlign: TextAlign.start,
-                          ),
-                          const SizedBox(height: 12),
-                          _HighlightChips(sentence: sentence),
-                          const SizedBox(height: 16),
-                          Text(
-                            targetLabel,
-                            style: AppTextStyles.body.copyWith(
-                              color: AppColors.muted,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          _TokenSection(
-                            title: 'Your sentence',
-                            emptyLabel: 'Tap words below to build it.',
-                            tokens: provider.selectedTokens,
-                            enabled: !provider.answered,
-                            onTap: provider.removeToken,
-                            showRemove: true,
-                          ),
-                          const SizedBox(height: 16),
-                          _TokenSection(
-                            title: 'Word bank',
-                            emptyLabel: 'All words are used.',
-                            tokens: provider.availableTokens,
-                            enabled: !provider.answered,
-                            onTap: provider.selectToken,
-                            showRemove: false,
-                          ),
-                          if (provider.answered) ...[
-                            const SizedBox(height: 16),
-                            _ResultCard(
-                              sentence: sentence,
-                              isCorrect: provider.lastCorrect,
-                              direction: direction,
-                            ),
-                          ],
-                        ],
+                    child: AppButton(
+                      variant: AppButtonVariant.outlined,
+                      onPressed: provider.canReset
+                          ? provider.resetSelection
+                          : null,
+                      child: const Text('Кайра'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: AppButton(
+                      onPressed: provider.answered
+                          ? provider.next
+                          : (provider.canCheck ? provider.check : null),
+                      child: Text(
+                        provider.answered
+                            ? (provider.isLast ? 'Бүтөрүү' : 'Кийинки')
+                            : (provider.canCheck ? 'Текшерүү' : 'Тандаңыз'),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: provider.canReset
-                              ? provider.resetSelection
-                              : null,
-                          child: const Text('Reset'),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: FilledButton(
-                          onPressed: provider.answered
-                              ? provider.next
-                              : (provider.canCheck ? provider.check : null),
-                          child: Text(
-                            provider.answered
-                                ? (provider.isLast ? 'Finish' : 'Next')
-                                : (provider.canCheck
-                                    ? 'Check'
-                                    : 'Select all words'),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
-            );
-          },
-        ),
+            ],
+          );
+        },
       ),
     );
   }
 }
 
-class _HighlightChips extends StatelessWidget {
-  const _HighlightChips({required this.sentence});
+class _ProgressHeader extends StatelessWidget {
+  const _ProgressHeader({
+    required this.current,
+    required this.total,
+    required this.progress,
+  });
 
-  final SentenceModel sentence;
+  final int current;
+  final int total;
+  final double progress;
 
   @override
   Widget build(BuildContext context) {
-    final highlightEn = sentence.highlight.trim().isNotEmpty
-        ? sentence.highlight.trim()
-        : sentence.wordEn.trim();
-    final highlightKy = sentence.wordKy.trim();
-    if (highlightEn.isEmpty && highlightKy.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
+    return Column(
       children: [
-        if (highlightEn.isNotEmpty)
-          _HighlightChip(label: highlightEn, color: AppColors.accent),
-        if (highlightKy.isNotEmpty)
-          _HighlightChip(label: highlightKy, color: AppColors.primary),
+        Row(
+          children: [
+            Text(
+              'Сүйлөм $current / $total',
+              style: AppTextStyles.muted,
+            ),
+            const Spacer(),
+            Text(
+              '${(progress * 100).round()}%',
+              style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        _ProgressBar(value: progress),
       ],
     );
   }
 }
 
-class _HighlightChip extends StatelessWidget {
-  const _HighlightChip({required this.label, required this.color});
+class _PromptChips extends StatelessWidget {
+  const _PromptChips({required this.prompt});
 
-  final String label;
-  final Color color;
+  final String prompt;
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      label: Text(
-        label,
-        style: AppTextStyles.caption.copyWith(color: Colors.white),
-      ),
-      backgroundColor: color,
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+    final words = prompt.split(' ');
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: words.asMap().entries.map((entry) {
+        final index = entry.key;
+        final word = entry.value;
+        final variant = index == 0
+            ? AppChipVariant.accent
+            : index == 2
+                ? AppChipVariant.primary
+                : AppChipVariant.defaultChip;
+        return AppChip(label: word, variant: variant);
+      }).toList(),
     );
   }
 }
 
-class _TokenSection extends StatelessWidget {
-  const _TokenSection({
-    required this.title,
-    required this.emptyLabel,
-    required this.tokens,
-    required this.enabled,
-    required this.onTap,
-    required this.showRemove,
-  });
+class _ProgressBar extends StatelessWidget {
+  const _ProgressBar({required this.value});
 
-  final String title;
-  final String emptyLabel;
-  final List<SentenceToken> tokens;
-  final bool enabled;
-  final ValueChanged<SentenceToken> onTap;
-  final bool showRemove;
+  final double value;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      height: 8,
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.accent.withValues(alpha: 0.35)),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.cardShadow,
-            blurRadius: 12,
-            offset: Offset(0, 8),
-          ),
-        ],
+        color: AppColors.mutedSurface,
+        borderRadius: BorderRadius.circular(999),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: AppTextStyles.title),
-          const SizedBox(height: 12),
-          if (tokens.isEmpty)
-            Text(emptyLabel, style: AppTextStyles.muted)
-          else
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: tokens.map((token) {
-                if (showRemove) {
-                  return InputChip(
-                    label: Text(token.text),
-                    onDeleted: enabled ? () => onTap(token) : null,
-                    deleteIcon: const Icon(Icons.close),
-                  );
-                }
-                return ActionChip(
-                  label: Text(token.text),
-                  onPressed: enabled ? () => onTap(token) : null,
-                  backgroundColor: AppColors.accent.withValues(alpha: 0.2),
-                );
-              }).toList(),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: FractionallySizedBox(
+          widthFactor: value.clamp(0, 1),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.primary, const Color(0xFFF7C15C)],
+              ),
+              borderRadius: BorderRadius.circular(999),
             ),
-        ],
+          ),
+        ),
       ),
     );
   }
@@ -313,34 +317,49 @@ class _ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isCorrect ? AppColors.success : AppColors.error;
-    final status = isCorrect ? 'Correct!' : 'Not quite.';
+    final color = isCorrect ? AppColors.success : AppColors.accent;
     final targetText =
         direction == LearningDirection.enToKy ? sentence.ky : sentence.en;
-    return Container(
+    return AppCard(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: color),
-      ),
-      child: Column(
+      backgroundColor: color.withValues(alpha: 0.1),
+      borderColor: color.withValues(alpha: 0.3),
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(
-                isCorrect ? Icons.check_circle : Icons.cancel,
-                color: color,
-              ),
-              const SizedBox(width: 8),
-              Text(status, style: AppTextStyles.title.copyWith(color: color)),
-            ],
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.15),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              isCorrect ? Icons.check : Icons.close,
+              color: color,
+              size: 20,
+            ),
           ),
-          const SizedBox(height: 10),
-          Text('Correct sentence', style: AppTextStyles.caption),
-          const SizedBox(height: 6),
-          Text(targetText, style: AppTextStyles.body),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  isCorrect ? 'Туура!' : 'Туура эмес',
+                  style: AppTextStyles.body.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: color,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Туура жооп: $targetText',
+                  style: AppTextStyles.body,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -355,70 +374,64 @@ class _SentenceBuilderSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Session complete', style: AppTextStyles.heading),
+          Text('Сессия аяктады', style: AppTextStyles.heading),
           const SizedBox(height: 12),
-          Container(
+          AppCard(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: const [
-                BoxShadow(
-                  color: AppColors.cardShadow,
-                  blurRadius: 20,
-                  offset: Offset(0, 12),
-                ),
-              ],
-            ),
             child: Column(
               children: [
                 _SummaryRow(
-                  label: 'Sentences',
+                  label: 'Сүйлөмдөр',
                   value: provider.totalSentences.toString(),
                 ),
                 const SizedBox(height: 8),
                 _SummaryRow(
-                  label: 'Correct',
+                  label: 'Туура',
                   value: provider.correctCount.toString(),
                   color: AppColors.success,
                 ),
                 const SizedBox(height: 8),
                 _SummaryRow(
-                  label: 'Incorrect',
+                  label: 'Ката',
                   value: provider.wrongCount.toString(),
-                  color: AppColors.error,
+                  color: AppColors.accent,
                 ),
               ],
             ),
           ),
           const SizedBox(height: 16),
           if (provider.mistakes.isNotEmpty) ...[
-            Text('Mistakes', style: AppTextStyles.title),
+            Text('Ката сүйлөмдөр', style: AppTextStyles.title),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: provider.mistakes
                   .map(
-                    (sentence) =>
-                        Chip(label: Text('${sentence.en} - ${sentence.ky}')),
+                    (sentence) => AppChip(
+                      label: '${sentence.en} - ${sentence.ky}',
+                      variant: AppChipVariant.defaultChip,
+                    ),
                   )
                   .toList(),
             ),
             const SizedBox(height: 16),
           ],
-          FilledButton(
+          AppButton(
+            fullWidth: true,
             onPressed: provider.restart,
-            child: const Text('Restart'),
+            child: const Text('Кайра баштоо'),
           ),
-          const SizedBox(height: 8),
-          TextButton(
+          const SizedBox(height: 12),
+          AppButton(
+            fullWidth: true,
+            variant: AppButtonVariant.outlined,
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Back'),
+            child: const Text('Артка кайтуу'),
           ),
         ],
       ),
@@ -439,7 +452,10 @@ class _SummaryRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label, style: AppTextStyles.body),
-        Text(value, style: AppTextStyles.title.copyWith(color: color)),
+        Text(
+          value,
+          style: AppTextStyles.title.copyWith(color: color),
+        ),
       ],
     );
   }
@@ -459,13 +475,13 @@ class _EmptyState extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'No sentences available for this category.',
+              'Бул категорияда сүйлөмдөр табылган жок.',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
-            FilledButton(
+            AppButton(
               onPressed: onReload,
-              child: const Text('Reload'),
+              child: const Text('Кайра жүктөө'),
             ),
           ],
         ),

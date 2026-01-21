@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/providers/app_providers.dart';
 import '../../../core/services/firebase_service.dart';
 import '../../../data/models/category_model.dart';
 
@@ -27,3 +29,8 @@ class CategoriesProvider extends ChangeNotifier {
     }
   }
 }
+
+final categoriesProvider = ChangeNotifierProvider<CategoriesProvider>((ref) {
+  final firebase = ref.read(firebaseServiceProvider);
+  return CategoriesProvider(firebase);
+});
