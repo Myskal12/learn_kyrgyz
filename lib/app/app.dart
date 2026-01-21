@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import 'providers/theme_provider.dart';
 import '../core/utils/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'router.dart';
 
-class App extends ConsumerWidget {
-  const App({super.key});
+class App extends StatelessWidget {
+  App({super.key});
+
+  final FirebaseService firebaseService = FirebaseService();
+  final LocalStorageService localStorageService = LocalStorageService();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
