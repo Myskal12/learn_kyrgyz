@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../app/providers/learning_direction_provider.dart';
 import '../../../core/providers/learning_session_provider.dart';
@@ -9,7 +10,9 @@ import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/quiz_question_model.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_shell.dart';
+import '../../../shared/widgets/app_state_views.dart';
 import '../../../shared/widgets/app_top_nav.dart';
+import '../../../shared/widgets/session_summary_panel.dart';
 import '../providers/quiz_provider.dart';
 
 class QuizScreen extends ConsumerStatefulWidget {
@@ -28,9 +31,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.categoryId.isNotEmpty) {
-        ref
-            .read(learningSessionProvider)
-            .setLastCategoryId(widget.categoryId);
+        ref.read(learningSessionProvider).setLastCategoryId(widget.categoryId);
       }
       final direction = ref.read(learningDirectionProvider);
       _lastDirection = direction;
@@ -56,6 +57,9 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
       subtitle: 'Кыска текшерүү',
       activeTab: AppTab.learn,
       tone: AppTopNavTone.dark,
+      navigationMode: AppShellNavigationMode.back,
+      backFallbackRoute: '/practice',
+      showBottomNav: false,
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Container(
@@ -71,36 +75,41 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
             child: Builder(
               builder: (context) {
                 if (quiz.isLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: Colors.white),
+                  return const AppLoadingState(
+                    title: 'Квиз жүктөлүүдө',
+                    message: 'Суроолор жана варианттар даярдалып жатат.',
+                    foregroundColor: Colors.white,
+                    indicatorColor: Colors.white,
                   );
                 }
                 if (quiz.isSummary) {
-                  return _QuizSummary(provider: quiz);
+                  return _QuizSummary(
+                    provider: quiz,
+                    categoryId: widget.categoryId,
+                  );
+                }
+                if (quiz.errorMessage != null) {
+                  return AppErrorState(
+                    message: quiz.errorMessage!,
+                    foregroundColor: Colors.white,
+                    buttonVariant: AppButtonVariant.accent,
+                    onAction: () =>
+                        quiz.startWithDirection(widget.categoryId, direction),
+                  );
                 }
 
                 final question = quiz.currentQuestion;
                 if (question == null) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Бул категория үчүн суроолор табылган жок.',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 12),
-                        AppButton(
-                          variant: AppButtonVariant.accent,
-                          onPressed: () => quiz.startWithDirection(
-                            widget.categoryId,
-                            direction,
-                          ),
-                          child: const Text('Кайра жүктөө'),
-                        ),
-                      ],
-                    ),
+                  return AppEmptyState(
+                    title: 'Суроолор табылган жок',
+                    message:
+                        'Бул категория үчүн суроолор же fallback сөздөр табылган жок.',
+                    icon: Icons.quiz_outlined,
+                    foregroundColor: Colors.white,
+                    buttonVariant: AppButtonVariant.accent,
+                    actionLabel: 'Кайра жүктөө',
+                    onAction: () =>
+                        quiz.startWithDirection(widget.categoryId, direction),
                   );
                 }
 
@@ -132,8 +141,9 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                         value: quiz.progress,
                         minHeight: 8,
                         backgroundColor: Colors.white.withValues(alpha: 0.2),
-                        valueColor:
-                            const AlwaysStoppedAnimation<Color>(Colors.white),
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                          Colors.white,
+                        ),
                       ),
                       const SizedBox(height: 24),
                       Expanded(
@@ -159,8 +169,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                           quiz.answered
                               ? 'Кийинки'
                               : (quiz.selected == null
-                                  ? 'Жоопту тандаңыз'
-                                  : 'Текшерүү'),
+                                    ? 'Жоопту тандаңыз'
+                                    : 'Текшерүү'),
                         ),
                       ),
                     ],
@@ -222,6 +232,14 @@ class _QuizBody extends StatelessWidget {
               ),
             );
           }),
+          if (answered) ...[
+            const SizedBox(height: 6),
+            _AnswerFeedbackCard(
+              selected: selected,
+              correct: correct,
+              isCorrect: selected == correct,
+            ),
+          ],
         ],
       ),
     );
@@ -337,9 +355,10 @@ class _AnswerButton extends StatelessWidget {
 }
 
 class _QuizSummary extends StatelessWidget {
-  const _QuizSummary({required this.provider});
+  const _QuizSummary({required this.provider, required this.categoryId});
 
   final QuizProvider provider;
+  final String categoryId;
 
   @override
   Widget build(BuildContext context) {
@@ -348,171 +367,133 @@ class _QuizSummary extends StatelessWidget {
         ? 0
         : ((provider.correctAnswers / mainTotal) * 100).round();
     final mistakes = provider.mistakeDetails;
+    final mistakeTags = mistakes
+        .take(6)
+        .map((item) => '${item.question} → ${item.correct}')
+        .toList();
+    final nextRoute = categoryId.isNotEmpty
+        ? '/sentence-builder/$categoryId'
+        : '/categories';
+    final nextLabel = categoryId.isNotEmpty
+        ? 'Сүйлөм түзүүгө өтүү'
+        : 'Категория тандаңыз';
 
-    return Padding(
-      padding: const EdgeInsets.all(24),
+    return SessionSummaryPanel(
+      title: 'Квиз аяктады',
+      headline: _headline(accuracy),
+      message: provider.reviewSucceeded
+          ? 'Каталар жабылды. Эми натыйжаны активдүү колдонуу үчүн башка режимге өтүңүз.'
+          : 'Дагы ${provider.unresolvedMistakesCount} суроо толук бекей элек. Кайра өтүү пайдалуу болот.',
+      metrics: [
+        SessionSummaryMetric(
+          label: 'Туура',
+          value: provider.correctAnswers.toString(),
+          color: AppColors.success,
+        ),
+        SessionSummaryMetric(
+          label: 'Ката',
+          value: provider.incorrectAnswers.toString(),
+          color: AppColors.accent,
+        ),
+        SessionSummaryMetric(
+          label: 'Кайра окуу',
+          value:
+              '${provider.reviewCorrectAnswers + provider.reviewIncorrectAnswers}',
+          color: AppColors.primary,
+        ),
+        SessionSummaryMetric(
+          label: 'Тактык',
+          value: '$accuracy%',
+          color: AppColors.primary,
+        ),
+      ],
+      noteTitle: 'Жакшы кийинки кадам',
+      noteMessage: provider.reviewSucceeded
+          ? 'Квизден кийин сүйлөм түзүү же карточка режими маалыматты узагыраак сактоого жардам берет.'
+          : 'Алгач каталарды кайра өтүп, андан кийин башка режимге өтсөңүз натыйжа жакшыраак бекет.',
+      tagsTitle: mistakeTags.isNotEmpty
+          ? 'Кайра кароого калган суроолор'
+          : null,
+      tags: mistakeTags,
+      primaryAction: SessionSummaryAction(
+        label: mistakeTags.isNotEmpty ? 'Каталарды кайра өтүү' : nextLabel,
+        onPressed: mistakeTags.isNotEmpty
+            ? provider.reviewMistakesAgain
+            : () => context.go(nextRoute),
+        variant: AppButtonVariant.accent,
+      ),
+      secondaryAction: SessionSummaryAction(
+        label: mistakeTags.isNotEmpty ? nextLabel : 'Квизди кайра баштоо',
+        onPressed: mistakeTags.isNotEmpty
+            ? () => context.go(nextRoute)
+            : provider.restartFull,
+        variant: AppButtonVariant.outlined,
+      ),
+      tertiaryLabel: 'Практикага кайтуу',
+      onTertiaryTap: () => context.go('/practice'),
+    );
+  }
+
+  String _headline(int accuracy) {
+    if (provider.reviewSucceeded && accuracy >= 80) {
+      return 'Жакшы текшерүү болду';
+    }
+    if (accuracy >= 60) {
+      return 'Негизги темп жакшы';
+    }
+    return 'Дагы бир айлампа жардам берет';
+  }
+}
+
+class _AnswerFeedbackCard extends StatelessWidget {
+  const _AnswerFeedbackCard({
+    required this.selected,
+    required this.correct,
+    required this.isCorrect,
+  });
+
+  final String? selected;
+  final String correct;
+  final bool isCorrect;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Жыйынтык',
-            style: AppTextStyles.heading.copyWith(color: Colors.white),
-          ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
+            isCorrect ? 'Туура жооп' : 'Жооп түшүндүрмөсү',
+            style: AppTextStyles.body.copyWith(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.cardShadow,
-                  blurRadius: 20,
-                  offset: Offset(0, 12),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                _SummaryRow(
-                  label: 'Негизги: туура',
-                  value: provider.correctAnswers.toString(),
-                  color: AppColors.success,
-                ),
-                const SizedBox(height: 8),
-                _SummaryRow(
-                  label: 'Негизги: ката',
-                  value: provider.incorrectAnswers.toString(),
-                  color: AppColors.accent,
-                ),
-                if (provider.reviewCorrectAnswers +
-                        provider.reviewIncorrectAnswers >
-                    0) ...[
-                  const Divider(height: 28),
-                  _SummaryRow(
-                    label: 'Кайра окуу: туура',
-                    value: provider.reviewCorrectAnswers.toString(),
-                    color: AppColors.success,
-                  ),
-                  const SizedBox(height: 8),
-                  _SummaryRow(
-                    label: 'Кайра окуу: ката',
-                    value: provider.reviewIncorrectAnswers.toString(),
-                    color: AppColors.accent,
-                  ),
-                ],
-                const Divider(height: 32),
-                Text(
-                  '$accuracy%',
-                  style: AppTextStyles.heading.copyWith(
-                    color: AppColors.primary,
-                    fontSize: 44,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  provider.reviewSucceeded
-                      ? 'Кайра окууда бардык каталарды оңдодуңуз.'
-                      : 'Кайра окууда ${provider.unresolvedMistakesCount} сөз калды.',
-                  style: AppTextStyles.body,
-                  textAlign: TextAlign.center,
-                ),
-              ],
+              fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 18),
-          if (mistakes.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Text(
+            isCorrect
+                ? 'Сиз туура вариантты тандадыңыз: $correct'
+                : 'Сиз тандадыңыз: ${selected ?? 'жооп жок'}',
+            style: AppTextStyles.body.copyWith(color: Colors.white),
+          ),
+          if (!isCorrect) ...[
+            const SizedBox(height: 4),
             Text(
-              'Ката кеткен сөздөр',
-              style: AppTextStyles.title.copyWith(color: Colors.white),
+              'Туурасы: $correct',
+              style: AppTextStyles.body.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: mistakes
-                  .map(
-                    (q) => Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      child: Text(
-                        '${q.question} - ${q.correct}',
-                        style: AppTextStyles.caption.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-            const SizedBox(height: 18),
           ],
-          AppButton(
-            variant: AppButtonVariant.accent,
-            fullWidth: true,
-            onPressed: provider.restartFull,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.refresh, size: 18, color: Colors.white),
-                SizedBox(width: 8),
-                Text('Квизди кайра баштоо'),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          AppButton(
-            variant: AppButtonVariant.outlined,
-            fullWidth: true,
-            disabled: mistakes.isEmpty,
-            onPressed: mistakes.isEmpty ? null : provider.reviewMistakesAgain,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.replay, size: 18),
-                SizedBox(width: 8),
-                Text('Каталарды кайра өтүү'),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          AppButton(
-            variant: AppButtonVariant.outlined,
-            fullWidth: true,
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Артка кайтуу'),
-          ),
         ],
       ),
-    );
-  }
-}
-
-class _SummaryRow extends StatelessWidget {
-  const _SummaryRow({
-    required this.label,
-    required this.value,
-    required this.color,
-  });
-
-  final String label;
-  final String value;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: AppTextStyles.body),
-        Text(value, style: AppTextStyles.title.copyWith(color: color)),
-      ],
     );
   }
 }

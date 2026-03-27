@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/providers/onboarding_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../shared/widgets/app_button.dart';
@@ -20,6 +21,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   bool _showPassword = false;
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Future<void> _handlePasswordReset(AuthProvider auth) async {
+    final email = _email.text.trim();
+    if (email.isEmpty) {
+      _showMessage('Адегенде email дарегиңизди жазыңыз.');
+      return;
+    }
+
+    final ok = await auth.sendPasswordResetEmail(email);
+    if (!mounted) return;
+    if (ok) {
+      _showMessage('Сыр сөздү жаңыртуу шилтемеси email дарегине жөнөтүлдү.');
+      return;
+    }
+    final error = auth.error;
+    if (error != null) {
+      _showMessage(error);
+    }
+  }
 
   @override
   void dispose() {
@@ -118,7 +144,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: auth.isLoading
+                              ? null
+                              : () => _handlePasswordReset(auth),
                           child: Text(
                             'Сыр сөздү унуттуңузбу?',
                             style: AppTextStyles.body.copyWith(
@@ -152,11 +180,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           );
                           if (!context.mounted) return;
                           if (ok) {
-                            context.go('/');
+                            await ref
+                                .read(onboardingProvider)
+                                .completeOnboarding();
+                            if (!context.mounted) return;
+                            context.go('/home');
                           } else if (auth.error != null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(auth.error!)),
-                            );
+                            _showMessage(auth.error!);
                           }
                         },
                   child: const Text('Кирүү'),
@@ -172,11 +202,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           final ok = await auth.loginWithGoogle();
                           if (!context.mounted) return;
                           if (ok) {
-                            context.go('/');
+                            await ref
+                                .read(onboardingProvider)
+                                .completeOnboarding();
+                            if (!context.mounted) return;
+                            context.go('/home');
                           } else if (auth.error != null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(auth.error!)),
-                            );
+                            _showMessage(auth.error!);
                           }
                         },
                   child: Row(
@@ -189,10 +221,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  'Аккаунтуңуз жокпу?',
-                  style: AppTextStyles.muted,
-                ),
+                Text('Аккаунтуңуз жокпу?', style: AppTextStyles.muted),
                 TextButton(
                   onPressed: () => context.push('/signup'),
                   child: Text(

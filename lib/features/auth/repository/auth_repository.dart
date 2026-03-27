@@ -15,5 +15,8 @@ class AuthRepository {
   Future<bool> register(String email, String password, {String? nickname}) =>
       _service.register(email, password, nickname: nickname);
 
+  Future<void> sendPasswordResetEmail(String email) =>
+      _service.sendPasswordResetEmail(email);
+
   Future<void> logout() => _service.logout();
 }

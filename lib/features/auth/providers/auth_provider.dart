@@ -89,6 +89,25 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> sendPasswordResetEmail(String email) async {
+    _loading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      await _repo.sendPasswordResetEmail(email.trim());
+      return true;
+    } on FirebaseAuthException catch (e) {
+      _error = _messageForCode(e);
+      return false;
+    } catch (_) {
+      _error = 'Калыбына келтирүү шилтемесин жөнөтүү ишке ашкан жок.';
+      return false;
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> logout() async {
     await _repo.logout();
     _logged = _repo.isLogged;
@@ -103,10 +122,14 @@ class AuthProvider extends ChangeNotifier {
         return 'Сырсөз туура эмес.';
       case 'invalid-email':
         return 'Email дареги туура эмес форматта.';
+      case 'missing-email':
+        return 'Email дарегин киргизиңиз.';
       case 'email-already-in-use':
         return 'Бул email мурунтан колдонулуп жатат.';
       case 'weak-password':
         return 'Сырсөз күчтүү эмес. 6 символдон узун болсун.';
+      case 'too-many-requests':
+        return 'Өтө көп аракет жасалды. Бир аздан кийин кайра кылыңыз.';
       default:
         return e.message ?? 'Аныкталбаган ката.';
     }

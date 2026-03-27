@@ -563,6 +563,7 @@ class FirebaseService {
       }, SetOptions(merge: true));
     } catch (e) {
       debugPrint('Failed to save progress for $uid: $e');
+      rethrow;
     }
   }
 
@@ -581,6 +582,7 @@ class FirebaseService {
       }, SetOptions(merge: true));
     } catch (e) {
       debugPrint('Failed to update user stats for $uid: $e');
+      rethrow;
     }
   }
 
@@ -624,7 +626,7 @@ class FirebaseService {
           .toList();
     } catch (e) {
       debugPrint('Failed to load leaderboard: $e');
-      return const [];
+      rethrow;
     }
   }
 
@@ -686,6 +688,18 @@ class FirebaseService {
       rethrow;
     } catch (e) {
       debugPrint('Failed to register: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      debugPrint('Failed to send password reset email: $e');
+      rethrow;
+    } catch (e) {
+      debugPrint('Failed to send password reset email: $e');
       rethrow;
     }
   }

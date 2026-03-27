@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/utils/app_text_styles.dart';
+import '../../../shared/widgets/app_shell.dart';
 
 class StudyPlanScreen extends StatelessWidget {
   const StudyPlanScreen({super.key});
@@ -30,9 +31,14 @@ class StudyPlanScreen extends StatelessWidget {
       ),
     ];
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Күнүмдүк план')),
-      body: ListView.separated(
+    return AppShell(
+      title: 'Күндүк план',
+      subtitle: 'Кыска ритм менен күнүмдүк окуу',
+      activeTab: AppTab.learn,
+      navigationMode: AppShellNavigationMode.back,
+      backFallbackRoute: '/profile',
+      showBottomNav: false,
+      child: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemBuilder: (context, index) {
           final task = tasks[index];

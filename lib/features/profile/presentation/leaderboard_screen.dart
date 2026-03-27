@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../app/providers/app_providers.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../data/models/user_profile_model.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_chip.dart';
 import '../../../shared/widgets/app_shell.dart';
+import '../../../shared/widgets/app_state_views.dart';
+import '../providers/leaderboard_provider.dart';
+import '../providers/progress_provider.dart';
+import '../providers/user_profile_provider.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
@@ -17,306 +20,200 @@ class LeaderboardScreen extends ConsumerStatefulWidget {
 }
 
 class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
-  late Future<List<UserProfileModel>> _future;
-
   @override
   void initState() {
     super.initState();
-    final service = ref.read(firebaseServiceProvider);
-    _future = service.fetchLeaderboard(limit: 12);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(leaderboardProvider).load();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final leaderboard = ref.watch(leaderboardProvider);
+    final profileState = ref.watch(userProfileProvider);
+    final progress = ref.watch(progressProvider);
+    final entries = leaderboard.entries
+        .map(_LeaderboardEntry.fromUserProfile)
+        .toList();
+    final currentUserId = profileState.isGuest ? null : profileState.profile.id;
+    final currentIndex = currentUserId == null
+        ? -1
+        : entries.indexWhere((entry) => entry.id == currentUserId);
+
+    Widget content;
+    if (leaderboard.isLoading && entries.isEmpty) {
+      content = const AppLoadingState(
+        title: 'Рейтинг жүктөлүүдө',
+        message: 'Тизмедеги акыркы катышуучулар даярдалып жатат.',
+      );
+    } else if (leaderboard.errorMessage != null && entries.isEmpty) {
+      content = AppErrorState(
+        message: leaderboard.errorMessage!,
+        onAction: () => ref.read(leaderboardProvider).load(force: true),
+      );
+    } else {
+      content = ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        children: [
+          Text('Рейтинг', style: AppTextStyles.heading.copyWith(fontSize: 28)),
+          const SizedBox(height: 6),
+          Text(
+            'Реалдуу катышуучулар жана синхрондолгон статистика',
+            style: AppTextStyles.body.copyWith(color: AppColors.muted),
+          ),
+          const SizedBox(height: 20),
+          _LeaderboardSummaryCard(
+            isGuest: profileState.isGuest,
+            currentIndex: currentIndex,
+            entries: entries,
+            progress: progress,
+          ),
+          const SizedBox(height: 16),
+          _SyncNotice(progress: progress),
+          if (leaderboard.errorMessage != null && entries.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            AppSyncBanner(
+              title: 'Тизме толук жаңыланган жок',
+              message: leaderboard.errorMessage!,
+              icon: Icons.cloud_off,
+              accentColor: AppColors.accent,
+              actionLabel: 'Кайра жүктөө',
+              onAction: () => ref.read(leaderboardProvider).load(force: true),
+            ),
+          ],
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Топ катышуучулар',
+                style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
+              ),
+              const AppChip(
+                label: 'Жандуу тизме',
+                variant: AppChipVariant.primary,
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          if (entries.isEmpty)
+            SizedBox(
+              height: 260,
+              child: AppEmptyState(
+                title: 'Лидерборд азырынча бош',
+                message:
+                    'Булуттагы таблицада азырынча катышуучулар жок. Биринчи синхрондолгон колдонуучулардын бири боло аласыз.',
+                icon: Icons.emoji_events_outlined,
+                actionLabel: 'Кайра жүктөө',
+                onAction: () => ref.read(leaderboardProvider).load(force: true),
+              ),
+            )
+          else
+            ...entries.asMap().entries.map((entry) {
+              final index = entry.key;
+              final item = entry.value;
+              final highlight = _highlightForIndex(index);
+              final highlightColors = _highlightColors(highlight);
+              final isTop = index < 3;
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: AppCard(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          gradient: isTop
+                              ? LinearGradient(colors: highlightColors)
+                              : null,
+                          color: isTop ? null : AppColors.mutedSurface,
+                        ),
+                        alignment: Alignment.center,
+                        child: isTop
+                            ? Icon(
+                                index == 0
+                                    ? Icons.workspace_premium
+                                    : index == 1
+                                    ? Icons.emoji_events
+                                    : Icons.star,
+                                color: AppColors.textDark,
+                              )
+                            : Text(
+                                '${index + 1}',
+                                style: AppTextStyles.body.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.muted,
+                                ),
+                              ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    item.name,
+                                    style: AppTextStyles.body.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                if (item.id == currentUserId)
+                                  const AppChip(
+                                    label: 'Сиз',
+                                    variant: AppChipVariant.primary,
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${item.points} упай · ${item.activity} аракет · ${item.accuracy}% тактык',
+                              style: AppTextStyles.muted,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+          const SizedBox(height: 8),
+          _WeeklyChallengeCard(progress: progress),
+        ],
+      );
+    }
+
     return AppShell(
       title: 'Рейтинг',
       subtitle: 'Жума жана сезон',
       activeTab: AppTab.progress,
-      child: FutureBuilder<List<UserProfileModel>>(
-        future: _future,
-        builder: (context, snapshot) {
-          final fallback = _fallbackEntries();
-          final entries = snapshot.hasData && snapshot.data!.isNotEmpty
-              ? _mapEntries(snapshot.data!)
-              : fallback;
-
-          return ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            children: [
-              Text('Рейтинг', style: AppTextStyles.heading.copyWith(fontSize: 28)),
-              const SizedBox(height: 6),
-              Text(
-                'Башкалар менен салыштырып, жетишкендиктерди көрөсүз',
-                style: AppTextStyles.body.copyWith(color: AppColors.muted),
-              ),
-              const SizedBox(height: 20),
-              AppCard(
-                gradient: true,
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Сиздин ордуңуз',
-                              style: AppTextStyles.muted.copyWith(
-                                color: Colors.white.withValues(alpha: 0.8),
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              '3-орун',
-                              style: AppTextStyles.heading.copyWith(
-                                color: Colors.white,
-                                fontSize: 24,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.emoji_events,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: const [
-                        _GlassChip(label: '1685 упай'),
-                        SizedBox(width: 8),
-                        _GlassChip(label: '12 күн катар'),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Топ катышуучулар',
-                    style: AppTextStyles.body.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const AppChip(
-                    label: 'Бул жума',
-                    variant: AppChipVariant.primary,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              ...entries.asMap().entries.map((entry) {
-                final index = entry.key;
-                final item = entry.value;
-                final isTop = index < 3;
-                final highlight = item.highlight;
-                final highlightColors = _highlightColors(highlight);
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: AppCard(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            gradient: isTop
-                                ? LinearGradient(colors: highlightColors)
-                                : null,
-                            color:
-                                isTop ? null : AppColors.mutedSurface,
-                          ),
-                          alignment: Alignment.center,
-                          child: isTop
-                              ? Icon(
-                                  index == 0
-                                      ? Icons.workspace_premium
-                                      : index == 1
-                                          ? Icons.emoji_events
-                                          : Icons.star,
-                                  color: AppColors.textDark,
-                                )
-                              : Text(
-                                  '${index + 1}',
-                                  style: AppTextStyles.body.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.muted,
-                                  ),
-                                ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      item.name,
-                                      style: AppTextStyles.body.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  if (item.isYou)
-                                    const AppChip(
-                                      label: 'Сиз',
-                                      variant: AppChipVariant.primary,
-                                    ),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                '${item.points} упай · ${item.streak} күн катар',
-                                style: AppTextStyles.muted,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Row(
-                          children: [
-                            Icon(Icons.local_fire_department,
-                                size: 16, color: AppColors.accent),
-                            const SizedBox(width: 4),
-                            Text(
-                              item.streak.toString(),
-                              style: AppTextStyles.body.copyWith(
-                                color: AppColors.accent,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-              const SizedBox(height: 8),
-              AppCard(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        _CircleIcon(
-                          icon: Icons.emoji_events,
-                          color: AppColors.accent,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Апталык чакырык',
-                                style: AppTextStyles.body.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                '7 күн катар окуп, атайын төш белгини алыңыз',
-                                style: AppTextStyles.muted,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    _ProgressBar(value: 0.7),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('5/7 күн', style: AppTextStyles.muted),
-                        Text(
-                          'Даяр',
-                          style: AppTextStyles.body.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          );
-        },
-      ),
+      navigationMode: AppShellNavigationMode.back,
+      backFallbackRoute: '/progress',
+      showBottomNav: false,
+      child: content,
     );
   }
 
-  List<_LeaderboardEntry> _mapEntries(List<UserProfileModel> users) {
-    return users.take(6).map((user) {
-      final points = user.totalMastered * 6 + user.totalSessions * 2;
-      return _LeaderboardEntry(
-        name: user.nickname,
-        points: points,
-        streak: user.totalSessions,
-      );
-    }).toList();
-  }
-
-  List<_LeaderboardEntry> _fallbackEntries() {
-    return [
-      _LeaderboardEntry(
-        name: 'Алина Токтобаева',
-        points: 1860,
-        streak: 18,
-        highlight: _Highlight.gold,
-      ),
-      _LeaderboardEntry(
-        name: 'Бекзат уулу Айбек',
-        points: 1720,
-        streak: 15,
-        highlight: _Highlight.silver,
-      ),
-      _LeaderboardEntry(
-        name: 'Айгүл Асанова',
-        points: 1685,
-        streak: 12,
-        highlight: _Highlight.bronze,
-        isYou: true,
-      ),
-      _LeaderboardEntry(
-        name: 'Элина Назарова',
-        points: 1605,
-        streak: 11,
-      ),
-      _LeaderboardEntry(
-        name: 'Темирлан Мусаев',
-        points: 1540,
-        streak: 10,
-      ),
-      _LeaderboardEntry(
-        name: 'Асия Рысбекова',
-        points: 1498,
-        streak: 9,
-      ),
-    ];
+  _Highlight _highlightForIndex(int index) {
+    switch (index) {
+      case 0:
+        return _Highlight.gold;
+      case 1:
+        return _Highlight.silver;
+      case 2:
+        return _Highlight.bronze;
+      default:
+        return _Highlight.none;
+    }
   }
 
   List<Color> _highlightColors(_Highlight highlight) {
@@ -332,6 +229,199 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         return [const Color(0xFFC47A3A), const Color(0xFFE3A870)];
       case _Highlight.none:
         return [AppColors.mutedSurface, AppColors.mutedSurface];
+    }
+  }
+}
+
+class _LeaderboardSummaryCard extends StatelessWidget {
+  const _LeaderboardSummaryCard({
+    required this.isGuest,
+    required this.currentIndex,
+    required this.entries,
+    required this.progress,
+  });
+
+  final bool isGuest;
+  final int currentIndex;
+  final List<_LeaderboardEntry> entries;
+  final ProgressProvider progress;
+
+  @override
+  Widget build(BuildContext context) {
+    final localPoints =
+        progress.totalWordsMastered * 6 + progress.totalReviewSessions * 2;
+
+    String title;
+    String subtitle;
+    if (isGuest) {
+      title = 'Конок режиминде рейтинг жок';
+      subtitle = 'Киргенден кийин синхрондолгон орун жана атаандаштар көрүнөт.';
+    } else if (entries.isEmpty) {
+      title = 'Лидерборд жаңыдан толот';
+      subtitle = 'Азырынча булуттагы тизмеде катышуучулар жок.';
+    } else if (currentIndex >= 0) {
+      title = '${currentIndex + 1}-орун';
+      subtitle = 'Учурдагы ордуңуз синхрондолгон таблицадан эсептелди.';
+    } else {
+      title = 'Топ тизмеге чыга элексиз';
+      subtitle = 'Бул экран азыр болгону жүктөлгөн катышуучуларды көрсөтөт.';
+    }
+
+    return AppCard(
+      gradient: true,
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Сиздин абал',
+                    style: AppTextStyles.muted.copyWith(
+                      color: Colors.white.withValues(alpha: 0.8),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    title,
+                    style: AppTextStyles.heading.copyWith(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.emoji_events, color: Colors.white),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            subtitle,
+            style: AppTextStyles.body.copyWith(color: Colors.white70),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              _GlassChip(label: '$localPoints упай'),
+              const SizedBox(width: 8),
+              _GlassChip(label: '${progress.streakDays} күн катар'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WeeklyChallengeCard extends StatelessWidget {
+  const _WeeklyChallengeCard({required this.progress});
+
+  final ProgressProvider progress;
+
+  @override
+  Widget build(BuildContext context) {
+    final completedDays = progress.streakDays.clamp(0, 7);
+    final value = completedDays / 7;
+
+    return AppCard(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _CircleIcon(icon: Icons.emoji_events, color: AppColors.accent),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Апталык чакырык',
+                      style: AppTextStyles.body.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '7 күн катары менен окусаңыз, жаңы белги ачылат.',
+                      style: AppTextStyles.muted,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          _ProgressBar(value: value),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('$completedDays/7 күн', style: AppTextStyles.muted),
+              Text(
+                completedDays >= 7 ? 'Ачылды' : 'Улантыңыз',
+                style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SyncNotice extends StatelessWidget {
+  const _SyncNotice({required this.progress});
+
+  final ProgressProvider progress;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (progress.syncState) {
+      case ProgressSyncState.localOnly:
+        return AppSyncBanner(
+          title: progress.syncTitle,
+          message: progress.syncSubtitle,
+          icon: Icons.save_outlined,
+          accentColor: AppColors.primary,
+        );
+      case ProgressSyncState.pending:
+      case ProgressSyncState.syncing:
+        return AppSyncBanner(
+          title: progress.syncTitle,
+          message: progress.syncSubtitle,
+          icon: Icons.sync,
+          accentColor: AppColors.accent,
+        );
+      case ProgressSyncState.synced:
+        return AppSyncBanner(
+          title: progress.syncTitle,
+          message: progress.syncSubtitle,
+          icon: Icons.cloud_done,
+          accentColor: AppColors.success,
+        );
+      case ProgressSyncState.failed:
+        return AppSyncBanner(
+          title: progress.syncTitle,
+          message: progress.syncSubtitle,
+          icon: Icons.cloud_off,
+          accentColor: AppColors.accent,
+          actionLabel: 'Кайра синк кылуу',
+          onAction: progress.canRetrySync ? progress.retrySync : null,
+        );
     }
   }
 }
@@ -394,7 +484,7 @@ class _ProgressBar extends StatelessWidget {
       child: Align(
         alignment: Alignment.centerLeft,
         child: FractionallySizedBox(
-          widthFactor: value,
+          widthFactor: value.clamp(0, 1),
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -410,19 +500,29 @@ class _ProgressBar extends StatelessWidget {
 }
 
 class _LeaderboardEntry {
-  _LeaderboardEntry({
+  const _LeaderboardEntry({
+    required this.id,
     required this.name,
     required this.points,
-    required this.streak,
-    this.highlight = _Highlight.none,
-    this.isYou = false,
+    required this.activity,
+    required this.accuracy,
   });
 
+  factory _LeaderboardEntry.fromUserProfile(UserProfileModel user) {
+    return _LeaderboardEntry(
+      id: user.id,
+      name: user.nickname,
+      points: user.totalMastered * 6 + user.totalSessions * 2,
+      activity: user.totalSessions,
+      accuracy: user.accuracy,
+    );
+  }
+
+  final String id;
   final String name;
   final int points;
-  final int streak;
-  final _Highlight highlight;
-  final bool isYou;
+  final int activity;
+  final int accuracy;
 }
 
 enum _Highlight { none, gold, silver, bronze }

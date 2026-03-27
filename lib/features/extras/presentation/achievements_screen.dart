@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
+import '../../../shared/widgets/app_shell.dart';
 import '../../profile/providers/progress_provider.dart';
 
 class AchievementsScreen extends ConsumerWidget {
@@ -34,9 +35,14 @@ class AchievementsScreen extends ConsumerWidget {
       ),
     ];
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Жетишкендиктер')),
-      body: ListView.separated(
+    return AppShell(
+      title: 'Жетишкендиктер',
+      subtitle: 'Ачылган жана алдыдагы белгилер',
+      activeTab: AppTab.progress,
+      navigationMode: AppShellNavigationMode.back,
+      backFallbackRoute: '/progress',
+      showBottomNav: false,
+      child: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: trophies.length,
         separatorBuilder: (_, __) => const SizedBox(height: 12),

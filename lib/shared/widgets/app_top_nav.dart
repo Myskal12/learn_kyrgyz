@@ -7,33 +7,39 @@ import '../../core/utils/app_text_styles.dart';
 
 enum AppTopNavTone { light, dark }
 
+enum AppTopNavLeadingType { menu, back }
+
 class AppTopNav extends StatelessWidget {
   const AppTopNav({
     super.key,
     required this.title,
     this.subtitle = 'Кыргызча / English',
-    required this.onMenuTap,
+    required this.onLeadingTap,
     this.onActionTap,
     this.tone = AppTopNavTone.light,
+    this.leadingType = AppTopNavLeadingType.menu,
   });
 
   final String title;
   final String subtitle;
-  final VoidCallback onMenuTap;
+  final VoidCallback onLeadingTap;
   final VoidCallback? onActionTap;
   final AppTopNavTone tone;
+  final AppTopNavLeadingType leadingType;
 
   @override
   Widget build(BuildContext context) {
     final isDark = tone == AppTopNavTone.dark;
-    final backgroundColor =
-        isDark ? Colors.white.withValues(alpha: 0.1) : AppColors.background;
+    final backgroundColor = isDark
+        ? Colors.white.withValues(alpha: 0.1)
+        : AppColors.background;
     final borderColor = isDark
         ? Colors.white.withValues(alpha: 0.2)
         : AppColors.border;
     final iconColor = isDark ? Colors.white : AppColors.textDark;
-    final subtitleColor =
-        isDark ? Colors.white.withValues(alpha: 0.7) : AppColors.muted;
+    final subtitleColor = isDark
+        ? Colors.white.withValues(alpha: 0.7)
+        : AppColors.muted;
 
     return ClipRect(
       child: BackdropFilter(
@@ -50,8 +56,10 @@ class AppTopNav extends StatelessWidget {
               child: Row(
                 children: [
                   _NavIconButton(
-                    icon: Icons.menu,
-                    onTap: onMenuTap,
+                    icon: leadingType == AppTopNavLeadingType.back
+                        ? Icons.arrow_back
+                        : Icons.menu,
+                    onTap: onLeadingTap,
                     isDark: isDark,
                   ),
                   const SizedBox(width: 12),
@@ -81,11 +89,14 @@ class AppTopNav extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  _NavIconButton(
-                    icon: Icons.notifications_none,
-                    onTap: onActionTap,
-                    isDark: isDark,
-                  ),
+                  if (onActionTap != null)
+                    _NavIconButton(
+                      icon: Icons.notifications_none,
+                      onTap: onActionTap,
+                      isDark: isDark,
+                    )
+                  else
+                    const SizedBox(width: 40, height: 40),
                 ],
               ),
             ),
@@ -112,8 +123,9 @@ class _NavIconButton extends StatelessWidget {
     final background = isDark
         ? Colors.white.withValues(alpha: 0.15)
         : AppColors.surface;
-    final borderColor =
-        isDark ? Colors.white.withValues(alpha: 0.2) : AppColors.border;
+    final borderColor = isDark
+        ? Colors.white.withValues(alpha: 0.2)
+        : AppColors.border;
     final iconColor = isDark ? Colors.white : AppColors.textDark;
 
     return SizedBox(

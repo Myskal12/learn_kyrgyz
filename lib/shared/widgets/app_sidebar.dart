@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/utils/app_colors.dart';
 import '../../core/utils/app_text_styles.dart';
+import '../../features/auth/providers/auth_provider.dart';
 import '../../features/profile/providers/user_profile_provider.dart';
 import 'app_card.dart';
 
@@ -30,22 +31,27 @@ class AppSidebar extends ConsumerWidget {
     final avatar = isGuest ? 'G' : profile.avatar;
 
     final destinations = [
-      _SidebarItem('Башкы бет', Icons.home, '/'),
+      _SidebarItem('Башкы бет', Icons.home, '/home'),
       _SidebarItem('Сабактар', Icons.layers, '/categories'),
       _SidebarItem('Практика', Icons.flash_on, '/practice'),
       _SidebarItem('Карточкалар', Icons.menu_book, '/flashcards'),
       _SidebarItem('Сүйлөм түзүү', Icons.text_fields, '/sentence-builder'),
       _SidebarItem('Квиз', Icons.check_circle, '/quiz'),
       _SidebarItem('Прогресс', Icons.bar_chart, '/progress'),
+      _SidebarItem('Жетишкендиктер', Icons.workspace_premium, '/achievements'),
       _SidebarItem('Рейтинг', Icons.emoji_events, '/leaderboard'),
+      _SidebarItem('Күндүк план', Icons.calendar_month, '/study-plan'),
+      _SidebarItem('Ресурстар', Icons.open_in_new, '/resources'),
       _SidebarItem('Профиль', Icons.person, '/profile'),
       _SidebarItem('Жөндөөлөр', Icons.settings, '/settings'),
     ];
 
-    final accountItems = [
-      _SidebarItem('Кирүү', Icons.login, '/login'),
-      _SidebarItem('Катталуу', Icons.person_add, '/signup'),
-    ];
+    final accountItems = isGuest
+        ? [
+            _SidebarItem('Кирүү', Icons.login, '/login'),
+            _SidebarItem('Катталуу', Icons.person_add, '/signup'),
+          ]
+        : const <_SidebarItem>[];
 
     return Stack(
       children: [
@@ -99,10 +105,7 @@ class AppSidebar extends ConsumerWidget {
                             Text('Learn Kyrgyz', style: AppTextStyles.title),
                           ],
                         ),
-                        _SidebarIconButton(
-                          icon: Icons.close,
-                          onTap: onClose,
-                        ),
+                        _SidebarIconButton(icon: Icons.close, onTap: onClose),
                       ],
                     ),
                   ),
@@ -139,10 +142,7 @@ class AppSidebar extends ConsumerWidget {
                               children: [
                                 Text(displayName, style: AppTextStyles.title),
                                 const SizedBox(height: 2),
-                                Text(
-                                  subtitle,
-                                  style: AppTextStyles.muted,
-                                ),
+                                Text(subtitle, style: AppTextStyles.muted),
                               ],
                             ),
                           ),
@@ -204,34 +204,38 @@ class AppSidebar extends ConsumerWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: AppCard(
-                            radius: AppCardRadius.md,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            onTap: () => onNavigate('/login'),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.logout,
-                                  size: 20,
-                                  color: AppColors.accent,
-                                ),
-                                const SizedBox(width: 12),
-                                Text(
-                                  'Чыгуу',
-                                  style: AppTextStyles.body.copyWith(
-                                    fontWeight: FontWeight.w600,
+                        if (!isGuest)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: AppCard(
+                              radius: AppCardRadius.md,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              onTap: () async {
+                                await ref.read(authProvider).logout();
+                                onNavigate('/home');
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.logout,
+                                    size: 20,
                                     color: AppColors.accent,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    'Чыгуу',
+                                    style: AppTextStyles.body.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.accent,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
                         const SizedBox(height: 24),
                       ],
                     ),
@@ -246,8 +250,8 @@ class AppSidebar extends ConsumerWidget {
   }
 
   bool _isActive(String route) {
-    if (route == '/') {
-      return currentLocation == '/';
+    if (route == '/home') {
+      return currentLocation == '/home';
     }
     return currentLocation.startsWith(route);
   }

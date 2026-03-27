@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/providers/onboarding_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../shared/widgets/app_button.dart';
@@ -36,6 +37,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   void _setLocalError(String? value) {
     setState(() => _localError = value);
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -194,14 +201,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           );
                           if (!context.mounted) return;
                           if (ok) {
-                            context.go('/');
+                            await ref
+                                .read(onboardingProvider)
+                                .completeOnboarding();
+                            if (!context.mounted) return;
+                            context.go('/home');
                             return;
                           }
                           final error = auth.error;
                           if (error != null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(error)),
-                            );
+                            _showMessage(error);
                           }
                         },
                   child: Text(auth.isLoading ? '...' : 'Катталуу'),
@@ -211,7 +220,25 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   fullWidth: true,
                   size: AppButtonSize.lg,
                   variant: AppButtonVariant.outlined,
-                  onPressed: auth.isLoading ? null : () {},
+                  onPressed: auth.isLoading
+                      ? null
+                      : () async {
+                          _setLocalError(null);
+                          final ok = await auth.loginWithGoogle();
+                          if (!context.mounted) return;
+                          if (ok) {
+                            await ref
+                                .read(onboardingProvider)
+                                .completeOnboarding();
+                            if (!context.mounted) return;
+                            context.go('/home');
+                            return;
+                          }
+                          final error = auth.error;
+                          if (error != null) {
+                            _showMessage(error);
+                          }
+                        },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
@@ -222,10 +249,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  'Аккаунтуңуз барбы?',
-                  style: AppTextStyles.muted,
-                ),
+                Text('Аккаунтуңуз барбы?', style: AppTextStyles.muted),
                 TextButton(
                   onPressed: () => context.push('/login'),
                   child: Text(

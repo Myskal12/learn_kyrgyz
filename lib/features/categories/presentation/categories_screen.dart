@@ -8,6 +8,7 @@ import '../../../core/utils/app_text_styles.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_chip.dart';
 import '../../../shared/widgets/app_shell.dart';
+import '../../../shared/widgets/app_state_views.dart';
 import '../../profile/providers/progress_provider.dart';
 import '../providers/categories_provider.dart';
 
@@ -51,7 +52,34 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
         ),
         const SizedBox(height: 20),
         if (categories.isLoading && categories.categories.isEmpty)
-          const Center(child: CircularProgressIndicator())
+          const SizedBox(
+            height: 260,
+            child: AppLoadingState(
+              title: 'Сабактар жүктөлүүдө',
+              message: 'Категориялар даярдалып жатат.',
+            ),
+          )
+        else if (categories.errorMessage != null &&
+            categories.categories.isEmpty)
+          SizedBox(
+            height: 280,
+            child: AppErrorState(
+              message: categories.errorMessage!,
+              onAction: () => ref.read(categoriesProvider).load(force: true),
+            ),
+          )
+        else if (categories.categories.isEmpty)
+          SizedBox(
+            height: 280,
+            child: AppEmptyState(
+              title: 'Сабактар табылган жок',
+              message:
+                  'Firebase же локалдык кэштен бир да категория табылган жок.',
+              icon: Icons.menu_book_outlined,
+              actionLabel: 'Кайра жүктөө',
+              onAction: () => ref.read(categoriesProvider).load(force: true),
+            ),
+          )
         else
           ...categories.categories.asMap().entries.map((entry) {
             final lessonIndex = entry.key;
@@ -63,7 +91,8 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                 .round();
             final unlockThreshold = lessonIndex * 5;
             final locked =
-                lessonIndex > 0 && progress.totalWordsMastered < unlockThreshold;
+                lessonIndex > 0 &&
+                progress.totalWordsMastered < unlockThreshold;
             final completed = mastery >= 0.9;
             final active = !locked && mastery > 0 && mastery < 0.9;
             return Padding(
@@ -135,24 +164,24 @@ class _LessonCard extends StatelessWidget {
                 color: locked
                     ? AppColors.mutedSurface
                     : completed
-                        ? AppColors.success
-                        : active
-                            ? AppColors.primary
-                            : AppColors.mutedSurface,
+                    ? AppColors.success
+                    : active
+                    ? AppColors.primary
+                    : AppColors.mutedSurface,
                 borderRadius: BorderRadius.circular(14),
               ),
               alignment: Alignment.center,
               child: completed
                   ? Icon(Icons.check, color: Colors.white)
                   : locked
-                      ? Icon(Icons.lock, color: AppColors.muted)
-                      : Text(
-                          index.toString().padLeft(2, '0'),
-                          style: AppTextStyles.body.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: active ? AppColors.textDark : AppColors.muted,
-                          ),
-                        ),
+                  ? Icon(Icons.lock, color: AppColors.muted)
+                  : Text(
+                      index.toString().padLeft(2, '0'),
+                      style: AppTextStyles.body.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: active ? AppColors.textDark : AppColors.muted,
+                      ),
+                    ),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -214,10 +243,7 @@ class _LessonCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 6),
-                    _ProgressBar(
-                      value: mastery,
-                      color: AppColors.primary,
-                    ),
+                    _ProgressBar(value: mastery, color: AppColors.primary),
                   ],
                   if (!locked && !completed && !active)
                     Text(

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../shared/widgets/app_card.dart';
-import '../../../shared/widgets/app_chip.dart';
 import '../../../shared/widgets/app_shell.dart';
+import '../../../shared/widgets/app_state_views.dart';
 import '../../profile/providers/progress_provider.dart';
 
 class ProgressScreen extends ConsumerWidget {
@@ -14,55 +15,13 @@ class ProgressScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final progress = ref.watch(progressProvider);
-    final weeklyData = [
-      _WeekData(day: 'Дш', minutes: 15, target: 20),
-      _WeekData(day: 'Шш', minutes: 25, target: 20),
-      _WeekData(day: 'Шр', minutes: 18, target: 20),
-      _WeekData(day: 'Бш', minutes: 30, target: 20),
-      _WeekData(day: 'Жм', minutes: 22, target: 20),
-      _WeekData(day: 'Иш', minutes: 20, target: 20),
-      _WeekData(day: 'Жк', minutes: 12, target: 20),
-    ];
-
-    final achievements = [
-      _Achievement(
-        title: '7 күн',
-        description: '7 күн катар',
-        colors: [AppColors.accent, const Color(0xFFB71C1C)],
-        icon: Icons.local_fire_department,
-        completed: true,
-      ),
-      _Achievement(
-        title: '100 сөз',
-        description: '100 сөз үйрөндү',
-        colors: [AppColors.primary, const Color(0xFFF7C15C)],
-        icon: Icons.gps_fixed,
-        completed: true,
-      ),
-      _Achievement(
-        title: 'Биринчи сабак',
-        description: 'Биринчи сабакты аяктады',
-        colors: [const Color(0xFF1976D2), const Color(0xFF1565C0)],
-        icon: Icons.emoji_events,
-        completed: true,
-      ),
-      _Achievement(
-        title: '30 күн',
-        description: '30 күн катар',
-        colors: [AppColors.mutedSurface, AppColors.mutedSurface],
-        icon: Icons.local_fire_department,
-        completed: false,
-      ),
-    ];
-
-    final maxMinutes = weeklyData.fold<int>(
-      20,
-      (current, data) => data.minutes > current ? data.minutes : current,
-    );
+    final achievements = _buildAchievements(progress);
+    final unlockedCount = achievements.where((item) => item.unlocked).length;
+    final hasProgress = progress.totalWordsReviewed > 0;
 
     return AppShell(
       title: 'Прогресс',
-      subtitle: 'Апталык жыйынтык',
+      subtitle: 'Реалдуу жыйынтык',
       activeTab: AppTab.progress,
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -70,7 +29,7 @@ class ProgressScreen extends ConsumerWidget {
           Text('Прогресс', style: AppTextStyles.heading.copyWith(fontSize: 28)),
           const SizedBox(height: 6),
           Text(
-            'Сиздин ийгилик жолуӊуз',
+            'Сакталган аракеттер, синхрондоштуруу жана жетишкендиктер',
             style: AppTextStyles.body.copyWith(color: AppColors.muted),
           ),
           const SizedBox(height: 20),
@@ -95,7 +54,9 @@ class ProgressScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Учурдагы серия',
+                          progress.hasActivityToday
+                              ? 'Бүгүн да активдүүсүз'
+                              : 'Учурдагы серия',
                           style: AppTextStyles.muted.copyWith(
                             color: Colors.white70,
                           ),
@@ -121,9 +82,12 @@ class ProgressScreen extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _Metric(label: 'Сөздөр', value: progress.totalWordsMastered),
                     _Metric(
-                      label: 'Сабактар',
+                      label: 'Сөздөр',
+                      value: progress.totalWordsMastered,
+                    ),
+                    _Metric(
+                      label: 'Көрүүлөр',
                       value: progress.totalReviewSessions,
                     ),
                     _Metric(
@@ -136,67 +100,58 @@ class ProgressScreen extends ConsumerWidget {
               ],
             ),
           ),
+          const SizedBox(height: 16),
+          _ProgressSyncCard(progress: progress),
           const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Жумалык активдүүлүк',
-                style: AppTextStyles.body.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const AppChip(
-                label: 'Максат: 20 мүн',
-                variant: AppChipVariant.success,
-              ),
-            ],
+          Text(
+            'Статус',
+            style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 12),
-          AppCard(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 140,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: weeklyData.map((data) {
-                      return Expanded(
-                        child: _WeekBar(data: data, maxMinutes: maxMinutes),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Divider(color: AppColors.border),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Бул жумада жалпы:', style: AppTextStyles.muted),
-                    Text(
-                      '${weeklyData.fold<int>(0, (sum, d) => sum + d.minutes)} мүнөт',
-                      style: AppTextStyles.body.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+          if (!hasProgress)
+            SizedBox(
+              height: 260,
+              child: AppEmptyState(
+                title: 'Азырынча прогресс жок',
+                message:
+                    'Биринчи карточканы, сүйлөмдү же квизди өткөндөн кийин статистика ушул жерде пайда болот.',
+                icon: Icons.insights_outlined,
+                actionLabel: 'Биринчи сабакты ачуу',
+                onAction: () => context.go('/categories'),
+              ),
+            )
+          else
+            AppCard(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Апталык бөлүштүрүү эсептелбейт',
+                    style: AppTextStyles.body.copyWith(
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Азыркы версия күндөр же мүнөттөр боюнча тарыхты сактабайт. Ошондуктан бул экран жалпы көрүлгөн сөздөрдү, тактыкты жана серияны гана чынчыл көрсөтөт.',
+                    style: AppTextStyles.muted,
+                  ),
+                ],
+              ),
             ),
-          ),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'Жетишкендиктер',
-                style: AppTextStyles.body.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
               ),
-              Icon(Icons.trending_up, color: AppColors.muted),
+              Text(
+                '$unlockedCount/${achievements.length}',
+                style: AppTextStyles.muted,
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -208,53 +163,90 @@ class ProgressScreen extends ConsumerWidget {
             physics: const NeverScrollableScrollPhysics(),
             children: achievements
                 .map(
-                  (achievement) => Opacity(
-                    opacity: achievement.completed ? 1 : 0.5,
-                    child: AppCard(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 56,
-                            height: 56,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: achievement.colors,
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                            ),
-                            child: Icon(
-                              achievement.icon,
-                              color: Colors.white,
-                              size: 28,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            achievement.title,
-                            style: AppTextStyles.body.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            achievement.description,
-                            style: AppTextStyles.muted,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  (achievement) => _AchievementTile(achievement: achievement),
                 )
                 .toList(),
           ),
         ],
       ),
     );
+  }
+
+  List<_Achievement> _buildAchievements(ProgressProvider progress) {
+    return [
+      _Achievement(
+        title: 'Алгачкы кадам',
+        description: 'Биринчи сөздү ачтыңыз.',
+        icon: Icons.play_circle_fill,
+        colors: [const Color(0xFF1976D2), const Color(0xFF42A5F5)],
+        unlocked: progress.totalWordsReviewed >= 1,
+      ),
+      _Achievement(
+        title: '5 сөз',
+        description: '5 сөздү бекем үйрөндүңүз.',
+        icon: Icons.gps_fixed,
+        colors: [AppColors.primary, const Color(0xFFF7C15C)],
+        unlocked: progress.totalWordsMastered >= 5,
+      ),
+      _Achievement(
+        title: '15 сөз',
+        description: '15 сөздү өздөштүрдүңүз.',
+        icon: Icons.workspace_premium,
+        colors: [AppColors.accent, const Color(0xFFE57373)],
+        unlocked: progress.totalWordsMastered >= 15,
+      ),
+      _Achievement(
+        title: 'Так жооптор',
+        description: 'Тактык 80% же андан жогору.',
+        icon: Icons.verified,
+        colors: [AppColors.success, const Color(0xFF81C784)],
+        unlocked:
+            progress.totalReviewSessions > 0 && progress.accuracyPercent >= 80,
+      ),
+    ];
+  }
+}
+
+class _ProgressSyncCard extends StatelessWidget {
+  const _ProgressSyncCard({required this.progress});
+
+  final ProgressProvider progress;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (progress.syncState) {
+      case ProgressSyncState.localOnly:
+        return AppSyncBanner(
+          title: progress.syncTitle,
+          message: progress.syncSubtitle,
+          icon: Icons.save_outlined,
+          accentColor: AppColors.primary,
+        );
+      case ProgressSyncState.pending:
+      case ProgressSyncState.syncing:
+        return AppSyncBanner(
+          title: progress.syncTitle,
+          message: progress.syncSubtitle,
+          icon: Icons.sync,
+          accentColor: AppColors.accent,
+        );
+      case ProgressSyncState.synced:
+        return AppSyncBanner(
+          title: progress.syncTitle,
+          message: progress.syncSubtitle,
+          icon: Icons.cloud_done,
+          accentColor: AppColors.success,
+        );
+      case ProgressSyncState.failed:
+        return AppSyncBanner(
+          title: progress.syncTitle,
+          message: progress.syncSubtitle,
+          icon: Icons.cloud_off,
+          accentColor: AppColors.accent,
+          actionLabel: 'Кайра синк кылуу',
+          onAction: progress.canRetrySync ? progress.retrySync : null,
+        );
+    }
   }
 }
 
@@ -278,85 +270,69 @@ class _Metric extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: AppTextStyles.muted.copyWith(color: Colors.white70),
-        ),
+        Text(label, style: AppTextStyles.muted.copyWith(color: Colors.white70)),
       ],
     );
   }
 }
 
-class _WeekData {
-  _WeekData({required this.day, required this.minutes, required this.target});
+class _AchievementTile extends StatelessWidget {
+  const _AchievementTile({required this.achievement});
 
-  final String day;
-  final int minutes;
-  final int target;
-}
-
-class _WeekBar extends StatelessWidget {
-  const _WeekBar({required this.data, required this.maxMinutes});
-
-  final _WeekData data;
-  final int maxMinutes;
+  final _Achievement achievement;
 
   @override
   Widget build(BuildContext context) {
-    final heightFactor =
-        (data.minutes / maxMinutes).clamp(0.0, 1.0).toDouble();
-    final metGoal = data.minutes >= data.target;
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Expanded(
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: FractionallySizedBox(
-              heightFactor: heightFactor,
-              widthFactor: 0.6,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(8),
-                  ),
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: metGoal
-                        ? [const Color(0xFF388E3C), const Color(0xFF4CAF50)]
-                        : [AppColors.primary, const Color(0xFFF7C15C)],
-                  ),
+    return Opacity(
+      opacity: achievement.unlocked ? 1 : 0.5,
+      child: AppCard(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: achievement.colors,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
               ),
+              child: Icon(achievement.icon, color: Colors.white, size: 28),
             ),
-          ),
+            const SizedBox(height: 8),
+            Text(
+              achievement.title,
+              style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              achievement.description,
+              style: AppTextStyles.muted,
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
-        const SizedBox(height: 6),
-        Text(
-          data.day,
-          style: AppTextStyles.caption.copyWith(
-            color: AppColors.muted,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
 
 class _Achievement {
-  _Achievement({
+  const _Achievement({
     required this.title,
     required this.description,
-    required this.colors,
     required this.icon,
-    required this.completed,
+    required this.colors,
+    required this.unlocked,
   });
 
   final String title;
   final String description;
-  final List<Color> colors;
   final IconData icon;
-  final bool completed;
+  final List<Color> colors;
+  final bool unlocked;
 }

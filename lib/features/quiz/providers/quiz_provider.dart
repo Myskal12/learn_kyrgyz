@@ -28,6 +28,7 @@ class QuizProvider extends ChangeNotifier {
   int _reviewCorrect = 0;
   int _reviewWrong = 0;
   LearningDirection _direction = LearningDirection.enToKy;
+  String? _errorMessage;
 
   List<QuizQuestionModel> _questions = [];
   List<QuizQuestionModel> _originalQuestions = [];
@@ -65,9 +66,11 @@ class QuizProvider extends ChangeNotifier {
       _firstAttemptMistakes.values.toList();
   bool get reviewSucceeded => _unresolvedMistakes.isEmpty;
   int get unresolvedMistakesCount => _unresolvedMistakes.length;
+  String? get errorMessage => _errorMessage;
 
   Future<void> start(String categoryId) async {
     _isLoading = true;
+    _errorMessage = null;
     _stage = QuizStage.active;
     _isReviewRound = false;
     _answered = false;
@@ -85,18 +88,26 @@ class QuizProvider extends ChangeNotifier {
     _optionsCache.clear();
     notifyListeners();
 
-    final questions = await _quizRepository.fetchQuestions(
-      categoryId,
-      direction: _direction,
-    );
-    _questions = List.of(questions);
-    _originalQuestions = List.of(_questions);
-    _resetOptions();
-    _isLoading = false;
-    if (_questions.isEmpty) {
-      _stage = QuizStage.summary;
+    try {
+      final questions = await _quizRepository.fetchQuestions(
+        categoryId,
+        direction: _direction,
+      );
+      _questions = List.of(questions);
+      _originalQuestions = List.of(_questions);
+      _resetOptions();
+    } catch (_) {
+      _errorMessage =
+          'Квиз жүктөлгөн жок. Интернетти текшерип кайра аракет кылыңыз.';
+      _questions = [];
+      _originalQuestions = [];
+      _stage = QuizStage.active;
+      _answered = false;
+      _selected = null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<void> startWithDirection(
@@ -160,8 +171,8 @@ class QuizProvider extends ChangeNotifier {
     final word = question.wordId != null
         ? _wordsRepository.findById(question.wordId!)
         : (_direction == LearningDirection.kyToEn
-            ? _wordsRepository.findByKyrgyz(question.question)
-            : _wordsRepository.findByEnglish(question.question));
+              ? _wordsRepository.findByKyrgyz(question.question)
+              : _wordsRepository.findByEnglish(question.question));
     if (word == null) return;
     if (mastered) {
       _progress.markWordMastered(word.id);

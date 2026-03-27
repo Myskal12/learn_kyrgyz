@@ -28,6 +28,7 @@ class FlashcardProvider extends ChangeNotifier {
   final List<WordModel> _mistakeHistory = [];
   int _correctCount = 0;
   int _wrongCount = 0;
+  String? _errorMessage;
 
   List<WordModel> get words => _deck;
   int get index => _index;
@@ -44,32 +45,55 @@ class FlashcardProvider extends ChangeNotifier {
   int get totalWords => _allWords.length;
   int get correctCount => _correctCount;
   int get wrongCount => _wrongCount;
+  int get accuracyPercent {
+    final total = _correctCount + _wrongCount;
+    if (total == 0) return 0;
+    return ((_correctCount / total) * 100).round();
+  }
+
   List<WordModel> get mistakes => List.unmodifiable(_mistakeHistory);
+  String? get errorMessage => _errorMessage;
 
   Future<void> load(String categoryId) async {
     _loading = true;
+    _errorMessage = null;
     notifyListeners();
     _sentencesByWordId = {};
-    final wordsFuture = _repo.fetchWordsByCategory(categoryId);
-    List<SentenceModel> sentences = const [];
     try {
-      sentences = await _sentencesRepo.fetchSentencesByCategory(categoryId);
-    } catch (_) {
-      sentences = const [];
-    }
-    _sentencesByWordId = _indexSentences(sentences);
+      final wordsFuture = _repo.fetchWordsByCategory(categoryId);
+      List<SentenceModel> sentences = const [];
+      try {
+        sentences = await _sentencesRepo.fetchSentencesByCategory(categoryId);
+      } catch (_) {
+        sentences = const [];
+      }
+      _sentencesByWordId = _indexSentences(sentences);
 
-    _allWords = await wordsFuture;
-    _deck = List.of(_allWords);
-    _index = 0;
-    _showTranslation = false;
-    _stage = FlashcardStage.learning;
-    _pendingReview.clear();
-    _mistakeHistory.clear();
-    _correctCount = 0;
-    _wrongCount = 0;
-    _loading = false;
-    notifyListeners();
+      _allWords = await wordsFuture;
+      _deck = List.of(_allWords);
+      _index = 0;
+      _showTranslation = false;
+      _stage = FlashcardStage.learning;
+      _pendingReview.clear();
+      _mistakeHistory.clear();
+      _correctCount = 0;
+      _wrongCount = 0;
+    } catch (_) {
+      _errorMessage =
+          'Карточкалар жүктөлгөн жок. Интернетти текшерип кайра аракет кылыңыз.';
+      _allWords = [];
+      _deck = [];
+      _index = 0;
+      _showTranslation = false;
+      _stage = FlashcardStage.learning;
+      _pendingReview.clear();
+      _mistakeHistory.clear();
+      _correctCount = 0;
+      _wrongCount = 0;
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
   }
 
   Map<String, SentenceModel> _indexSentences(List<SentenceModel> sentences) {
@@ -157,6 +181,18 @@ class FlashcardProvider extends ChangeNotifier {
     _showTranslation = false;
     _pendingReview.clear();
     _mistakeHistory.clear();
+    _correctCount = 0;
+    _wrongCount = 0;
+    notifyListeners();
+  }
+
+  void reviewMistakesOnly() {
+    if (_mistakeHistory.isEmpty) return;
+    _deck = List.of(_mistakeHistory);
+    _index = 0;
+    _stage = FlashcardStage.review;
+    _showTranslation = false;
+    _pendingReview.clear();
     _correctCount = 0;
     _wrongCount = 0;
     notifyListeners();

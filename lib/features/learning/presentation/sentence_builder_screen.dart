@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../app/providers/learning_direction_provider.dart';
 import '../../../core/providers/learning_session_provider.dart';
@@ -11,6 +12,8 @@ import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_chip.dart';
 import '../../../shared/widgets/app_shell.dart';
+import '../../../shared/widgets/app_state_views.dart';
+import '../../../shared/widgets/session_summary_panel.dart';
 import '../providers/sentence_builder_provider.dart';
 
 class SentenceBuilderScreen extends ConsumerStatefulWidget {
@@ -23,8 +26,7 @@ class SentenceBuilderScreen extends ConsumerStatefulWidget {
       _SentenceBuilderScreenState();
 }
 
-class _SentenceBuilderScreenState
-    extends ConsumerState<SentenceBuilderScreen> {
+class _SentenceBuilderScreenState extends ConsumerState<SentenceBuilderScreen> {
   LearningDirection? _lastDirection;
 
   @override
@@ -32,16 +34,13 @@ class _SentenceBuilderScreenState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.categoryId.isNotEmpty) {
-        ref
-            .read(learningSessionProvider)
-            .setLastCategoryId(widget.categoryId);
+        ref.read(learningSessionProvider).setLastCategoryId(widget.categoryId);
       }
       final direction = ref.read(learningDirectionProvider);
       _lastDirection = direction;
-      ref.read(sentenceBuilderProvider).load(
-            widget.categoryId,
-            direction: direction,
-          );
+      ref
+          .read(sentenceBuilderProvider)
+          .load(widget.categoryId, direction: direction);
     });
   }
 
@@ -54,6 +53,9 @@ class _SentenceBuilderScreenState
       title: 'Сүйлөм түзүү',
       subtitle: 'Сүйлөмдөрдү түзүү',
       activeTab: AppTab.learn,
+      navigationMode: AppShellNavigationMode.back,
+      backFallbackRoute: '/practice',
+      showBottomNav: false,
       child: Builder(
         builder: (context) {
           if (_lastDirection != direction) {
@@ -64,18 +66,29 @@ class _SentenceBuilderScreenState
             });
           }
           if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const AppLoadingState(
+              title: 'Сүйлөмдөр жүктөлүүдө',
+              message: 'Көнүгүү үчүн сүйлөмдөр даярдалып жатат.',
+            );
+          }
+          if (provider.errorMessage != null) {
+            return AppErrorState(
+              message: provider.errorMessage!,
+              onAction: () =>
+                  provider.load(widget.categoryId, direction: direction),
+            );
           }
           if (provider.isCompleted) {
-            return _SentenceBuilderSummary(provider: provider);
+            return _SentenceBuilderSummary(
+              provider: provider,
+              categoryId: widget.categoryId,
+            );
           }
           final sentence = provider.current;
           if (sentence == null) {
             return _EmptyState(
-              onReload: () => provider.load(
-                widget.categoryId,
-                direction: direction,
-              ),
+              onReload: () =>
+                  provider.load(widget.categoryId, direction: direction),
             );
           }
           final isEnToKy = direction == LearningDirection.enToKy;
@@ -100,6 +113,8 @@ class _SentenceBuilderScreenState
                 progress: provider.progress,
               ),
               const SizedBox(height: 20),
+              const _SentenceHintCard(),
+              const SizedBox(height: 16),
               AppCard(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -114,9 +129,7 @@ class _SentenceBuilderScreenState
               const SizedBox(height: 16),
               Text(
                 'Сиздин сүйлөмүңүз:',
-                style: AppTextStyles.body.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 8),
               AppCard(
@@ -147,17 +160,16 @@ class _SentenceBuilderScreenState
               const SizedBox(height: 16),
               Text(
                 'Сөздөр банкы:',
-                style: AppTextStyles.body.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: provider.availableTokens.map((token) {
-                  final isUsed = provider.selectedTokens
-                      .any((selected) => selected.id == token.id);
+                  final isUsed = provider.selectedTokens.any(
+                    (selected) => selected.id == token.id,
+                  );
                   return Opacity(
                     opacity: isUsed ? 0.3 : 1,
                     child: AppChip(
@@ -230,10 +242,7 @@ class _ProgressHeader extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(
-              'Сүйлөм $current / $total',
-              style: AppTextStyles.muted,
-            ),
+            Text('Сүйлөм $current / $total', style: AppTextStyles.muted),
             const Spacer(),
             Text(
               '${(progress * 100).round()}%',
@@ -265,8 +274,8 @@ class _PromptChips extends StatelessWidget {
         final variant = index == 0
             ? AppChipVariant.accent
             : index == 2
-                ? AppChipVariant.primary
-                : AppChipVariant.defaultChip;
+            ? AppChipVariant.primary
+            : AppChipVariant.defaultChip;
         return AppChip(label: word, variant: variant);
       }).toList(),
     );
@@ -318,8 +327,9 @@ class _ResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = isCorrect ? AppColors.success : AppColors.accent;
-    final targetText =
-        direction == LearningDirection.enToKy ? sentence.ky : sentence.en;
+    final targetText = direction == LearningDirection.enToKy
+        ? sentence.ky
+        : sentence.en;
     return AppCard(
       padding: const EdgeInsets.all(16),
       backgroundColor: color.withValues(alpha: 0.1),
@@ -353,10 +363,7 @@ class _ResultCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 6),
-                Text(
-                  'Туура жооп: $targetText',
-                  style: AppTextStyles.body,
-                ),
+                Text('Туура жооп: $targetText', style: AppTextStyles.body),
               ],
             ),
           ),
@@ -367,96 +374,113 @@ class _ResultCard extends StatelessWidget {
 }
 
 class _SentenceBuilderSummary extends StatelessWidget {
-  const _SentenceBuilderSummary({required this.provider});
+  const _SentenceBuilderSummary({
+    required this.provider,
+    required this.categoryId,
+  });
 
   final SentenceBuilderProvider provider;
+  final String categoryId;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Сессия аяктады', style: AppTextStyles.heading),
-          const SizedBox(height: 12),
-          AppCard(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                _SummaryRow(
-                  label: 'Сүйлөмдөр',
-                  value: provider.totalSentences.toString(),
-                ),
-                const SizedBox(height: 8),
-                _SummaryRow(
-                  label: 'Туура',
-                  value: provider.correctCount.toString(),
-                  color: AppColors.success,
-                ),
-                const SizedBox(height: 8),
-                _SummaryRow(
-                  label: 'Ката',
-                  value: provider.wrongCount.toString(),
-                  color: AppColors.accent,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          if (provider.mistakes.isNotEmpty) ...[
-            Text('Ката сүйлөмдөр', style: AppTextStyles.title),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: provider.mistakes
-                  .map(
-                    (sentence) => AppChip(
-                      label: '${sentence.en} - ${sentence.ky}',
-                      variant: AppChipVariant.defaultChip,
-                    ),
-                  )
-                  .toList(),
-            ),
-            const SizedBox(height: 16),
-          ],
-          AppButton(
-            fullWidth: true,
-            onPressed: provider.restart,
-            child: const Text('Кайра баштоо'),
-          ),
-          const SizedBox(height: 12),
-          AppButton(
-            fullWidth: true,
-            variant: AppButtonVariant.outlined,
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Артка кайтуу'),
-          ),
-        ],
+    final mistakes = provider.mistakes
+        .take(6)
+        .map((sentence) => '${sentence.en} → ${sentence.ky}')
+        .toList();
+    final hasMistakes = mistakes.isNotEmpty;
+
+    return SessionSummaryPanel(
+      title: 'Сүйлөм түзүү аяктады',
+      headline: _headline(),
+      message: hasMistakes
+          ? 'Алсыз сүйлөмдөрдү кайра чогултуп, андан соң квиз менен текшерип чыгыңыз.'
+          : 'Тартипти жакшы кармадыңыз. Эми ушул эле теманы квиз менен же карточка менен бекемдеңиз.',
+      metrics: [
+        SessionSummaryMetric(
+          label: 'Сүйлөмдөр',
+          value: provider.totalSentences.toString(),
+        ),
+        SessionSummaryMetric(
+          label: 'Туура',
+          value: provider.correctCount.toString(),
+          color: AppColors.success,
+        ),
+        SessionSummaryMetric(
+          label: 'Ката',
+          value: provider.wrongCount.toString(),
+          color: AppColors.accent,
+        ),
+        SessionSummaryMetric(
+          label: 'Тактык',
+          value: '${provider.accuracyPercent}%',
+          color: AppColors.primary,
+        ),
+      ],
+      noteTitle: 'Эмне үчүн бул маанилүү',
+      noteMessage:
+          'Сүйлөмдү өзүңүз чогултуу сөздөрдү жөн гана таанууга эмес, активдүү колдонууга өткөрөт.',
+      tagsTitle: hasMistakes ? 'Кайра түзө турган сүйлөмдөр' : null,
+      tags: mistakes,
+      primaryAction: SessionSummaryAction(
+        label: hasMistakes ? 'Ката сүйлөмдөрдү кайра өтүү' : 'Квизге өтүү',
+        onPressed: hasMistakes
+            ? provider.reviewMistakes
+            : () => context.go('/quiz/$categoryId'),
       ),
+      secondaryAction: SessionSummaryAction(
+        label: hasMistakes
+            ? 'Карточкаларга кайтуу'
+            : 'Карточкалар менен бекемдөө',
+        onPressed: () => context.go('/flashcards/$categoryId'),
+        variant: AppButtonVariant.outlined,
+      ),
+      tertiaryLabel: 'Практикага кайтуу',
+      onTertiaryTap: () => context.go('/practice'),
     );
+  }
+
+  String _headline() {
+    if (provider.wrongCount == 0 && provider.correctCount > 0) {
+      return 'Сүйлөмдөр так чыкты';
+    }
+    if (provider.accuracyPercent >= 70) {
+      return 'Жакшы курулуш';
+    }
+    return 'Бир аз дагы бекемдөө керек';
   }
 }
 
-class _SummaryRow extends StatelessWidget {
-  const _SummaryRow({required this.label, required this.value, this.color});
-
-  final String label;
-  final String value;
-  final Color? color;
+class _SentenceHintCard extends StatelessWidget {
+  const _SentenceHintCard();
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: AppTextStyles.body),
-        Text(
-          value,
-          style: AppTextStyles.title.copyWith(color: color),
-        ),
-      ],
+    return AppCard(
+      padding: const EdgeInsets.all(14),
+      backgroundColor: AppColors.primary.withValues(alpha: 0.05),
+      borderColor: AppColors.primary.withValues(alpha: 0.18),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 34,
+            height: 34,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.primary.withValues(alpha: 0.12),
+            ),
+            child: Icon(Icons.auto_awesome, size: 18, color: AppColors.primary),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              'Алгач маанини окуңуз, анан сөздөрдү башынан аягына чейин чогултуңуз. Туура жооп тек гана түстөр менен эмес, текст менен да көрсөтүлөт.',
+              style: AppTextStyles.muted,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -468,24 +492,12 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Бул категорияда сүйлөмдөр табылган жок.',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
-            AppButton(
-              onPressed: onReload,
-              child: const Text('Кайра жүктөө'),
-            ),
-          ],
-        ),
-      ),
+    return AppEmptyState(
+      title: 'Сүйлөмдөр табылган жок',
+      message: 'Бул категория үчүн сүйлөмдөр Firebase же кэштен табылган жок.',
+      icon: Icons.subject_outlined,
+      actionLabel: 'Кайра жүктөө',
+      onAction: onReload,
     );
   }
 }

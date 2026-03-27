@@ -12,9 +12,12 @@ class LessonOverviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppShell(
-      title: '',
-      showTopNav: false,
+      title: 'Сабак тууралуу',
+      subtitle: 'Баштоодон мурун кыскача',
       activeTab: AppTab.learn,
+      navigationMode: AppShellNavigationMode.back,
+      backFallbackRoute: '/categories',
+      showBottomNav: false,
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Container(
@@ -22,7 +25,11 @@ class LessonOverviewScreen extends StatelessWidget {
             constraints: BoxConstraints(minHeight: constraints.maxHeight),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFFFFF3DB), Color(0xFFFDF6E8), Color(0xFFF9E8E0)],
+                colors: [
+                  Color(0xFFFFF3DB),
+                  Color(0xFFFDF6E8),
+                  Color(0xFFF9E8E0),
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -30,28 +37,6 @@ class LessonOverviewScreen extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: AppColors.background.withValues(alpha: 0.85),
-                    border: Border(
-                      bottom: BorderSide(color: AppColors.border),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      _BackButton(onTap: () => context.pop()),
-                      const SizedBox(width: 12),
-                      Text(
-                        'Сабак тууралуу',
-                        style: AppTextStyles.body.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
                 AppCard(
                   padding: const EdgeInsets.all(24),
                   child: Stack(
@@ -115,7 +100,9 @@ class LessonOverviewScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text(
                   'Практика кылынуучу көндүмдөр',
-                  style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
+                  style: AppTextStyles.body.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Wrap(
@@ -151,7 +138,11 @@ class LessonOverviewScreen extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Icon(Icons.star, color: AppColors.primary, size: 18),
+                                Icon(
+                                  Icons.star,
+                                  color: AppColors.primary,
+                                  size: 18,
+                                ),
                                 const SizedBox(width: 6),
                                 Text('Кыйынчылык', style: AppTextStyles.muted),
                               ],
@@ -177,7 +168,11 @@ class LessonOverviewScreen extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Icon(Icons.timer, color: AppColors.accent, size: 18),
+                                Icon(
+                                  Icons.timer,
+                                  color: AppColors.accent,
+                                  size: 18,
+                                ),
                                 const SizedBox(width: 6),
                                 Text('Убакыт', style: AppTextStyles.muted),
                               ],
@@ -209,7 +204,9 @@ class LessonOverviewScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      _OutcomeRow(text: 'Ар кандай кырдаалда саламдашуу жана таанышуу'),
+                      _OutcomeRow(
+                        text: 'Ар кандай кырдаалда саламдашуу жана таанышуу',
+                      ),
                       const SizedBox(height: 8),
                       _OutcomeRow(text: 'Багыт сурап, жоопту түшүнүү'),
                       const SizedBox(height: 8),
@@ -259,29 +256,6 @@ class LessonOverviewScreen extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class _BackButton extends StatelessWidget {
-  const _BackButton({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: AppColors.mutedSurface,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: const Icon(Icons.arrow_back, size: 20),
       ),
     );
   }
@@ -349,10 +323,7 @@ class _OutcomeRow extends StatelessWidget {
         Icon(Icons.check_circle, color: AppColors.primary, size: 20),
         const SizedBox(width: 8),
         Expanded(
-          child: Text(
-            text,
-            style: AppTextStyles.body.copyWith(fontSize: 14),
-          ),
+          child: Text(text, style: AppTextStyles.body.copyWith(fontSize: 14)),
         ),
       ],
     );

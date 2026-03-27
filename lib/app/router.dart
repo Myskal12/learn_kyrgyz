@@ -15,15 +15,28 @@ import '../features/profile/presentation/profile_screen.dart';
 import '../features/profile/presentation/profile_settings_screen.dart';
 import '../features/quiz/presentation/quiz_screen.dart';
 import '../features/home/presentation/home_screen.dart';
+import '../features/onboarding/presentation/launch_gate_screen.dart';
+import '../features/onboarding/presentation/welcome_screen.dart';
 import '../features/practice/presentation/practice_screen.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/',
   routes: [
-    GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
+    GoRoute(path: '/', builder: (context, state) => const LaunchGateScreen()),
+    GoRoute(
+      path: '/welcome',
+      builder: (context, state) => const WelcomeScreen(),
+    ),
+    GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
-    GoRoute(path: '/signup', builder: (context, state) => const RegisterScreen()),
-    GoRoute(path: '/practice', builder: (context, state) => const PracticeScreen()),
+    GoRoute(
+      path: '/signup',
+      builder: (context, state) => const RegisterScreen(),
+    ),
+    GoRoute(
+      path: '/practice',
+      builder: (context, state) => const PracticeScreen(),
+    ),
     GoRoute(
       path: '/categories',
       builder: (context, state) => const CategoriesScreen(),
@@ -65,7 +78,10 @@ final GoRouter router = GoRouter(
       path: '/progress',
       builder: (context, state) => const ProgressScreen(),
     ),
-    GoRoute(path: '/profile', builder: (context, state) => const ProfileScreen()),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => const ProfileScreen(),
+    ),
     GoRoute(
       path: '/settings',
       builder: (context, state) => const ProfileSettingsScreen(),

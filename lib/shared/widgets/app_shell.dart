@@ -8,6 +8,8 @@ import 'app_bottom_nav.dart';
 import 'app_sidebar.dart';
 import 'app_top_nav.dart';
 
+enum AppShellNavigationMode { menu, back }
+
 class AppShell extends StatefulWidget {
   const AppShell({
     super.key,
@@ -18,6 +20,8 @@ class AppShell extends StatefulWidget {
     this.showTopNav = true,
     this.showBottomNav = true,
     this.activeTab = AppTab.learn,
+    this.navigationMode = AppShellNavigationMode.menu,
+    this.backFallbackRoute,
   });
 
   final Widget child;
@@ -27,6 +31,8 @@ class AppShell extends StatefulWidget {
   final bool showTopNav;
   final bool showBottomNav;
   final AppTab activeTab;
+  final AppShellNavigationMode navigationMode;
+  final String? backFallbackRoute;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -48,10 +54,19 @@ class _AppShellState extends State<AppShell> {
     context.go(route);
   }
 
+  void _handleBack() {
+    final router = GoRouter.of(context);
+    if (router.canPop()) {
+      router.pop();
+      return;
+    }
+    context.go(widget.backFallbackRoute ?? '/home');
+  }
+
   void _handleTab(AppTab tab) {
     switch (tab) {
       case AppTab.learn:
-        context.go('/');
+        context.go('/home');
         break;
       case AppTab.practice:
         context.go('/practice');
@@ -110,8 +125,15 @@ class _AppShellState extends State<AppShell> {
                   child: AppTopNav(
                     title: widget.title,
                     subtitle: widget.subtitle ?? 'Кыргызча / English',
-                    onMenuTap: _openSidebar,
+                    onLeadingTap:
+                        widget.navigationMode == AppShellNavigationMode.back
+                        ? _handleBack
+                        : _openSidebar,
                     tone: widget.tone,
+                    leadingType:
+                        widget.navigationMode == AppShellNavigationMode.back
+                        ? AppTopNavLeadingType.back
+                        : AppTopNavLeadingType.menu,
                   ),
                 ),
               ),
@@ -131,12 +153,13 @@ class _AppShellState extends State<AppShell> {
                 ),
               ),
             ),
-          AppSidebar(
-            open: _sidebarOpen,
-            currentLocation: GoRouterState.of(context).uri.path,
-            onClose: _closeSidebar,
-            onNavigate: _handleNavigate,
-          ),
+          if (widget.navigationMode == AppShellNavigationMode.menu)
+            AppSidebar(
+              open: _sidebarOpen,
+              currentLocation: GoRouterState.of(context).uri.path,
+              onClose: _closeSidebar,
+              onNavigate: _handleNavigate,
+            ),
         ],
       ),
     );

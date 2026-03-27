@@ -1,0 +1,224 @@
+/* Learn Kyrgyz - Professional Documentation PDF Styles */
+
+:root {
+  --color-primary: #1a365d;
+  --color-secondary: #2c5282;
+  --color-accent: #3182ce;
+  --color-text: #2d3748;
+  --color-text-muted: #4a5568;
+  --color-border: #e2e8f0;
+  --color-bg-alt: #f7fafc;
+  --color-success: #276749;
+  --color-warning: #b7791f;
+  --color-critical: #c53030;
+}
+
+@page {
+  size: A4;
+  margin: 2.5cm;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 12pt;
+  line-height: 1.8;
+  color: var(--color-text);
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Cover / Title styling */
+h1 {
+  font-size: 24pt;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0 0 0.5em 0;
+  padding-bottom: 0.3em;
+  border-bottom: 3px solid var(--color-accent);
+  page-break-after: avoid;
+}
+
+h2 {
+  font-size: 16pt;
+  font-weight: 600;
+  color: var(--color-secondary);
+  margin: 1.25em 0 0.5em 0;
+  page-break-after: avoid;
+}
+
+h3 {
+  font-size: 13pt;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 1.5em 0 0.6em 0;
+  page-break-after: avoid;
+}
+
+h4, h5, h6 {
+  font-size: 12pt;
+  font-weight: 600;
+  margin: 1.25em 0 0.5em 0;
+  page-break-after: avoid;
+}
+
+p {
+  margin: 0.75em 0;
+  text-align: justify;
+}
+
+/* Document metadata header */
+body > h1:first-of-type + p,
+body > p:first-of-type {
+  font-size: 9pt;
+  color: var(--color-text-muted);
+  margin-bottom: 1.5em;
+}
+
+/* Horizontal rules */
+hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 1.5em 0;
+}
+
+/* Lists */
+ul, ol {
+  margin: 0.75em 0;
+  padding-left: 1.5em;
+}
+
+li {
+  margin: 0.4em 0;
+}
+
+/* Tables - Professional documentation style */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25em 0;
+  font-size: 11pt;
+  page-break-inside: avoid;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+th {
+  background: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.65em 0.85em;
+  border: 1px solid var(--color-secondary);
+}
+
+td {
+  padding: 0.65em 0.85em;
+  border: 1px solid var(--color-border);
+}
+
+tr:nth-child(even) {
+  background: var(--color-bg-alt);
+}
+
+tr:hover {
+  background: #edf2f7;
+}
+
+/* Code and monospace */
+code, pre, kbd {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 9pt;
+}
+
+code {
+  background: var(--color-bg-alt);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  border: 1px solid var(--color-border);
+}
+
+pre {
+  background: #2d3748;
+  color: #e2e8f0;
+  padding: 1em;
+  overflow-x: auto;
+  border-radius: 4px;
+  margin: 1em 0;
+  page-break-inside: avoid;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  border: none;
+  color: inherit;
+}
+
+/* Blockquotes */
+blockquote {
+  margin: 1em 0;
+  padding: 0.5em 1em;
+  border-left: 4px solid var(--color-accent);
+  background: var(--color-bg-alt);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Strong and emphasis */
+strong, b {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+em {
+  font-style: italic;
+}
+
+/* Checkmarks and status indicators */
+p:has(✓), li:has(✓) {
+  color: var(--color-success);
+}
+
+/* Links */
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Section breaks for better pagination */
+h2, h3 {
+  page-break-before: auto;
+}
+
+/* Avoid orphaned headings */
+h1, h2, h3, h4, h5, h6 {
+  page-break-after: avoid;
+}
+
+/* Footer area - document info */
+body::after {
+  content: none;
+}
+
+/* Print-specific adjustments */
+@media print {
+  body {
+    font-size: 10pt;
+  }
+  
+  table {
+    page-break-inside: avoid;
+  }
+  
+  pre, blockquote {
+    page-break-inside: avoid;
+  }
+}

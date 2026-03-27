@@ -24,6 +24,7 @@ dependencies:
   firebase_auth: ^5.7.0
   cloud_firestore: ^5.4.4
   google_sign_in: ^6.2.1
+  url_launcher: ^6.3.1
 
   shared_preferences: ^2.5.3
 

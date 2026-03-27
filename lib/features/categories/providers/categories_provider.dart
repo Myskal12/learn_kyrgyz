@@ -12,17 +12,23 @@ class CategoriesProvider extends ChangeNotifier {
 
   List<CategoryModel> _categories = [];
   bool _loading = false;
+  String? _errorMessage;
 
   List<CategoryModel> get categories => _categories;
   bool get isLoading => _loading;
+  String? get errorMessage => _errorMessage;
 
   Future<void> load({bool force = false}) async {
     if (_loading) return;
     if (!force && _categories.isNotEmpty) return;
     _loading = true;
+    _errorMessage = null;
     notifyListeners();
     try {
       _categories = await _service.fetchCategories();
+    } catch (_) {
+      _errorMessage =
+          'Категориялар жүктөлгөн жок. Интернетти текшерип кайра аракет кылыңыз.';
     } finally {
       _loading = false;
       notifyListeners();

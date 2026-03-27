@@ -10,6 +10,7 @@ import '../../../core/utils/learning_direction.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_shell.dart';
+import '../../../shared/widgets/app_state_views.dart';
 import '../providers/progress_provider.dart';
 import '../providers/user_profile_provider.dart';
 
@@ -25,12 +26,18 @@ class ProfileScreen extends ConsumerWidget {
     final progress = ref.watch(progressProvider);
     final direction = ref.watch(learningDirectionProvider);
     final themeMode = ref.watch(themeModeProvider);
+    final rankingTitle = profileProvider.isGuest
+        ? 'Конок режиминде рейтинг жок'
+        : 'Рейтинг толук тизмекте эсептелет';
+    final rankingSubtitle = profileProvider.isGuest
+        ? 'Киргенден кийин сиз дагы лидерборддо көрүнөсүз.'
+        : 'Чынчыл орунду көрүү үчүн лидерборд экранын ачыңыз.';
 
     final themeLabel = themeMode == ThemeMode.dark
         ? 'Караңгы'
         : themeMode == ThemeMode.light
-            ? 'Жарык'
-            : 'Авто';
+        ? 'Жарык'
+        : 'Авто';
 
     return AppShell(
       title: 'Профиль',
@@ -79,7 +86,7 @@ class ProfileScreen extends ConsumerWidget {
                       Text(profile.nickname, style: AppTextStyles.title),
                       const SizedBox(height: 4),
                       Text(
-                        'Башталгыч деңгээл · ${progress.streakDays} күн катар',
+                        '${progress.level} · ${progress.streakDays} күн катар',
                         style: AppTextStyles.muted,
                       ),
                     ],
@@ -106,7 +113,7 @@ class ProfileScreen extends ConsumerWidget {
               Expanded(
                 child: _StatCard(
                   value: progress.totalReviewSessions.toString(),
-                  label: 'Тесттер',
+                  label: 'Көрүүлөр',
                 ),
               ),
               const SizedBox(width: 12),
@@ -118,6 +125,8 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ],
           ),
+          const SizedBox(height: 20),
+          _ProfileSyncNotice(progress: progress),
           const SizedBox(height: 20),
           Text(
             'Рейтинг',
@@ -136,16 +145,13 @@ class ProfileScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Сиз 24-орундасыз',
+                        rankingTitle,
                         style: AppTextStyles.body.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        'Жуманын топ 10 максатына 80 упай калды',
-                        style: AppTextStyles.muted,
-                      ),
+                      Text(rankingSubtitle, style: AppTextStyles.muted),
                     ],
                   ),
                 ),
@@ -166,7 +172,10 @@ class ProfileScreen extends ConsumerWidget {
               children: [
                 Row(
                   children: [
-                    _CircleIcon(icon: Icons.translate, color: AppColors.primary),
+                    _CircleIcon(
+                      icon: Icons.translate,
+                      color: AppColors.primary,
+                    ),
                     const SizedBox(width: 12),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,6 +254,49 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
+class _ProfileSyncNotice extends StatelessWidget {
+  const _ProfileSyncNotice({required this.progress});
+
+  final ProgressProvider progress;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (progress.syncState) {
+      case ProgressSyncState.localOnly:
+        return AppSyncBanner(
+          title: progress.syncTitle,
+          message: progress.syncSubtitle,
+          icon: Icons.save_outlined,
+          accentColor: AppColors.primary,
+        );
+      case ProgressSyncState.pending:
+      case ProgressSyncState.syncing:
+        return AppSyncBanner(
+          title: progress.syncTitle,
+          message: progress.syncSubtitle,
+          icon: Icons.sync,
+          accentColor: AppColors.accent,
+        );
+      case ProgressSyncState.synced:
+        return AppSyncBanner(
+          title: progress.syncTitle,
+          message: progress.syncSubtitle,
+          icon: Icons.cloud_done,
+          accentColor: AppColors.success,
+        );
+      case ProgressSyncState.failed:
+        return AppSyncBanner(
+          title: progress.syncTitle,
+          message: progress.syncSubtitle,
+          icon: Icons.cloud_off,
+          accentColor: AppColors.accent,
+          actionLabel: 'Кайра синк кылуу',
+          onAction: progress.canRetrySync ? progress.retrySync : null,
+        );
+    }
+  }
+}
+
 class _StatCard extends StatelessWidget {
   const _StatCard({required this.value, required this.label});
 
@@ -257,10 +309,7 @@ class _StatCard extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       child: Column(
         children: [
-          Text(
-            value,
-            style: AppTextStyles.title.copyWith(fontSize: 20),
-          ),
+          Text(value, style: AppTextStyles.title.copyWith(fontSize: 20)),
           const SizedBox(height: 4),
           Text(label, style: AppTextStyles.muted),
         ],

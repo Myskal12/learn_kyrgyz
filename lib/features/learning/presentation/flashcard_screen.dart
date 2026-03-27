@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/providers/learning_session_provider.dart';
 import '../../../app/providers/learning_direction_provider.dart';
@@ -9,7 +10,10 @@ import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../core/utils/learning_direction.dart';
 import '../../../shared/widgets/app_button.dart';
+import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_shell.dart';
+import '../../../shared/widgets/app_state_views.dart';
+import '../../../shared/widgets/session_summary_panel.dart';
 import '../../../data/models/sentence_model.dart';
 import '../../../data/models/word_model.dart';
 import '../providers/flashcard_provider.dart';
@@ -33,9 +37,7 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen> {
       ..setPitch(1.0)
       ..setSpeechRate(0.4);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(learningSessionProvider)
-          .setLastCategoryId(widget.categoryId);
+      ref.read(learningSessionProvider).setLastCategoryId(widget.categoryId);
       ref.read(flashcardProvider).load(widget.categoryId);
     });
   }
@@ -59,18 +61,40 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen> {
       title: 'Карточкалар',
       subtitle: 'Сөздөрдү бекемдөө',
       activeTab: AppTab.learn,
+      navigationMode: AppShellNavigationMode.back,
+      backFallbackRoute: '/categories',
+      showBottomNav: false,
       child: Builder(
         builder: (context) {
           final provider = ref.watch(flashcardProvider);
           if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const AppLoadingState(
+              title: 'Карточкалар жүктөлүүдө',
+              message: 'Сөздөр жана мисал сүйлөмдөр даярдалып жатат.',
+            );
+          }
+          if (provider.errorMessage != null) {
+            return AppErrorState(
+              message: provider.errorMessage!,
+              onAction: () => provider.load(widget.categoryId),
+            );
           }
           if (provider.stage == FlashcardStage.completed) {
-            return _FlashcardSummary(provider: provider);
+            return _FlashcardSummary(
+              provider: provider,
+              categoryId: widget.categoryId,
+            );
           }
           final word = provider.current;
           if (word == null) {
-            return const Center(child: Text('Сөздөр табылган жок.'));
+            return AppEmptyState(
+              title: 'Карточкалар табылган жок',
+              message:
+                  'Бул категория үчүн сөздөр же кэш табылган жок. Кийинчерээк кайра текшерип көрүңүз.',
+              icon: Icons.style_outlined,
+              actionLabel: 'Кайра жүктөө',
+              onAction: () => provider.load(widget.categoryId),
+            );
           }
           final direction = ref.watch(learningDirectionProvider);
           final isEnToKy = direction == LearningDirection.enToKy;
@@ -100,37 +124,40 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen> {
               ),
               const SizedBox(height: 6),
               Text(
-                'Басып, котормосун көрөсүз',
+                provider.stage == FlashcardStage.review
+                    ? 'Ката кеткен сөздөргө кайра келдиңиз'
+                    : 'Адегенде эстеп, анан карточканы ачыңыз',
                 style: AppTextStyles.muted,
               ),
               const SizedBox(height: 20),
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 350),
-                child: _Flashcard(
-                  key: ValueKey(word.id),
-                  word: word,
-                  sentence: provider.currentSentence,
-                  direction: direction,
-                  prompt: prompt,
-                  showTranslation: provider.showTranslation,
-                  onReveal: provider.reveal,
-                  onSpeak: () => _speak(
-                    speechText,
-                    isEnglish: !isEnToKy,
-                  ),
-                )
-                    .animate()
-                    .fadeIn(duration: 200.ms, curve: Curves.easeOut)
-                    .scale(
-                      begin: const Offset(0.98, 0.98),
-                      end: const Offset(1.0, 1.0),
-                    ),
+              _FlashcardHintCard(
+                showTranslation: provider.showTranslation,
+                stage: provider.stage,
               ),
               const SizedBox(height: 16),
-              _ProgressDots(
-                total: total,
-                currentIndex: provider.index,
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 350),
+                child:
+                    _Flashcard(
+                          key: ValueKey(word.id),
+                          word: word,
+                          sentence: provider.currentSentence,
+                          direction: direction,
+                          prompt: prompt,
+                          showTranslation: provider.showTranslation,
+                          onReveal: provider.reveal,
+                          onSpeak: () =>
+                              _speak(speechText, isEnglish: !isEnToKy),
+                        )
+                        .animate()
+                        .fadeIn(duration: 200.ms, curve: Curves.easeOut)
+                        .scale(
+                          begin: const Offset(0.98, 0.98),
+                          end: const Offset(1.0, 1.0),
+                        ),
               ),
+              const SizedBox(height: 16),
+              _ProgressDots(total: total, currentIndex: provider.index),
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -243,8 +270,8 @@ class _Flashcard extends StatelessWidget {
                   Text(
                     direction == LearningDirection.enToKy
                         ? word.transcriptionKy.isNotEmpty
-                            ? word.transcriptionKy
-                            : word.transcription
+                              ? word.transcriptionKy
+                              : word.transcription
                         : word.transcription,
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.9),
@@ -344,86 +371,130 @@ class _TranslationDetails extends StatelessWidget {
 }
 
 class _FlashcardSummary extends StatelessWidget {
-  const _FlashcardSummary({required this.provider});
+  const _FlashcardSummary({required this.provider, required this.categoryId});
 
   final FlashcardProvider provider;
+  final String categoryId;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    final mistakes = provider.mistakes
+        .take(6)
+        .map((word) => '${word.english} → ${word.kyrgyz}')
+        .toList();
+    final hasMistakes = mistakes.isNotEmpty;
+
+    return SessionSummaryPanel(
+      title: 'Карточкалар аяктады',
+      headline: _headline(),
+      message: hasMistakes
+          ? 'Адегенде оор сөздөрдү кайра өтүп, андан кийин квиз же сүйлөм түзүү менен бекемдеңиз.'
+          : 'Сөздөр жакшы бекеди. Эми ошол эле теманы сүйлөм же квиз менен жандандырыңыз.',
+      metrics: [
+        SessionSummaryMetric(
+          label: 'Сөздөр',
+          value: provider.totalWords.toString(),
+        ),
+        SessionSummaryMetric(
+          label: 'Түшүнгөндөр',
+          value: provider.correctCount.toString(),
+          color: AppColors.success,
+        ),
+        SessionSummaryMetric(
+          label: 'Кыйын болгон',
+          value: provider.wrongCount.toString(),
+          color: AppColors.accent,
+        ),
+        SessionSummaryMetric(
+          label: 'Тактык',
+          value: '${provider.accuracyPercent}%',
+          color: AppColors.primary,
+        ),
+      ],
+      noteTitle: hasMistakes
+          ? 'Кийинки эң жакшы кадам'
+          : 'Күчтүү кийинки кадам',
+      noteMessage: hasMistakes
+          ? 'Ката кеткен сөздөрдү өзүнчө кайталоо эстөөнү тезирээк бекемдейт.'
+          : 'Ушул эле категория боюнча сүйлөм түзүү же квиз билимди узагыраак сактайт.',
+      tagsTitle: hasMistakes ? 'Кайра карай турган сөздөр' : null,
+      tags: mistakes,
+      primaryAction: SessionSummaryAction(
+        label: hasMistakes
+            ? 'Кыйын сөздөрдү кайра өтүү'
+            : 'Сүйлөм түзүүгө өтүү',
+        onPressed: hasMistakes
+            ? provider.reviewMistakesOnly
+            : () => context.go('/sentence-builder/$categoryId'),
+      ),
+      secondaryAction: SessionSummaryAction(
+        label: hasMistakes ? 'Квиз менен текшерүү' : 'Квизге өтүү',
+        onPressed: () => context.go('/quiz/$categoryId'),
+        variant: AppButtonVariant.outlined,
+      ),
+      tertiaryLabel: 'Практикага кайтуу',
+      onTertiaryTap: () => context.go('/practice'),
+    );
+  }
+
+  String _headline() {
+    if (provider.wrongCount == 0 && provider.correctCount > 0) {
+      return 'Сөздөр мыкты бекеди';
+    }
+    if (provider.accuracyPercent >= 70) {
+      return 'Жакшы темп';
+    }
+    return 'Кайра кароо пайдалуу болот';
+  }
+}
+
+class _FlashcardHintCard extends StatelessWidget {
+  const _FlashcardHintCard({
+    required this.showTranslation,
+    required this.stage,
+  });
+
+  final bool showTranslation;
+  final FlashcardStage stage;
+
+  @override
+  Widget build(BuildContext context) {
+    final isReview = stage == FlashcardStage.review;
+    return AppCard(
+      padding: const EdgeInsets.all(14),
+      backgroundColor: isReview
+          ? AppColors.accent.withValues(alpha: 0.06)
+          : AppColors.primary.withValues(alpha: 0.05),
+      borderColor: isReview
+          ? AppColors.accent.withValues(alpha: 0.18)
+          : AppColors.primary.withValues(alpha: 0.18),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Сессия аяктады', style: AppTextStyles.heading),
-          const SizedBox(height: 12),
           Container(
-            padding: const EdgeInsets.all(20),
+            width: 34,
+            height: 34,
             decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.cardShadow,
-                  blurRadius: 20,
-                  offset: Offset(0, 12),
-                ),
-              ],
+              shape: BoxShape.circle,
+              color: (isReview ? AppColors.accent : AppColors.primary)
+                  .withValues(alpha: 0.12),
             ),
-            child: Column(
-              children: [
-                _SummaryRow(
-                  label: 'Сөздөр',
-                  value: provider.totalWords.toString(),
-                ),
-                const SizedBox(height: 8),
-                _SummaryRow(
-                  label: 'Түшүнгөндөр',
-                  value: provider.correctCount.toString(),
-                ),
-                const SizedBox(height: 8),
-                _SummaryRow(
-                  label: 'Кыйын болгон',
-                  value: provider.wrongCount.toString(),
-                ),
-                if (provider.mistakes.isNotEmpty) ...[
-                  const Divider(height: 32),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Кийинчерээк кайталаңыз:',
-                      style: AppTextStyles.body,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: provider.mistakes
-                        .map(
-                          (word) => Chip(
-                            label: Text('${word.english} → ${word.kyrgyz}'),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ],
-              ],
+            child: Icon(
+              isReview ? Icons.refresh : Icons.lightbulb_outline,
+              size: 18,
+              color: isReview ? AppColors.accent : AppColors.primary,
             ),
           ),
-          const SizedBox(height: 24),
-          AppButton(
-            fullWidth: true,
-            onPressed: provider.restart,
-            child: const Text('Карточкаларды кайра өтүү'),
-          ),
-          const SizedBox(height: 12),
-          AppButton(
-            fullWidth: true,
-            variant: AppButtonVariant.outlined,
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Категорияга кайтуу'),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              isReview
+                  ? 'Бул этапта мурун кыйын болгон сөздөр гана калды. Кыска, так жооп берип жабыңыз.'
+                  : showTranslation
+                  ? 'Эми үнүн угуп, мисалды окуп, анан гана баа бериңиз.'
+                  : 'Алгач сөздү өзүңүз эстеп көрүңүз, андан кийин карточканы ачып текшериңиз.',
+              style: AppTextStyles.muted,
+            ),
           ),
         ],
       ),
@@ -456,23 +527,6 @@ class _ProgressDots extends StatelessWidget {
           ),
         );
       }),
-    );
-  }
-}
-
-class _SummaryRow extends StatelessWidget {
-  const _SummaryRow({required this.label, required this.value});
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: AppTextStyles.body),
-        Text(value, style: AppTextStyles.title),
-      ],
     );
   }
 }
