@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../data/models/category_model.dart';
@@ -30,6 +31,26 @@ class FirebaseService {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
   final GoogleSignIn _googleSignIn;
+
+  bool get isGoogleSignInSupported {
+    if (kIsWeb) return true;
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+        return true;
+      case TargetPlatform.linux:
+      case TargetPlatform.fuchsia:
+        return false;
+    }
+  }
+
+  String get googleSignInUnavailableMessage =>
+      'Google менен кирүү бул түзмөктө жеткиликтүү эмес. Email же демо аккаунтту колдонуңуз.';
+
+  String get googleSignInConfigurationMessage =>
+      'Google Sign-In Android үчүн толук жөндөлгөн эмес. Firebase долбоорунда SHA-1/SHA-256 кошуп, жаңы google-services.json жүктөп, колдонмону кайра куруңуз.';
 
   final Map<String, List<WordModel>> _words = {
     'basic': [
@@ -644,7 +665,26 @@ class FirebaseService {
   }
 
   Future<bool> loginWithGoogle() async {
+    if (!isGoogleSignInSupported) {
+      throw FirebaseAuthException(
+        code: 'google-sign-in-not-supported',
+        message: googleSignInUnavailableMessage,
+      );
+    }
     try {
+      final provider = _buildGoogleProvider();
+      if (kIsWeb) {
+        await _auth.signInWithPopup(provider);
+        return true;
+      }
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        await _auth.signInWithProvider(provider);
+        return true;
+      }
+      if (defaultTargetPlatform == TargetPlatform.windows) {
+        await _auth.signInWithProvider(provider);
+        return true;
+      }
       final account = await _googleSignIn.signIn();
       if (account == null) return false;
       final googleAuth = await account.authentication;
@@ -654,6 +694,15 @@ class FirebaseService {
       );
       await _auth.signInWithCredential(credential);
       return true;
+    } on PlatformException catch (e) {
+      debugPrint('Failed to sign in with Google: $e');
+      if (_isAndroidGoogleConfigurationIssue(e)) {
+        throw FirebaseAuthException(
+          code: 'google-sign-in-config-missing',
+          message: googleSignInConfigurationMessage,
+        );
+      }
+      rethrow;
     } on FirebaseAuthException catch (e) {
       debugPrint('Failed to sign in with Google: $e');
       rethrow;
@@ -706,7 +755,29 @@ class FirebaseService {
 
   Future<void> logout() async {
     await _auth.signOut();
-    await _googleSignIn.signOut();
+    if (!kIsWeb &&
+        isGoogleSignInSupported &&
+        defaultTargetPlatform != TargetPlatform.windows) {
+      await _googleSignIn.signOut();
+    }
+  }
+
+  GoogleAuthProvider _buildGoogleProvider() {
+    final provider = GoogleAuthProvider();
+    provider.setCustomParameters({'prompt': 'select_account'});
+    return provider;
+  }
+
+  bool _isAndroidGoogleConfigurationIssue(PlatformException error) {
+    if (defaultTargetPlatform != TargetPlatform.android) {
+      return false;
+    }
+
+    final raw = '${error.code} ${error.message} ${error.details}'.toLowerCase();
+    return raw.contains('apiexception: 10') ||
+        raw.contains('developer_error') ||
+        raw.contains('12500') ||
+        raw.contains('sign_in_failed');
   }
 
   Future<List<QuizQuestionModel>> fetchQuizQuestions(

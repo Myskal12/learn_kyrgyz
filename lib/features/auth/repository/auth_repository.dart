@@ -6,6 +6,9 @@ class AuthRepository {
   final FirebaseService _service;
 
   bool get isLogged => _service.currentUserId != null;
+  bool get isGoogleSignInSupported => _service.isGoogleSignInSupported;
+  String get googleSignInUnavailableMessage =>
+      _service.googleSignInUnavailableMessage;
 
   Future<bool> login(String email, String password) =>
       _service.login(email, password);

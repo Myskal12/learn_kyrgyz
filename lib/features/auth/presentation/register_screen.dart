@@ -8,6 +8,7 @@ import '../../../core/utils/app_text_styles.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_shell.dart';
+import '../auth_demo_account.dart';
 import '../providers/auth_provider.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -45,9 +46,38 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     ).showSnackBar(SnackBar(content: Text(message)));
   }
 
+  void _fillDemoRegistration() {
+    _name.text = AuthDemoAccount.name;
+    _email.text = AuthDemoAccount.email;
+    _password.text = AuthDemoAccount.password;
+    _confirmPassword.text = AuthDemoAccount.password;
+  }
+
+  Future<void> _finishAuthFlow() async {
+    await ref.read(onboardingProvider).completeOnboarding();
+    if (!mounted) return;
+    context.go('/home');
+  }
+
+  Future<void> _handleDemoAccess(AuthProvider auth) async {
+    _setLocalError(null);
+    _fillDemoRegistration();
+    final ok = await auth.loginWithDemoAccount();
+    if (!mounted) return;
+    if (ok) {
+      await _finishAuthFlow();
+      return;
+    }
+    final error = auth.error;
+    if (error != null) {
+      _showMessage(error);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authProvider);
+    final googleSupported = auth.isGoogleSignInSupported;
 
     return AppShell(
       title: '',
@@ -110,21 +140,21 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         controller: _name,
                         label: 'Толук аты',
                         icon: Icons.person_outline,
-                        placeholder: 'Айгүл Асанова',
+                        placeholder: AuthDemoAccount.name,
                       ),
                       const SizedBox(height: 16),
                       _AuthField(
                         controller: _email,
                         label: 'Электрондук почта',
                         icon: Icons.mail_outline,
-                        placeholder: 'example@email.com',
+                        placeholder: AuthDemoAccount.email,
                       ),
                       const SizedBox(height: 16),
                       _AuthField(
                         controller: _password,
                         label: 'Сыр сөз',
                         icon: Icons.lock_outline,
-                        placeholder: '********',
+                        placeholder: AuthDemoAccount.password,
                         obscureText: !_showPassword,
                         suffix: IconButton(
                           onPressed: () {
@@ -143,7 +173,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         controller: _confirmPassword,
                         label: 'Сыр сөздү кайталаңыз',
                         icon: Icons.lock_reset,
-                        placeholder: '********',
+                        placeholder: AuthDemoAccount.password,
                         obscureText: !_showConfirm,
                         suffix: IconButton(
                           onPressed: () {
@@ -156,6 +186,79 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             color: AppColors.muted,
                           ),
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                AppCard(
+                  padding: const EdgeInsets.all(18),
+                  backgroundColor: AppColors.primary.withValues(alpha: 0.08),
+                  borderColor: AppColors.primary.withValues(alpha: 0.18),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.auto_awesome, color: AppColors.primary),
+                          const SizedBox(width: 10),
+                          Text(
+                            'Тест үчүн даяр профиль',
+                            style: AppTextStyles.body.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Бул блок тест аккаунтту дароо толтуруп, керек болсо өзү түзүп да киргизет.',
+                        style: AppTextStyles.muted,
+                      ),
+                      const SizedBox(height: 12),
+                      const _CredentialLine(
+                        label: 'Аты',
+                        value: AuthDemoAccount.name,
+                      ),
+                      const SizedBox(height: 8),
+                      const _CredentialLine(
+                        label: 'Email',
+                        value: AuthDemoAccount.email,
+                      ),
+                      const SizedBox(height: 8),
+                      const _CredentialLine(
+                        label: 'Сыр сөз',
+                        value: AuthDemoAccount.password,
+                      ),
+                      const SizedBox(height: 14),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: AppButton(
+                              size: AppButtonSize.sm,
+                              variant: AppButtonVariant.outlined,
+                              onPressed: auth.isLoading
+                                  ? null
+                                  : () {
+                                      _fillDemoRegistration();
+                                      _showMessage(
+                                        'Тест аккаунт маалыматтары толтурулду.',
+                                      );
+                                    },
+                              child: const Text('Толтуруу'),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: AppButton(
+                              size: AppButtonSize.sm,
+                              onPressed: auth.isLoading
+                                  ? null
+                                  : () => _handleDemoAccess(auth),
+                              child: const Text('Түзүү же кирүү'),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -201,11 +304,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           );
                           if (!context.mounted) return;
                           if (ok) {
-                            await ref
-                                .read(onboardingProvider)
-                                .completeOnboarding();
-                            if (!context.mounted) return;
-                            context.go('/home');
+                            await _finishAuthFlow();
                             return;
                           }
                           final error = auth.error;
@@ -220,18 +319,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   fullWidth: true,
                   size: AppButtonSize.lg,
                   variant: AppButtonVariant.outlined,
-                  onPressed: auth.isLoading
+                  onPressed: auth.isLoading || !googleSupported
                       ? null
                       : () async {
                           _setLocalError(null);
                           final ok = await auth.loginWithGoogle();
                           if (!context.mounted) return;
                           if (ok) {
-                            await ref
-                                .read(onboardingProvider)
-                                .completeOnboarding();
-                            if (!context.mounted) return;
-                            context.go('/home');
+                            await _finishAuthFlow();
                             return;
                           }
                           final error = auth.error;
@@ -248,6 +343,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ],
                   ),
                 ),
+                if (!googleSupported)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      auth.googleSignInUnavailableMessage,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.muted.copyWith(fontSize: 13),
+                    ),
+                  ),
                 const SizedBox(height: 16),
                 Text('Аккаунтуңуз барбы?', style: AppTextStyles.muted),
                 TextButton(
@@ -264,6 +368,45 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _CredentialLine extends StatelessWidget {
+  const _CredentialLine({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.82),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Row(
+        children: [
+          Text(
+            '$label:',
+            style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: AppTextStyles.body.copyWith(
+                color: AppColors.textDark,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

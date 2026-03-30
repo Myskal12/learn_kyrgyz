@@ -70,6 +70,10 @@ class _StudyPlanScreenState extends ConsumerState<StudyPlanScreen>
             streakDays: progress.streakDays,
             totalWordsMastered: progress.totalWordsMastered,
             dailyGoalMinutes: onboarding.dailyGoalMinutes,
+            stages: stages,
+            currentIndex: currentIndex,
+            selectedIndex: selectedIndex,
+            onStageSelected: (index) => setState(() => _selectedIndex = index),
           ),
           const SizedBox(height: 18),
           _SelectedStagePanel(
@@ -104,6 +108,7 @@ class _StudyPlanScreenState extends ConsumerState<StudyPlanScreen>
                         index: index,
                         state: state,
                         isSelected: isSelected,
+                        showConnector: index != stages.length - 1,
                         onTap: () => setState(() => _selectedIndex = index),
                       )
                       .animate(delay: Duration(milliseconds: 80 * index))
@@ -229,6 +234,10 @@ class _RoadmapHero extends StatelessWidget {
     required this.streakDays,
     required this.totalWordsMastered,
     required this.dailyGoalMinutes,
+    required this.stages,
+    required this.currentIndex,
+    required this.selectedIndex,
+    required this.onStageSelected,
   });
 
   final AnimationController controller;
@@ -236,20 +245,25 @@ class _RoadmapHero extends StatelessWidget {
   final int streakDays;
   final int totalWordsMastered;
   final int dailyGoalMinutes;
+  final List<_RoadmapStage> stages;
+  final int currentIndex;
+  final int selectedIndex;
+  final ValueChanged<int> onStageSelected;
 
   @override
   Widget build(BuildContext context) {
+    final selectedStage = stages[selectedIndex];
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
         final pulse = Curves.easeInOut.transform(controller.value);
-        final imageOffset = math.sin(controller.value * math.pi * 2) * 6;
+        final imageOffset = math.sin(controller.value * math.pi * 2) * 10;
         return Container(
-          height: 360,
+          height: 468,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(34),
             gradient: const LinearGradient(
-              colors: [Color(0xFF120C0B), Color(0xFF6E3F1D), Color(0xFFCF9C4A)],
+              colors: [Color(0xFF150F0C), Color(0xFF5A341A), Color(0xFFD3A056)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -263,6 +277,9 @@ class _RoadmapHero extends StatelessWidget {
           ),
           child: Stack(
             children: [
+              Positioned.fill(
+                child: CustomPaint(painter: _ContourPainter(progress: pulse)),
+              ),
               Positioned(
                 left: -36,
                 top: 42,
@@ -274,7 +291,7 @@ class _RoadmapHero extends StatelessWidget {
                 child: _GlowRing(size: 130, opacity: 0.1 + pulse * 0.06),
               ),
               Positioned(
-                top: 28,
+                top: 24,
                 left: 22,
                 right: 22,
                 child: Row(
@@ -289,13 +306,13 @@ class _RoadmapHero extends StatelessWidget {
               ),
               Positioned(
                 left: 22,
-                right: 22,
-                bottom: 24,
+                top: 96,
+                right: 164,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Yurt Roadmap',
+                      'Yurt roadmap',
                       style: AppTextStyles.caption.copyWith(
                         color: Colors.white70,
                         letterSpacing: 1.0,
@@ -303,13 +320,56 @@ class _RoadmapHero extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Окуу жолуңузду көзгө көрүнгөн картага айлантыңыз',
+                      'Юрта аркылуу өсүү жолун көрүнө турган окуу трегине айлантыңыз',
                       style: AppTextStyles.heading.copyWith(
                         color: Colors.white,
-                        fontSize: 30,
+                        fontSize: 31,
                       ),
                     ),
                     const SizedBox(height: 12),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 280),
+                      child: Container(
+                        key: ValueKey(selectedStage.title),
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(22),
+                          color: Colors.white.withValues(alpha: 0.12),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.14),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              selectedStage.title,
+                              style: AppTextStyles.body.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              selectedStage.headline,
+                              style: AppTextStyles.body.copyWith(
+                                color: Colors.white.withValues(alpha: 0.84),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: [
+                                _HeroTag(label: selectedStage.kicker),
+                                _HeroTag(label: selectedStage.focus),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(999),
                       child: LinearProgressIndicator(
@@ -326,50 +386,84 @@ class _RoadmapHero extends StatelessWidget {
                       '${(overallProgress * 100).round()}% жол ачылды',
                       style: AppTextStyles.body.copyWith(color: Colors.white70),
                     ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Картадагы чекиттерди таптап, ар бир фазанын тапшырмасын караңыз.',
+                      style: AppTextStyles.caption.copyWith(
+                        color: Colors.white54,
+                      ),
+                    ),
                   ],
                 ),
               ),
               Positioned.fill(
                 child: IgnorePointer(
                   child: Align(
-                    alignment: const Alignment(0.45, -0.05),
+                    alignment: const Alignment(0.72, -0.06),
                     child: Transform.translate(
                       offset: Offset(0, imageOffset),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(
-                            width: 190 + pulse * 18,
-                            height: 190 + pulse * 18,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white.withValues(alpha: 0.08),
-                            ),
-                          ),
-                          Container(
-                            width: 154,
-                            height: 154,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.18),
-                                width: 1.5,
+                      child: Transform.rotate(
+                        angle: math.sin(controller.value * math.pi * 2) * 0.018,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              width: 260 + pulse * 22,
+                              height: 260 + pulse * 22,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: RadialGradient(
+                                  colors: [
+                                    const Color(
+                                      0xFFFFE5AA,
+                                    ).withValues(alpha: 0.34),
+                                    Colors.transparent,
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(28),
-                            child: Image.asset(
-                              'assets/images/yurt.png',
-                              width: 148,
-                              height: 148,
-                              fit: BoxFit.cover,
+                            Positioned(
+                              bottom: 18,
+                              child: Container(
+                                width: 210,
+                                height: 42,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(999),
+                                  gradient: RadialGradient(
+                                    colors: [
+                                      Colors.black.withValues(alpha: 0.34),
+                                      Colors.transparent,
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                            Image.asset(
+                              'assets/images/yurt.png',
+                              width: 248,
+                              height: 248,
+                              fit: BoxFit.contain,
+                              filterQuality: FilterQuality.high,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const _YurtFallback();
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
+                ),
+              ),
+              Positioned(
+                left: 18,
+                right: 18,
+                bottom: 18,
+                child: _HeroRoadTrack(
+                  stages: stages,
+                  currentIndex: currentIndex,
+                  selectedIndex: selectedIndex,
+                  onStageSelected: onStageSelected,
                 ),
               ),
             ],
@@ -503,6 +597,7 @@ class _RoadmapStageCard extends StatelessWidget {
     required this.index,
     required this.state,
     required this.isSelected,
+    required this.showConnector,
     required this.onTap,
   });
 
@@ -510,6 +605,7 @@ class _RoadmapStageCard extends StatelessWidget {
   final int index;
   final _RoadmapStageState state;
   final bool isSelected;
+  final bool showConnector;
   final VoidCallback onTap;
 
   @override
@@ -569,7 +665,7 @@ class _RoadmapStageCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (index < 4)
+                    if (showConnector)
                       Container(
                         width: 2,
                         height: 80,
@@ -682,6 +778,293 @@ class _RoadmapStageCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _HeroRoadTrack extends StatelessWidget {
+  const _HeroRoadTrack({
+    required this.stages,
+    required this.currentIndex,
+    required this.selectedIndex,
+    required this.onStageSelected,
+  });
+
+  final List<_RoadmapStage> stages;
+  final int currentIndex;
+  final int selectedIndex;
+  final ValueChanged<int> onStageSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(28),
+        color: Colors.white.withValues(alpha: 0.12),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+      ),
+      child: SizedBox(
+        height: 92,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _RoadTrackPainter(
+                  currentIndex: currentIndex,
+                  selectedIndex: selectedIndex,
+                  stageCount: stages.length,
+                ),
+              ),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: stages.asMap().entries.map((entry) {
+                final index = entry.key;
+                final stage = entry.value;
+                final isCurrent = index == currentIndex;
+                final isSelected = index == selectedIndex;
+                final isCompleted = index < currentIndex;
+                final color = isCompleted
+                    ? AppColors.success
+                    : isCurrent
+                    ? const Color(0xFFFFD684)
+                    : Colors.white70;
+
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () => onStageSelected(index),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Spacer(),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 260),
+                          curve: Curves.easeOutCubic,
+                          width: isSelected
+                              ? 22
+                              : isCurrent
+                              ? 18
+                              : 14,
+                          height: isSelected
+                              ? 22
+                              : isCurrent
+                              ? 18
+                              : 14,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: color,
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.44),
+                              width: 1.5,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: color.withValues(
+                                  alpha: isSelected ? 0.44 : 0.22,
+                                ),
+                                blurRadius: isSelected ? 20 : 10,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          '${index + 1}',
+                          style: AppTextStyles.caption.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          stage.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.caption.copyWith(
+                            color: isSelected ? Colors.white : Colors.white70,
+                            fontSize: 10.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HeroTag extends StatelessWidget {
+  const _HeroTag({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(999),
+        color: Colors.white.withValues(alpha: 0.12),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+      ),
+      child: Text(
+        label,
+        style: AppTextStyles.caption.copyWith(color: Colors.white),
+      ),
+    );
+  }
+}
+
+class _YurtFallback extends StatelessWidget {
+  const _YurtFallback();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 220,
+      height: 220,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(34),
+        color: Colors.white.withValues(alpha: 0.12),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.home_work_rounded, size: 56, color: Colors.white),
+          const SizedBox(height: 10),
+          Text(
+            'Yurt asset',
+            style: AppTextStyles.body.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ContourPainter extends CustomPainter {
+  const _ContourPainter({required this.progress});
+
+  final double progress;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+    for (var i = 0; i < 5; i++) {
+      final inset = 24.0 + (i * 28);
+      final rect = Rect.fromLTWH(
+        inset,
+        40 + i * 12,
+        size.width - inset * 2,
+        size.height - 180 - i * 16,
+      );
+      paint.color = Colors.white.withValues(
+        alpha: 0.035 + (i == 1 ? progress * 0.02 : 0),
+      );
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(rect, Radius.circular(56 - i * 6)),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _ContourPainter oldDelegate) =>
+      oldDelegate.progress != progress;
+}
+
+class _RoadTrackPainter extends CustomPainter {
+  const _RoadTrackPainter({
+    required this.currentIndex,
+    required this.selectedIndex,
+    required this.stageCount,
+  });
+
+  final int currentIndex;
+  final int selectedIndex;
+  final int stageCount;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final points = <Offset>[];
+    const yStops = [0.72, 0.42, 0.63, 0.34, 0.58];
+    for (var i = 0; i < stageCount; i++) {
+      final dx = stageCount == 1
+          ? size.width / 2
+          : size.width * (i / (stageCount - 1));
+      final dy = size.height * yStops[i.clamp(0, yStops.length - 1)];
+      points.add(Offset(dx, dy));
+    }
+
+    final basePaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round
+      ..color = Colors.white.withValues(alpha: 0.16);
+
+    final activePaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4
+      ..strokeCap = StrokeCap.round
+      ..shader = const LinearGradient(
+        colors: [Color(0xFFFFE3A1), Color(0xFFFFB862)],
+      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+
+    final basePath = _buildSmoothPath(points);
+    canvas.drawPath(basePath, basePaint);
+
+    final activePoints = points
+        .take(math.min(currentIndex + 1, points.length))
+        .toList();
+    if (activePoints.length >= 2) {
+      canvas.drawPath(_buildSmoothPath(activePoints), activePaint);
+    }
+
+    if (selectedIndex < points.length) {
+      final selected = points[selectedIndex];
+      final glow = Paint()
+        ..color = Colors.white.withValues(alpha: 0.08)
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(selected, 18, glow);
+    }
+  }
+
+  Path _buildSmoothPath(List<Offset> points) {
+    final path = Path();
+    if (points.isEmpty) {
+      return path;
+    }
+    path.moveTo(points.first.dx, points.first.dy);
+    for (var i = 1; i < points.length; i++) {
+      final previous = points[i - 1];
+      final current = points[i];
+      final control = Offset(
+        (previous.dx + current.dx) / 2,
+        (previous.dy + current.dy) / 2,
+      );
+      path.quadraticBezierTo(previous.dx, previous.dy, control.dx, control.dy);
+    }
+    path.lineTo(points.last.dx, points.last.dy);
+    return path;
+  }
+
+  @override
+  bool shouldRepaint(covariant _RoadTrackPainter oldDelegate) {
+    return oldDelegate.currentIndex != currentIndex ||
+        oldDelegate.selectedIndex != selectedIndex ||
+        oldDelegate.stageCount != stageCount;
   }
 }
 

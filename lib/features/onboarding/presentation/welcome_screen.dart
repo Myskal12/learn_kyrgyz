@@ -7,6 +7,7 @@ import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
+import '../../auth/auth_demo_account.dart';
 import '../../auth/providers/auth_provider.dart';
 
 class WelcomeScreen extends ConsumerWidget {
@@ -17,6 +18,7 @@ class WelcomeScreen extends ConsumerWidget {
     final onboarding = ref.watch(onboardingProvider);
     final auth = ref.watch(authProvider);
     final selectedGoal = onboarding.dailyGoalMinutes;
+    final googleSupported = auth.isGoogleSignInSupported;
 
     Future<void> continueAsGuest() async {
       await ref.read(onboardingProvider).completeOnboarding();
@@ -26,6 +28,23 @@ class WelcomeScreen extends ConsumerWidget {
 
     Future<void> continueWithGoogle() async {
       final ok = await ref.read(authProvider).loginWithGoogle();
+      if (!context.mounted) return;
+      if (!ok) {
+        final error = ref.read(authProvider).error;
+        if (error != null) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(error)));
+        }
+        return;
+      }
+      await ref.read(onboardingProvider).completeOnboarding();
+      if (!context.mounted) return;
+      context.go('/home');
+    }
+
+    Future<void> continueWithDemo() async {
+      final ok = await ref.read(authProvider).loginWithDemoAccount();
       if (!context.mounted) return;
       if (!ok) {
         final error = ref.read(authProvider).error;
@@ -157,8 +176,24 @@ class WelcomeScreen extends ConsumerWidget {
                 AppButton(
                   fullWidth: true,
                   size: AppButtonSize.lg,
+                  variant: AppButtonVariant.outlined,
+                  onPressed: auth.isLoading ? null : continueWithDemo,
+                  child: const Text('Демо аккаунт менен тез кирүү'),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '${AuthDemoAccount.email}  |  ${AuthDemoAccount.password}',
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.muted.copyWith(fontSize: 13),
+                ),
+                const SizedBox(height: 12),
+                AppButton(
+                  fullWidth: true,
+                  size: AppButtonSize.lg,
                   variant: AppButtonVariant.accent,
-                  onPressed: auth.isLoading ? null : continueWithGoogle,
+                  onPressed: auth.isLoading || !googleSupported
+                      ? null
+                      : continueWithGoogle,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
@@ -168,6 +203,15 @@ class WelcomeScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
+                if (!googleSupported)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      auth.googleSignInUnavailableMessage,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.muted.copyWith(fontSize: 13),
+                    ),
+                  ),
                 const SizedBox(height: 16),
                 Row(
                   children: [

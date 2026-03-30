@@ -137,4 +137,5 @@ Use the helper scripts in `tools/firestore` to generate and upload large dataset
 
 - Empty UI: confirm collection names match exactly (`words`, `sentences`, `quiz`).
 - Google Sign-In fails on Android: ensure SHA-1/SHA-256 are added in Firebase Console and the device has Google Play Services.
+- If `android/app/google-services.json` has an empty `oauth_client` array, enabling Google provider alone is not enough. Add the Android app SHA fingerprints in Firebase Project Settings, download a fresh `google-services.json`, and rebuild the app.
 - Permission denied: relax Firestore rules for development (at least allow reads for your content collections) and tighten for production.
