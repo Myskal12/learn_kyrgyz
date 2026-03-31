@@ -1,0 +1,92 @@
+[
+  {
+    "id": "water",
+    "en": "water",
+    "ky": "суу",
+    "transcription_en": "[ˈwɔːtər]",
+    "transcription_ky": "[суу]",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "hello",
+    "en": "hello",
+    "ky": "салам",
+    "transcription_en": "[həˈləʊ]",
+    "transcription_ky": "[салам]",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "family",
+    "en": "family",
+    "ky": "үй-бүлө",
+    "transcription_en": "[ˈfæməli]",
+    "transcription_ky": "[үй-бүлө]",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "bread",
+    "en": "bread",
+    "ky": "нан",
+    "transcription_en": "[brɛd]",
+    "transcription_ky": "[нан]",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "mountain",
+    "en": "mountain",
+    "ky": "тоо",
+    "transcription_en": "[ˈmaʊntən]",
+    "transcription_ky": "[тоо]",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "horse",
+    "en": "horse",
+    "ky": "ат",
+    "transcription_en": "[hɔːrs]",
+    "transcription_ky": "[ат]",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "school",
+    "en": "school",
+    "ky": "мектеп",
+    "transcription_en": "[skuːl]",
+    "transcription_ky": "[мектеп]",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "book",
+    "en": "book",
+    "ky": "китеп",
+    "transcription_en": "[bʊk]",
+    "transcription_ky": "[китеп]",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "sun",
+    "en": "sun",
+    "ky": "күн",
+    "transcription_en": "[sʌn]",
+    "transcription_ky": "[күн]",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "friend",
+    "en": "friend",
+    "ky": "дос",
+    "transcription_en": "[frɛnd]",
+    "transcription_ky": "[дос]",
+    "level": 1,
+    "category": "emotion"
+  }
+]
