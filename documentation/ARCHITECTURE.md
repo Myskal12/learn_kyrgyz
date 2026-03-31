@@ -1,62 +1,61 @@
 # Architecture
 
-Обновлено: 2026-04-01
+## 1. High-Level Structure
 
-## 1. Общая схема
+I built the app as a Flutter client-first project. I use Riverpod for dependency injection and state wiring, Firebase as the remote backend, and local persistence for offline-friendly behavior.
 
-Приложение построено как Flutter client-first проект с Riverpod для DI и state wiring, Firebase как remote backend и локальными persistence-слоями для offline-friendly работы.
-
-Текущая архитектурная формула:
+The current structure is:
 
 - presentation -> screens and shared widgets
-- state -> providers / notifiers
+- state -> providers and notifiers
 - data access -> repositories
-- platform / remote / local -> services
+- remote and local integration -> services
 
-## 2. Основной стек
+## 2. Core Stack
 
-- Flutter / Dart
+I currently use:
+
+- Flutter and Dart
 - flutter_riverpod
 - go_router
 - Firebase Auth
 - Cloud Firestore
 - SharedPreferences
 
-Важно:
-полноценная локальная БД еще не внедрена. Сейчас offline foundation построен поверх `SharedPreferences` и dedicated cache services.
+I have not added a full local database yet. The offline layer still depends on serialized local storage and cache services.
 
-## 3. Ключевые директории
+## 3. Directory Layout
 
 - `lib/app`
-  app bootstrap, router, global providers
+  I keep app bootstrap, routing, and global providers here.
 
 - `lib/core`
-  shared services, utilities, session helpers
+  I keep shared services, utilities, and session helpers here.
 
 - `lib/data/models`
-  app models: words, categories, quiz questions, progress, profile
+  I keep application models here, including words, categories, quizzes, progress, and profile data.
 
 - `lib/features`
-  feature-first модули: auth, home, categories, learning, quiz, progress, profile, extras
+  I organize feature modules here: auth, home, categories, learning, quiz, progress, profile, and extras.
 
 - `lib/shared/widgets`
-  reusable UI blocks, shell, cards, buttons, layout helpers
+  I keep reusable UI building blocks here.
 
-## 4. Routing и shell
+## 4. Routing And Shell
 
-Навигация собирается через `GoRouter` в `lib/app/router.dart`.
+I use `GoRouter` in `lib/app/router.dart`.
 
-Основные свойства текущего navigation layer:
+The current routing layer supports:
 
-- единый shell для основных экранов
-- secondary flows на тех же shared UI patterns
-- query-param support для review entry points в flashcards
+- a shared shell for the main screens
+- separate secondary flows on the same design patterns
+- query parameter support for review mode in flashcards
 
-## 5. Provider graph
+## 5. Provider Graph
 
 ### App-level providers
 
-В `lib/app/providers/app_providers.dart` находятся базовые зависимости:
+In `lib/app/providers/app_providers.dart` I register the base dependencies:
 
 - `sharedPreferencesProvider`
 - `firebaseServiceProvider`
@@ -65,7 +64,7 @@
 - `offlineCatalogCacheServiceProvider`
 - repository providers
 
-### User/session related providers
+### User and session providers
 
 - `authProvider`
 - `onboardingProvider`
@@ -83,31 +82,31 @@
 - `quizProvider`
 - `sentenceBuilderProvider`
 
-## 6. Data flow
+## 6. Data Flow
 
-### 6.1 Startup
+### Startup
 
-1. App initializes Firebase and SharedPreferences.
-2. Riverpod wires base services and repositories.
-3. Onboarding / auth / theme / direction providers hydrate local state.
-4. Home and other screens read feature providers on demand.
+1. I initialize Firebase and SharedPreferences.
+2. Riverpod wires the services and repositories.
+3. Onboarding, auth, theme, and direction providers hydrate local state.
+4. Screens load feature providers when needed.
 
-### 6.2 Content loading
+### Content loading
 
-Категории, слова, предложения и quiz data проходят через repository layer.
+Categories, words, sentences, and quiz content go through the repository layer.
 
-Типовой путь:
+The typical flow is:
 
 1. screen -> provider
 2. provider -> repository
-3. repository -> offline cache read
+3. repository -> local cache read
 4. repository -> Firebase fetch attempt
 5. remote success -> cache refresh
 6. fallback -> cached or seeded content
 
-### 6.3 Progress
+### Progress
 
-`ProgressProvider` - центральная точка для:
+`ProgressProvider` is the central place for:
 
 - streak
 - attempts
@@ -115,26 +114,26 @@
 - weak words
 - mastered words
 - sync state
-- next milestone helpers
+- milestone helpers
 
-Per-word progress хранится через `WordProgressRecord`, а не только через простые counters.
+I no longer rely only on simple counters. I store per-word progress through `WordProgressRecord`.
 
-### 6.4 Learning cycle
+### Learning cycle
 
-Flashcards, quiz и sentence builder обновляют progress через `recordWordAttempt`.
+Flashcards, quiz, and sentence builder all update progress through `recordWordAttempt`.
 
-Сейчас это обеспечивает:
+That gives me:
 
-- unified attempt tracking
+- shared attempt tracking
 - review due calculation
-- mastery progression foundation
+- mastery progression groundwork
 - session analytics events
 
-### 6.5 Sync
+### Sync
 
-Remote sync сейчас строится вокруг `ProgressProvider` и `FirebaseService`.
+Remote sync is currently handled through `ProgressProvider` and `FirebaseService`.
 
-Текущие состояния:
+The sync states are:
 
 - local only
 - pending
@@ -142,57 +141,59 @@ Remote sync сейчас строится вокруг `ProgressProvider` и `Fi
 - synced
 - failed
 
-Важно:
-sync foundation есть, но полноценная conflict resolution и queue backed by local DB еще не завершены.
+I already have the foundation, but I still need stronger conflict handling and a queue backed by a real local database.
 
-## 7. Offline-first foundation
+## 7. Offline Foundation
 
-Текущее offline-решение состоит из двух слоев:
+My current offline layer has two main parts.
 
-1. `LocalStorageService`
-   хранение lightweight state и serialized payloads
+### `LocalStorageService`
 
-2. `OfflineCatalogCacheService`
-   кэширует:
-   - categories
-   - words by category
-   - sentences by category
-   - quiz questions by category and direction
+I use it for lightweight state and serialized payloads.
 
-Это уже делает приложение заметно устойчивее без сети, но это еще не "full offline-first architecture" в смысле локальной БД и полноценной sync queue.
+### `OfflineCatalogCacheService`
+
+I use it to cache:
+
+- categories
+- words by category
+- sentences by category
+- quiz questions by category and direction
+
+This makes the app much more stable without a network connection, but it is not yet a full offline-first architecture.
 
 ## 8. Analytics
 
-В проекте есть локальный analytics layer:
+I added a local analytics layer through:
 
 - `AnalyticsService`
 - `LocalAnalyticsService`
 
-Сейчас логируются ключевые учебные события:
+I currently log:
 
-- flashcards started / completed
-- quiz started / completed
-- sentence builder started / completed
+- flashcards started and completed
+- quiz started and completed
+- sentence builder started and completed
 
-Пока это локальное наблюдение и debugging/quality layer. Отправка в remote analytics еще не подключена.
+This layer is local right now. I have not connected remote analytics yet.
 
-## 9. Текущие архитектурные плюсы
+## 9. Strengths
 
-- feature-first структура понятна и масштабируема
-- providers и repositories уже разведены достаточно чисто
-- UX-изменения последних этапов внедрялись без полного архитектурного слома
-- offline и analytics foundation уже встроены в app-level graph
+- I already have a clear feature-first structure.
+- Providers and repositories are separated well enough for continued growth.
+- Recent UX changes fit into the architecture without a full rewrite.
+- Offline and analytics foundations are already part of the app graph.
 
-## 10. Текущие ограничения
+## 10. Current Limits
 
-- нет полноценной local DB
-- FirebaseService все еще слишком крупный и многофункциональный
-- часть sync-сценариев требует дальнейшего hardening
-- integration-test layer пока не покрывает end-to-end learning cycle
+- no full local database yet
+- `FirebaseService` is still too broad
+- sync scenarios still need more hardening
+- integration tests do not cover the full learning flow yet
 
-## 11. Следующий архитектурный приоритет
+## 11. Next Architecture Priorities
 
-1. local DB for content and sync queue
-2. safer guest/cloud merge strategy
-3. smaller service boundaries around Firebase-related responsibilities
-4. integration-test coverage for full learning flow
+1. add a local database for content and sync queue
+2. make guest and cloud merge safer
+3. split Firebase responsibilities into smaller services
+4. add integration coverage for the full learning cycle

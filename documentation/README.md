@@ -1,48 +1,36 @@
 # Learn Kyrgyz Documentation
 
-Обновлено: 2026-04-01
+I keep this folder as the single place for project documentation. I removed old drafts, duplicate notes, and PDF exports so that the repository has one clear source of truth.
 
-Эта папка теперь хранит только актуальную документацию по текущему состоянию проекта. Старые черновики про wireframes, follow-up backlog, PDF summary и разрозненные заметки удалены, чтобы в репозитории не было нескольких противоречащих друг другу источников правды.
-
-## Состав документации
+## Documentation Set
 
 1. `PRODUCT_AND_UX.md`
-   Текущее продуктовое позиционирование, роли экранов, учебный цикл и UX-принципы.
+   I explain the product idea, the learning flow, and the UX rules I follow in the app.
 
 2. `ARCHITECTURE.md`
-   Текущая архитектура приложения, слой данных, offline-first foundation, sync и analytics.
+   I describe the current application structure, the data flow, the offline layer, and the sync model.
 
 3. `ENGINEERING_QUALITY.md`
-   Правила качества, тестирование, операционные заметки, команды разработки и оставшийся техдолг.
+   I document my quality rules, test expectations, release checks, and technical risks.
 
 4. `USER_GUIDE.md`
-   Краткая пользовательская документация по основным сценариям приложения.
+   I describe the main user flows from the point of view of someone using the app.
 
 5. `TEST_REPORT.md`
-   Текущий отчет по тестированию и покрытию проверочных сценариев.
+   I summarize the checks I run and the testing gaps that still remain.
 
-## Текущее состояние проекта
+## Documentation Rule
 
-- Этап 1. Продуктовая структура и CTA-иерархия: базово завершен.
-- Этап 2. Per-word progress model и review logic: фундамент заложен.
-- Этап 3. Offline-first foundation: реализован catalog cache и local-first repositories.
-- Этап 4. Учебный цикл: добавлены review mode и связанный переход между learning modes.
-- Этап 5. Мотивация и персонализация: усилены progress, milestone и study snapshot.
-- Этап 6. Качество и стабилизация: добавлены локальная аналитика, тесты и hygiene-проверки.
+I only document what already exists in the codebase.
 
-## Правило обновления документации
+If I change product behavior, I update `PRODUCT_AND_UX.md`.
+If I change architecture or data handling, I update `ARCHITECTURE.md`.
+If I change testing, release flow, or engineering standards, I update `ENGINEERING_QUALITY.md`.
 
-Документация должна описывать только то, что реально есть в коде сейчас.
+## What I Do Not Keep Here
 
-Если меняется одно из направлений ниже, обновляется соответствующий файл:
-
-- продуктовый сценарий, экран или UX-правило -> `PRODUCT_AND_UX.md`
-- архитектура, состояние данных, sync, offline, analytics -> `ARCHITECTURE.md`
-- тесты, quality gates, release-процесс, security notes -> `ENGINEERING_QUALITY.md`
-
-## Что намеренно не хранится здесь
-
-- старые wireframe-спеки, если они уже не соответствуют коду
-- разовые отчеты вида "последние 5 изменений"
-- закоммиченные generated PDF-файлы
-- параллельные backlog-файлы с дублирующими списками улучшений
+- expired wireframe notes
+- duplicate backlog files
+- generated PDFs
+- short-lived status summaries
+- documents that no longer match the code

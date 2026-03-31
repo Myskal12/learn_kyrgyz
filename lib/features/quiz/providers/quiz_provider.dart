@@ -209,7 +209,6 @@ class QuizProvider extends ChangeNotifier {
       return;
     }
 
-    // Review round: one pass only. Track whether mistakes were fixed.
     if (isCorrect) {
       _reviewCorrect++;
       _unresolvedMistakes.remove(question.id);

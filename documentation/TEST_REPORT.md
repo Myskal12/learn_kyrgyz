@@ -1,12 +1,10 @@
 # Test Report
 
-Обновлено: 2026-04-01
+## 1. Scope
 
-## 1. Цель
+I use this report to describe the current validation baseline after the UX, offline foundation, learning flow, and stabilization work already merged into the project.
 
-Этот отчет фиксирует текущий минимальный проверочный контур проекта после завершения этапов UX, offline-first foundation, learning-flow и stabilization work.
-
-## 2. Основные команды проверки
+## 2. Main Verification Commands
 
 ```bash
 flutter analyze
@@ -14,51 +12,58 @@ flutter test
 git diff --check
 ```
 
-## 3. Что покрыто
+## 3. Current Coverage
 
-### Provider / logic tests
+### Provider and logic tests
+
+I currently cover:
 
 - learning direction persistence
-- progress provider milestone/review logic
-- flashcard provider reveal and review mode behavior
+- progress provider milestone and review logic
+- flashcard provider reveal and review behavior
 - quiz provider session analytics lifecycle
-- sentence builder session analytics lifecycle
+- sentence builder provider session analytics lifecycle
 
-### Repository / service tests
+### Repository and service tests
+
+I currently cover:
 
 - offline catalog cache service
 - words repository
 - quiz repository
 - local analytics service
 
-### Widget / UX smoke tests
+### Widget and UX smoke tests
+
+I currently cover:
 
 - auth CTA visibility on short screens
 - adaptive mobile shell stability
 - learning direction control behavior
+- study plan roadmap rendering
 
-## 4. Последний статус
+## 4. Current Result
 
-На последнем полном прогоне:
+In my latest full validation run:
 
-- `flutter analyze` -> passed
-- `flutter test` -> passed
-- `git diff --check` -> passed without whitespace errors
+- `flutter analyze` passed
+- `flutter test` passed
+- `git diff --check` passed
 
-## 5. Что еще не закрыто полностью
+## 5. Remaining Gaps
 
-- full integration tests for complete study cycle
-- guest/cloud merge edge cases under sync pressure
-- golden tests for key mobile screens
-- manual device audit for all main flows on multiple form factors
+- full integration tests for the complete study cycle
+- guest and cloud merge edge cases under sync pressure
+- golden tests for the main mobile screens
+- broader manual device checks on more form factors
 
-## 6. Рекомендованный следующий тестовый этап
+## 6. Next Testing Step
 
-1. integration test:
+I want the next testing step to include:
+
+1. integration flow:
    onboarding -> home -> flashcards -> quiz -> sentence builder -> progress
-
-2. offline/online transition tests
-
+2. offline and online transition checks
 3. golden tests for:
    - home
    - practice

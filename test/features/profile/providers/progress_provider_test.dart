@@ -6,7 +6,6 @@ import 'package:learn_kyrgyz/core/services/firebase_service.dart';
 import 'package:learn_kyrgyz/core/services/local_storage_service.dart';
 import 'package:learn_kyrgyz/data/models/user_progress_model.dart';
 
-// Mocks
 class MockLocalStorageService implements LocalStorageService {
   String? _data;
 
@@ -66,7 +65,6 @@ void main() {
     test('markWordSeen updates totals and accuracy', () {
       provider.markWordSeen('word1');
 
-      // 1 attempt, 0 mastered. Accuracy = 0.
       expect(provider.totalReviewSessions, 1);
       expect(provider.accuracyPercent, 0);
       expect(

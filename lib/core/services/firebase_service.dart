@@ -13,7 +13,6 @@ import '../../data/models/user_progress_model.dart';
 import '../../data/models/user_profile_model.dart';
 import '../../data/models/word_model.dart';
 
-/// Firebase-powered data layer with local fallbacks for offline use.
 class FirebaseService {
   FirebaseService({
     FirebaseFirestore? firestore,
