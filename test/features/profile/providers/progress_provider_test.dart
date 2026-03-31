@@ -66,44 +66,49 @@ void main() {
     test('markWordSeen updates totals and accuracy', () {
       provider.markWordSeen('word1');
 
-      // 1 exposure, 0 mastered. Accuracy = 0.
+      // 1 attempt, 0 mastered. Accuracy = 0.
       expect(provider.totalReviewSessions, 1);
       expect(provider.accuracyPercent, 0);
+      expect(
+        provider.learningStateForWord('word1'),
+        WordLearningState.reviewDue,
+      );
 
       provider.markWordSeen('word1');
-      // 2 exposures, 0 mastered.
       expect(provider.totalReviewSessions, 2);
+      expect(provider.weakWordsCount, 1);
     });
 
     test('markWordMastered updates totals and accuracy', () {
       provider.markWordMastered('word1');
 
-      // markWordMastered calls markWordSeen first.
-      // So 1 exposure, 1 mastered. Accuracy = 100%.
       expect(provider.totalReviewSessions, 1);
       expect(provider.totalWordsMastered, 1);
       expect(provider.accuracyPercent, 100);
+      expect(
+        provider.learningStateForWord('word1'),
+        WordLearningState.learning,
+      );
 
       provider.markWordSeen('word1');
-      // 2 exposures, 1 mastered. Accuracy = 50%.
       expect(provider.totalReviewSessions, 2);
-      expect(provider.totalWordsMastered, 1); // Key count is still 1
+      expect(provider.totalWordsMastered, 1);
       expect(provider.accuracyPercent, 50);
     });
 
     test('load recalculates totals correctly', () async {
-      // Setup stored data
       final progress = UserProgressModel(
         userId: 'guest',
-        seenByWordId: {'w1': 10, 'w2': 5}, // 15 exposures
-        correctByWordId: {'w1': 5, 'w2': 1}, // 6 mastered
+        seenByWordId: {'w1': 10, 'w2': 5},
+        correctByWordId: {'w1': 5, 'w2': 1},
       );
       await storage.setString('user_progress', jsonEncode(progress.toJson()));
 
       await provider.load();
 
       expect(provider.totalReviewSessions, 15);
-      expect(provider.accuracyPercent, ((6 / 15) * 100).round()); // 40%
+      expect(provider.accuracyPercent, ((6 / 15) * 100).round());
+      expect(provider.progressForWord('w1'), isNotNull);
     });
 
     test('reset clears totals', () async {
@@ -114,6 +119,48 @@ void main() {
 
       expect(provider.totalReviewSessions, 0);
       expect(provider.accuracyPercent, 0);
+    });
+
+    test('recordWordAttempt schedules review states', () {
+      provider.recordWordAttempt('word1', isCorrect: false);
+      expect(provider.reviewDueWordsCount, 1);
+      expect(
+        provider.learningStateForWord('word1'),
+        WordLearningState.reviewDue,
+      );
+
+      provider.recordWordAttempt('word1', isCorrect: true);
+      provider.recordWordAttempt('word1', isCorrect: true);
+
+      expect(provider.learningStateForWord('word1'), WordLearningState.strong);
+    });
+
+    test('milestone helpers expose next target and remaining words', () {
+      expect(provider.nextMilestoneTarget, 5);
+      expect(provider.wordsToNextMilestone, 5);
+      expect(provider.nextMilestoneProgress, 0);
+
+      for (var i = 0; i < 6; i++) {
+        provider.recordWordAttempt('word_$i', isCorrect: true);
+      }
+
+      expect(provider.nextMilestoneTarget, 15);
+      expect(provider.previousMilestoneTarget, 5);
+      expect(provider.wordsToNextMilestone, 9);
+      expect(provider.nextMilestoneProgress, closeTo(0.1, 0.001));
+    });
+
+    test('hasReviewFocus reflects due and weak words', () async {
+      expect(provider.hasReviewFocus, isFalse);
+
+      provider.recordWordAttempt('word1', isCorrect: false);
+      expect(provider.hasReviewFocus, isTrue);
+
+      await provider.reset();
+      provider.recordWordAttempt('word2', isCorrect: false);
+      provider.recordWordAttempt('word2', isCorrect: false);
+      expect(provider.weakWordsCount, 1);
+      expect(provider.hasReviewFocus, isTrue);
     });
   });
 }

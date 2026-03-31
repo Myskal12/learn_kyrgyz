@@ -8,6 +8,7 @@ import '../../../core/providers/learning_session_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../data/models/category_model.dart';
+import '../../../shared/widgets/adaptive_panel_grid.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_chip.dart';
 import '../../../shared/widgets/app_shell.dart';
@@ -77,20 +78,12 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
           }
           return best;
         });
-    final growthSnapshot = snapshots
-        .where((item) => !item.locked && item.completion < 1)
-        .fold<_CategorySnapshot?>(null, (best, item) {
-          if (best == null) return item;
-          if (item.mastered > best.mastered) return item;
-          return best;
-        });
 
     final plan = _PracticePlan.fromState(
       progress: progress,
       dailyGoalMinutes: onboarding.dailyGoalMinutes,
       continueSnapshot: continueSnapshot,
       reviewSnapshot: reviewSnapshot,
-      growthSnapshot: growthSnapshot,
     );
 
     final totalReviewDue = snapshots.fold<int>(
@@ -113,7 +106,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
       body = AppEmptyState(
         title: 'Практика үчүн темалар жок',
         message:
-            'Категориялар табылмайынча көнүгүү сценариилерин түзө албайбыз.',
+            'Категориялар табылмайынча көнүгүү сценарийлерин түзө албайбыз.',
         icon: Icons.extension_outlined,
         actionLabel: 'Кайра жүктөө',
         onAction: () => ref.read(categoriesProvider).load(force: true),
@@ -125,7 +118,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
           Text('Практика', style: AppTextStyles.heading.copyWith(fontSize: 28)),
           const SizedBox(height: 8),
           Text(
-            plan.supportingText,
+            'Бул жерде режимди өзүңүз тандайсыз: эстөө, текшерүү же колдонуу.',
             style: AppTextStyles.body.copyWith(color: AppColors.muted),
           ),
           const SizedBox(height: 20),
@@ -169,23 +162,55 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                       label: plan.primaryLabel,
                       onTap: () => context.push(plan.primaryRoute),
                     ),
-                    const SizedBox(height: 10),
-                    TextButton(
-                      onPressed: () => context.push(plan.secondaryRoute),
-                      child: Text(
-                        plan.secondaryLabel,
-                        style: AppTextStyles.body.copyWith(color: Colors.white),
-                      ),
-                    ),
                   ],
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
-          _MilestoneCard(progress: progress),
-          const SizedBox(height: 20),
-          Text('Бүгүн эмне кылуу керек', style: AppTextStyles.title),
+          const SizedBox(height: 24),
+          Text('Режимдер', style: AppTextStyles.title),
+          const SizedBox(height: 12),
+          AdaptivePanelGrid(
+            maxColumns: 2,
+            minItemWidth: 156,
+            spacing: 12,
+            children: [
+              _ModeCard(
+                title: 'Карточкалар',
+                subtitle: 'Сөздү эстеп, ачып, дароо бекемдеңиз.',
+                icon: Icons.style,
+                color: AppColors.primary,
+                onTap: () =>
+                    context.push('/flashcards/${continueSnapshot.category.id}'),
+              ),
+              _ModeCard(
+                title: 'Сүйлөм түзүү',
+                subtitle: 'Сөздөрдү колдонууга өткөрүү үчүн тартип түзүңүз.',
+                icon: Icons.subject,
+                color: AppColors.success,
+                onTap: () => context.push(
+                  '/sentence-builder/${continueSnapshot.category.id}',
+                ),
+              ),
+              _ModeCard(
+                title: 'Экспресс-квиз',
+                subtitle: 'Кыска текшерүү менен темпти жана тактыкты көрүңүз.',
+                icon: Icons.flash_on,
+                color: AppColors.accent,
+                onTap: () => context.push('/quick-quiz'),
+              ),
+              _ModeCard(
+                title: 'Жол картасы',
+                subtitle:
+                    'Бардык темаларды, кулпуларды жана прогрессти көрүңүз.',
+                icon: Icons.alt_route,
+                color: const Color(0xFF1976D2),
+                onTap: () => context.push('/categories'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Text('Максаттуу машыгуу', style: AppTextStyles.title),
           const SizedBox(height: 12),
           _ScenarioCard(
             title: 'Улантуу',
@@ -211,16 +236,16 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
           _ScenarioCard(
             title: reviewSnapshot != null
                 ? 'Ката кеткен сөздөр'
-                : 'Экспресс-текшерүү',
+                : 'Кыска текшерүү',
             subtitle: reviewSnapshot != null
                 ? '${reviewSnapshot.category.title} ичинде жооп бербей калган сөздөрдү жабыңыз.'
-                : 'Жалпы темпти сактоо үчүн кыска квизден өтүңүз.',
+                : 'Бүгүнкү темпти сактоо үчүн тез квиз же жаңы тема ачыңыз.',
             chips: reviewSnapshot != null
                 ? [
                     '${reviewSnapshot.reviewDue} сөз жооп күтүп турат',
-                    'Максат: серияны бекемдөө',
+                    'Максат: сапатты бекемдөө',
                   ]
-                : ['5 суроо', 'Күндүк ритмди сактоо'],
+                : ['5 суроо', 'Ритмди сактоо'],
             icon: reviewSnapshot != null ? Icons.refresh : Icons.flash_on,
             colors: reviewSnapshot != null
                 ? [AppColors.accent, const Color(0xFFE57373)]
@@ -230,44 +255,17 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                 : 'Квизди баштоо',
             onPrimary: () => context.push(
               reviewSnapshot != null
-                  ? '/flashcards/${reviewSnapshot.category.id}'
+                  ? '/flashcards/${reviewSnapshot.category.id}?mode=review'
                   : '/quick-quiz',
             ),
             secondaryLabel: reviewSnapshot != null
                 ? 'Квиз менен текшерүү'
-                : 'Категорияларды ачуу',
+                : 'Жол картасына өтүү',
             onSecondary: () => context.push(
               reviewSnapshot != null
                   ? '/quiz/${reviewSnapshot.category.id}'
                   : '/categories',
             ),
-          ),
-          const SizedBox(height: 12),
-          _ScenarioCard(
-            title: 'Өсүү чекити',
-            subtitle: growthSnapshot != null
-                ? '${growthSnapshot.category.title} категориясында прогрессти жогорулатыңыз.'
-                : 'Жаңы категория ачып, сөз корун кеңейтиңиз.',
-            chips: growthSnapshot != null
-                ? [
-                    '${(growthSnapshot.completion * 100).round()}% өздөштүрүлдү',
-                    growthSnapshot.locked
-                        ? 'Азырынча кулпуланган'
-                        : 'Улантууга даяр',
-                  ]
-                : ['Жаңы тема', 'Сөз корун кеңейтүү'],
-            icon: Icons.trending_up,
-            colors: [AppColors.success, const Color(0xFF81C784)],
-            primaryLabel: growthSnapshot != null
-                ? 'Категорияны ачуу'
-                : 'Категориялар',
-            onPrimary: () => context.push(
-              growthSnapshot != null
-                  ? '/flashcards/${growthSnapshot.category.id}'
-                  : '/categories',
-            ),
-            secondaryLabel: 'Бардык сабактарды көрүү',
-            onSecondary: () => context.push('/categories'),
           ),
           const SizedBox(height: 24),
           Text('Темалар боюнча фокус', style: AppTextStyles.title),
@@ -287,7 +285,7 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
 
     return AppShell(
       title: 'Практика',
-      subtitle: 'Көнүгүүлөр жана сценарийлер',
+      subtitle: 'Режимдер жана максаттуу drills',
       activeTab: AppTab.practice,
       child: body,
     );
@@ -383,38 +381,45 @@ class _GlassTag extends StatelessWidget {
   }
 }
 
-class _MilestoneCard extends StatelessWidget {
-  const _MilestoneCard({required this.progress});
+class _ModeCard extends StatelessWidget {
+  const _ModeCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
 
-  final ProgressProvider progress;
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final milestone = _MilestoneData.fromProgress(progress);
     return AppCard(
       padding: const EdgeInsets.all(18),
-      backgroundColor: AppColors.primary.withValues(alpha: 0.05),
-      borderColor: AppColors.primary.withValues(alpha: 0.18),
-      child: Row(
+      onTap: onTap,
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _CircleIcon(icon: Icons.workspace_premium, color: AppColors.primary),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  milestone.title,
-                  style: AppTextStyles.body.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(milestone.message, style: AppTextStyles.muted),
-              ],
+          Container(
+            width: 46,
+            height: 46,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color.withValues(alpha: 0.12),
             ),
+            child: Icon(icon, color: color),
           ),
+          const SizedBox(height: 12),
+          Text(
+            title,
+            style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 6),
+          Text(subtitle, style: AppTextStyles.muted),
         ],
       ),
     );
@@ -497,22 +502,20 @@ class _ScenarioCard extends StatelessWidget {
                 .toList(),
           ),
           const SizedBox(height: 16),
-          Row(
+          AdaptivePanelGrid(
+            maxColumns: 2,
+            minItemWidth: 168,
+            spacing: 10,
             children: [
-              Expanded(
-                child: _MiniActionButton(
-                  label: primaryLabel,
-                  variant: AppChipVariant.primary,
-                  onTap: onPrimary,
-                ),
+              _MiniActionButton(
+                label: primaryLabel,
+                variant: AppChipVariant.primary,
+                onTap: onPrimary,
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: _MiniActionButton(
-                  label: secondaryLabel,
-                  variant: AppChipVariant.accent,
-                  onTap: onSecondary,
-                ),
+              _MiniActionButton(
+                label: secondaryLabel,
+                variant: AppChipVariant.accent,
+                onTap: onSecondary,
               ),
             ],
           ),
@@ -535,27 +538,48 @@ class _CategoryFocusCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  snapshot.category.title,
-                  style: AppTextStyles.body.copyWith(
-                    fontWeight: FontWeight.w700,
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final badge = snapshot.reviewDue > 0
+                  ? AppChip(
+                      label: '${snapshot.reviewDue} кайталоо',
+                      variant: AppChipVariant.accent,
+                    )
+                  : AppChip(
+                      label: '${snapshot.mastered}/${snapshot.totalWords} сөз',
+                      variant: AppChipVariant.success,
+                    );
+
+              if (constraints.maxWidth < 220) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      snapshot.category.title,
+                      style: AppTextStyles.body.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    badge,
+                  ],
+                );
+              }
+
+              return Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      snapshot.category.title,
+                      style: AppTextStyles.body.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              if (snapshot.reviewDue > 0)
-                AppChip(
-                  label: '${snapshot.reviewDue} кайталоо',
-                  variant: AppChipVariant.accent,
-                )
-              else
-                AppChip(
-                  label: '${snapshot.mastered}/${snapshot.totalWords} сөз',
-                  variant: AppChipVariant.success,
-                ),
-            ],
+                  badge,
+                ],
+              );
+            },
           ),
           const SizedBox(height: 6),
           Text(snapshot.category.description, style: AppTextStyles.muted),
@@ -628,26 +652,6 @@ class _MiniActionButton extends StatelessWidget {
   }
 }
 
-class _CircleIcon extends StatelessWidget {
-  const _CircleIcon({required this.icon, required this.color});
-
-  final IconData icon;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color.withValues(alpha: 0.12),
-      ),
-      child: Icon(icon, color: color, size: 20),
-    );
-  }
-}
-
 class _LinearProgress extends StatelessWidget {
   const _LinearProgress({required this.value});
 
@@ -683,107 +687,57 @@ class _PracticePlan {
   const _PracticePlan({
     required this.title,
     required this.subtitle,
-    required this.supportingText,
     required this.primaryLabel,
     required this.primaryRoute,
-    required this.secondaryLabel,
-    required this.secondaryRoute,
   });
 
   final String title;
   final String subtitle;
-  final String supportingText;
   final String primaryLabel;
   final String primaryRoute;
-  final String secondaryLabel;
-  final String secondaryRoute;
 
   factory _PracticePlan.fromState({
     required ProgressProvider progress,
     required int dailyGoalMinutes,
     required _CategorySnapshot continueSnapshot,
     required _CategorySnapshot? reviewSnapshot,
-    required _CategorySnapshot? growthSnapshot,
   }) {
     if (progress.totalWordsMastered == 0) {
       return _PracticePlan(
-        title: 'Биринчи ритмди баштаңыз',
+        title: 'Биринчи режимди тандаңыз',
         subtitle:
-            '${continueSnapshot.category.title} аркылуу негизги сөздөрдү ачып, окуу циклин түзүңүз.',
-        supportingText:
-            'Практика эми кооз витрина эмес, реалдуу кийинки кадамдарды көрсөтөт.',
+            '${continueSnapshot.category.title} аркылуу негизги сөздөрдү ачып, машыгуу циклин түзүңүз.',
         primaryLabel: 'Биринчи карточкалар',
         primaryRoute: '/flashcards/${continueSnapshot.category.id}',
-        secondaryLabel: 'Бардык сабактар',
-        secondaryRoute: '/categories',
       );
     }
 
     if (!progress.hasActivityToday) {
       return _PracticePlan(
-        title: 'Серияны бүгүн сактап калыңыз',
+        title: 'Бүгүнкү машыгууну ачыңыз',
         subtitle:
-            '$dailyGoalMinutes мүнөттүк максат үчүн ${continueSnapshot.category.title} сабагына кайтыңыз.',
-        supportingText:
-            'Күнүмдүк сценарий эми “эмне кылсам?” деген суроого түз жооп берет.',
+            '$dailyGoalMinutes мүнөттүк максат үчүн азыр кайсы режим ылайыктуу экенин тандаңыз.',
         primaryLabel: 'Улантуу',
         primaryRoute: '/flashcards/${continueSnapshot.category.id}',
-        secondaryLabel: 'Экспресс-квиз',
-        secondaryRoute: '/quick-quiz',
       );
     }
 
     if (reviewSnapshot != null) {
       return _PracticePlan(
-        title: 'Ката кеткен сөздөрдү жабыңыз',
+        title: 'Алсыз жерлерди тазалаңыз',
         subtitle:
             '${reviewSnapshot.category.title} ичинде ${reviewSnapshot.reviewDue} сөз кошумча бекемдөөнү күтүп турат.',
-        supportingText:
-            'Бүгүн сиз активдүүсүз, эми сапатты көтөрүү үчүн алсыз жерлерди тазалайбыз.',
         primaryLabel: 'Кайталоону баштоо',
-        primaryRoute: '/flashcards/${reviewSnapshot.category.id}',
-        secondaryLabel: 'Квиз менен текшерүү',
-        secondaryRoute: '/quiz/${reviewSnapshot.category.id}',
+        primaryRoute: '/flashcards/${reviewSnapshot.category.id}?mode=review',
       );
     }
 
-    final growth = growthSnapshot ?? continueSnapshot;
     return _PracticePlan(
-      title: 'Темпти бекемдеңиз',
+      title: 'Режимди өзүңүз тандаңыз',
       subtitle:
-          '${growth.category.title} боюнча дагы бир көнүгүү жасап, прогрессти бекитиңиз.',
-      supportingText:
-          'Эми бир режимден экинчисине өтүп, эстөөнү, түзүүнү жана текшерүүнү айкалыштырабыз.',
+          'Эстөө, текшерүү жана колдонуу сценарийлерин өзүнчө башкаруу үчүн бул экранды хаб кылып бөлдүк.',
       primaryLabel: 'Сүйлөм түзүү',
-      primaryRoute: '/sentence-builder/${growth.category.id}',
-      secondaryLabel: 'Квизге өтүү',
-      secondaryRoute: '/quiz/${growth.category.id}',
-    );
-  }
-}
-
-class _MilestoneData {
-  const _MilestoneData({required this.title, required this.message});
-
-  final String title;
-  final String message;
-
-  factory _MilestoneData.fromProgress(ProgressProvider progress) {
-    final milestones = [5, 15, 30, 50];
-    for (final milestone in milestones) {
-      if (progress.totalWordsMastered < milestone) {
-        final remaining = milestone - progress.totalWordsMastered;
-        return _MilestoneData(
-          title: 'Кийинки чекит: $milestone сөз',
-          message:
-              'Дагы $remaining сөз өздөштүрсөңүз, кийинки жетишкендикке жакындайсыз.',
-        );
-      }
-    }
-    return _MilestoneData(
-      title: 'Сиз мыкты темпте бара жатасыз',
-      message:
-          'Эми сөздөрдү гана эмес, серияны жана тактыкты да көтөрүүгө көңүл буруңуз.',
+      primaryRoute: '/sentence-builder/${continueSnapshot.category.id}',
     );
   }
 }

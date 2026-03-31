@@ -1,26 +1,48 @@
 import '../../../core/services/firebase_service.dart';
+import '../../../core/services/offline_catalog_cache_service.dart';
 import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/quiz_question_model.dart';
 import '../../learning/repository/words_repository.dart';
 import '../../../data/models/word_model.dart';
 
 class QuizRepository {
-  QuizRepository(this._firebase, this._wordsRepository);
+  QuizRepository(this._firebase, this._wordsRepository, this._offlineCache);
 
   final FirebaseService _firebase;
   final WordsRepository _wordsRepository;
+  final OfflineCatalogCacheService _offlineCache;
 
   Future<List<QuizQuestionModel>> fetchQuestions(
     String categoryId, {
     int limit = 20,
     LearningDirection direction = LearningDirection.enToKy,
   }) async {
-    final remote = await _firebase.fetchQuizQuestions(categoryId, limit: limit);
-    if (remote.isNotEmpty) {
-      return remote
-          .map((q) => _normalizeRemoteQuestion(q, categoryId, direction))
-          .toList();
+    await _wordsRepository.ensureWordsLoaded(categoryId);
+
+    final cached = await _offlineCache.readQuizQuestions(categoryId, direction);
+
+    try {
+      final remote = await _firebase.fetchQuizQuestions(
+        categoryId,
+        limit: limit,
+      );
+      if (remote.isNotEmpty) {
+        final normalized = remote
+            .map((q) => _normalizeRemoteQuestion(q, categoryId, direction))
+            .toList();
+        await _offlineCache.writeQuizQuestions(
+          categoryId,
+          direction,
+          normalized,
+        );
+        return normalized;
+      }
+    } catch (_) {}
+
+    if (cached.isNotEmpty) {
+      return cached.take(limit).toList();
     }
+
     return _fallbackFromWords(categoryId, limit: limit, direction: direction);
   }
 
@@ -30,22 +52,16 @@ class QuizRepository {
     LearningDirection direction,
   ) {
     if (direction == LearningDirection.kyToEn) {
-      final word = _resolveWord(question);
-      if (word == null) {
-        return _normalizeRemoteQuestion(
-          question,
-          categoryId,
-          LearningDirection.enToKy,
-        );
-      }
+      final prompt = question.correct.trim();
+      final correct = question.question.trim();
       return QuizQuestionModel(
         id: question.id,
-        question: word.kyrgyz,
-        correct: word.english,
-        options: _buildEnglishOptions(word),
+        question: prompt,
+        correct: correct,
+        options: _buildEnglishOptionsFromText(correct),
         category: question.category.isNotEmpty ? question.category : categoryId,
         level: question.level,
-        wordId: word.id,
+        wordId: question.wordId,
       );
     }
     final deduped = <String>{};
@@ -143,27 +159,27 @@ class QuizRepository {
   }
 
   List<String> _buildEnglishOptions(WordModel word) {
+    return _buildEnglishOptionsFromText(word.english, excludedId: word.id);
+  }
+
+  List<String> _buildEnglishOptionsFromText(
+    String correct, {
+    String? excludedId,
+  }) {
     final pool =
-        _wordsRepository.allWords.where((w) => w.id != word.id).toList()
+        _wordsRepository.allWords
+            .where((w) => excludedId == null || w.id != excludedId)
+            .toList()
           ..shuffle();
-    final options = <String>[word.english];
+    final options = <String>[correct];
     for (final candidate in pool) {
       if (options.length >= 4) break;
       options.add(candidate.english);
     }
     while (options.length < 4) {
-      options.add(word.english);
+      options.add(correct);
     }
     options.shuffle();
     return options;
-  }
-
-  WordModel? _resolveWord(QuizQuestionModel question) {
-    final wordId = question.wordId;
-    if (wordId != null && wordId.isNotEmpty) {
-      return _wordsRepository.findById(wordId);
-    }
-    return _wordsRepository.findByEnglish(question.question) ??
-        _wordsRepository.findByKyrgyz(question.correct);
   }
 }

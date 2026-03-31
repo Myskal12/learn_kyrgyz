@@ -19,6 +19,7 @@ class ProgressProvider extends ChangeNotifier {
   }
 
   static const _storageKey = 'user_progress';
+  static const _milestoneTargets = <int>[5, 15, 30, 50];
 
   final LocalStorageService _storage;
   final FirebaseService _firebase;
@@ -91,6 +92,7 @@ class ProgressProvider extends ChangeNotifier {
         _progress = UserProgressModel(userId: 'guest');
       }
     }
+    _progress = _migrateLegacyWordProgress(_progress);
     _loaded = true;
     _recalculateTotals();
     _syncState = _remoteUid == null
@@ -108,6 +110,17 @@ class ProgressProvider extends ChangeNotifier {
   }
 
   void _recalculateTotals() {
+    if (_progress.wordProgressById.isNotEmpty) {
+      _cachedTotalExposures = _progress.wordProgressById.values.fold(
+        0,
+        (sum, value) => sum + value.attemptCount,
+      );
+      _cachedTotalCorrect = _progress.wordProgressById.values.fold(
+        0,
+        (sum, value) => sum + value.successCount,
+      );
+      return;
+    }
     _cachedTotalExposures = _progress.seenByWordId.values.fold(
       0,
       (sum, value) => sum + value,
@@ -119,29 +132,90 @@ class ProgressProvider extends ChangeNotifier {
   }
 
   void markWordSeen(String wordId) {
-    _touchSession();
-    final seen = _progress.seenByWordId[wordId] ?? 0;
-    _progress.seenByWordId[wordId] = seen + 1;
-    _cachedTotalExposures++;
-    notifyListeners();
-    unawaited(_persist());
+    recordWordAttempt(wordId, isCorrect: false);
   }
 
   void markWordMastered(String wordId) {
+    recordWordAttempt(wordId, isCorrect: true);
+  }
+
+  void recordWordAttempt(String wordId, {required bool isCorrect}) {
     _touchSession();
     final seen = _progress.seenByWordId[wordId] ?? 0;
-    final correct = _progress.correctByWordId[wordId] ?? 0;
     _progress.seenByWordId[wordId] = seen + 1;
-    _progress.correctByWordId[wordId] = correct + 1;
+    final now = DateTime.now();
+    final current = _progress.wordProgressById[wordId] ?? WordProgressRecord();
+    _progress.wordProgressById[wordId] = _nextWordProgressState(
+      current,
+      attemptedAt: now,
+      isCorrect: isCorrect,
+    );
     _cachedTotalExposures++;
-    _cachedTotalCorrect++;
+    if (isCorrect) {
+      final correct = _progress.correctByWordId[wordId] ?? 0;
+      _progress.correctByWordId[wordId] = correct + 1;
+      _cachedTotalCorrect++;
+    }
     notifyListeners();
     unawaited(_persist());
   }
 
-  int get totalWordsReviewed => _progress.seenByWordId.length;
+  int get totalWordsReviewed => _progress.wordProgressById.isNotEmpty
+      ? _progress.wordProgressById.values
+            .where((record) => record.attemptCount > 0)
+            .length
+      : _progress.seenByWordId.length;
   int get totalWordsMastered => _progress.correctByWordId.length;
   int get totalReviewSessions => _cachedTotalExposures;
+  int get weakWordsCount => _progress.wordProgressById.values
+      .where(
+        (record) =>
+            record.learningState == WordLearningState.weak ||
+            record.learningState == WordLearningState.reviewDue,
+      )
+      .length;
+  int get reviewDueWordsCount =>
+      _progress.wordProgressById.values.where(_isWordReviewDue).length;
+  bool get hasReviewFocus => reviewDueWordsCount > 0 || weakWordsCount > 0;
+
+  int? get nextMilestoneTarget {
+    for (final target in _milestoneTargets) {
+      if (totalWordsMastered < target) return target;
+    }
+    return null;
+  }
+
+  int get previousMilestoneTarget {
+    var previous = 0;
+    for (final target in _milestoneTargets) {
+      if (totalWordsMastered < target) {
+        return previous;
+      }
+      previous = target;
+    }
+    return _milestoneTargets.last;
+  }
+
+  int get wordsToNextMilestone {
+    final target = nextMilestoneTarget;
+    if (target == null) return 0;
+    return (target - totalWordsMastered).clamp(0, target);
+  }
+
+  double get nextMilestoneProgress {
+    final target = nextMilestoneTarget;
+    if (target == null) return 1;
+    final previous = previousMilestoneTarget;
+    final span = target - previous;
+    if (span <= 0) return 1;
+    return ((totalWordsMastered - previous) / span).clamp(0, 1);
+  }
+
+  String get nextMilestoneLabel {
+    final target = nextMilestoneTarget;
+    if (target == null) return 'Ачык практика этабы';
+    return '$target сөз';
+  }
 
   int get accuracyPercent {
     final exposures = _cachedTotalExposures;
@@ -175,10 +249,27 @@ class ProgressProvider extends ChangeNotifier {
   int reviewDueForCategory(List<WordModel> words) {
     if (words.isEmpty) return 0;
     return words.where((word) {
+      final record = _progress.wordProgressById[word.id];
+      if (record != null) {
+        return _isWordReviewDue(record);
+      }
       final seen = _progress.seenByWordId[word.id] ?? 0;
       final correct = _progress.correctByWordId[word.id] ?? 0;
       return seen > correct;
     }).length;
+  }
+
+  List<WordModel> reviewDueWords(List<WordModel> words) {
+    if (words.isEmpty) return const [];
+    return words.where((word) {
+      final record = _progress.wordProgressById[word.id];
+      if (record != null) {
+        return _isWordReviewDue(record);
+      }
+      final seen = _progress.seenByWordId[word.id] ?? 0;
+      final correct = _progress.correctByWordId[word.id] ?? 0;
+      return seen > correct;
+    }).toList();
   }
 
   double completionForCategory(List<WordModel> words) {
@@ -245,7 +336,7 @@ class ProgressProvider extends ChangeNotifier {
     try {
       final remote = await _firebase.fetchUserProgress(uid);
       if (remote != null) {
-        _progress = remote;
+        _progress = _migrateLegacyWordProgress(remote);
         _recalculateTotals();
         await _saveLocal();
         _lastSyncedAt = DateTime.now();
@@ -259,7 +350,7 @@ class ProgressProvider extends ChangeNotifier {
       return;
     }
 
-    _progress = _progress.copyWith(userId: uid);
+    _progress = _migrateLegacyWordProgress(_progress.copyWith(userId: uid));
     _recalculateTotals();
     notifyListeners();
     await _persist();
@@ -337,6 +428,128 @@ class ProgressProvider extends ChangeNotifier {
     }
 
     _progress = _progress.copyWith(streakDays: streak, lastSessionAt: today);
+  }
+
+  WordProgressRecord? progressForWord(String wordId) {
+    return _progress.wordProgressById[wordId];
+  }
+
+  WordLearningState learningStateForWord(String wordId) {
+    return progressForWord(wordId)?.learningState ?? WordLearningState.newWord;
+  }
+
+  UserProgressModel _migrateLegacyWordProgress(UserProgressModel progress) {
+    if (progress.wordProgressById.isNotEmpty) {
+      return progress;
+    }
+
+    final migrated = <String, WordProgressRecord>{};
+    final allWordIds = <String>{
+      ...progress.seenByWordId.keys,
+      ...progress.correctByWordId.keys,
+    };
+    for (final wordId in allWordIds) {
+      final attempts = progress.seenByWordId[wordId] ?? 0;
+      final successes = progress.correctByWordId[wordId] ?? 0;
+      final failures = (attempts - successes).clamp(0, attempts);
+      final learningState = _deriveLearningState(
+        attemptCount: attempts,
+        successCount: successes,
+        failureCount: failures,
+      );
+      migrated[wordId] = WordProgressRecord(
+        attemptCount: attempts,
+        successCount: successes,
+        failureCount: failures,
+        lastAttemptAt: progress.lastSessionAt,
+        lastCorrectAt: successes > 0 ? progress.lastSessionAt : null,
+        nextReviewAt: failures > 0 ? DateTime.now() : null,
+        learningState: learningState,
+      );
+    }
+    return progress.copyWith(wordProgressById: migrated);
+  }
+
+  WordProgressRecord _nextWordProgressState(
+    WordProgressRecord current, {
+    required DateTime attemptedAt,
+    required bool isCorrect,
+  }) {
+    final attempts = current.attemptCount + 1;
+    final successes = current.successCount + (isCorrect ? 1 : 0);
+    final failures = current.failureCount + (isCorrect ? 0 : 1);
+    final learningState = _deriveLearningState(
+      attemptCount: attempts,
+      successCount: successes,
+      failureCount: failures,
+    );
+    return WordProgressRecord(
+      attemptCount: attempts,
+      successCount: successes,
+      failureCount: failures,
+      lastAttemptAt: attemptedAt,
+      lastCorrectAt: isCorrect ? attemptedAt : current.lastCorrectAt,
+      nextReviewAt: _nextReviewAt(
+        attemptedAt: attemptedAt,
+        attemptCount: attempts,
+        successCount: successes,
+        failureCount: failures,
+        isCorrect: isCorrect,
+      ),
+      learningState: learningState,
+    );
+  }
+
+  WordLearningState _deriveLearningState({
+    required int attemptCount,
+    required int successCount,
+    required int failureCount,
+  }) {
+    if (attemptCount == 0) return WordLearningState.newWord;
+    if (failureCount >= successCount && failureCount > 0) {
+      return failureCount >= 2
+          ? WordLearningState.weak
+          : WordLearningState.reviewDue;
+    }
+    if (successCount >= 3 && failureCount == 0) {
+      return WordLearningState.mastered;
+    }
+    if (successCount >= 2) {
+      return WordLearningState.strong;
+    }
+    return WordLearningState.learning;
+  }
+
+  DateTime? _nextReviewAt({
+    required DateTime attemptedAt,
+    required int attemptCount,
+    required int successCount,
+    required int failureCount,
+    required bool isCorrect,
+  }) {
+    if (!isCorrect) {
+      return attemptedAt;
+    }
+    if (successCount >= 3 && failureCount == 0) {
+      return attemptedAt.add(const Duration(days: 7));
+    }
+    if (successCount >= 2) {
+      return attemptedAt.add(const Duration(days: 3));
+    }
+    if (attemptCount == 1) {
+      return attemptedAt.add(const Duration(hours: 12));
+    }
+    return attemptedAt.add(const Duration(days: 1));
+  }
+
+  bool _isWordReviewDue(WordProgressRecord record) {
+    if (record.learningState == WordLearningState.weak ||
+        record.learningState == WordLearningState.reviewDue) {
+      return true;
+    }
+    final nextReviewAt = record.nextReviewAt;
+    if (nextReviewAt == null) return false;
+    return !nextReviewAt.isAfter(DateTime.now());
   }
 
   void _setSyncState(

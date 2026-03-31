@@ -14,8 +14,18 @@ extension LearningDirectionX on LearningDirection {
   String get storageValue =>
       this == LearningDirection.kyToEn ? 'ky_to_en' : 'en_to_ky';
 
-  String get label =>
-      this == LearningDirection.kyToEn ? 'KY -> EN' : 'EN -> KY';
+  String get label => this == LearningDirection.kyToEn
+      ? 'Кыргызча -> Англисче'
+      : 'Англисче -> Кыргызча';
+
+  String get promptLanguageLabel =>
+      this == LearningDirection.kyToEn ? 'кыргызча' : 'англисче';
+
+  String get answerLanguageLabel =>
+      this == LearningDirection.kyToEn ? 'англисче' : 'кыргызча';
+
+  String get helperText =>
+      'Суроо $promptLanguageLabel, жооп $answerLanguageLabel.';
 
   bool get isEnToKy => this == LearningDirection.enToKy;
 }

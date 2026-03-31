@@ -82,11 +82,15 @@ class _AppShellState extends State<AppShell> {
 
   @override
   Widget build(BuildContext context) {
-    const maxWidth = 390.0;
     const topNavContentHeight = 64.0;
     const bottomNavContentHeight = 62.0;
 
     final media = MediaQuery.of(context);
+    final maxWidth = media.size.width >= 900
+        ? 640.0
+        : media.size.width >= 600
+        ? 520.0
+        : 430.0;
     final topPadding = widget.showTopNav
         ? media.padding.top + topNavContentHeight
         : media.padding.top;
@@ -102,7 +106,7 @@ class _AppShellState extends State<AppShell> {
             child: Align(
               alignment: Alignment.topCenter,
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: maxWidth),
+                constraints: BoxConstraints(maxWidth: maxWidth),
                 child: Container(
                   color: AppColors.background,
                   padding: EdgeInsets.only(
@@ -121,7 +125,7 @@ class _AppShellState extends State<AppShell> {
               right: 0,
               child: Center(
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: maxWidth),
+                  constraints: BoxConstraints(maxWidth: maxWidth),
                   child: AppTopNav(
                     title: widget.title,
                     subtitle: widget.subtitle ?? 'Кыргызча / English',
@@ -145,7 +149,7 @@ class _AppShellState extends State<AppShell> {
               bottom: 0,
               child: Center(
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: maxWidth),
+                  constraints: BoxConstraints(maxWidth: maxWidth),
                   child: AppBottomNav(
                     activeTab: widget.activeTab,
                     onTabSelected: _handleTab,

@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers/app_providers.dart';
+import '../../../core/services/analytics_service.dart';
 import '../../../data/models/sentence_model.dart';
 import '../../../data/models/word_model.dart';
 import '../../profile/providers/progress_provider.dart';
@@ -10,12 +13,20 @@ import '../repository/words_repository.dart';
 
 enum FlashcardStage { learning, review, completed }
 
+enum FlashcardSessionMode { fullDeck, reviewDue }
+
 class FlashcardProvider extends ChangeNotifier {
-  FlashcardProvider(this._repo, this._sentencesRepo, this._progress);
+  FlashcardProvider(
+    this._repo,
+    this._sentencesRepo,
+    this._progress, {
+    AnalyticsService? analytics,
+  }) : _analytics = analytics ?? const NoopAnalyticsService();
 
   final WordsRepository _repo;
   final SentencesRepository _sentencesRepo;
   final ProgressProvider _progress;
+  final AnalyticsService _analytics;
 
   List<WordModel> _allWords = [];
   List<WordModel> _deck = [];
@@ -24,11 +35,14 @@ class FlashcardProvider extends ChangeNotifier {
   bool _loading = false;
   bool _showTranslation = false;
   FlashcardStage _stage = FlashcardStage.learning;
+  FlashcardSessionMode _sessionMode = FlashcardSessionMode.fullDeck;
   final List<WordModel> _pendingReview = [];
   final List<WordModel> _mistakeHistory = [];
   int _correctCount = 0;
   int _wrongCount = 0;
   String? _errorMessage;
+  String _categoryId = '';
+  bool _completionTracked = false;
 
   List<WordModel> get words => _deck;
   int get index => _index;
@@ -42,6 +56,9 @@ class FlashcardProvider extends ChangeNotifier {
 
   bool get showTranslation => _showTranslation;
   FlashcardStage get stage => _stage;
+  FlashcardSessionMode get sessionMode => _sessionMode;
+  bool get isReviewQueueSession =>
+      _sessionMode == FlashcardSessionMode.reviewDue;
   int get totalWords => _allWords.length;
   int get correctCount => _correctCount;
   int get wrongCount => _wrongCount;
@@ -54,7 +71,13 @@ class FlashcardProvider extends ChangeNotifier {
   List<WordModel> get mistakes => List.unmodifiable(_mistakeHistory);
   String? get errorMessage => _errorMessage;
 
-  Future<void> load(String categoryId) async {
+  Future<void> load(
+    String categoryId, {
+    FlashcardSessionMode mode = FlashcardSessionMode.fullDeck,
+  }) async {
+    _categoryId = categoryId;
+    _sessionMode = mode;
+    _completionTracked = false;
     _loading = true;
     _errorMessage = null;
     notifyListeners();
@@ -69,7 +92,8 @@ class FlashcardProvider extends ChangeNotifier {
       }
       _sentencesByWordId = _indexSentences(sentences);
 
-      _allWords = await wordsFuture;
+      final categoryWords = await wordsFuture;
+      _allWords = _selectSessionWords(categoryWords, mode);
       _deck = List.of(_allWords);
       _index = 0;
       _showTranslation = false;
@@ -78,6 +102,7 @@ class FlashcardProvider extends ChangeNotifier {
       _mistakeHistory.clear();
       _correctCount = 0;
       _wrongCount = 0;
+      await _trackSessionStarted();
     } catch (_) {
       _errorMessage =
           'Карточкалар жүктөлгөн жок. Интернетти текшерип кайра аракет кылыңыз.';
@@ -90,9 +115,22 @@ class FlashcardProvider extends ChangeNotifier {
       _mistakeHistory.clear();
       _correctCount = 0;
       _wrongCount = 0;
+      _completionTracked = false;
     } finally {
       _loading = false;
       notifyListeners();
+    }
+  }
+
+  List<WordModel> _selectSessionWords(
+    List<WordModel> words,
+    FlashcardSessionMode mode,
+  ) {
+    switch (mode) {
+      case FlashcardSessionMode.fullDeck:
+        return List<WordModel>.of(words);
+      case FlashcardSessionMode.reviewDue:
+        return _progress.reviewDueWords(words);
     }
   }
 
@@ -117,11 +155,41 @@ class FlashcardProvider extends ChangeNotifier {
     return map;
   }
 
+  Future<void> _trackSessionStarted() {
+    if (_categoryId.isEmpty) return Future.value();
+    return _analytics.track(
+      'flashcards_started',
+      properties: {
+        'categoryId': _categoryId,
+        'mode': _sessionMode.name,
+        'deckSize': _allWords.length,
+      },
+    );
+  }
+
+  void _trackSessionCompleted() {
+    if (_completionTracked || _categoryId.isEmpty) return;
+    _completionTracked = true;
+    unawaited(
+      _analytics.track(
+        'flashcards_completed',
+        properties: {
+          'categoryId': _categoryId,
+          'mode': _sessionMode.name,
+          'totalWords': _allWords.length,
+          'correctCount': _correctCount,
+          'wrongCount': _wrongCount,
+          'accuracyPercent': accuracyPercent,
+          'mistakeCount': _mistakeHistory.length,
+          'usedReviewStage': _mistakeHistory.isNotEmpty,
+        },
+      ),
+    );
+  }
+
   void reveal() {
-    _showTranslation = !_showTranslation;
-    if (_showTranslation && current != null) {
-      _progress.markWordSeen(current!.id);
-    }
+    if (_showTranslation || current == null) return;
+    _showTranslation = true;
     notifyListeners();
   }
 
@@ -130,7 +198,7 @@ class FlashcardProvider extends ChangeNotifier {
     if (word == null) return;
     if (isCorrect) {
       _correctCount++;
-      _progress.markWordMastered(word.id);
+      _progress.recordWordAttempt(word.id, isCorrect: true);
       _pendingReview.removeWhere((w) => w.id == word.id);
     } else {
       _wrongCount++;
@@ -142,7 +210,7 @@ class FlashcardProvider extends ChangeNotifier {
       if (!exists) {
         _pendingReview.add(word);
       }
-      _progress.markWordSeen(word.id);
+      _progress.recordWordAttempt(word.id, isCorrect: false);
     }
     _next();
   }
@@ -171,6 +239,7 @@ class FlashcardProvider extends ChangeNotifier {
       _deck = [];
       _index = 0;
       _stage = FlashcardStage.completed;
+      _trackSessionCompleted();
     }
   }
 
@@ -183,6 +252,7 @@ class FlashcardProvider extends ChangeNotifier {
     _mistakeHistory.clear();
     _correctCount = 0;
     _wrongCount = 0;
+    _completionTracked = false;
     notifyListeners();
   }
 
@@ -195,6 +265,7 @@ class FlashcardProvider extends ChangeNotifier {
     _pendingReview.clear();
     _correctCount = 0;
     _wrongCount = 0;
+    _completionTracked = false;
     notifyListeners();
   }
 }
@@ -204,5 +275,6 @@ final flashcardProvider = ChangeNotifierProvider<FlashcardProvider>((ref) {
     ref.read(wordsRepositoryProvider),
     ref.read(sentencesRepositoryProvider),
     ref.read(progressProvider),
+    analytics: ref.read(analyticsServiceProvider),
   );
 });

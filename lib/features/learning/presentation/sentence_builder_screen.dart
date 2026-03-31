@@ -8,6 +8,7 @@ import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/sentence_model.dart';
+import '../../../shared/widgets/adaptive_panel_grid.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_chip.dart';
@@ -27,27 +28,25 @@ class SentenceBuilderScreen extends ConsumerStatefulWidget {
 }
 
 class _SentenceBuilderScreenState extends ConsumerState<SentenceBuilderScreen> {
-  LearningDirection? _lastDirection;
+  late final LearningDirection _direction;
 
   @override
   void initState() {
     super.initState();
+    _direction = ref.read(learningDirectionProvider);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.categoryId.isNotEmpty) {
         ref.read(learningSessionProvider).setLastCategoryId(widget.categoryId);
       }
-      final direction = ref.read(learningDirectionProvider);
-      _lastDirection = direction;
       ref
           .read(sentenceBuilderProvider)
-          .load(widget.categoryId, direction: direction);
+          .load(widget.categoryId, direction: _direction);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = ref.watch(sentenceBuilderProvider);
-    final direction = ref.watch(learningDirectionProvider);
 
     return AppShell(
       title: 'Сүйлөм түзүү',
@@ -58,13 +57,6 @@ class _SentenceBuilderScreenState extends ConsumerState<SentenceBuilderScreen> {
       showBottomNav: false,
       child: Builder(
         builder: (context) {
-          if (_lastDirection != direction) {
-            _lastDirection = direction;
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (!mounted) return;
-              ref.read(sentenceBuilderProvider).setDirection(direction);
-            });
-          }
           if (provider.isLoading) {
             return const AppLoadingState(
               title: 'Сүйлөмдөр жүктөлүүдө',
@@ -75,7 +67,7 @@ class _SentenceBuilderScreenState extends ConsumerState<SentenceBuilderScreen> {
             return AppErrorState(
               message: provider.errorMessage!,
               onAction: () =>
-                  provider.load(widget.categoryId, direction: direction),
+                  provider.load(widget.categoryId, direction: _direction),
             );
           }
           if (provider.isCompleted) {
@@ -88,11 +80,17 @@ class _SentenceBuilderScreenState extends ConsumerState<SentenceBuilderScreen> {
           if (sentence == null) {
             return _EmptyState(
               onReload: () =>
-                  provider.load(widget.categoryId, direction: direction),
+                  provider.load(widget.categoryId, direction: _direction),
             );
           }
-          final isEnToKy = direction == LearningDirection.enToKy;
+          final isEnToKy = _direction == LearningDirection.enToKy;
           final prompt = isEnToKy ? sentence.en : sentence.ky;
+          final promptLabel = isEnToKy
+              ? 'Берилген англисче сүйлөм'
+              : 'Берилген кыргызча сүйлөм';
+          final answerLabel = isEnToKy
+              ? 'Чогулта турган кыргызча сүйлөм'
+              : 'Чогулта турган англисче сүйлөм';
 
           return ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -120,7 +118,7 @@ class _SentenceBuilderScreenState extends ConsumerState<SentenceBuilderScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Котормосу:', style: AppTextStyles.muted),
+                    Text(promptLabel, style: AppTextStyles.muted),
                     const SizedBox(height: 12),
                     _PromptChips(prompt: prompt),
                   ],
@@ -128,7 +126,7 @@ class _SentenceBuilderScreenState extends ConsumerState<SentenceBuilderScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Сиздин сүйлөмүңүз:',
+                answerLabel,
                 style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 8),
@@ -187,32 +185,29 @@ class _SentenceBuilderScreenState extends ConsumerState<SentenceBuilderScreen> {
                 _ResultCard(
                   sentence: sentence,
                   isCorrect: provider.lastCorrect,
-                  direction: direction,
+                  direction: _direction,
                 ),
               ],
               const SizedBox(height: 20),
-              Row(
+              AdaptivePanelGrid(
+                maxColumns: 2,
+                minItemWidth: 150,
                 children: [
-                  Expanded(
-                    child: AppButton(
-                      variant: AppButtonVariant.outlined,
-                      onPressed: provider.canReset
-                          ? provider.resetSelection
-                          : null,
-                      child: const Text('Кайра'),
-                    ),
+                  AppButton(
+                    variant: AppButtonVariant.outlined,
+                    onPressed: provider.canReset
+                        ? provider.resetSelection
+                        : null,
+                    child: const Text('Кайра'),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: AppButton(
-                      onPressed: provider.answered
-                          ? provider.next
-                          : (provider.canCheck ? provider.check : null),
-                      child: Text(
-                        provider.answered
-                            ? (provider.isLast ? 'Бүтөрүү' : 'Кийинки')
-                            : (provider.canCheck ? 'Текшерүү' : 'Тандаңыз'),
-                      ),
+                  AppButton(
+                    onPressed: provider.answered
+                        ? provider.next
+                        : (provider.canCheck ? provider.check : null),
+                    child: Text(
+                      provider.answered
+                          ? (provider.isLast ? 'Бүтөрүү' : 'Кийинки')
+                          : (provider.canCheck ? 'Текшерүү' : 'Тандаңыз'),
                     ),
                   ),
                 ],
@@ -389,12 +384,13 @@ class _SentenceBuilderSummary extends StatelessWidget {
         .map((sentence) => '${sentence.en} → ${sentence.ky}')
         .toList();
     final hasMistakes = mistakes.isNotEmpty;
+    final reviewRoute = '/flashcards/$categoryId?mode=review';
 
     return SessionSummaryPanel(
       title: 'Сүйлөм түзүү аяктады',
       headline: _headline(),
       message: hasMistakes
-          ? 'Алсыз сүйлөмдөрдү кайра чогултуп, андан соң квиз менен текшерип чыгыңыз.'
+          ? 'Алсыз сүйлөмдөр review queue болуп белгиленди. Адегенде ошол сөздөрдү жаап, андан соң квиз менен текшерсеңиз жакшы болот.'
           : 'Тартипти жакшы кармадыңыз. Эми ушул эле теманы квиз менен же карточка менен бекемдеңиз.',
       metrics: [
         SessionSummaryMetric(
@@ -423,16 +419,18 @@ class _SentenceBuilderSummary extends StatelessWidget {
       tagsTitle: hasMistakes ? 'Кайра түзө турган сүйлөмдөр' : null,
       tags: mistakes,
       primaryAction: SessionSummaryAction(
-        label: hasMistakes ? 'Ката сүйлөмдөрдү кайра өтүү' : 'Квизге өтүү',
+        label: hasMistakes ? 'Кайталоо кезегине өтүү' : 'Квизге өтүү',
         onPressed: hasMistakes
-            ? provider.reviewMistakes
+            ? () => context.go(reviewRoute)
             : () => context.go('/quiz/$categoryId'),
       ),
       secondaryAction: SessionSummaryAction(
         label: hasMistakes
-            ? 'Карточкаларга кайтуу'
+            ? 'Ката сүйлөмдөрдү кайра өтүү'
             : 'Карточкалар менен бекемдөө',
-        onPressed: () => context.go('/flashcards/$categoryId'),
+        onPressed: hasMistakes
+            ? provider.reviewMistakes
+            : () => context.go('/flashcards/$categoryId'),
         variant: AppButtonVariant.outlined,
       ),
       tertiaryLabel: 'Практикага кайтуу',

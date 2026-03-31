@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers/app_providers.dart';
+import '../../../core/services/analytics_service.dart';
 import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/sentence_model.dart';
 import '../../profile/providers/progress_provider.dart';
@@ -18,11 +21,17 @@ class SentenceToken {
 }
 
 class SentenceBuilderProvider extends ChangeNotifier {
-  SentenceBuilderProvider(this._sentencesRepo, this._wordsRepo, this._progress);
+  SentenceBuilderProvider(
+    this._sentencesRepo,
+    this._wordsRepo,
+    this._progress, {
+    AnalyticsService? analytics,
+  }) : _analytics = analytics ?? const NoopAnalyticsService();
 
   final SentencesRepository _sentencesRepo;
   final WordsRepository _wordsRepo;
   final ProgressProvider _progress;
+  final AnalyticsService _analytics;
 
   bool _isLoading = false;
   SentenceBuilderStage _stage = SentenceBuilderStage.active;
@@ -34,6 +43,7 @@ class SentenceBuilderProvider extends ChangeNotifier {
   String _categoryId = '';
   LearningDirection _direction = LearningDirection.enToKy;
   String? _errorMessage;
+  bool _completionTracked = false;
 
   List<SentenceModel> _sentences = [];
   List<SentenceToken> _tokens = [];
@@ -83,6 +93,7 @@ class SentenceBuilderProvider extends ChangeNotifier {
   }) async {
     _categoryId = categoryId;
     _direction = direction;
+    _completionTracked = false;
     _isLoading = true;
     _errorMessage = null;
     _stage = SentenceBuilderStage.active;
@@ -95,12 +106,14 @@ class SentenceBuilderProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      final wordsFuture = _wordsRepo.ensureWordsLoaded(categoryId);
       List<SentenceModel> sentences = const [];
       try {
         sentences = await _sentencesRepo.fetchSentencesByCategory(categoryId);
       } catch (_) {
         sentences = _sentencesRepo.getCachedSentences(categoryId);
       }
+      await wordsFuture;
       _sentences =
           sentences
               .where((s) => s.en.trim().isNotEmpty && s.ky.trim().isNotEmpty)
@@ -108,6 +121,7 @@ class SentenceBuilderProvider extends ChangeNotifier {
             ..shuffle();
       _index = 0;
       _prepareCurrent();
+      await _trackSessionStarted();
     } catch (_) {
       _errorMessage =
           'Сүйлөмдөр жүктөлгөн жок. Интернетти текшерип кайра аракет кылыңыз.';
@@ -118,6 +132,37 @@ class SentenceBuilderProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> _trackSessionStarted() {
+    if (_categoryId.isEmpty) return Future.value();
+    return _analytics.track(
+      'sentence_builder_started',
+      properties: {
+        'categoryId': _categoryId,
+        'direction': _direction.storageValue,
+        'sentenceCount': _sentences.length,
+      },
+    );
+  }
+
+  void _trackSessionCompleted() {
+    if (_completionTracked || _categoryId.isEmpty) return;
+    _completionTracked = true;
+    unawaited(
+      _analytics.track(
+        'sentence_builder_completed',
+        properties: {
+          'categoryId': _categoryId,
+          'direction': _direction.storageValue,
+          'sentenceCount': _sentences.length,
+          'correctCount': _correct,
+          'wrongCount': _wrong,
+          'accuracyPercent': accuracyPercent,
+          'mistakeCount': _mistakes.length,
+        },
+      ),
+    );
   }
 
   void _prepareCurrent() {
@@ -214,6 +259,7 @@ class SentenceBuilderProvider extends ChangeNotifier {
     if (!_answered) return;
     if (_sentences.isEmpty || _index >= _sentences.length - 1) {
       _stage = SentenceBuilderStage.completed;
+      _trackSessionCompleted();
       notifyListeners();
       return;
     }
@@ -236,6 +282,7 @@ class SentenceBuilderProvider extends ChangeNotifier {
     _wrong = 0;
     _answered = false;
     _lastCorrect = false;
+    _completionTracked = false;
     _prepareCurrent();
     notifyListeners();
   }
@@ -256,11 +303,7 @@ class SentenceBuilderProvider extends ChangeNotifier {
                                 _wordsRepo.findByKyrgyz(highlight))
                           : null)));
     if (word == null) return;
-    if (mastered) {
-      _progress.markWordMastered(word.id);
-    } else {
-      _progress.markWordSeen(word.id);
-    }
+    _progress.recordWordAttempt(word.id, isCorrect: mastered);
   }
 }
 
@@ -270,6 +313,7 @@ final sentenceBuilderProvider = ChangeNotifierProvider<SentenceBuilderProvider>(
       ref.read(sentencesRepositoryProvider),
       ref.read(wordsRepositoryProvider),
       ref.read(progressProvider),
+      analytics: ref.read(analyticsServiceProvider),
     );
   },
 );

@@ -27,6 +27,14 @@ Mobile flashcards and quizzes to practice Kyrgyz vocabulary with synced progress
 - `lib/features/profile` — profile, leaderboard, progress/state providers
 - `lib/features/extras` — achievements, quick quiz, study plan, resources
 
+## Documentation
+- Current project docs live in [documentation/README.md](documentation/README.md)
+- Product and UX notes: [documentation/PRODUCT_AND_UX.md](documentation/PRODUCT_AND_UX.md)
+- Architecture notes: [documentation/ARCHITECTURE.md](documentation/ARCHITECTURE.md)
+- Quality and testing notes: [documentation/ENGINEERING_QUALITY.md](documentation/ENGINEERING_QUALITY.md)
+- User guide: [documentation/USER_GUIDE.md](documentation/USER_GUIDE.md)
+- Test report: [documentation/TEST_REPORT.md](documentation/TEST_REPORT.md)
+
 ## Troubleshooting
 - If Google Sign-In fails on Android, ensure SHA-1/SHA-256 are registered and `com.google.android.gms` is allowed in `AndroidManifest`.
 - When testing layout on small screens, use `flutter run -d` with low-res emulators; cards and buttons wrap instead of overflowing.

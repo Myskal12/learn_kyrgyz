@@ -7,8 +7,10 @@ import '../../../app/providers/theme_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../core/utils/learning_direction.dart';
+import '../../../shared/widgets/adaptive_panel_grid.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
+import '../../../shared/widgets/app_chip.dart';
 import '../../../shared/widgets/app_shell.dart';
 import '../../../shared/widgets/app_state_views.dart';
 import '../providers/progress_provider.dart';
@@ -101,29 +103,74 @@ class ProfileScreen extends ConsumerWidget {
             style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 12),
-          Row(
+          AdaptivePanelGrid(
+            maxColumns: 3,
+            minItemWidth: 92,
             children: [
-              Expanded(
-                child: _StatCard(
-                  value: progress.totalWordsMastered.toString(),
-                  label: 'Сөздөр',
-                ),
+              _StatCard(
+                value: progress.totalWordsMastered.toString(),
+                label: 'Сөздөр',
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _StatCard(
-                  value: progress.totalReviewSessions.toString(),
-                  label: 'Көрүүлөр',
-                ),
+              _StatCard(
+                value: progress.totalReviewSessions.toString(),
+                label: 'Көрүүлөр',
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _StatCard(
-                  value: progress.streakDays.toString(),
-                  label: 'Күн',
-                ),
-              ),
+              _StatCard(value: progress.streakDays.toString(), label: 'Күн'),
             ],
+          ),
+          const SizedBox(height: 16),
+          AppCard(
+            padding: const EdgeInsets.all(16),
+            backgroundColor: AppColors.primary.withValues(alpha: 0.05),
+            borderColor: AppColors.primary.withValues(alpha: 0.18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Окуу snapshot',
+                  style: AppTextStyles.body.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    AppChip(
+                      label: '${progress.reviewDueWordsCount} review',
+                      variant: progress.reviewDueWordsCount > 0
+                          ? AppChipVariant.accent
+                          : AppChipVariant.success,
+                    ),
+                    AppChip(
+                      label: '${progress.weakWordsCount} алсыз сөз',
+                      variant: AppChipVariant.defaultChip,
+                    ),
+                    AppChip(
+                      label: progress.nextMilestoneLabel,
+                      variant: AppChipVariant.primary,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  progress.reviewDueWordsCount > 0
+                      ? 'Азыр эң жакшы кадам review queue жабуу. Андан кийин quiz же sentence builder натыйжалуураак болот.'
+                      : progress.wordsToNextMilestone > 0
+                      ? 'Кийинки чекитке чейин дагы ${progress.wordsToNextMilestone} сөз калды. Темпти сактоо жетиштүү.'
+                      : 'Негизги чекиттер ачылган. Эми сапатты review жана mixed practice менен кармаңыз.',
+                  style: AppTextStyles.muted,
+                ),
+                const SizedBox(height: 12),
+                AppButton(
+                  variant: AppButtonVariant.outlined,
+                  fullWidth: true,
+                  onPressed: () => context.push('/progress'),
+                  child: const Text('Толук прогрессти көрүү'),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 20),
           _ProfileSyncNotice(progress: progress),
@@ -165,74 +212,22 @@ class ProfileScreen extends ConsumerWidget {
             style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 12),
-          AppCard(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    _CircleIcon(
-                      icon: Icons.translate,
-                      color: AppColors.primary,
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Тил багыты',
-                          style: AppTextStyles.body.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(direction.label, style: AppTextStyles.muted),
-                      ],
-                    ),
-                  ],
-                ),
-                _MiniAction(
-                  label: 'Өзгөртүү',
-                  onTap: () => ref
-                      .read(learningDirectionProvider.notifier)
-                      .toggleDirection(),
-                ),
-              ],
-            ),
+          _SettingCard(
+            icon: Icons.translate,
+            iconColor: AppColors.primary,
+            title: 'Көнүгүү багыты',
+            subtitle: direction.helperText,
+            actionLabel: 'Жөндөө',
+            onAction: () => context.push('/settings'),
           ),
           const SizedBox(height: 12),
-          AppCard(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    _CircleIcon(icon: Icons.sunny, color: AppColors.accent),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Тема',
-                          style: AppTextStyles.body.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(themeLabel, style: AppTextStyles.muted),
-                      ],
-                    ),
-                  ],
-                ),
-                _MiniAction(
-                  label: 'Өзгөртүү',
-                  onTap: () =>
-                      ref.read(themeModeProvider.notifier).toggleTheme(),
-                ),
-              ],
-            ),
+          _SettingCard(
+            icon: Icons.sunny,
+            iconColor: AppColors.accent,
+            title: 'Тема',
+            subtitle: themeLabel,
+            actionLabel: 'Өзгөртүү',
+            onAction: () => ref.read(themeModeProvider.notifier).toggleTheme(),
           ),
           const SizedBox(height: 20),
           AppButton(
@@ -359,6 +354,77 @@ class _MiniAction extends StatelessWidget {
           label,
           style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.w600),
         ),
+      ),
+    );
+  }
+}
+
+class _SettingCard extends StatelessWidget {
+  const _SettingCard({
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.subtitle,
+    required this.actionLabel,
+    required this.onAction,
+  });
+
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final String subtitle;
+  final String actionLabel;
+  final VoidCallback onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      padding: const EdgeInsets.all(16),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final content = Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _CircleIcon(icon: icon, color: iconColor),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: AppTextStyles.body.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(subtitle, style: AppTextStyles.muted),
+                  ],
+                ),
+              ),
+            ],
+          );
+
+          if (constraints.maxWidth < 280) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                content,
+                const SizedBox(height: 12),
+                _MiniAction(label: actionLabel, onTap: onAction),
+              ],
+            );
+          }
+
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: content),
+              const SizedBox(width: 12),
+              _MiniAction(label: actionLabel, onTap: onAction),
+            ],
+          );
+        },
       ),
     );
   }

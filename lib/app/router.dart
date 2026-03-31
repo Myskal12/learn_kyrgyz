@@ -9,6 +9,7 @@ import '../features/extras/presentation/study_plan_screen.dart';
 import '../features/learning/presentation/flashcard_screen.dart';
 import '../features/learning/presentation/lesson_overview_screen.dart';
 import '../features/learning/presentation/sentence_builder_screen.dart';
+import '../features/learning/providers/flashcard_provider.dart';
 import '../features/progress/presentation/progress_screen.dart';
 import '../features/profile/presentation/leaderboard_screen.dart';
 import '../features/profile/presentation/profile_screen.dart';
@@ -47,12 +48,17 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/flashcards',
-      builder: (context, state) => const FlashcardScreen(categoryId: 'basic'),
+      builder: (context, state) => FlashcardScreen(
+        categoryId: 'basic',
+        mode: _flashcardModeFromState(state),
+      ),
     ),
     GoRoute(
       path: '/flashcards/:categoryId',
-      builder: (context, state) =>
-          FlashcardScreen(categoryId: state.pathParameters['categoryId']!),
+      builder: (context, state) => FlashcardScreen(
+        categoryId: state.pathParameters['categoryId']!,
+        mode: _flashcardModeFromState(state),
+      ),
     ),
     GoRoute(
       path: '/sentence-builder',
@@ -108,3 +114,9 @@ final GoRouter router = GoRouter(
     ),
   ],
 );
+
+FlashcardSessionMode _flashcardModeFromState(GoRouterState state) {
+  return state.uri.queryParameters['mode'] == 'review'
+      ? FlashcardSessionMode.reviewDue
+      : FlashcardSessionMode.fullDeck;
+}

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers/app_providers.dart';
-import '../../../core/services/firebase_service.dart';
 import '../../../data/models/category_model.dart';
+import '../../learning/repository/words_repository.dart';
+import '../repository/categories_repository.dart';
 
 class CategoriesProvider extends ChangeNotifier {
-  CategoriesProvider(this._service);
+  CategoriesProvider(this._repository, this._wordsRepository);
 
-  final FirebaseService _service;
+  final CategoriesRepository _repository;
+  final WordsRepository _wordsRepository;
 
   List<CategoryModel> _categories = [];
   bool _loading = false;
@@ -25,7 +27,11 @@ class CategoriesProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
     try {
-      _categories = await _service.fetchCategories();
+      _categories = await _repository.fetchCategories(forceRefresh: force);
+      notifyListeners();
+      await _wordsRepository.prefetchCategories(
+        _categories.map((category) => category.id),
+      );
     } catch (_) {
       _errorMessage =
           'Категориялар жүктөлгөн жок. Интернетти текшерип кайра аракет кылыңыз.';
@@ -37,6 +43,8 @@ class CategoriesProvider extends ChangeNotifier {
 }
 
 final categoriesProvider = ChangeNotifierProvider<CategoriesProvider>((ref) {
-  final firebase = ref.read(firebaseServiceProvider);
-  return CategoriesProvider(firebase);
+  return CategoriesProvider(
+    ref.read(categoriesRepositoryProvider),
+    ref.read(wordsRepositoryProvider),
+  );
 });

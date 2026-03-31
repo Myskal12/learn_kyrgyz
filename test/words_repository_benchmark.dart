@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:learn_kyrgyz/core/services/firebase_service.dart';
+import 'package:learn_kyrgyz/core/services/local_storage_service.dart';
+import 'package:learn_kyrgyz/core/services/offline_catalog_cache_service.dart';
 import 'package:learn_kyrgyz/data/models/word_model.dart';
 import 'package:learn_kyrgyz/features/learning/repository/words_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// Mock FirebaseService to avoid real dependencies and control data
 class MockFirebaseService implements FirebaseService {
   final List<WordModel> _words;
 
@@ -24,15 +27,12 @@ class MockFirebaseService implements FirebaseService {
 
   @override
   dynamic noSuchMethod(Invocation invocation) {
-    // Return null or throw depending on what's needed.
-    // For this benchmark, we only need allWords and maybe fetchWordsByCategory logic.
     return null;
   }
 }
 
 void main() {
   test('WordsRepository findById benchmark', () async {
-    // 1. Setup large dataset
     final int wordCount = 10000;
     final List<WordModel> words = List.generate(wordCount, (index) {
       return WordModel(
@@ -43,12 +43,14 @@ void main() {
     });
 
     final mockService = MockFirebaseService(words);
-    final repository = WordsRepository(mockService);
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final storage = LocalStorageService(prefs);
+    final cache = OfflineCatalogCacheService(storage);
+    final repository = WordsRepository(mockService, cache);
 
-    // Target the last word to force worst-case scenario for linear search
     final targetId = 'word_${wordCount - 1}';
 
-    // 2. Measure
     final stopwatch = Stopwatch()..start();
     final iterations = 1000;
 
@@ -61,10 +63,14 @@ void main() {
 
     stopwatch.stop();
 
-    print('--------------------------------------------------');
-    print('Benchmark Results:');
-    print('Total time for $iterations iterations: ${stopwatch.elapsedMilliseconds} ms');
-    print('Average time per call: ${stopwatch.elapsedMicroseconds / iterations} µs');
-    print('--------------------------------------------------');
+    debugPrint('--------------------------------------------------');
+    debugPrint('Benchmark Results:');
+    debugPrint(
+      'Total time for $iterations iterations: ${stopwatch.elapsedMilliseconds} ms',
+    );
+    debugPrint(
+      'Average time per call: ${stopwatch.elapsedMicroseconds / iterations} µs',
+    );
+    debugPrint('--------------------------------------------------');
   });
 }

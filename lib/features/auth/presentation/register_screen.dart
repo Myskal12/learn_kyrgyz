@@ -5,9 +5,11 @@ import 'package:go_router/go_router.dart';
 import '../../../app/providers/onboarding_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
+import '../../../shared/widgets/adaptive_panel_grid.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_shell.dart';
+import '../../../shared/widgets/sticky_bottom_action_bar.dart';
 import '../auth_demo_account.dart';
 import '../providers/auth_provider.dart';
 
@@ -83,289 +85,314 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       title: '',
       showTopNav: false,
       showBottomNav: false,
+      navigationMode: AppShellNavigationMode.back,
+      backFallbackRoute: '/welcome',
       child: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 360),
-            child: Column(
-              children: [
-                AppCard(
-                  padding: const EdgeInsets.all(24),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 360),
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 24,
+                  ),
                   child: Column(
                     children: [
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [AppColors.primary, AppColors.accent],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                        child: const Text(
-                          'КЕ',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Жаңы аккаунт',
-                        style: AppTextStyles.heading.copyWith(fontSize: 28),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Кыргызча жана англисче сүйлөшүүнү оңой үйрөнөсүз',
-                        style: AppTextStyles.muted,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                AppCard(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _AuthField(
-                        controller: _name,
-                        label: 'Толук аты',
-                        icon: Icons.person_outline,
-                        placeholder: AuthDemoAccount.name,
-                      ),
-                      const SizedBox(height: 16),
-                      _AuthField(
-                        controller: _email,
-                        label: 'Электрондук почта',
-                        icon: Icons.mail_outline,
-                        placeholder: AuthDemoAccount.email,
-                      ),
-                      const SizedBox(height: 16),
-                      _AuthField(
-                        controller: _password,
-                        label: 'Сыр сөз',
-                        icon: Icons.lock_outline,
-                        placeholder: AuthDemoAccount.password,
-                        obscureText: !_showPassword,
-                        suffix: IconButton(
-                          onPressed: () {
-                            setState(() => _showPassword = !_showPassword);
-                          },
-                          icon: Icon(
-                            _showPassword
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: AppColors.muted,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      _AuthField(
-                        controller: _confirmPassword,
-                        label: 'Сыр сөздү кайталаңыз',
-                        icon: Icons.lock_reset,
-                        placeholder: AuthDemoAccount.password,
-                        obscureText: !_showConfirm,
-                        suffix: IconButton(
-                          onPressed: () {
-                            setState(() => _showConfirm = !_showConfirm);
-                          },
-                          icon: Icon(
-                            _showConfirm
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: AppColors.muted,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                AppCard(
-                  padding: const EdgeInsets.all(18),
-                  backgroundColor: AppColors.primary.withValues(alpha: 0.08),
-                  borderColor: AppColors.primary.withValues(alpha: 0.18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.auto_awesome, color: AppColors.primary),
-                          const SizedBox(width: 10),
-                          Text(
-                            'Тест үчүн даяр профиль',
-                            style: AppTextStyles.body.copyWith(
-                              fontWeight: FontWeight.w700,
+                      AppCard(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 72,
+                              height: 72,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: LinearGradient(
+                                  colors: [AppColors.primary, AppColors.accent],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                              ),
+                              alignment: Alignment.center,
+                              child: const Text(
+                                'КЕ',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Бул блок тест аккаунтту дароо толтуруп, керек болсо өзү түзүп да киргизет.',
-                        style: AppTextStyles.muted,
-                      ),
-                      const SizedBox(height: 12),
-                      const _CredentialLine(
-                        label: 'Аты',
-                        value: AuthDemoAccount.name,
-                      ),
-                      const SizedBox(height: 8),
-                      const _CredentialLine(
-                        label: 'Email',
-                        value: AuthDemoAccount.email,
-                      ),
-                      const SizedBox(height: 8),
-                      const _CredentialLine(
-                        label: 'Сыр сөз',
-                        value: AuthDemoAccount.password,
-                      ),
-                      const SizedBox(height: 14),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: AppButton(
-                              size: AppButtonSize.sm,
-                              variant: AppButtonVariant.outlined,
-                              onPressed: auth.isLoading
-                                  ? null
-                                  : () {
-                                      _fillDemoRegistration();
-                                      _showMessage(
-                                        'Тест аккаунт маалыматтары толтурулду.',
-                                      );
-                                    },
-                              child: const Text('Толтуруу'),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Жаңы аккаунт',
+                              style: AppTextStyles.heading.copyWith(
+                                fontSize: 28,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: AppButton(
-                              size: AppButtonSize.sm,
-                              onPressed: auth.isLoading
-                                  ? null
-                                  : () => _handleDemoAccess(auth),
-                              child: const Text('Түзүү же кирүү'),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Кыргызча жана англисче сүйлөшүүнү оңой үйрөнөсүз',
+                              style: AppTextStyles.muted,
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      AppCard(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _AuthField(
+                              controller: _name,
+                              label: 'Толук аты',
+                              icon: Icons.person_outline,
+                              placeholder: AuthDemoAccount.name,
+                            ),
+                            const SizedBox(height: 16),
+                            _AuthField(
+                              controller: _email,
+                              label: 'Электрондук почта',
+                              icon: Icons.mail_outline,
+                              placeholder: AuthDemoAccount.email,
+                            ),
+                            const SizedBox(height: 16),
+                            _AuthField(
+                              controller: _password,
+                              label: 'Сыр сөз',
+                              icon: Icons.lock_outline,
+                              placeholder: AuthDemoAccount.password,
+                              obscureText: !_showPassword,
+                              suffix: IconButton(
+                                onPressed: () {
+                                  setState(
+                                    () => _showPassword = !_showPassword,
+                                  );
+                                },
+                                icon: Icon(
+                                  _showPassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: AppColors.muted,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            _AuthField(
+                              controller: _confirmPassword,
+                              label: 'Сыр сөздү кайталаңыз',
+                              icon: Icons.lock_reset,
+                              placeholder: AuthDemoAccount.password,
+                              obscureText: !_showConfirm,
+                              suffix: IconButton(
+                                onPressed: () {
+                                  setState(() => _showConfirm = !_showConfirm);
+                                },
+                                icon: Icon(
+                                  _showConfirm
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: AppColors.muted,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      AppCard(
+                        padding: const EdgeInsets.all(18),
+                        backgroundColor: AppColors.primary.withValues(
+                          alpha: 0.08,
+                        ),
+                        borderColor: AppColors.primary.withValues(alpha: 0.18),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.auto_awesome,
+                                  color: AppColors.primary,
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    'Тест үчүн даяр профиль',
+                                    style: AppTextStyles.body.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Бул блок тест аккаунтту дароо толтуруп, керек болсо өзү түзүп да киргизет.',
+                              style: AppTextStyles.muted,
+                            ),
+                            const SizedBox(height: 12),
+                            const _CredentialLine(
+                              label: 'Аты',
+                              value: AuthDemoAccount.name,
+                            ),
+                            const SizedBox(height: 8),
+                            const _CredentialLine(
+                              label: 'Email',
+                              value: AuthDemoAccount.email,
+                            ),
+                            const SizedBox(height: 8),
+                            const _CredentialLine(
+                              label: 'Сыр сөз',
+                              value: AuthDemoAccount.password,
+                            ),
+                            const SizedBox(height: 14),
+                            AdaptivePanelGrid(
+                              maxColumns: 2,
+                              minItemWidth: 150,
+                              children: [
+                                AppButton(
+                                  size: AppButtonSize.sm,
+                                  fullWidth: true,
+                                  variant: AppButtonVariant.outlined,
+                                  onPressed: auth.isLoading
+                                      ? null
+                                      : () {
+                                          _fillDemoRegistration();
+                                          _showMessage(
+                                            'Тест аккаунт маалыматтары толтурулду.',
+                                          );
+                                        },
+                                  child: const Text('Толтуруу'),
+                                ),
+                                AppButton(
+                                  size: AppButtonSize.sm,
+                                  fullWidth: true,
+                                  onPressed: auth.isLoading
+                                      ? null
+                                      : () => _handleDemoAccess(auth),
+                                  child: const Text('Түзүү же кирүү'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
-                if (_localError != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Text(
-                      _localError!,
-                      style: const TextStyle(color: Colors.red),
+              ),
+              StickyBottomActionBar(
+                maxWidth: 360,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (_localError != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          _localError!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    if (auth.error != null && !auth.isLoading)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          auth.error!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    AppButton(
+                      key: const Key('register-primary-cta'),
+                      fullWidth: true,
+                      size: AppButtonSize.lg,
+                      onPressed: auth.isLoading
+                          ? null
+                          : () async {
+                              final nickname = _name.text.trim();
+                              final email = _email.text.trim();
+                              if (nickname.isEmpty) {
+                                _setLocalError('Толук атты жазыңыз.');
+                                return;
+                              }
+                              if (_password.text != _confirmPassword.text) {
+                                _setLocalError('Сыр сөздөр дал келбейт.');
+                                return;
+                              }
+                              _setLocalError(null);
+                              final ok = await auth.register(
+                                email,
+                                _password.text,
+                                nickname: nickname,
+                              );
+                              if (!context.mounted) return;
+                              if (ok) {
+                                await _finishAuthFlow();
+                                return;
+                              }
+                              final error = auth.error;
+                              if (error != null) {
+                                _showMessage(error);
+                              }
+                            },
+                      child: Text(auth.isLoading ? '...' : 'Катталуу'),
                     ),
-                  ),
-                if (auth.error != null && !auth.isLoading)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Text(
-                      auth.error!,
-                      style: const TextStyle(color: Colors.red),
+                    const SizedBox(height: 10),
+                    AppButton(
+                      fullWidth: true,
+                      size: AppButtonSize.lg,
+                      variant: AppButtonVariant.outlined,
+                      onPressed: auth.isLoading || !googleSupported
+                          ? null
+                          : () async {
+                              _setLocalError(null);
+                              final ok = await auth.loginWithGoogle();
+                              if (!context.mounted) return;
+                              if (ok) {
+                                await _finishAuthFlow();
+                                return;
+                              }
+                              final error = auth.error;
+                              if (error != null) {
+                                _showMessage(error);
+                              }
+                            },
+                      child: const Text('Google менен катталуу'),
                     ),
-                  ),
-                AppButton(
-                  fullWidth: true,
-                  size: AppButtonSize.lg,
-                  onPressed: auth.isLoading
-                      ? null
-                      : () async {
-                          final nickname = _name.text.trim();
-                          final email = _email.text.trim();
-                          if (nickname.isEmpty) {
-                            _setLocalError('Толук атты жазыңыз.');
-                            return;
-                          }
-                          if (_password.text != _confirmPassword.text) {
-                            _setLocalError('Сыр сөздөр дал келбейт.');
-                            return;
-                          }
-                          _setLocalError(null);
-                          final ok = await auth.register(
-                            email,
-                            _password.text,
-                            nickname: nickname,
-                          );
-                          if (!context.mounted) return;
-                          if (ok) {
-                            await _finishAuthFlow();
-                            return;
-                          }
-                          final error = auth.error;
-                          if (error != null) {
-                            _showMessage(error);
-                          }
-                        },
-                  child: Text(auth.isLoading ? '...' : 'Катталуу'),
+                    if (!googleSupported)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          auth.googleSignInUnavailableMessage,
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.muted.copyWith(fontSize: 13),
+                        ),
+                      ),
+                    const SizedBox(height: 8),
+                    TextButton(
+                      onPressed: () => context.push('/login'),
+                      child: Text(
+                        'Аккаунтуңуз барбы? Кирүү',
+                        style: AppTextStyles.body.copyWith(
+                          color: AppColors.link,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 12),
-                AppButton(
-                  fullWidth: true,
-                  size: AppButtonSize.lg,
-                  variant: AppButtonVariant.outlined,
-                  onPressed: auth.isLoading || !googleSupported
-                      ? null
-                      : () async {
-                          _setLocalError(null);
-                          final ok = await auth.loginWithGoogle();
-                          if (!context.mounted) return;
-                          if (ok) {
-                            await _finishAuthFlow();
-                            return;
-                          }
-                          final error = auth.error;
-                          if (error != null) {
-                            _showMessage(error);
-                          }
-                        },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.account_circle_outlined, size: 20),
-                      SizedBox(width: 8),
-                      Text('Google менен катталуу'),
-                    ],
-                  ),
-                ),
-                if (!googleSupported)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Text(
-                      auth.googleSignInUnavailableMessage,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.muted.copyWith(fontSize: 13),
-                    ),
-                  ),
-                const SizedBox(height: 16),
-                Text('Аккаунтуңуз барбы?', style: AppTextStyles.muted),
-                TextButton(
-                  onPressed: () => context.push('/login'),
-                  child: Text(
-                    'Кирүү',
-                    style: AppTextStyles.body.copyWith(
-                      color: AppColors.link,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

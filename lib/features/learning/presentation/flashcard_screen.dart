@@ -9,6 +9,7 @@ import '../../../app/providers/learning_direction_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../core/utils/learning_direction.dart';
+import '../../../shared/widgets/adaptive_panel_grid.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_shell.dart';
@@ -19,8 +20,13 @@ import '../../../data/models/word_model.dart';
 import '../providers/flashcard_provider.dart';
 
 class FlashcardScreen extends ConsumerStatefulWidget {
-  const FlashcardScreen({required this.categoryId, super.key});
+  const FlashcardScreen({
+    required this.categoryId,
+    this.mode = FlashcardSessionMode.fullDeck,
+    super.key,
+  });
   final String categoryId;
+  final FlashcardSessionMode mode;
 
   @override
   ConsumerState<FlashcardScreen> createState() => _FlashcardScreenState();
@@ -28,17 +34,19 @@ class FlashcardScreen extends ConsumerStatefulWidget {
 
 class _FlashcardScreenState extends ConsumerState<FlashcardScreen> {
   late final FlutterTts _tts;
+  late final LearningDirection _direction;
 
   @override
   void initState() {
     super.initState();
+    _direction = ref.read(learningDirectionProvider);
     _tts = FlutterTts()
       ..setLanguage('ky-KG')
       ..setPitch(1.0)
       ..setSpeechRate(0.4);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(learningSessionProvider).setLastCategoryId(widget.categoryId);
-      ref.read(flashcardProvider).load(widget.categoryId);
+      ref.read(flashcardProvider).load(widget.categoryId, mode: widget.mode);
     });
   }
 
@@ -76,7 +84,8 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen> {
           if (provider.errorMessage != null) {
             return AppErrorState(
               message: provider.errorMessage!,
-              onAction: () => provider.load(widget.categoryId),
+              onAction: () =>
+                  provider.load(widget.categoryId, mode: widget.mode),
             );
           }
           if (provider.stage == FlashcardStage.completed) {
@@ -88,18 +97,31 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen> {
           final word = provider.current;
           if (word == null) {
             return AppEmptyState(
-              title: 'Карточкалар табылган жок',
-              message:
-                  'Бул категория үчүн сөздөр же кэш табылган жок. Кийинчерээк кайра текшерип көрүңүз.',
+              title: provider.isReviewQueueSession
+                  ? 'Кайталоо кезеги бош'
+                  : 'Карточкалар табылган жок',
+              message: provider.isReviewQueueSession
+                  ? 'Бул категорияда азыр кайра бекемдей турган сөздөр жок. Толук циклди баштасаңыз, жаңы материал ачылат.'
+                  : 'Бул категория үчүн сөздөр же кэш табылган жок. Кийинчерээк кайра текшерип көрүңүз.',
               icon: Icons.style_outlined,
-              actionLabel: 'Кайра жүктөө',
-              onAction: () => provider.load(widget.categoryId),
+              actionLabel: provider.isReviewQueueSession
+                  ? 'Толук циклди ачуу'
+                  : 'Кайра жүктөө',
+              onAction: () => provider.load(
+                widget.categoryId,
+                mode: provider.isReviewQueueSession
+                    ? FlashcardSessionMode.fullDeck
+                    : widget.mode,
+              ),
             );
           }
-          final direction = ref.watch(learningDirectionProvider);
-          final isEnToKy = direction == LearningDirection.enToKy;
+          final isEnToKy = _direction.isEnToKy;
           final prompt = isEnToKy ? word.english : word.kyrgyz;
-          final speechText = isEnToKy ? word.kyrgyz : word.english;
+          final translation = isEnToKy ? word.kyrgyz : word.english;
+          final speechText = provider.showTranslation ? translation : prompt;
+          final speechIsEnglish = provider.showTranslation
+              ? !isEnToKy
+              : isEnToKy;
           final total = provider.stage == FlashcardStage.learning
               ? provider.totalWords
               : provider.mistakes.length;
@@ -126,6 +148,8 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen> {
               Text(
                 provider.stage == FlashcardStage.review
                     ? 'Ката кеткен сөздөргө кайра келдиңиз'
+                    : provider.isReviewQueueSession
+                    ? 'Бул жерде кайра бекемдөөнү күткөн сөздөр гана турат'
                     : 'Адегенде эстеп, анан карточканы ачыңыз',
                 style: AppTextStyles.muted,
               ),
@@ -133,6 +157,7 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen> {
               _FlashcardHintCard(
                 showTranslation: provider.showTranslation,
                 stage: provider.stage,
+                isReviewQueueSession: provider.isReviewQueueSession,
               ),
               const SizedBox(height: 16),
               AnimatedSwitcher(
@@ -142,12 +167,12 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen> {
                           key: ValueKey(word.id),
                           word: word,
                           sentence: provider.currentSentence,
-                          direction: direction,
+                          direction: _direction,
                           prompt: prompt,
                           showTranslation: provider.showTranslation,
                           onReveal: provider.reveal,
                           onSpeak: () =>
-                              _speak(speechText, isEnglish: !isEnToKy),
+                              _speak(speechText, isEnglish: speechIsEnglish),
                         )
                         .animate()
                         .fadeIn(duration: 200.ms, curve: Curves.easeOut)
@@ -159,24 +184,27 @@ class _FlashcardScreenState extends ConsumerState<FlashcardScreen> {
               const SizedBox(height: 16),
               _ProgressDots(total: total, currentIndex: provider.index),
               const SizedBox(height: 16),
-              Row(
+              AdaptivePanelGrid(
+                maxColumns: 2,
+                minItemWidth: 152,
                 children: [
-                  Expanded(
-                    child: AppButton(
-                      variant: AppButtonVariant.outlined,
-                      fullWidth: true,
-                      onPressed: () => provider.markAnswer(false),
-                      child: const Text('Кыйын болду'),
-                    ),
+                  AppButton(
+                    variant: AppButtonVariant.outlined,
+                    fullWidth: true,
+                    disabled: !provider.showTranslation,
+                    onPressed: provider.showTranslation
+                        ? () => provider.markAnswer(false)
+                        : null,
+                    child: const Text('Кыйын болду'),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: AppButton(
-                      variant: AppButtonVariant.success,
-                      fullWidth: true,
-                      onPressed: () => provider.markAnswer(true),
-                      child: const Text('Түшүндүм'),
-                    ),
+                  AppButton(
+                    variant: AppButtonVariant.success,
+                    fullWidth: true,
+                    disabled: !provider.showTranslation,
+                    onPressed: provider.showTranslation
+                        ? () => provider.markAnswer(true)
+                        : null,
+                    child: const Text('Түшүндүм'),
                   ),
                 ],
               ),
@@ -383,13 +411,42 @@ class _FlashcardSummary extends StatelessWidget {
         .map((word) => '${word.english} → ${word.kyrgyz}')
         .toList();
     final hasMistakes = mistakes.isNotEmpty;
+    final isReviewQueueSession = provider.isReviewQueueSession;
+    final message = hasMistakes
+        ? 'Алсыз сөздөрдү азыр жапсаңыз, кийинки квиз же сүйлөм режими алда канча ишенимдүү өтөт.'
+        : isReviewQueueSession
+        ? 'Кайталоо кезегин жаптыңыз. Эми ушул теманы текшерүү же колдонуу режими менен бекемдеңиз.'
+        : 'Сөздөр жакшы бекеди. Эми ошол эле теманы сүйлөм же квиз менен жандандырыңыз.';
+    final noteMessage = hasMistakes
+        ? 'Кыйын сөздөрдү ушул замат кайра өтүү эске сактоону тездетет.'
+        : isReviewQueueSession
+        ? 'Кайталоодон кийин квиз же сүйлөм түзүү пассивдүү таанууну активдүү колдонууга айлантат.'
+        : 'Ушул эле категория боюнча сүйлөм түзүү же квиз билимди узагыраак сактайт.';
+    final primaryLabel = hasMistakes
+        ? 'Кыйын сөздөрдү кайра өтүү'
+        : isReviewQueueSession
+        ? 'Квиз менен текшерүү'
+        : 'Сүйлөм түзүүгө өтүү';
+    final primaryAction = hasMistakes
+        ? provider.reviewMistakesOnly
+        : isReviewQueueSession
+        ? () => context.go('/quiz/$categoryId')
+        : () => context.go('/sentence-builder/$categoryId');
+    final secondaryLabel = hasMistakes
+        ? 'Квиз менен текшерүү'
+        : isReviewQueueSession
+        ? 'Сүйлөм түзүүгө өтүү'
+        : 'Квизге өтүү';
+    final secondaryAction = hasMistakes
+        ? () => context.go('/quiz/$categoryId')
+        : isReviewQueueSession
+        ? () => context.go('/sentence-builder/$categoryId')
+        : () => context.go('/quiz/$categoryId');
 
     return SessionSummaryPanel(
-      title: 'Карточкалар аяктады',
+      title: isReviewQueueSession ? 'Кайталоо аяктады' : 'Карточкалар аяктады',
       headline: _headline(),
-      message: hasMistakes
-          ? 'Адегенде оор сөздөрдү кайра өтүп, андан кийин квиз же сүйлөм түзүү менен бекемдеңиз.'
-          : 'Сөздөр жакшы бекеди. Эми ошол эле теманы сүйлөм же квиз менен жандандырыңыз.',
+      message: message,
       metrics: [
         SessionSummaryMetric(
           label: 'Сөздөр',
@@ -414,22 +471,16 @@ class _FlashcardSummary extends StatelessWidget {
       noteTitle: hasMistakes
           ? 'Кийинки эң жакшы кадам'
           : 'Күчтүү кийинки кадам',
-      noteMessage: hasMistakes
-          ? 'Ката кеткен сөздөрдү өзүнчө кайталоо эстөөнү тезирээк бекемдейт.'
-          : 'Ушул эле категория боюнча сүйлөм түзүү же квиз билимди узагыраак сактайт.',
+      noteMessage: noteMessage,
       tagsTitle: hasMistakes ? 'Кайра карай турган сөздөр' : null,
       tags: mistakes,
       primaryAction: SessionSummaryAction(
-        label: hasMistakes
-            ? 'Кыйын сөздөрдү кайра өтүү'
-            : 'Сүйлөм түзүүгө өтүү',
-        onPressed: hasMistakes
-            ? provider.reviewMistakesOnly
-            : () => context.go('/sentence-builder/$categoryId'),
+        label: primaryLabel,
+        onPressed: primaryAction,
       ),
       secondaryAction: SessionSummaryAction(
-        label: hasMistakes ? 'Квиз менен текшерүү' : 'Квизге өтүү',
-        onPressed: () => context.go('/quiz/$categoryId'),
+        label: secondaryLabel,
+        onPressed: secondaryAction,
         variant: AppButtonVariant.outlined,
       ),
       tertiaryLabel: 'Практикага кайтуу',
@@ -452,10 +503,12 @@ class _FlashcardHintCard extends StatelessWidget {
   const _FlashcardHintCard({
     required this.showTranslation,
     required this.stage,
+    required this.isReviewQueueSession,
   });
 
   final bool showTranslation;
   final FlashcardStage stage;
+  final bool isReviewQueueSession;
 
   @override
   Widget build(BuildContext context) {
@@ -490,6 +543,8 @@ class _FlashcardHintCard extends StatelessWidget {
             child: Text(
               isReview
                   ? 'Бул этапта мурун кыйын болгон сөздөр гана калды. Кыска, так жооп берип жабыңыз.'
+                  : isReviewQueueSession
+                  ? 'Бул цикл жаңы сөздөр үчүн эмес, мурун жооп бербей калган же мөөнөтү жеткен сөздөр үчүн ачылды.'
                   : showTranslation
                   ? 'Эми үнүн угуп, мисалды окуп, анан гана баа бериңиз.'
                   : 'Алгач сөздү өзүңүз эстеп көрүңүз, андан кийин карточканы ачып текшериңиз.',

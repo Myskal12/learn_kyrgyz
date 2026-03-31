@@ -16,6 +16,7 @@ migrate_working_dir/
 *.iml
 *.ipr
 *.iws
+*.code-workspace
 .idea/
 
 # The .vscode folder contains launch configuration and tasks you configure in
@@ -50,6 +51,8 @@ android/key.properties
 firebase-debug.log*
 firestore-debug.log*
 ui-debug.log*
+redmi_google_signin*.log
+.tmp_*.png
 
 # Node / tooling
 **/node_modules/

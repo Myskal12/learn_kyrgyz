@@ -24,32 +24,23 @@ class QuizScreen extends ConsumerStatefulWidget {
 }
 
 class _QuizScreenState extends ConsumerState<QuizScreen> {
-  LearningDirection? _lastDirection;
+  late final LearningDirection _direction;
 
   @override
   void initState() {
     super.initState();
+    _direction = ref.read(learningDirectionProvider);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.categoryId.isNotEmpty) {
         ref.read(learningSessionProvider).setLastCategoryId(widget.categoryId);
       }
-      final direction = ref.read(learningDirectionProvider);
-      _lastDirection = direction;
-      ref.read(quizProvider).startWithDirection(widget.categoryId, direction);
+      ref.read(quizProvider).startWithDirection(widget.categoryId, _direction);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final isQuick = widget.categoryId.isEmpty;
-    final direction = ref.watch(learningDirectionProvider);
-    if (_lastDirection != direction) {
-      _lastDirection = direction;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        ref.read(quizProvider).startWithDirection(widget.categoryId, direction);
-      });
-    }
     final quiz = ref.watch(quizProvider);
 
     return AppShell(
@@ -94,7 +85,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                     foregroundColor: Colors.white,
                     buttonVariant: AppButtonVariant.accent,
                     onAction: () =>
-                        quiz.startWithDirection(widget.categoryId, direction),
+                        quiz.startWithDirection(widget.categoryId, _direction),
                   );
                 }
 
@@ -109,7 +100,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                     buttonVariant: AppButtonVariant.accent,
                     actionLabel: 'Кайра жүктөө',
                     onAction: () =>
-                        quiz.startWithDirection(widget.categoryId, direction),
+                        quiz.startWithDirection(widget.categoryId, _direction),
                   );
                 }
 
@@ -377,13 +368,19 @@ class _QuizSummary extends StatelessWidget {
     final nextLabel = categoryId.isNotEmpty
         ? 'Сүйлөм түзүүгө өтүү'
         : 'Категория тандаңыз';
+    final reviewRoute = categoryId.isNotEmpty
+        ? '/flashcards/$categoryId?mode=review'
+        : '/categories';
+    final reviewLabel = categoryId.isNotEmpty
+        ? 'Кайталоо кезегин ачуу'
+        : 'Категория тандаңыз';
 
     return SessionSummaryPanel(
       title: 'Квиз аяктады',
       headline: _headline(accuracy),
       message: provider.reviewSucceeded
           ? 'Каталар жабылды. Эми натыйжаны активдүү колдонуу үчүн башка режимге өтүңүз.'
-          : 'Дагы ${provider.unresolvedMistakesCount} суроо толук бекей элек. Кайра өтүү пайдалуу болот.',
+          : 'Дагы ${provider.unresolvedMistakesCount} суроо толук бекей элек. Аларды review queue аркылуу жабуу жакшы кийинки кадам болот.',
       metrics: [
         SessionSummaryMetric(
           label: 'Туура',
@@ -410,22 +407,23 @@ class _QuizSummary extends StatelessWidget {
       noteTitle: 'Жакшы кийинки кадам',
       noteMessage: provider.reviewSucceeded
           ? 'Квизден кийин сүйлөм түзүү же карточка режими маалыматты узагыраак сактоого жардам берет.'
-          : 'Алгач каталарды кайра өтүп, андан кийин башка режимге өтсөңүз натыйжа жакшыраак бекет.',
+          : 'Ката кеткен жооптор буга чейин эле прогресске review item болуп жазылды. Аларды карточка режиминде кайра жабуу ылдамыраак бекемдейт.',
       tagsTitle: mistakeTags.isNotEmpty
           ? 'Кайра кароого калган суроолор'
           : null,
       tags: mistakeTags,
       primaryAction: SessionSummaryAction(
-        label: mistakeTags.isNotEmpty ? 'Каталарды кайра өтүү' : nextLabel,
-        onPressed: mistakeTags.isNotEmpty
-            ? provider.reviewMistakesAgain
-            : () => context.go(nextRoute),
+        label: mistakeTags.isNotEmpty ? reviewLabel : nextLabel,
+        onPressed: () =>
+            context.go(mistakeTags.isNotEmpty ? reviewRoute : nextRoute),
         variant: AppButtonVariant.accent,
       ),
       secondaryAction: SessionSummaryAction(
-        label: mistakeTags.isNotEmpty ? nextLabel : 'Квизди кайра баштоо',
+        label: mistakeTags.isNotEmpty
+            ? 'Каталарды кайра өтүү'
+            : 'Квизди кайра баштоо',
         onPressed: mistakeTags.isNotEmpty
-            ? () => context.go(nextRoute)
+            ? provider.reviewMistakesAgain
             : provider.restartFull,
         variant: AppButtonVariant.outlined,
       ),

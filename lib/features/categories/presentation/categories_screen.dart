@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../app/providers/app_providers.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
+import '../../../data/models/category_model.dart';
+import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_chip.dart';
 import '../../../shared/widgets/app_shell.dart';
@@ -27,14 +29,49 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(categoriesProvider).load();
+      ref.read(progressProvider).load();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final wordsRepo = ref.read(wordsRepositoryProvider);
-    final categories = ref.watch(categoriesProvider);
+    final categoriesState = ref.watch(categoriesProvider);
     final progress = ref.watch(progressProvider);
+    final categories = categoriesState.categories;
+
+    final roadmapItems = categories.asMap().entries.map((entry) {
+      final index = entry.key;
+      final category = entry.value;
+      final words = wordsRepo.getCachedWords(category.id);
+      final mastery = progress.completionForCategory(words);
+      final remaining = (words.length - (words.length * mastery))
+          .clamp(0, words.length)
+          .round();
+      final unlockThreshold = index * 5;
+      final locked = index > 0 && progress.totalWordsMastered < unlockThreshold;
+      final completed = mastery >= 0.9;
+      final active = !locked && mastery > 0 && mastery < 0.9;
+      return _RoadmapItem(
+        category: category,
+        index: index + 1,
+        mastery: mastery,
+        remaining: remaining,
+        locked: locked,
+        completed: completed,
+        active: active,
+        reviewDue: progress.reviewDueForCategory(words),
+        wordsCount: words.length,
+      );
+    }).toList();
+
+    final nextLesson = _resolveNextLesson(roadmapItems);
+    final unlockedCount = roadmapItems.where((item) => !item.locked).length;
+    final completedCount = roadmapItems.where((item) => item.completed).length;
+    final totalReviewDue = roadmapItems.fold<int>(
+      0,
+      (sum, item) => sum + item.reviewDue,
+    );
 
     final content = ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -42,33 +79,89 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
         AppChip(label: '1-деңгээл', variant: AppChipVariant.primary),
         const SizedBox(height: 12),
         Text(
-          'Башталгыч сабактар',
+          'Жол картасы',
           style: AppTextStyles.heading.copyWith(fontSize: 28),
         ),
         const SizedBox(height: 8),
         Text(
-          'Кыргыз тилинин негиздерин үйрөнөсүз',
+          'Бул экран кайсы сабак ачылганын, эмнени улантуу керек экенин жана кайда баратканыңызды көрсөтөт.',
           style: AppTextStyles.body.copyWith(color: AppColors.muted),
         ),
         const SizedBox(height: 20),
-        if (categories.isLoading && categories.categories.isEmpty)
+        AppCard(
+          gradient: true,
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _GlassTag(label: '$unlockedCount ачылган'),
+                  _GlassTag(label: '$completedCount аяктаган'),
+                  _GlassTag(label: '$totalReviewDue кайталоо'),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                nextLesson != null ? 'Кийинки эң жакшы сабак' : 'Жол даяр',
+                style: AppTextStyles.body.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                nextLesson?.category.title ?? 'Бардык учурдагы сабактар бүткөн',
+                style: AppTextStyles.heading.copyWith(
+                  color: Colors.white,
+                  fontSize: 28,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                nextLesson != null
+                    ? nextLesson.active
+                          ? 'Бул жерде прогресс бар. Азыр улантуу эң жакшы кадам.'
+                          : 'Бул сабак ачылган. Жаңы циклди ушул жерден баштаңыз.'
+                    : 'Эми Практикага өтүп, алсыз сөздөрдү же квизди тандаңыз.',
+                style: AppTextStyles.body.copyWith(
+                  color: Colors.white.withValues(alpha: 0.9),
+                ),
+              ),
+              const SizedBox(height: 18),
+              AppButton(
+                fullWidth: true,
+                onPressed: nextLesson == null
+                    ? () => context.push('/practice')
+                    : () =>
+                          context.push('/flashcards/${nextLesson.category.id}'),
+                child: Text(
+                  nextLesson == null ? 'Практикага өтүү' : 'Сабакты ачуу',
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+        if (categoriesState.isLoading && categories.isEmpty)
           const SizedBox(
             height: 260,
             child: AppLoadingState(
               title: 'Сабактар жүктөлүүдө',
-              message: 'Категориялар даярдалып жатат.',
+              message: 'Жол картасы жана статус белгилери даярдалып жатат.',
             ),
           )
-        else if (categories.errorMessage != null &&
-            categories.categories.isEmpty)
+        else if (categoriesState.errorMessage != null && categories.isEmpty)
           SizedBox(
             height: 280,
             child: AppErrorState(
-              message: categories.errorMessage!,
+              message: categoriesState.errorMessage!,
               onAction: () => ref.read(categoriesProvider).load(force: true),
             ),
           )
-        else if (categories.categories.isEmpty)
+        else if (categories.isEmpty)
           SizedBox(
             height: 280,
             child: AppEmptyState(
@@ -80,206 +173,287 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
               onAction: () => ref.read(categoriesProvider).load(force: true),
             ),
           )
-        else
-          ...categories.categories.asMap().entries.map((entry) {
-            final lessonIndex = entry.key;
-            final category = entry.value;
-            final words = wordsRepo.getCachedWords(category.id);
-            final mastery = progress.completionForCategory(words);
-            final remaining = (words.length - (words.length * mastery))
-                .clamp(0, words.length)
-                .round();
-            final unlockThreshold = lessonIndex * 5;
-            final locked =
-                lessonIndex > 0 &&
-                progress.totalWordsMastered < unlockThreshold;
-            final completed = mastery >= 0.9;
-            final active = !locked && mastery > 0 && mastery < 0.9;
+        else ...[
+          Text('Сабактардын ирети', style: AppTextStyles.title),
+          const SizedBox(height: 12),
+          ...roadmapItems.asMap().entries.map((entry) {
+            final index = entry.key;
+            final item = entry.value;
+            final highlighted =
+                nextLesson != null &&
+                nextLesson.category.id == item.category.id;
             return Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: _LessonCard(
-                index: lessonIndex + 1,
-                title: category.title,
-                subtitle: category.description,
-                locked: locked,
-                completed: completed,
-                active: active,
-                mastery: mastery,
-                remaining: remaining,
-                onTap: locked
+              padding: const EdgeInsets.only(bottom: 14),
+              child: _RoadmapEntry(
+                item: item,
+                highlighted: highlighted,
+                showConnector: index != roadmapItems.length - 1,
+                onTap: item.locked
                     ? null
-                    : () => context.push('/flashcards/${category.id}'),
+                    : () => context.push('/flashcards/${item.category.id}'),
               ),
             );
           }),
+        ],
       ],
     );
 
     return AppShell(
-      title: 'Сабактар',
-      subtitle: 'Сабак тандаңыз',
+      title: 'Жол картасы',
+      subtitle: 'Сабактардын ирети жана статусу',
       activeTab: AppTab.learn,
       child: content,
+    );
+  }
+
+  _RoadmapItem? _resolveNextLesson(List<_RoadmapItem> items) {
+    for (final item in items) {
+      if (item.active) return item;
+    }
+    for (final item in items) {
+      if (!item.locked && !item.completed) return item;
+    }
+    for (final item in items) {
+      if (!item.locked) return item;
+    }
+    return null;
+  }
+}
+
+class _RoadmapEntry extends StatelessWidget {
+  const _RoadmapEntry({
+    required this.item,
+    required this.highlighted,
+    required this.showConnector,
+    this.onTap,
+  });
+
+  final _RoadmapItem item;
+  final bool highlighted;
+  final bool showConnector;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final markerColor = item.locked
+        ? AppColors.muted
+        : item.completed
+        ? AppColors.success
+        : item.active
+        ? AppColors.primary
+        : AppColors.accent;
+
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            width: 28,
+            child: Column(
+              children: [
+                Container(
+                  width: 18,
+                  height: 18,
+                  decoration: BoxDecoration(
+                    color: markerColor,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: highlighted ? Colors.white : markerColor,
+                      width: highlighted ? 2 : 0,
+                    ),
+                    boxShadow: highlighted
+                        ? [
+                            BoxShadow(
+                              color: markerColor.withValues(alpha: 0.35),
+                              blurRadius: 16,
+                              offset: const Offset(0, 6),
+                            ),
+                          ]
+                        : null,
+                  ),
+                ),
+                if (showConnector)
+                  Expanded(
+                    child: Container(
+                      width: 2,
+                      margin: const EdgeInsets.symmetric(vertical: 6),
+                      color: AppColors.border,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: _LessonCard(
+              item: item,
+              highlighted: highlighted,
+              onTap: onTap,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
 class _LessonCard extends StatelessWidget {
   const _LessonCard({
-    required this.index,
-    required this.title,
-    required this.subtitle,
-    required this.locked,
-    required this.completed,
-    required this.active,
-    required this.mastery,
-    required this.remaining,
+    required this.item,
+    required this.highlighted,
     this.onTap,
   });
 
-  final int index;
-  final String title;
-  final String subtitle;
-  final bool locked;
-  final bool completed;
-  final bool active;
-  final double mastery;
-  final int remaining;
+  final _RoadmapItem item;
+  final bool highlighted;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
+    final backgroundColor = highlighted
+        ? AppColors.primary.withValues(alpha: 0.07)
+        : null;
+    final borderColor = highlighted
+        ? AppColors.primary.withValues(alpha: 0.28)
+        : null;
+
     return Opacity(
-      opacity: locked ? 0.5 : 1,
+      opacity: item.locked ? 0.56 : 1,
       child: AppCard(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(18),
+        backgroundColor: backgroundColor,
+        borderColor: borderColor,
         onTap: onTap,
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: locked
-                    ? AppColors.mutedSurface
-                    : completed
-                    ? AppColors.success
-                    : active
-                    ? AppColors.primary
-                    : AppColors.mutedSurface,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              alignment: Alignment.center,
-              child: completed
-                  ? Icon(Icons.check, color: Colors.white)
-                  : locked
-                  ? Icon(Icons.lock, color: AppColors.muted)
-                  : Text(
-                      index.toString().padLeft(2, '0'),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final badge = AppChip(
+                  label: _statusLabel(),
+                  variant: item.locked
+                      ? AppChipVariant.defaultChip
+                      : item.completed
+                      ? AppChipVariant.success
+                      : item.active
+                      ? AppChipVariant.primary
+                      : AppChipVariant.accent,
+                );
+                final titleBlock = Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Сабак ${item.index.toString().padLeft(2, '0')}',
+                      style: AppTextStyles.caption,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      item.category.title,
                       style: AppTextStyles.body.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: active ? AppColors.textDark : AppColors.muted,
                       ),
                     ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: AppTextStyles.body.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(subtitle, style: AppTextStyles.muted),
-                          ],
-                        ),
-                      ),
-                      if (!locked && remaining > 0)
-                        AppChip(
-                          label: remaining.toString(),
-                          variant: AppChipVariant.accent,
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  if (completed)
-                    Row(
-                      children: [
-                        Icon(Icons.check, size: 16, color: AppColors.success),
-                        const SizedBox(width: 6),
-                        Text(
-                          'Аяктады',
-                          style: AppTextStyles.body.copyWith(
-                            fontSize: 14,
-                            color: AppColors.success,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  if (active) ...[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Прогресс', style: AppTextStyles.muted),
-                        Text(
-                          '${(mastery * 100).round()}%',
-                          style: AppTextStyles.body.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    _ProgressBar(value: mastery, color: AppColors.primary),
                   ],
-                  if (!locked && !completed && !active)
-                    Text(
-                      'Даяр',
-                      style: AppTextStyles.body.copyWith(
-                        color: AppColors.primary,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
+                );
+
+                if (constraints.maxWidth < 220) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [titleBlock, const SizedBox(height: 8), badge],
+                  );
+                }
+
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: titleBlock),
+                    const SizedBox(width: 8),
+                    badge,
+                  ],
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            Text(item.category.description, style: AppTextStyles.muted),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                AppChip(
+                  label: '${item.wordsCount} сөз',
+                  variant: AppChipVariant.defaultChip,
+                ),
+                if (!item.locked) ...[
+                  const SizedBox(width: 8),
+                  AppChip(
+                    label: item.reviewDue > 0
+                        ? '${item.reviewDue} кайталоо'
+                        : '${item.remaining} калды',
+                    variant: item.reviewDue > 0
+                        ? AppChipVariant.accent
+                        : AppChipVariant.defaultChip,
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 12),
+            if (!item.locked) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Прогресс', style: AppTextStyles.muted),
+                  Text(
+                    '${(item.mastery * 100).round()}%',
+                    style: AppTextStyles.body.copyWith(
+                      fontWeight: FontWeight.w600,
                     ),
-                  if (locked)
-                    Row(
-                      children: [
-                        Icon(Icons.lock, size: 16, color: AppColors.muted),
-                        const SizedBox(width: 6),
-                        Text(
-                          'Мурунку сабакты аяктаңыз',
-                          style: AppTextStyles.muted,
-                        ),
-                      ],
-                    ),
-                  if (remaining > 0 && !locked && !active && !completed)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6),
-                      child: Text(
-                        '$remaining сөз калды',
-                        style: AppTextStyles.muted,
-                      ),
-                    ),
+                  ),
                 ],
               ),
+              const SizedBox(height: 6),
+              _ProgressBar(value: item.mastery, color: AppColors.primary),
+              const SizedBox(height: 12),
+            ] else ...[
+              Text(
+                'Бул сабак ачылышы үчүн мурунку бөлүктөрдү бүтүрүңүз.',
+                style: AppTextStyles.muted,
+              ),
+              const SizedBox(height: 12),
+            ],
+            Row(
+              children: [
+                Text(
+                  _actionLabel(),
+                  style: AppTextStyles.body.copyWith(
+                    color: item.locked ? AppColors.muted : AppColors.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Icon(
+                  item.locked ? Icons.lock : Icons.chevron_right,
+                  size: 18,
+                  color: item.locked ? AppColors.muted : AppColors.primary,
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  String _statusLabel() {
+    if (item.locked) return 'Кулпуланган';
+    if (item.completed) return 'Аяктады';
+    if (item.active) return 'Улантуу';
+    return 'Кийинки';
+  }
+
+  String _actionLabel() {
+    if (item.locked) return 'Азырынча ачылган жок';
+    if (item.active) return 'Улантуу';
+    if (item.completed) return 'Кайра өтүү';
+    return 'Баштоо';
   }
 }
 
@@ -316,4 +490,50 @@ class _ProgressBar extends StatelessWidget {
       },
     );
   }
+}
+
+class _GlassTag extends StatelessWidget {
+  const _GlassTag({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.18),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.24)),
+      ),
+      child: Text(
+        label,
+        style: AppTextStyles.caption.copyWith(color: Colors.white),
+      ),
+    );
+  }
+}
+
+class _RoadmapItem {
+  const _RoadmapItem({
+    required this.category,
+    required this.index,
+    required this.mastery,
+    required this.remaining,
+    required this.locked,
+    required this.completed,
+    required this.active,
+    required this.reviewDue,
+    required this.wordsCount,
+  });
+
+  final CategoryModel category;
+  final int index;
+  final double mastery;
+  final int remaining;
+  final bool locked;
+  final bool completed;
+  final bool active;
+  final int reviewDue;
+  final int wordsCount;
 }

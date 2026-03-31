@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers/app_providers.dart';
+import '../../../core/services/analytics_service.dart';
 import '../../../core/utils/learning_direction.dart';
 import '../../../data/models/quiz_question_model.dart';
 import '../../learning/repository/words_repository.dart';
@@ -11,11 +14,17 @@ import '../repository/quiz_repository.dart';
 enum QuizStage { active, summary }
 
 class QuizProvider extends ChangeNotifier {
-  QuizProvider(this._quizRepository, this._wordsRepository, this._progress);
+  QuizProvider(
+    this._quizRepository,
+    this._wordsRepository,
+    this._progress, {
+    AnalyticsService? analytics,
+  }) : _analytics = analytics ?? const NoopAnalyticsService();
 
   final QuizRepository _quizRepository;
   final WordsRepository _wordsRepository;
   final ProgressProvider _progress;
+  final AnalyticsService _analytics;
 
   bool _isLoading = false;
   QuizStage _stage = QuizStage.active;
@@ -29,6 +38,8 @@ class QuizProvider extends ChangeNotifier {
   int _reviewWrong = 0;
   LearningDirection _direction = LearningDirection.enToKy;
   String? _errorMessage;
+  String _categoryId = '';
+  bool _completionTracked = false;
 
   List<QuizQuestionModel> _questions = [];
   List<QuizQuestionModel> _originalQuestions = [];
@@ -67,8 +78,15 @@ class QuizProvider extends ChangeNotifier {
   bool get reviewSucceeded => _unresolvedMistakes.isEmpty;
   int get unresolvedMistakesCount => _unresolvedMistakes.length;
   String? get errorMessage => _errorMessage;
+  int get mainAccuracyPercent {
+    final total = _mainCorrect + _mainWrong;
+    if (total == 0) return 0;
+    return ((_mainCorrect / total) * 100).round();
+  }
 
   Future<void> start(String categoryId) async {
+    _categoryId = categoryId;
+    _completionTracked = false;
     _isLoading = true;
     _errorMessage = null;
     _stage = QuizStage.active;
@@ -96,6 +114,7 @@ class QuizProvider extends ChangeNotifier {
       _questions = List.of(questions);
       _originalQuestions = List.of(_questions);
       _resetOptions();
+      await _trackSessionStarted();
     } catch (_) {
       _errorMessage =
           'Квиз жүктөлгөн жок. Интернетти текшерип кайра аракет кылыңыз.';
@@ -108,6 +127,41 @@ class QuizProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> _trackSessionStarted() {
+    if (_categoryId.isEmpty) return Future.value();
+    return _analytics.track(
+      'quiz_started',
+      properties: {
+        'categoryId': _categoryId,
+        'direction': _direction.storageValue,
+        'questionCount': _questions.length,
+      },
+    );
+  }
+
+  void _trackSessionCompleted() {
+    if (_completionTracked || _categoryId.isEmpty) return;
+    _completionTracked = true;
+    unawaited(
+      _analytics.track(
+        'quiz_completed',
+        properties: {
+          'categoryId': _categoryId,
+          'direction': _direction.storageValue,
+          'questionCount': _originalQuestions.length,
+          'mainCorrect': _mainCorrect,
+          'mainWrong': _mainWrong,
+          'reviewCorrect': _reviewCorrect,
+          'reviewWrong': _reviewWrong,
+          'mainAccuracyPercent': mainAccuracyPercent,
+          'reviewRoundUsed': _firstAttemptMistakes.isNotEmpty,
+          'reviewSucceeded': reviewSucceeded,
+          'unresolvedMistakes': _unresolvedMistakes.length,
+        },
+      ),
+    );
   }
 
   Future<void> startWithDirection(
@@ -174,11 +228,7 @@ class QuizProvider extends ChangeNotifier {
               ? _wordsRepository.findByKyrgyz(question.question)
               : _wordsRepository.findByEnglish(question.question));
     if (word == null) return;
-    if (mastered) {
-      _progress.markWordMastered(word.id);
-    } else {
-      _progress.markWordSeen(word.id);
-    }
+    _progress.recordWordAttempt(word.id, isCorrect: mastered);
   }
 
   void nextQuestion() {
@@ -194,6 +244,7 @@ class QuizProvider extends ChangeNotifier {
         _stage = QuizStage.summary;
         _answered = false;
         _selected = null;
+        _trackSessionCompleted();
       }
     } else {
       _index++;
@@ -216,6 +267,7 @@ class QuizProvider extends ChangeNotifier {
     _unresolvedMistakes.clear();
     _isReviewRound = false;
     _stage = QuizStage.active;
+    _completionTracked = false;
     _resetOptions();
     notifyListeners();
   }
@@ -235,6 +287,7 @@ class QuizProvider extends ChangeNotifier {
     _reviewWrong = 0;
     _isReviewRound = false;
     _stage = QuizStage.active;
+    _completionTracked = false;
     _resetOptions();
     notifyListeners();
   }
@@ -245,5 +298,6 @@ final quizProvider = ChangeNotifierProvider<QuizProvider>((ref) {
     ref.read(quizRepositoryProvider),
     ref.read(wordsRepositoryProvider),
     ref.read(progressProvider),
+    analytics: ref.read(analyticsServiceProvider),
   );
 });

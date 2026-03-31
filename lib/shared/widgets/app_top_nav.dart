@@ -40,6 +40,7 @@ class AppTopNav extends StatelessWidget {
     final subtitleColor = isDark
         ? Colors.white.withValues(alpha: 0.7)
         : AppColors.muted;
+    final textScale = MediaQuery.textScalerOf(context).scale(16) / 16;
 
     return ClipRect(
       child: BackdropFilter(
@@ -51,54 +52,72 @@ class AppTopNav extends StatelessWidget {
           ),
           child: SafeArea(
             bottom: false,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                children: [
-                  _NavIconButton(
-                    icon: leadingType == AppTopNavLeadingType.back
-                        ? Icons.arrow_back
-                        : Icons.menu,
-                    onTap: onLeadingTap,
-                    isDark: isDark,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final showSubtitle =
+                    subtitle.isNotEmpty &&
+                    constraints.maxWidth > 340 &&
+                    textScale <= 1.2;
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          title,
-                          style: AppTextStyles.title.copyWith(
-                            fontSize: 18,
-                            color: iconColor,
-                          ),
-                          textAlign: TextAlign.center,
+                  child: Row(
+                    children: [
+                      _NavIconButton(
+                        icon: leadingType == AppTopNavLeadingType.back
+                            ? Icons.arrow_back
+                            : Icons.menu,
+                        onTap: onLeadingTap,
+                        isDark: isDark,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.title.copyWith(
+                                fontSize: 18,
+                                color: iconColor,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            if (showSubtitle) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                subtitle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.caption.copyWith(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500,
+                                  color: subtitleColor,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ],
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          subtitle,
-                          style: AppTextStyles.caption.copyWith(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w500,
-                            color: subtitleColor,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(width: 12),
+                      if (onActionTap != null)
+                        _NavIconButton(
+                          icon: Icons.notifications_none,
+                          onTap: onActionTap,
+                          isDark: isDark,
+                        )
+                      else
+                        const SizedBox(width: 40, height: 40),
+                    ],
                   ),
-                  const SizedBox(width: 12),
-                  if (onActionTap != null)
-                    _NavIconButton(
-                      icon: Icons.notifications_none,
-                      onTap: onActionTap,
-                      isDark: isDark,
-                    )
-                  else
-                    const SizedBox(width: 40, height: 40),
-                ],
-              ),
+                );
+              },
             ),
           ),
         ),

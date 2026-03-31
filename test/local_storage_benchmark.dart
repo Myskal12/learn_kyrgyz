@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,27 +37,33 @@ void main() {
 
     const int iterations = 10000;
 
-    // Benchmark Legacy
     final stopwatchLegacy = Stopwatch()..start();
     for (int i = 0; i < iterations; i++) {
       await legacyService.setString('key_$i', 'value_$i');
       await legacyService.getString('key_$i');
     }
     stopwatchLegacy.stop();
-    print('Legacy LocalStorageService time: ${stopwatchLegacy.elapsedMilliseconds}ms');
+    debugPrint(
+      'Legacy LocalStorageService time: ${stopwatchLegacy.elapsedMilliseconds}ms',
+    );
 
-    // Benchmark Optimized
     final stopwatchOptimized = Stopwatch()..start();
     for (int i = 0; i < iterations; i++) {
       await optimizedService.setString('key_$i', 'value_$i');
       await optimizedService.getString('key_$i');
     }
     stopwatchOptimized.stop();
-    print('Optimized LocalStorageService time: ${stopwatchOptimized.elapsedMilliseconds}ms');
+    debugPrint(
+      'Optimized LocalStorageService time: ${stopwatchOptimized.elapsedMilliseconds}ms',
+    );
 
-    final improvement = stopwatchLegacy.elapsedMilliseconds - stopwatchOptimized.elapsedMilliseconds;
+    final improvement =
+        stopwatchLegacy.elapsedMilliseconds -
+        stopwatchOptimized.elapsedMilliseconds;
     final percent = (improvement / stopwatchLegacy.elapsedMilliseconds) * 100;
 
-    print('Improvement: ${improvement}ms (${percent.toStringAsFixed(2)}%)');
+    debugPrint(
+      'Improvement: ${improvement}ms (${percent.toStringAsFixed(2)}%)',
+    );
   });
 }

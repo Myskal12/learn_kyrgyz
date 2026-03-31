@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/providers/learning_direction_provider.dart';
 import '../../../app/providers/onboarding_provider.dart';
 import '../../../app/providers/theme_provider.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
-import '../../../core/utils/learning_direction.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_chip.dart';
 import '../../../shared/widgets/app_shell.dart';
+import '../../../shared/widgets/learning_direction_control.dart';
 import '../providers/progress_provider.dart';
 import '../providers/user_profile_provider.dart';
 
@@ -20,7 +19,6 @@ class ProfileSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final direction = ref.watch(learningDirectionProvider);
     final onboarding = ref.watch(onboardingProvider);
     final themeMode = ref.watch(themeModeProvider);
 
@@ -112,19 +110,13 @@ class ProfileSettingsScreen extends ConsumerWidget {
                 _SettingsHeader(
                   icon: Icons.language,
                   color: AppColors.primary,
-                  title: 'Тил жана көрүнүш',
-                  subtitle: 'Колдонмонун көрүнүшүн ылайыктаңыз',
+                  title: 'Көнүгүү жана көрүнүш',
+                  subtitle: 'Окуу багытын жана колдонмонун темасын ылайыктаңыз',
                 ),
                 const SizedBox(height: 12),
-                _SettingsRow(
-                  title: 'Тил багыты',
-                  value: direction.label,
-                  action: _InlineAction(
-                    label: 'Өзгөртүү',
-                    onTap: () => ref
-                        .read(learningDirectionProvider.notifier)
-                        .toggleDirection(),
-                  ),
+                const LearningDirectionControl(
+                  subtitle:
+                      'Суроо жана жооп кайсы тилде чыгарын ушул жерден тандаңыз.',
                 ),
                 const SizedBox(height: 8),
                 _SettingsRow(
@@ -363,25 +355,41 @@ class _SettingsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final accessory = action ?? trailing;
+        final content = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 4),
+            Text(value, style: AppTextStyles.muted),
+          ],
+        );
+
+        if (accessory == null) {
+          return content;
+        }
+
+        if (constraints.maxWidth < 300) {
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 4),
-              Text(value, style: AppTextStyles.muted),
-            ],
-          ),
-        ),
-        if (action != null) ...[const SizedBox(width: 12), action!],
-        if (trailing != null) ...[const SizedBox(width: 12), trailing!],
-      ],
+            children: [content, const SizedBox(height: 10), accessory],
+          );
+        }
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: content),
+            const SizedBox(width: 12),
+            accessory,
+          ],
+        );
+      },
     );
   }
 }
