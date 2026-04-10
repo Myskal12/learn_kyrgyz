@@ -1,0 +1,65 @@
+[
+    {
+        "id": "onboarding",
+        "dailyGoalOptions": [
+            10,
+            20,
+            30,
+            40
+        ],
+        "defaultDailyGoal": 20
+    },
+    {
+        "id": "achievements",
+        "items": [
+            {
+                "id": "first_star",
+                "title": "First Star",
+                "description": "Master 5 words.",
+                "metric": "total_words_mastered",
+                "target": 5,
+                "order": 10,
+                "active": true
+            },
+            {
+                "id": "steady_learner",
+                "title": "Steady Learner",
+                "description": "Master 15 words.",
+                "metric": "total_words_mastered",
+                "target": 15,
+                "order": 20,
+                "active": true
+            },
+            {
+                "id": "accuracy_pro",
+                "title": "Accuracy Pro",
+                "description": "Reach at least 80% accuracy.",
+                "metric": "accuracy_percent",
+                "target": 80,
+                "order": 30,
+                "active": true
+            }
+        ]
+    },
+    {
+        "id": "resources",
+        "items": [
+            {
+                "id": "glosbe_dictionary",
+                "title": "Online Dictionary",
+                "description": "Use Glosbe for English-Kyrgyz lookup.",
+                "url": "https://en.glosbe.com/en/ky",
+                "order": 10,
+                "active": true
+            },
+            {
+                "id": "video_lessons",
+                "title": "Video Lessons",
+                "description": "Start with beginner-friendly video lessons.",
+                "url": "https://www.50languages.com/em/videos/ky",
+                "order": 20,
+                "active": true
+            }
+        ]
+    }
+]

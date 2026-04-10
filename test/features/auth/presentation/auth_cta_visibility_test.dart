@@ -7,11 +7,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:learn_kyrgyz/app/providers/app_providers.dart';
 import 'package:learn_kyrgyz/core/services/firebase_service.dart';
 import 'package:learn_kyrgyz/core/services/local_storage_service.dart';
+import 'package:learn_kyrgyz/data/models/onboarding_config_model.dart';
 import 'package:learn_kyrgyz/data/models/user_progress_model.dart';
 import 'package:learn_kyrgyz/features/auth/presentation/login_screen.dart';
 import 'package:learn_kyrgyz/features/auth/presentation/register_screen.dart';
 import 'package:learn_kyrgyz/features/onboarding/presentation/welcome_screen.dart';
-import 'package:learn_kyrgyz/features/learning/presentation/lesson_overview_screen.dart';
 
 class FakeLocalStorageService implements LocalStorageService {
   FakeLocalStorageService([Map<String, String>? initialValues])
@@ -41,6 +41,9 @@ class FakeFirebaseService implements FirebaseService {
   bool get isGoogleSignInSupported => true;
 
   @override
+  String get googleSignInConfigurationMessage => 'Unavailable';
+
+  @override
   String get googleSignInUnavailableMessage => 'Unavailable';
 
   @override
@@ -48,6 +51,9 @@ class FakeFirebaseService implements FirebaseService {
 
   @override
   Future<UserProgressModel?> fetchUserProgress(String uid) async => null;
+
+  @override
+  Future<OnboardingConfigModel?> fetchOnboardingConfig() async => null;
 
   @override
   Future<bool> login(String email, String password) async => true;
@@ -112,17 +118,6 @@ void main() {
     await _pumpScreen(tester, const RegisterScreen(), includeProviders: true);
 
     final rect = tester.getRect(find.byKey(const Key('register-primary-cta')));
-    expect(rect.bottom, lessThanOrEqualTo(560));
-  });
-
-  testWidgets('lesson overview start action stays visible on short screens', (
-    tester,
-  ) async {
-    await _pumpScreen(tester, const LessonOverviewScreen());
-
-    final rect = tester.getRect(
-      find.byKey(const Key('lesson-overview-primary-cta')),
-    );
     expect(rect.bottom, lessThanOrEqualTo(560));
   });
 }

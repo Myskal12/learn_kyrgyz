@@ -59,7 +59,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           Text('Рейтинг', style: AppTextStyles.heading.copyWith(fontSize: 28)),
           const SizedBox(height: 6),
           Text(
-            'Реалдуу катышуучулар жана синхрондолгон статистика',
+            'Катышуучулар жана орундар',
             style: AppTextStyles.body.copyWith(color: AppColors.muted),
           ),
           const SizedBox(height: 20),
@@ -102,8 +102,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
               height: 260,
               child: AppEmptyState(
                 title: 'Лидерборд азырынча бош',
-                message:
-                    'Булуттагы таблицада азырынча катышуучулар жок. Биринчи синхрондолгон колдонуучулардын бири боло аласыз.',
+                message: 'Азырынча катышуучу жок.',
                 icon: Icons.emoji_events_outlined,
                 actionLabel: 'Кайра жүктөө',
                 onAction: () => ref.read(leaderboardProvider).load(force: true),
@@ -255,16 +254,16 @@ class _LeaderboardSummaryCard extends StatelessWidget {
     String subtitle;
     if (isGuest) {
       title = 'Конок режиминде рейтинг жок';
-      subtitle = 'Киргенден кийин синхрондолгон орун жана атаандаштар көрүнөт.';
+      subtitle = 'Кирсеңиз, орун көрүнөт.';
     } else if (entries.isEmpty) {
       title = 'Лидерборд жаңыдан толот';
-      subtitle = 'Азырынча булуттагы тизмеде катышуучулар жок.';
+      subtitle = 'Азырынча тизмеде катышуучу жок.';
     } else if (currentIndex >= 0) {
       title = '${currentIndex + 1}-орун';
-      subtitle = 'Учурдагы ордуңуз синхрондолгон таблицадан эсептелди.';
+      subtitle = 'Учурдагы ордуңуз.';
     } else {
       title = 'Топ тизмеге чыга элексиз';
-      subtitle = 'Бул экран азыр болгону жүктөлгөн катышуучуларды көрсөтөт.';
+      subtitle = 'Дагы бир аз упай топтоңуз.';
     }
 
     return AppCard(

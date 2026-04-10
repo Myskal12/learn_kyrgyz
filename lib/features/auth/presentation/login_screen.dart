@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/providers/app_providers.dart';
 import '../../../app/providers/onboarding_provider.dart';
 import '../../../core/utils/app_colors.dart';
+import '../../../core/utils/constants.dart';
 import '../../../core/utils/app_text_styles.dart';
-import '../../../shared/widgets/adaptive_panel_grid.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_shell.dart';
 import '../../../shared/widgets/sticky_bottom_action_bar.dart';
-import '../auth_demo_account.dart';
 import '../providers/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -50,15 +50,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
-  void _fillDemoCredentials() {
-    _email.text = AuthDemoAccount.email;
-    _password.text = AuthDemoAccount.password;
-  }
-
   Future<void> _finishAuthFlow() async {
+    await ref.read(localStorageServiceProvider).setString(
+      Constants.postLogoutRedirectKey,
+      'false',
+    );
     await ref.read(onboardingProvider).completeOnboarding();
     if (!mounted) return;
-    context.go('/home');
+    context.go('/auth-complete');
   }
 
   Future<void> _handleEmailLogin(AuthProvider auth) async {
@@ -76,20 +75,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> _handleGoogleLogin(AuthProvider auth) async {
     final ok = await auth.loginWithGoogle();
-    if (!mounted) return;
-    if (ok) {
-      await _finishAuthFlow();
-      return;
-    }
-    final error = auth.error;
-    if (error != null) {
-      _showMessage(error);
-    }
-  }
-
-  Future<void> _handleDemoLogin(AuthProvider auth) async {
-    _fillDemoCredentials();
-    final ok = await auth.loginWithDemoAccount();
     if (!mounted) return;
     if (ok) {
       await _finishAuthFlow();
@@ -169,7 +154,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Кыргызча жана англисче сүйлөөнү чогуу үйрөнөбүз',
+                              'Улантуу үчүн кириңиз.',
                               style: AppTextStyles.muted,
                               textAlign: TextAlign.center,
                             ),
@@ -186,14 +171,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               controller: _email,
                               label: 'Электрондук почта',
                               icon: Icons.mail_outline,
-                              placeholder: AuthDemoAccount.email,
+                              placeholder: 'name@example.com',
                             ),
                             const SizedBox(height: 16),
                             _AuthField(
                               controller: _password,
                               label: 'Сыр сөз',
                               icon: Icons.lock_outline,
-                              placeholder: AuthDemoAccount.password,
+                              placeholder: '********',
                               obscureText: !_showPassword,
                               suffix: IconButton(
                                 onPressed: () {
@@ -224,80 +209,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      AppCard(
-                        padding: const EdgeInsets.all(18),
-                        backgroundColor: AppColors.primary.withValues(
-                          alpha: 0.08,
-                        ),
-                        borderColor: AppColors.primary.withValues(alpha: 0.18),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.bolt_rounded,
-                                  color: AppColors.primary,
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    'Тест аккаунт',
-                                    style: AppTextStyles.body.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Демо профилди бир таптоо менен ачып, auth flow\'ду тез текшерсеңиз болот.',
-                              style: AppTextStyles.muted,
-                            ),
-                            const SizedBox(height: 12),
-                            const _CredentialLine(
-                              label: 'Email',
-                              value: AuthDemoAccount.email,
-                            ),
-                            const SizedBox(height: 8),
-                            const _CredentialLine(
-                              label: 'Сыр сөз',
-                              value: AuthDemoAccount.password,
-                            ),
-                            const SizedBox(height: 14),
-                            AdaptivePanelGrid(
-                              maxColumns: 2,
-                              minItemWidth: 150,
-                              children: [
-                                AppButton(
-                                  size: AppButtonSize.sm,
-                                  fullWidth: true,
-                                  variant: AppButtonVariant.outlined,
-                                  onPressed: auth.isLoading
-                                      ? null
-                                      : () {
-                                          _fillDemoCredentials();
-                                          _showMessage(
-                                            'Тест аккаунт маалыматтары талааларга коюлду.',
-                                          );
-                                        },
-                                  child: const Text('Толтуруу'),
-                                ),
-                                AppButton(
-                                  size: AppButtonSize.sm,
-                                  fullWidth: true,
-                                  onPressed: auth.isLoading
-                                      ? null
-                                      : () => _handleDemoLogin(auth),
-                                  child: const Text('Тез кирүү'),
-                                ),
-                              ],
                             ),
                           ],
                         ),
@@ -365,45 +276,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _CredentialLine extends StatelessWidget {
-  const _CredentialLine({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.82),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Row(
-        children: [
-          Text(
-            '$label:',
-            style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              value,
-              textAlign: TextAlign.right,
-              style: AppTextStyles.body.copyWith(
-                color: AppColors.textDark,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

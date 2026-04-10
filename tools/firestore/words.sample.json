@@ -1,0 +1,38 @@
+[
+    {
+        "id": "water",
+        "en": "water",
+        "ky": "суу",
+        "transcription_en": "[ˈwɔːtər]",
+        "transcription_ky": "[суу]",
+        "level": 1,
+        "category": "basic"
+    },
+    {
+        "id": "hello",
+        "en": "hello",
+        "ky": "салам",
+        "transcription_en": "[həˈləʊ]",
+        "transcription_ky": "[салам]",
+        "level": 1,
+        "category": "basic"
+    },
+    {
+        "id": "bread",
+        "en": "bread",
+        "ky": "нан",
+        "transcription_en": "[brɛd]",
+        "transcription_ky": "[нан]",
+        "level": 1,
+        "category": "food"
+    },
+    {
+        "id": "family",
+        "en": "family",
+        "ky": "үй-бүлө",
+        "transcription_en": "[ˈfæməli]",
+        "transcription_ky": "[үй-бүлө]",
+        "level": 1,
+        "category": "family"
+    }
+]

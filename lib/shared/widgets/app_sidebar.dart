@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/providers/app_providers.dart';
+import '../../core/utils/constants.dart';
 import '../../core/utils/app_colors.dart';
 import '../../core/utils/app_text_styles.dart';
 import '../../features/auth/providers/auth_provider.dart';
@@ -215,7 +217,13 @@ class AppSidebar extends ConsumerWidget {
                               ),
                               onTap: () async {
                                 await ref.read(authProvider).logout();
-                                onNavigate('/home');
+                                await ref
+                                    .read(localStorageServiceProvider)
+                                    .setString(
+                                      Constants.postLogoutRedirectKey,
+                                      'true',
+                                    );
+                                onNavigate('/login');
                               },
                               child: Row(
                                 children: [

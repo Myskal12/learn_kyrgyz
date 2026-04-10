@@ -9,18 +9,21 @@ class AppTheme {
 
   static ThemeData _buildTheme({required bool isDark}) {
     final brightness = isDark ? Brightness.dark : Brightness.light;
-    final background =
-        isDark ? AppColors.backgroundDark : AppColors.backgroundLight;
+    final background = isDark
+        ? AppColors.backgroundDark
+        : AppColors.backgroundLight;
     final surface = isDark ? AppColors.surfaceDark : AppColors.surfaceLight;
-    final textColor =
-        isDark ? AppColors.textLightDark : AppColors.textDarkLight;
+    final textColor = isDark
+        ? AppColors.textLightDark
+        : AppColors.textDarkLight;
     final muted = isDark ? AppColors.mutedDark : AppColors.mutedLight;
-    final outlineColor =
-        isDark ? AppColors.borderDark : AppColors.borderLight;
-    final outlineVariantColor =
-        isDark ? AppColors.borderDark : AppColors.borderLight;
-    final inputBackground =
-        isDark ? AppColors.inputBackgroundDark : AppColors.inputBackgroundLight;
+    final outlineColor = isDark ? AppColors.borderDark : AppColors.borderLight;
+    final outlineVariantColor = isDark
+        ? AppColors.borderDark
+        : AppColors.borderLight;
+    final inputBackground = isDark
+        ? AppColors.inputBackgroundDark
+        : AppColors.inputBackgroundLight;
 
     final baseTextTheme = AppTypography.baseTextTheme();
     final textTheme = baseTextTheme.apply(
@@ -38,92 +41,92 @@ class AppTheme {
       return Color.lerp(color, Colors.black, amount)!;
     }
 
-    final primary = isDark ? AppColors.yellowDark : AppColors.yellowLight;
-    final secondary = isDark ? AppColors.redDark : AppColors.redLight;
-    final onSecondary = isDark ? AppColors.textLightDark : Colors.white;
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: primary,
-      secondary: secondary,
-      brightness: brightness,
-      surface: surface,
-      outline: outlineColor,
-      outlineVariant: outlineVariantColor,
-      error: secondary,
-    ).copyWith(
-      primary: primary,
-      secondary: secondary,
-      onPrimary: AppColors.textDarkLight,
-      onSecondary: onSecondary,
-      onSurface: textColor,
-    );
+    final primary = isDark ? AppColors.royalBlueDark : AppColors.royalBlueLight;
+    final secondary = isDark
+        ? AppColors.sunsetOrangeDark
+        : AppColors.sunsetOrangeLight;
+    final onSecondary = Colors.white;
+    final colorScheme =
+        ColorScheme.fromSeed(
+          seedColor: primary,
+          secondary: secondary,
+          brightness: brightness,
+          surface: surface,
+          outline: outlineColor,
+          outlineVariant: outlineVariantColor,
+          error: isDark ? AppColors.errorDark : AppColors.errorLight,
+        ).copyWith(
+          primary: primary,
+          secondary: secondary,
+          onPrimary: Colors.white,
+          onSecondary: onSecondary,
+          onSurface: textColor,
+          onError: Colors.white,
+        );
 
     final inputHover = tint(inputBackground, 0.04);
-    final primaryHover = tint(colorScheme.primary, 0.06);
-    final primaryPressed = shade(colorScheme.primary, 0.08);
-    final textHover = tint(colorScheme.primary, 0.06);
+    final primaryHover = tint(colorScheme.primary, 0.08);
+    final primaryPressed = isDark
+        ? AppColors.royalBluePressedDark
+        : AppColors.royalBluePressedLight;
+    final textHover = tint(colorScheme.primary, 0.08);
     final textPressed = shade(colorScheme.primary, 0.06);
 
     return ThemeData(
       brightness: brightness,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: background,
+      canvasColor: background,
+      dividerColor: outlineColor,
       textTheme: textTheme,
       cardTheme: CardThemeData(
         color: surface,
         elevation: 0,
         shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(24),
           side: BorderSide(color: outlineColor),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: ButtonStyle(
-          minimumSize: const WidgetStatePropertyAll(
-            Size.fromHeight(54),
-          ),
+          minimumSize: const WidgetStatePropertyAll(Size.fromHeight(54)),
           padding: const WidgetStatePropertyAll(
-            EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           ),
           textStyle: WidgetStatePropertyAll(
             labelLarge.copyWith(fontWeight: FontWeight.w700),
           ),
           shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           ),
-          backgroundColor: WidgetStateProperty.resolveWith(
-            (states) {
-              if (states.contains(WidgetState.pressed)) {
-                return primaryPressed;
-              }
-              if (states.contains(WidgetState.hovered)) {
-                return primaryHover;
-              }
-              return colorScheme.primary;
-            },
-          ),
+          backgroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.pressed)) {
+              return primaryPressed;
+            }
+            if (states.contains(WidgetState.hovered)) {
+              return primaryHover;
+            }
+            return colorScheme.primary;
+          }),
           foregroundColor: WidgetStatePropertyAll(colorScheme.onPrimary),
           shadowColor: WidgetStatePropertyAll(
-            colorScheme.primary.withValues(alpha: 0.28),
+            colorScheme.primary.withValues(alpha: 0.22),
           ),
-          elevation: WidgetStateProperty.resolveWith(
-            (states) {
-              if (states.contains(WidgetState.hovered)) {
-                return 4;
-              }
-              if (states.contains(WidgetState.pressed)) {
-                return 2;
-              }
-              return 3;
-            },
-          ),
+          elevation: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.hovered)) {
+              return 4;
+            }
+            if (states.contains(WidgetState.pressed)) {
+              return 2;
+            }
+            return 3;
+          }),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(
-          minimumSize: const WidgetStatePropertyAll(
-            Size.fromHeight(52),
-          ),
+          minimumSize: const WidgetStatePropertyAll(Size.fromHeight(52)),
           padding: const WidgetStatePropertyAll(
             EdgeInsets.symmetric(horizontal: 18, vertical: 14),
           ),
@@ -131,30 +134,26 @@ class AppTheme {
             labelLarge.copyWith(fontWeight: FontWeight.w600),
           ),
           shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           ),
-          foregroundColor: WidgetStateProperty.resolveWith(
-            (states) {
-              if (states.contains(WidgetState.pressed)) {
-                return textPressed;
-              }
-              if (states.contains(WidgetState.hovered)) {
-                return textHover;
-              }
-              return colorScheme.primary;
-            },
-          ),
-          side: WidgetStateProperty.resolveWith(
-            (states) {
-              if (states.contains(WidgetState.hovered)) {
-                return BorderSide(color: colorScheme.outline, width: 2);
-              }
-              if (states.contains(WidgetState.pressed)) {
-                return BorderSide(color: colorScheme.outline, width: 1.5);
-              }
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.pressed)) {
+              return textPressed;
+            }
+            if (states.contains(WidgetState.hovered)) {
+              return textHover;
+            }
+            return colorScheme.primary;
+          }),
+          side: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.hovered)) {
+              return BorderSide(color: colorScheme.outline, width: 2);
+            }
+            if (states.contains(WidgetState.pressed)) {
               return BorderSide(color: colorScheme.outline, width: 1.5);
-            },
-          ),
+            }
+            return BorderSide(color: colorScheme.outline, width: 1.5);
+          }),
           overlayColor: WidgetStatePropertyAll(
             colorScheme.primary.withValues(alpha: 0.08),
           ),
@@ -162,26 +161,22 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-          minimumSize: const WidgetStatePropertyAll(
-            Size.fromHeight(44),
-          ),
+          minimumSize: const WidgetStatePropertyAll(Size.fromHeight(44)),
           padding: const WidgetStatePropertyAll(
             EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           ),
           textStyle: WidgetStatePropertyAll(
             labelMedium.copyWith(fontWeight: FontWeight.w600),
           ),
-          foregroundColor: WidgetStateProperty.resolveWith(
-            (states) {
-              if (states.contains(WidgetState.pressed)) {
-                return textPressed;
-              }
-              if (states.contains(WidgetState.hovered)) {
-                return textHover;
-              }
-              return colorScheme.primary;
-            },
-          ),
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.pressed)) {
+              return textPressed;
+            }
+            if (states.contains(WidgetState.hovered)) {
+              return textHover;
+            }
+            return colorScheme.primary;
+          }),
           overlayColor: WidgetStatePropertyAll(
             colorScheme.primary.withValues(alpha: 0.08),
           ),
@@ -192,46 +187,43 @@ class AppTheme {
         fillColor: inputBackground,
         hoverColor: inputHover,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(color: outlineColor, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(color: outlineColor, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(color: colorScheme.error, width: 2),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(color: colorScheme.error, width: 2),
         ),
       ),
       chipTheme: ChipThemeData(
-        backgroundColor:
-            isDark ? AppColors.mutedSurfaceDark : AppColors.mutedSurfaceLight,
+        backgroundColor: isDark
+            ? AppColors.mutedSurfaceDark
+            : AppColors.mutedSurfaceLight,
         selectedColor: colorScheme.secondary.withValues(alpha: 0.16),
         labelStyle: labelMedium.copyWith(color: textColor),
         secondaryLabelStyle: labelMedium.copyWith(color: colorScheme.secondary),
-        side: WidgetStateBorderSide.resolveWith(
-          (states) {
-            if (states.contains(WidgetState.selected)) {
-              return BorderSide(
-                color: colorScheme.secondary.withValues(alpha: 0.4),
-              );
-            }
-            return BorderSide(color: muted.withValues(alpha: 0.3));
-          },
-        ),
+        side: WidgetStateBorderSide.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return BorderSide(
+              color: colorScheme.secondary.withValues(alpha: 0.4),
+            );
+          }
+          return BorderSide(color: muted.withValues(alpha: 0.3));
+        }),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       ),
       badgeTheme: BadgeThemeData(
         backgroundColor: colorScheme.secondary,

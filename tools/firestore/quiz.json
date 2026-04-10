@@ -1,0 +1,7502 @@
+[
+  {
+    "id": "quiz_draft_adjectives_bad_24",
+    "type": "choose_translation",
+    "question": "bad",
+    "correct": "bad",
+    "options": [
+      "pencil",
+      "bad",
+      "sharp",
+      "diagnosis"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_bad_24"
+  },
+  {
+    "id": "quiz_draft_adjectives_beautiful_17",
+    "type": "choose_translation",
+    "question": "beautiful",
+    "correct": "beautiful",
+    "options": [
+      "beautiful",
+      "center",
+      "to be",
+      "cough"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_beautiful_17"
+  },
+  {
+    "id": "quiz_draft_adjectives_big_1",
+    "type": "choose_translation",
+    "question": "big",
+    "correct": "чоң",
+    "options": [
+      "чоң",
+      "hot",
+      "brother-in-law",
+      "house"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_big_1"
+  },
+  {
+    "id": "quiz_draft_adjectives_clean_15",
+    "type": "choose_translation",
+    "question": "clean",
+    "correct": "clean",
+    "options": [
+      "to finish",
+      "tree",
+      "red",
+      "clean"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_clean_15"
+  },
+  {
+    "id": "quiz_draft_adjectives_cold_13",
+    "type": "choose_translation",
+    "question": "cold",
+    "correct": "cold",
+    "options": [
+      "sunny",
+      "to write",
+      "support",
+      "cold"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_cold_13"
+  },
+  {
+    "id": "quiz_draft_adjectives_dirty_16",
+    "type": "choose_translation",
+    "question": "dirty",
+    "correct": "dirty",
+    "options": [
+      "meeting",
+      "dirty",
+      "job",
+      "butterfly"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_dirty_16"
+  },
+  {
+    "id": "quiz_draft_adjectives_early_29",
+    "type": "choose_translation",
+    "question": "early",
+    "correct": "early",
+    "options": [
+      "early",
+      "chapter",
+      "flower",
+      "cough"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_early_29"
+  },
+  {
+    "id": "quiz_draft_adjectives_easy_10",
+    "type": "choose_translation",
+    "question": "easy",
+    "correct": "жеңил",
+    "options": [
+      "door",
+      "vitamin",
+      "surprise",
+      "жеңил"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_easy_10"
+  },
+  {
+    "id": "quiz_draft_adjectives_fast_8",
+    "type": "choose_translation",
+    "question": "fast",
+    "correct": "тез",
+    "options": [
+      "тез",
+      "recovery",
+      "grandson",
+      "noodles"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_fast_8"
+  },
+  {
+    "id": "quiz_draft_adjectives_good_23",
+    "type": "choose_translation",
+    "question": "good",
+    "correct": "good",
+    "options": [
+      "good",
+      "headache",
+      "tomato",
+      "wife"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_good_23"
+  },
+  {
+    "id": "quiz_draft_adjectives_happy_21",
+    "type": "choose_translation",
+    "question": "happy",
+    "correct": "happy",
+    "options": [
+      "drizzle",
+      "happy",
+      "чоң",
+      "university"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_happy_21"
+  },
+  {
+    "id": "quiz_draft_adjectives_hard_11",
+    "type": "choose_translation",
+    "question": "hard",
+    "correct": "hard",
+    "options": [
+      "суу",
+      "paragraph",
+      "hard",
+      "left"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_hard_11"
+  },
+  {
+    "id": "quiz_draft_adjectives_hot_12",
+    "type": "choose_translation",
+    "question": "hot",
+    "correct": "hot",
+    "options": [
+      "tomato",
+      "hot",
+      "interesting",
+      "cave"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_hot_12"
+  },
+  {
+    "id": "quiz_draft_adjectives_important_25",
+    "type": "choose_translation",
+    "question": "important",
+    "correct": "important",
+    "options": [
+      "heavy",
+      "узун",
+      "important",
+      "stormy"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_important_25"
+  },
+  {
+    "id": "quiz_draft_adjectives_interesting_26",
+    "type": "choose_translation",
+    "question": "interesting",
+    "correct": "interesting",
+    "options": [
+      "pen",
+      "жай",
+      "goat",
+      "interesting"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_interesting_26"
+  },
+  {
+    "id": "quiz_draft_adjectives_late_30",
+    "type": "choose_translation",
+    "question": "late",
+    "correct": "late",
+    "options": [
+      "reservation",
+      "Агам",
+      "late",
+      "noodles"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_late_30"
+  },
+  {
+    "id": "quiz_draft_adjectives_long_3",
+    "type": "choose_translation",
+    "question": "long",
+    "correct": "узун",
+    "options": [
+      "kitten",
+      "blizzard",
+      "узун",
+      "trust"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_long_3"
+  },
+  {
+    "id": "quiz_draft_adjectives_loud_28",
+    "type": "choose_translation",
+    "question": "loud",
+    "correct": "loud",
+    "options": [
+      "Тоолор",
+      "loud",
+      "Ат",
+      "niece"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_loud_28"
+  },
+  {
+    "id": "quiz_draft_adjectives_new_5",
+    "type": "choose_translation",
+    "question": "new",
+    "correct": "жаңы",
+    "options": [
+      "sorry",
+      "жаңы",
+      "toddler",
+      "to become"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_new_5"
+  },
+  {
+    "id": "quiz_draft_adjectives_old_6",
+    "type": "choose_translation",
+    "question": "old",
+    "correct": "эски",
+    "options": [
+      "stone",
+      "эски",
+      "company",
+      "Атам"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_old_6"
+  },
+  {
+    "id": "quiz_draft_adjectives_quiet_27",
+    "type": "choose_translation",
+    "question": "quiet",
+    "correct": "quiet",
+    "options": [
+      "to be",
+      "bear",
+      "empathy",
+      "quiet"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_quiet_27"
+  },
+  {
+    "id": "quiz_draft_adjectives_sad_22",
+    "type": "choose_translation",
+    "question": "sad",
+    "correct": "sad",
+    "options": [
+      "rainbow",
+      "sad",
+      "deer",
+      "to be"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_sad_22"
+  },
+  {
+    "id": "quiz_draft_adjectives_short_4",
+    "type": "choose_translation",
+    "question": "short",
+    "correct": "кыска",
+    "options": [
+      "station",
+      "кыска",
+      "salad",
+      "ice"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_short_4"
+  },
+  {
+    "id": "quiz_draft_adjectives_slow_9",
+    "type": "choose_translation",
+    "question": "slow",
+    "correct": "жай",
+    "options": [
+      "evening",
+      "жай",
+      "friendship",
+      "early"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_slow_9"
+  },
+  {
+    "id": "quiz_draft_adjectives_small_2",
+    "type": "choose_translation",
+    "question": "small",
+    "correct": "кичине",
+    "options": [
+      "earth",
+      "admiration",
+      "checkpoint",
+      "кичине"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_small_2"
+  },
+  {
+    "id": "quiz_draft_adjectives_strong_19",
+    "type": "choose_translation",
+    "question": "strong",
+    "correct": "strong",
+    "options": [
+      "satisfaction",
+      "to answer",
+      "sister-in-law",
+      "strong"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_strong_19"
+  },
+  {
+    "id": "quiz_draft_adjectives_ugly_18",
+    "type": "choose_translation",
+    "question": "ugly",
+    "correct": "ugly",
+    "options": [
+      "to eat",
+      "ugly",
+      "flower",
+      "bee"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_ugly_18"
+  },
+  {
+    "id": "quiz_draft_adjectives_warm_14",
+    "type": "choose_translation",
+    "question": "warm",
+    "correct": "warm",
+    "options": [
+      "driver",
+      "warm",
+      "суу",
+      "rainy"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_warm_14"
+  },
+  {
+    "id": "quiz_draft_adjectives_weak_20",
+    "type": "choose_translation",
+    "question": "weak",
+    "correct": "weak",
+    "options": [
+      "star",
+      "дос",
+      "hard",
+      "weak"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_weak_20"
+  },
+  {
+    "id": "quiz_draft_adjectives_young_7",
+    "type": "choose_translation",
+    "question": "young",
+    "correct": "жаш",
+    "options": [
+      "business",
+      "storm",
+      "мектеп",
+      "жаш"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_young_7"
+  },
+  {
+    "id": "quiz_draft2_adjectives_black_5",
+    "type": "choose_translation",
+    "question": "black",
+    "correct": "black",
+    "options": [
+      "chicken",
+      "эски",
+      "black",
+      "чоң"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft2_adjectives_black_5"
+  },
+  {
+    "id": "quiz_draft2_adjectives_blue_2",
+    "type": "choose_translation",
+    "question": "blue",
+    "correct": "blue",
+    "options": [
+      "blue",
+      "affection",
+      "comfort",
+      "monsoon"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft2_adjectives_blue_2"
+  },
+  {
+    "id": "quiz_draft2_adjectives_green_3",
+    "type": "choose_translation",
+    "question": "green",
+    "correct": "green",
+    "options": [
+      "green",
+      "to rest",
+      "to open",
+      "lunch"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft2_adjectives_green_3"
+  },
+  {
+    "id": "quiz_draft2_adjectives_heavy_6",
+    "type": "choose_translation",
+    "question": "heavy",
+    "correct": "heavy",
+    "options": [
+      "job",
+      "heavy",
+      "storm",
+      "today"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft2_adjectives_heavy_6"
+  },
+  {
+    "id": "quiz_draft2_adjectives_light_7",
+    "type": "choose_translation",
+    "question": "light",
+    "correct": "light",
+    "options": [
+      "light",
+      "deadline",
+      "calf",
+      "pen"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft2_adjectives_light_7"
+  },
+  {
+    "id": "quiz_draft2_adjectives_red_1",
+    "type": "choose_translation",
+    "question": "red",
+    "correct": "red",
+    "options": [
+      "noodles",
+      "smile",
+      "red",
+      "Күн"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft2_adjectives_red_1"
+  },
+  {
+    "id": "quiz_draft2_adjectives_sharp_9",
+    "type": "choose_translation",
+    "question": "sharp",
+    "correct": "sharp",
+    "options": [
+      "to listen",
+      "sharp",
+      "snowfall",
+      "tomorrow"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft2_adjectives_sharp_9"
+  },
+  {
+    "id": "quiz_draft2_adjectives_soft_8",
+    "type": "choose_translation",
+    "question": "soft",
+    "correct": "soft",
+    "options": [
+      "teenager",
+      "soft",
+      "marker",
+      "cold"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft2_adjectives_soft_8"
+  },
+  {
+    "id": "quiz_draft2_adjectives_sweet_10",
+    "type": "choose_translation",
+    "question": "sweet",
+    "correct": "sweet",
+    "options": [
+      "inspiration",
+      "curiosity",
+      "branch",
+      "sweet"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft2_adjectives_sweet_10"
+  },
+  {
+    "id": "quiz_draft2_adjectives_white_4",
+    "type": "choose_translation",
+    "question": "white",
+    "correct": "white",
+    "options": [
+      "cloudy",
+      "descendant",
+      "leopard",
+      "white"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft2_adjectives_white_4"
+  },
+  {
+    "id": "quiz_animals_bird",
+    "type": "choose_translation",
+    "question": "bird",
+    "correct": "Куш",
+    "options": [
+      "Куш",
+      "evening",
+      "courage",
+      "goat"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "animals_bird"
+  },
+  {
+    "id": "quiz_animals_cat",
+    "type": "choose_translation",
+    "question": "cat",
+    "correct": "Мышык",
+    "options": [
+      "күн",
+      "Мышык",
+      "ancestor",
+      "disappointment"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "animals_cat"
+  },
+  {
+    "id": "quiz_animals_dog",
+    "type": "choose_translation",
+    "question": "dog",
+    "correct": "Ит",
+    "options": [
+      "yogurt",
+      "Ит",
+      "Дарыя",
+      "diagnosis"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "animals_dog"
+  },
+  {
+    "id": "quiz_animals_eagle",
+    "type": "choose_translation",
+    "question": "eagle",
+    "correct": "Бүркүт",
+    "options": [
+      "Бүркүт",
+      "warm",
+      "cucumber",
+      "flower"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "animals_eagle"
+  },
+  {
+    "id": "quiz_animals_horse",
+    "type": "choose_translation",
+    "question": "horse",
+    "correct": "Ат",
+    "options": [
+      "guardian",
+      "Бала",
+      "Ат",
+      "to finish"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "animals_horse"
+  },
+  {
+    "id": "quiz_animals_sheep",
+    "type": "choose_translation",
+    "question": "sheep",
+    "correct": "Кой",
+    "options": [
+      "toddler",
+      "Кой",
+      "wet",
+      "schedule"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "animals_sheep"
+  },
+  {
+    "id": "quiz_draft_animals_bear_7",
+    "type": "choose_translation",
+    "question": "bear",
+    "correct": "bear",
+    "options": [
+      "important",
+      "bear",
+      "Рахмат",
+      "experience"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_bear_7"
+  },
+  {
+    "id": "quiz_draft_animals_bee_15",
+    "type": "choose_translation",
+    "question": "bee",
+    "correct": "bee",
+    "options": [
+      "Чоң апа",
+      "trip",
+      "cliff",
+      "bee"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_bee_15"
+  },
+  {
+    "id": "quiz_draft_animals_butterfly_16",
+    "type": "choose_translation",
+    "question": "butterfly",
+    "correct": "butterfly",
+    "options": [
+      "butterfly",
+      "үй-бүлө",
+      "pencil",
+      "twins"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_butterfly_16"
+  },
+  {
+    "id": "quiz_draft_animals_camel_3",
+    "type": "choose_translation",
+    "question": "camel",
+    "correct": "camel",
+    "options": [
+      "taxi",
+      "camel",
+      "ugly",
+      "to choose"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_camel_3"
+  },
+  {
+    "id": "quiz_draft_animals_chicken_10",
+    "type": "choose_translation",
+    "question": "chicken",
+    "correct": "chicken",
+    "options": [
+      "Ат",
+      "treatment",
+      "chicken",
+      "patience"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_chicken_10"
+  },
+  {
+    "id": "quiz_draft_animals_cow_1",
+    "type": "choose_translation",
+    "question": "cow",
+    "correct": "cow",
+    "options": [
+      "subway",
+      "yesterday",
+      "Нан",
+      "cow"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_cow_1"
+  },
+  {
+    "id": "quiz_draft_animals_deer_13",
+    "type": "choose_translation",
+    "question": "deer",
+    "correct": "deer",
+    "options": [
+      "eraser",
+      "rental car",
+      "deer",
+      "Куш"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_deer_13"
+  },
+  {
+    "id": "quiz_draft_animals_donkey_14",
+    "type": "choose_translation",
+    "question": "donkey",
+    "correct": "donkey",
+    "options": [
+      "donkey",
+      "departure",
+      "relief",
+      "egg"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_donkey_14"
+  },
+  {
+    "id": "quiz_draft_animals_duck_9",
+    "type": "choose_translation",
+    "question": "duck",
+    "correct": "duck",
+    "options": [
+      "rental car",
+      "phone call",
+      "alphabet",
+      "duck"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_duck_9"
+  },
+  {
+    "id": "quiz_draft_animals_fish_8",
+    "type": "choose_translation",
+    "question": "fish",
+    "correct": "fish",
+    "options": [
+      "backpack",
+      "later",
+      "Салам",
+      "fish"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_fish_8"
+  },
+  {
+    "id": "quiz_draft_animals_fox_5",
+    "type": "choose_translation",
+    "question": "fox",
+    "correct": "fox",
+    "options": [
+      "to be",
+      "fox",
+      "blue",
+      "loneliness"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_fox_5"
+  },
+  {
+    "id": "quiz_draft_animals_goat_2",
+    "type": "choose_translation",
+    "question": "goat",
+    "correct": "goat",
+    "options": [
+      "to see",
+      "goat",
+      "twins",
+      "headache"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_goat_2"
+  },
+  {
+    "id": "quiz_draft_animals_mouse_12",
+    "type": "choose_translation",
+    "question": "mouse",
+    "correct": "mouse",
+    "options": [
+      "mouse",
+      "waterfall",
+      "earth",
+      "strong"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_mouse_12"
+  },
+  {
+    "id": "quiz_draft_animals_rabbit_6",
+    "type": "choose_translation",
+    "question": "rabbit",
+    "correct": "rabbit",
+    "options": [
+      "infection",
+      "rabbit",
+      "aunt",
+      "stress"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_rabbit_6"
+  },
+  {
+    "id": "quiz_draft_animals_rooster_11",
+    "type": "choose_translation",
+    "question": "rooster",
+    "correct": "rooster",
+    "options": [
+      "rooster",
+      "calm",
+      "Кутман таң",
+      "кыска"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_rooster_11"
+  },
+  {
+    "id": "quiz_draft_animals_wolf_4",
+    "type": "choose_translation",
+    "question": "wolf",
+    "correct": "wolf",
+    "options": [
+      "blood",
+      "wolf",
+      "country",
+      "evening"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft_animals_wolf_4"
+  },
+  {
+    "id": "quiz_draft2_animals_calf_14",
+    "type": "choose_translation",
+    "question": "calf",
+    "correct": "calf",
+    "options": [
+      "direction",
+      "kindness",
+      "calf",
+      "lamb"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_calf_14"
+  },
+  {
+    "id": "quiz_draft2_animals_crow_10",
+    "type": "choose_translation",
+    "question": "crow",
+    "correct": "crow",
+    "options": [
+      "customer",
+      "lecture",
+      "clinic",
+      "crow"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_crow_10"
+  },
+  {
+    "id": "quiz_draft2_animals_elephant_7",
+    "type": "choose_translation",
+    "question": "elephant",
+    "correct": "elephant",
+    "options": [
+      "elephant",
+      "узун",
+      "black",
+      "taxi"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_elephant_7"
+  },
+  {
+    "id": "quiz_draft2_animals_giraffe_5",
+    "type": "choose_translation",
+    "question": "giraffe",
+    "correct": "giraffe",
+    "options": [
+      "happy",
+      "giraffe",
+      "dirty",
+      "Тоолор"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_giraffe_5"
+  },
+  {
+    "id": "quiz_draft2_animals_goose_11",
+    "type": "choose_translation",
+    "question": "goose",
+    "correct": "goose",
+    "options": [
+      "goose",
+      "story",
+      "ear",
+      "guidebook"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_goose_11"
+  },
+  {
+    "id": "quiz_draft2_animals_kitten_15",
+    "type": "choose_translation",
+    "question": "kitten",
+    "correct": "kitten",
+    "options": [
+      "wolf",
+      "kitten",
+      "contract",
+      "Бүркүт"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_kitten_15"
+  },
+  {
+    "id": "quiz_draft2_animals_lamb_13",
+    "type": "choose_translation",
+    "question": "lamb",
+    "correct": "lamb",
+    "options": [
+      "year",
+      "lamb",
+      "Жок",
+      "cliff"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_lamb_13"
+  },
+  {
+    "id": "quiz_draft2_animals_leopard_3",
+    "type": "choose_translation",
+    "question": "leopard",
+    "correct": "leopard",
+    "options": [
+      "vocabulary",
+      "courage",
+      "leopard",
+      "professor"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_leopard_3"
+  },
+  {
+    "id": "quiz_draft2_animals_lion_1",
+    "type": "choose_translation",
+    "question": "lion",
+    "correct": "lion",
+    "options": [
+      "lion",
+      "university",
+      "backpack",
+      "trip"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_lion_1"
+  },
+  {
+    "id": "quiz_draft2_animals_monkey_6",
+    "type": "choose_translation",
+    "question": "monkey",
+    "correct": "monkey",
+    "options": [
+      "infection",
+      "project",
+      "bad",
+      "monkey"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_monkey_6"
+  },
+  {
+    "id": "quiz_draft2_animals_pigeon_9",
+    "type": "choose_translation",
+    "question": "pigeon",
+    "correct": "pigeon",
+    "options": [
+      "platform",
+      "honey",
+      "pigeon",
+      "stepmother"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_pigeon_9"
+  },
+  {
+    "id": "quiz_draft2_animals_puppy_16",
+    "type": "choose_translation",
+    "question": "puppy",
+    "correct": "puppy",
+    "options": [
+      "banana",
+      "puppy",
+      "to do",
+      "son"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_puppy_16"
+  },
+  {
+    "id": "quiz_draft2_animals_squirrel_17",
+    "type": "choose_translation",
+    "question": "squirrel",
+    "correct": "squirrel",
+    "options": [
+      "nephew",
+      "squirrel",
+      "descendant",
+      "тез"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_squirrel_17"
+  },
+  {
+    "id": "quiz_draft2_animals_swan_8",
+    "type": "choose_translation",
+    "question": "swan",
+    "correct": "swan",
+    "options": [
+      "duck",
+      "guardian",
+      "swan",
+      "dinner"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_swan_8"
+  },
+  {
+    "id": "quiz_draft2_animals_tiger_2",
+    "type": "choose_translation",
+    "question": "tiger",
+    "correct": "tiger",
+    "options": [
+      "drought",
+      "tiger",
+      "loud",
+      "sauce"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_tiger_2"
+  },
+  {
+    "id": "quiz_draft2_animals_turkey_12",
+    "type": "choose_translation",
+    "question": "turkey",
+    "correct": "turkey",
+    "options": [
+      "campus",
+      "turkey",
+      "jealousy",
+      "name"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_turkey_12"
+  },
+  {
+    "id": "quiz_draft2_animals_zebra_4",
+    "type": "choose_translation",
+    "question": "zebra",
+    "correct": "zebra",
+    "options": [
+      "cucumber",
+      "zebra",
+      "degree",
+      "to be"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "draft2_animals_zebra_4"
+  },
+  {
+    "id": "quiz_horse",
+    "type": "choose_translation",
+    "question": "horse",
+    "correct": "ат",
+    "options": [
+      "ат",
+      "duck",
+      "to see",
+      "student"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "horse"
+  },
+  {
+    "id": "quiz_basics_good_morning",
+    "type": "choose_translation",
+    "question": "good morning",
+    "correct": "Кутман таң",
+    "options": [
+      "чоң",
+      "Кутман таң",
+      "bear",
+      "valley"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "basics_good_morning"
+  },
+  {
+    "id": "quiz_basics_hello",
+    "type": "choose_translation",
+    "question": "hello",
+    "correct": "Салам",
+    "options": [
+      "infection",
+      "treatment",
+      "storm",
+      "Салам"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "basics_hello"
+  },
+  {
+    "id": "quiz_basics_no",
+    "type": "choose_translation",
+    "question": "no",
+    "correct": "Жок",
+    "options": [
+      "motivation",
+      "grass",
+      "leaf",
+      "Жок"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "basics_no"
+  },
+  {
+    "id": "quiz_basics_please",
+    "type": "choose_translation",
+    "question": "please",
+    "correct": "Суранам",
+    "options": [
+      "duck",
+      "Ооба",
+      "Суранам",
+      "blizzard"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "basics_please"
+  },
+  {
+    "id": "quiz_basics_thanks",
+    "type": "choose_translation",
+    "question": "thank you",
+    "correct": "Рахмат",
+    "options": [
+      "Рахмат",
+      "hotel",
+      "early",
+      "forecast"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "basics_thanks"
+  },
+  {
+    "id": "quiz_basics_yes",
+    "type": "choose_translation",
+    "question": "yes",
+    "correct": "Ооба",
+    "options": [
+      "interview",
+      "Ооба",
+      "Жок",
+      "friendship"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "basics_yes"
+  },
+  {
+    "id": "quiz_draft_basic_answer_12",
+    "type": "choose_translation",
+    "question": "answer",
+    "correct": "answer",
+    "options": [
+      "cough",
+      "bad",
+      "answer",
+      "салам"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_answer_12"
+  },
+  {
+    "id": "quiz_draft_basic_country_15",
+    "type": "choose_translation",
+    "question": "country",
+    "correct": "country",
+    "options": [
+      "sorry",
+      "country",
+      "flight",
+      "ancestor"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_country_15"
+  },
+  {
+    "id": "quiz_draft_basic_excuse_me_4",
+    "type": "choose_translation",
+    "question": "excuse me",
+    "correct": "excuse me",
+    "options": [
+      "excuse me",
+      "beautiful",
+      "paragraph",
+      "кыска"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_excuse_me_4"
+  },
+  {
+    "id": "quiz_draft_basic_goodbye_1",
+    "type": "choose_translation",
+    "question": "goodbye",
+    "correct": "goodbye",
+    "options": [
+      "noodles",
+      "goodbye",
+      "to eat",
+      "tomorrow"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_goodbye_1"
+  },
+  {
+    "id": "quiz_draft_basic_language_14",
+    "type": "choose_translation",
+    "question": "language",
+    "correct": "language",
+    "options": [
+      "dry",
+      "welcome",
+      "language",
+      "meadow"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_language_14"
+  },
+  {
+    "id": "quiz_draft_basic_later_7",
+    "type": "choose_translation",
+    "question": "later",
+    "correct": "later",
+    "options": [
+      "tomorrow",
+      "adult",
+      "later",
+      "cliff"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_later_7"
+  },
+  {
+    "id": "quiz_draft_basic_maybe_5",
+    "type": "choose_translation",
+    "question": "maybe",
+    "correct": "maybe",
+    "options": [
+      "maybe",
+      "notebook",
+      "meeting",
+      "ship"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_maybe_5"
+  },
+  {
+    "id": "quiz_draft_basic_name_13",
+    "type": "choose_translation",
+    "question": "name",
+    "correct": "name",
+    "options": [
+      "grape",
+      "interview",
+      "name",
+      "wedding"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_name_13"
+  },
+  {
+    "id": "quiz_draft_basic_now_6",
+    "type": "choose_translation",
+    "question": "now",
+    "correct": "now",
+    "options": [
+      "desert",
+      "ear",
+      "village",
+      "now"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_now_6"
+  },
+  {
+    "id": "quiz_draft_basic_question_11",
+    "type": "choose_translation",
+    "question": "question",
+    "correct": "question",
+    "options": [
+      "flower",
+      "vocabulary",
+      "question",
+      "journey"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_question_11"
+  },
+  {
+    "id": "quiz_draft_basic_sorry_3",
+    "type": "choose_translation",
+    "question": "sorry",
+    "correct": "sorry",
+    "options": [
+      "clinic",
+      "elephant",
+      "sorry",
+      "border"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_sorry_3"
+  },
+  {
+    "id": "quiz_draft_basic_today_8",
+    "type": "choose_translation",
+    "question": "today",
+    "correct": "today",
+    "options": [
+      "today",
+      "to speak",
+      "to begin",
+      "fever"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_today_8"
+  },
+  {
+    "id": "quiz_draft_basic_tomorrow_9",
+    "type": "choose_translation",
+    "question": "tomorrow",
+    "correct": "tomorrow",
+    "options": [
+      "forecast",
+      "Нан",
+      "tomorrow",
+      "elephant"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_tomorrow_9"
+  },
+  {
+    "id": "quiz_draft_basic_village_16",
+    "type": "choose_translation",
+    "question": "village",
+    "correct": "village",
+    "options": [
+      "кичине",
+      "village",
+      "promotion",
+      "treatment"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_village_16"
+  },
+  {
+    "id": "quiz_draft_basic_welcome_2",
+    "type": "choose_translation",
+    "question": "welcome",
+    "correct": "welcome",
+    "options": [
+      "welcome",
+      "aunt",
+      "bad",
+      "surprise"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_welcome_2"
+  },
+  {
+    "id": "quiz_draft_basic_yesterday_10",
+    "type": "choose_translation",
+    "question": "yesterday",
+    "correct": "yesterday",
+    "options": [
+      "to eat",
+      "yesterday",
+      "monsoon",
+      "китеп"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft_basic_yesterday_10"
+  },
+  {
+    "id": "quiz_draft2_basic_afternoon_1",
+    "type": "choose_translation",
+    "question": "afternoon",
+    "correct": "afternoon",
+    "options": [
+      "direction",
+      "forecast",
+      "afternoon",
+      "orange"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_afternoon_1"
+  },
+  {
+    "id": "quiz_draft2_basic_center_16",
+    "type": "choose_translation",
+    "question": "center",
+    "correct": "center",
+    "options": [
+      "tomato",
+      "map",
+      "salary",
+      "center"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_center_16"
+  },
+  {
+    "id": "quiz_draft2_basic_door_12",
+    "type": "choose_translation",
+    "question": "door",
+    "correct": "door",
+    "options": [
+      "maybe",
+      "rooster",
+      "goose",
+      "door"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_door_12"
+  },
+  {
+    "id": "quiz_draft2_basic_evening_2",
+    "type": "choose_translation",
+    "question": "evening",
+    "correct": "evening",
+    "options": [
+      "rooster",
+      "evening",
+      "year",
+      "language"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_evening_2"
+  },
+  {
+    "id": "quiz_draft2_basic_hour_8",
+    "type": "choose_translation",
+    "question": "hour",
+    "correct": "hour",
+    "options": [
+      "hour",
+      "dictionary",
+      "nurse",
+      "career"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_hour_8"
+  },
+  {
+    "id": "quiz_draft2_basic_house_10",
+    "type": "choose_translation",
+    "question": "house",
+    "correct": "house",
+    "options": [
+      "grandson",
+      "onion",
+      "research",
+      "house"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_house_10"
+  },
+  {
+    "id": "quiz_draft2_basic_left_15",
+    "type": "choose_translation",
+    "question": "left",
+    "correct": "left",
+    "options": [
+      "medicine",
+      "branch",
+      "left",
+      "жаңы"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_left_15"
+  },
+  {
+    "id": "quiz_draft2_basic_minute_7",
+    "type": "choose_translation",
+    "question": "minute",
+    "correct": "minute",
+    "options": [
+      "confidence",
+      "to have",
+      "baby",
+      "minute"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_minute_7"
+  },
+  {
+    "id": "quiz_draft2_basic_month_5",
+    "type": "choose_translation",
+    "question": "month",
+    "correct": "month",
+    "options": [
+      "month",
+      "to write",
+      "treatment",
+      "ocean"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_month_5"
+  },
+  {
+    "id": "quiz_draft2_basic_night_3",
+    "type": "choose_translation",
+    "question": "night",
+    "correct": "night",
+    "options": [
+      "interesting",
+      "question",
+      "night",
+      "to ask"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_night_3"
+  },
+  {
+    "id": "quiz_draft2_basic_right_14",
+    "type": "choose_translation",
+    "question": "right",
+    "correct": "right",
+    "options": [
+      "mouse",
+      "right",
+      "bad",
+      "monkey"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_right_14"
+  },
+  {
+    "id": "quiz_draft2_basic_room_11",
+    "type": "choose_translation",
+    "question": "room",
+    "correct": "room",
+    "options": [
+      "manager",
+      "research",
+      "room",
+      "ancestor"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_room_11"
+  },
+  {
+    "id": "quiz_draft2_basic_street_9",
+    "type": "choose_translation",
+    "question": "street",
+    "correct": "street",
+    "options": [
+      "vocabulary",
+      "street",
+      "Ооба",
+      "to buy"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_street_9"
+  },
+  {
+    "id": "quiz_draft2_basic_week_4",
+    "type": "choose_translation",
+    "question": "week",
+    "correct": "week",
+    "options": [
+      "Чай",
+      "exercise",
+      "week",
+      "giraffe"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_week_4"
+  },
+  {
+    "id": "quiz_draft2_basic_window_13",
+    "type": "choose_translation",
+    "question": "window",
+    "correct": "window",
+    "options": [
+      "smile",
+      "aunt",
+      "window",
+      "season"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_window_13"
+  },
+  {
+    "id": "quiz_draft2_basic_year_6",
+    "type": "choose_translation",
+    "question": "year",
+    "correct": "year",
+    "options": [
+      "year",
+      "hail",
+      "motorcycle",
+      "stomach"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "draft2_basic_year_6"
+  },
+  {
+    "id": "quiz_hello",
+    "type": "choose_translation",
+    "question": "hello",
+    "correct": "салам",
+    "options": [
+      "салам",
+      "chilly",
+      "humid",
+      "project"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "hello"
+  },
+  {
+    "id": "quiz_water",
+    "type": "choose_translation",
+    "question": "water",
+    "correct": "суу",
+    "options": [
+      "hill",
+      "puppy",
+      "fish",
+      "суу"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "water"
+  },
+  {
+    "id": "quiz_book",
+    "type": "choose_translation",
+    "question": "book",
+    "correct": "китеп",
+    "options": [
+      "sunlight",
+      "китеп",
+      "household",
+      "tomato"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "book"
+  },
+  {
+    "id": "quiz_draft_education_alphabet_11",
+    "type": "choose_translation",
+    "question": "alphabet",
+    "correct": "alphabet",
+    "options": [
+      "alphabet",
+      "bad",
+      "squirrel",
+      "month"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_alphabet_11"
+  },
+  {
+    "id": "quiz_draft_education_classroom_3",
+    "type": "choose_translation",
+    "question": "classroom",
+    "correct": "classroom",
+    "options": [
+      "tomato",
+      "classroom",
+      "potato",
+      "to have"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_classroom_3"
+  },
+  {
+    "id": "quiz_draft_education_dictionary_10",
+    "type": "choose_translation",
+    "question": "dictionary",
+    "correct": "dictionary",
+    "options": [
+      "appointment",
+      "library",
+      "dictionary",
+      "orange"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_dictionary_10"
+  },
+  {
+    "id": "quiz_draft_education_exam_6",
+    "type": "choose_translation",
+    "question": "exam",
+    "correct": "exam",
+    "options": [
+      "grade",
+      "cow",
+      "love",
+      "exam"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_exam_6"
+  },
+  {
+    "id": "quiz_draft_education_grade_7",
+    "type": "choose_translation",
+    "question": "grade",
+    "correct": "grade",
+    "options": [
+      "presentation",
+      "good",
+      "grade",
+      "clinic"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_grade_7"
+  },
+  {
+    "id": "quiz_draft_education_homework_5",
+    "type": "choose_translation",
+    "question": "homework",
+    "correct": "homework",
+    "options": [
+      "curiosity",
+      "homework",
+      "cloud",
+      "sweet"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_homework_5"
+  },
+  {
+    "id": "quiz_draft_education_knowledge_15",
+    "type": "choose_translation",
+    "question": "knowledge",
+    "correct": "knowledge",
+    "options": [
+      "pepper",
+      "knowledge",
+      "diagnosis",
+      "treatment"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_knowledge_15"
+  },
+  {
+    "id": "quiz_draft_education_lesson_4",
+    "type": "choose_translation",
+    "question": "lesson",
+    "correct": "lesson",
+    "options": [
+      "colleague",
+      "storm",
+      "respect",
+      "lesson"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_lesson_4"
+  },
+  {
+    "id": "quiz_draft_education_notebook_9",
+    "type": "choose_translation",
+    "question": "notebook",
+    "correct": "notebook",
+    "options": [
+      "notebook",
+      "budget",
+      "tree",
+      "hail"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_notebook_9"
+  },
+  {
+    "id": "quiz_draft_education_sentence_12",
+    "type": "choose_translation",
+    "question": "sentence",
+    "correct": "sentence",
+    "options": [
+      "light",
+      "giraffe",
+      "granddaughter",
+      "sentence"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_sentence_12"
+  },
+  {
+    "id": "quiz_draft_education_story_13",
+    "type": "choose_translation",
+    "question": "story",
+    "correct": "story",
+    "options": [
+      "story",
+      "жеңил",
+      "pasta",
+      "chicken meat"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_story_13"
+  },
+  {
+    "id": "quiz_draft_education_student_2",
+    "type": "choose_translation",
+    "question": "student",
+    "correct": "student",
+    "options": [
+      "student",
+      "niece",
+      "чоң",
+      "giraffe"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_student_2"
+  },
+  {
+    "id": "quiz_draft_education_subject_8",
+    "type": "choose_translation",
+    "question": "subject",
+    "correct": "subject",
+    "options": [
+      "Нан",
+      "mild",
+      "салам",
+      "subject"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_subject_8"
+  },
+  {
+    "id": "quiz_draft_education_teacher_1",
+    "type": "choose_translation",
+    "question": "teacher",
+    "correct": "teacher",
+    "options": [
+      "late",
+      "eye",
+      "cake",
+      "teacher"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_teacher_1"
+  },
+  {
+    "id": "quiz_draft_education_university_14",
+    "type": "choose_translation",
+    "question": "university",
+    "correct": "university",
+    "options": [
+      "cave",
+      "university",
+      "porridge",
+      "тоо"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft_education_university_14"
+  },
+  {
+    "id": "quiz_draft2_education_attendance_23",
+    "type": "choose_translation",
+    "question": "attendance",
+    "correct": "attendance",
+    "options": [
+      "attendance",
+      "star",
+      "dirty",
+      "laughter"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_attendance_23"
+  },
+  {
+    "id": "quiz_draft2_education_backpack_22",
+    "type": "choose_translation",
+    "question": "backpack",
+    "correct": "backpack",
+    "options": [
+      "to ask",
+      "rain",
+      "backpack",
+      "puppy"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_backpack_22"
+  },
+  {
+    "id": "quiz_draft2_education_board_5",
+    "type": "choose_translation",
+    "question": "board",
+    "correct": "board",
+    "options": [
+      "to have",
+      "milk",
+      "board",
+      "university"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_board_5"
+  },
+  {
+    "id": "quiz_draft2_education_calculator_21",
+    "type": "choose_translation",
+    "question": "calculator",
+    "correct": "calculator",
+    "options": [
+      "teenager",
+      "calculator",
+      "китеп",
+      "donkey"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_calculator_21"
+  },
+  {
+    "id": "quiz_draft2_education_campus_9",
+    "type": "choose_translation",
+    "question": "campus",
+    "correct": "campus",
+    "options": [
+      "Нан",
+      "campus",
+      "contract",
+      "home"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_campus_9"
+  },
+  {
+    "id": "quiz_draft2_education_chair_7",
+    "type": "choose_translation",
+    "question": "chair",
+    "correct": "chair",
+    "options": [
+      "cousin",
+      "right",
+      "chair",
+      "cake"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_chair_7"
+  },
+  {
+    "id": "quiz_draft2_education_chapter_14",
+    "type": "choose_translation",
+    "question": "chapter",
+    "correct": "chapter",
+    "options": [
+      "sorry",
+      "drizzle",
+      "frustration",
+      "chapter"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_chapter_14"
+  },
+  {
+    "id": "quiz_draft2_education_course_13",
+    "type": "choose_translation",
+    "question": "course",
+    "correct": "course",
+    "options": [
+      "course",
+      "potato",
+      "street",
+      "giraffe"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_course_13"
+  },
+  {
+    "id": "quiz_draft2_education_desk_6",
+    "type": "choose_translation",
+    "question": "desk",
+    "correct": "desk",
+    "options": [
+      "home",
+      "confidence",
+      "desk",
+      "pressure"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_desk_6"
+  },
+  {
+    "id": "quiz_draft2_education_eraser_3",
+    "type": "choose_translation",
+    "question": "eraser",
+    "correct": "eraser",
+    "options": [
+      "library",
+      "grandfather",
+      "attendance",
+      "eraser"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_eraser_3"
+  },
+  {
+    "id": "quiz_draft2_education_grammar_16",
+    "type": "choose_translation",
+    "question": "grammar",
+    "correct": "grammar",
+    "options": [
+      "hospital",
+      "stepmother",
+      "grammar",
+      "Рахмат"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_grammar_16"
+  },
+  {
+    "id": "quiz_draft2_education_lab_20",
+    "type": "choose_translation",
+    "question": "lab",
+    "correct": "lab",
+    "options": [
+      "lab",
+      "husband",
+      "to choose",
+      "library"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_lab_20"
+  },
+  {
+    "id": "quiz_draft2_education_lecture_11",
+    "type": "choose_translation",
+    "question": "lecture",
+    "correct": "lecture",
+    "options": [
+      "Суу",
+      "campus",
+      "lecture",
+      "to prepare"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_lecture_11"
+  },
+  {
+    "id": "quiz_draft2_education_library_8",
+    "type": "choose_translation",
+    "question": "library",
+    "correct": "library",
+    "options": [
+      "question",
+      "library",
+      "husband",
+      "journey"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_library_8"
+  },
+  {
+    "id": "quiz_draft2_education_marker_4",
+    "type": "choose_translation",
+    "question": "marker",
+    "correct": "marker",
+    "options": [
+      "marker",
+      "waterfall",
+      "gratitude",
+      "to build"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_marker_4"
+  },
+  {
+    "id": "quiz_draft2_education_paragraph_15",
+    "type": "choose_translation",
+    "question": "paragraph",
+    "correct": "paragraph",
+    "options": [
+      "bad",
+      "pressure",
+      "paragraph",
+      "тоо"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_paragraph_15"
+  },
+  {
+    "id": "quiz_draft2_education_pen_1",
+    "type": "choose_translation",
+    "question": "pen",
+    "correct": "pen",
+    "options": [
+      "dictionary",
+      "cold",
+      "pen",
+      "excitement"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_pen_1"
+  },
+  {
+    "id": "quiz_draft2_education_pencil_2",
+    "type": "choose_translation",
+    "question": "pencil",
+    "correct": "pencil",
+    "options": [
+      "pencil",
+      "calm",
+      "admiration",
+      "rice"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_pencil_2"
+  },
+  {
+    "id": "quiz_draft2_education_professor_10",
+    "type": "choose_translation",
+    "question": "professor",
+    "correct": "professor",
+    "options": [
+      "year",
+      "thunder",
+      "professor",
+      "to drink"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_professor_10"
+  },
+  {
+    "id": "quiz_draft2_education_research_19",
+    "type": "choose_translation",
+    "question": "research",
+    "correct": "research",
+    "options": [
+      "research",
+      "sweet",
+      "Суранам",
+      "mild"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_research_19"
+  },
+  {
+    "id": "quiz_draft2_education_seminar_12",
+    "type": "choose_translation",
+    "question": "seminar",
+    "correct": "seminar",
+    "options": [
+      "loud",
+      "emergency",
+      "seminar",
+      "home"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_seminar_12"
+  },
+  {
+    "id": "quiz_draft2_education_translation_18",
+    "type": "choose_translation",
+    "question": "translation",
+    "correct": "translation",
+    "options": [
+      "translation",
+      "subject",
+      "light",
+      "early"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_translation_18"
+  },
+  {
+    "id": "quiz_draft2_education_vocabulary_17",
+    "type": "choose_translation",
+    "question": "vocabulary",
+    "correct": "vocabulary",
+    "options": [
+      "smile",
+      "wet",
+      "cough",
+      "vocabulary"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "draft2_education_vocabulary_17"
+  },
+  {
+    "id": "quiz_school",
+    "type": "choose_translation",
+    "question": "school",
+    "correct": "мектеп",
+    "options": [
+      "dirty",
+      "brother-in-law",
+      "noodles",
+      "мектеп"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "school"
+  },
+  {
+    "id": "quiz_draft_emotion_anger_3",
+    "type": "choose_translation",
+    "question": "anger",
+    "correct": "anger",
+    "options": [
+      "infection",
+      "Салам",
+      "anger",
+      "respect"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_anger_3"
+  },
+  {
+    "id": "quiz_draft_emotion_calm_7",
+    "type": "choose_translation",
+    "question": "calm",
+    "correct": "calm",
+    "options": [
+      "career",
+      "puppy",
+      "calm",
+      "Шамал"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_calm_7"
+  },
+  {
+    "id": "quiz_draft_emotion_courage_15",
+    "type": "choose_translation",
+    "question": "courage",
+    "correct": "courage",
+    "options": [
+      "compassion",
+      "career",
+      "courage",
+      "excitement"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_courage_15"
+  },
+  {
+    "id": "quiz_draft_emotion_fear_2",
+    "type": "choose_translation",
+    "question": "fear",
+    "correct": "fear",
+    "options": [
+      "windy",
+      "fear",
+      "strawberry",
+      "business"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_fear_2"
+  },
+  {
+    "id": "quiz_draft_emotion_hope_5",
+    "type": "choose_translation",
+    "question": "hope",
+    "correct": "hope",
+    "options": [
+      "hope",
+      "enthusiasm",
+      "maybe",
+      "job"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_hope_5"
+  },
+  {
+    "id": "quiz_draft_emotion_joy_4",
+    "type": "choose_translation",
+    "question": "joy",
+    "correct": "joy",
+    "options": [
+      "to be",
+      "vocabulary",
+      "joy",
+      "to build"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_joy_4"
+  },
+  {
+    "id": "quiz_draft_emotion_kindness_13",
+    "type": "choose_translation",
+    "question": "kindness",
+    "correct": "kindness",
+    "options": [
+      "tram",
+      "kindness",
+      "to learn",
+      "treatment"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_kindness_13"
+  },
+  {
+    "id": "quiz_draft_emotion_love_1",
+    "type": "choose_translation",
+    "question": "love",
+    "correct": "love",
+    "options": [
+      "тоо",
+      "Апам",
+      "love",
+      "monsoon"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_love_1"
+  },
+  {
+    "id": "quiz_draft_emotion_patience_14",
+    "type": "choose_translation",
+    "question": "patience",
+    "correct": "patience",
+    "options": [
+      "patience",
+      "puppy",
+      "soil",
+      "inspiration"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_patience_14"
+  },
+  {
+    "id": "quiz_draft_emotion_pride_10",
+    "type": "choose_translation",
+    "question": "pride",
+    "correct": "pride",
+    "options": [
+      "rice",
+      "lightning",
+      "pride",
+      "joy"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_pride_10"
+  },
+  {
+    "id": "quiz_draft_emotion_shame_11",
+    "type": "choose_translation",
+    "question": "shame",
+    "correct": "shame",
+    "options": [
+      "chilly",
+      "luggage",
+      "toddler",
+      "shame"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_shame_11"
+  },
+  {
+    "id": "quiz_draft_emotion_stress_8",
+    "type": "choose_translation",
+    "question": "stress",
+    "correct": "stress",
+    "options": [
+      "stress",
+      "to listen",
+      "stone",
+      "rental car"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_stress_8"
+  },
+  {
+    "id": "quiz_draft_emotion_surprise_12",
+    "type": "choose_translation",
+    "question": "surprise",
+    "correct": "surprise",
+    "options": [
+      "to hear",
+      "lamb",
+      "potato",
+      "surprise"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_surprise_12"
+  },
+  {
+    "id": "quiz_draft_emotion_trust_6",
+    "type": "choose_translation",
+    "question": "trust",
+    "correct": "trust",
+    "options": [
+      "trust",
+      "жаңы",
+      "giraffe",
+      "humid"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_trust_6"
+  },
+  {
+    "id": "quiz_draft_emotion_worry_9",
+    "type": "choose_translation",
+    "question": "worry",
+    "correct": "worry",
+    "options": [
+      "cliff",
+      "жаш",
+      "camp",
+      "worry"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft_emotion_worry_9"
+  },
+  {
+    "id": "quiz_draft2_emotion_admiration_22",
+    "type": "choose_translation",
+    "question": "admiration",
+    "correct": "admiration",
+    "options": [
+      "to eat",
+      "admiration",
+      "relatives",
+      "employee"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_admiration_22"
+  },
+  {
+    "id": "quiz_draft2_emotion_affection_19",
+    "type": "choose_translation",
+    "question": "affection",
+    "correct": "affection",
+    "options": [
+      "to help",
+      "affection",
+      "reservation",
+      "kindness"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_affection_19"
+  },
+  {
+    "id": "quiz_draft2_emotion_comfort_21",
+    "type": "choose_translation",
+    "question": "comfort",
+    "correct": "comfort",
+    "options": [
+      "laughter",
+      "motorcycle",
+      "comfort",
+      "yesterday"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_comfort_21"
+  },
+  {
+    "id": "quiz_draft2_emotion_compassion_18",
+    "type": "choose_translation",
+    "question": "compassion",
+    "correct": "compassion",
+    "options": [
+      "pen",
+      "invoice",
+      "compassion",
+      "to come"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_compassion_18"
+  },
+  {
+    "id": "quiz_draft2_emotion_confidence_11",
+    "type": "choose_translation",
+    "question": "confidence",
+    "correct": "confidence",
+    "options": [
+      "жеңил",
+      "journey",
+      "lion",
+      "confidence"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_confidence_11"
+  },
+  {
+    "id": "quiz_draft2_emotion_curiosity_17",
+    "type": "choose_translation",
+    "question": "curiosity",
+    "correct": "curiosity",
+    "options": [
+      "infection",
+      "curiosity",
+      "noodles",
+      "Шорпо"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_curiosity_17"
+  },
+  {
+    "id": "quiz_draft2_emotion_disappointment_15",
+    "type": "choose_translation",
+    "question": "disappointment",
+    "correct": "disappointment",
+    "options": [
+      "budget",
+      "disappointment",
+      "center",
+      "drizzle"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_disappointment_15"
+  },
+  {
+    "id": "quiz_draft2_emotion_empathy_6",
+    "type": "choose_translation",
+    "question": "empathy",
+    "correct": "empathy",
+    "options": [
+      "empathy",
+      "orange",
+      "later",
+      "кичине"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_empathy_6"
+  },
+  {
+    "id": "quiz_draft2_emotion_enthusiasm_23",
+    "type": "choose_translation",
+    "question": "enthusiasm",
+    "correct": "enthusiasm",
+    "options": [
+      "overtime",
+      "late",
+      "enthusiasm",
+      "salt"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_enthusiasm_23"
+  },
+  {
+    "id": "quiz_draft2_emotion_excitement_9",
+    "type": "choose_translation",
+    "question": "excitement",
+    "correct": "excitement",
+    "options": [
+      "cow",
+      "platform",
+      "trip",
+      "excitement"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_excitement_9"
+  },
+  {
+    "id": "quiz_draft2_emotion_friendship_4",
+    "type": "choose_translation",
+    "question": "friendship",
+    "correct": "friendship",
+    "options": [
+      "white",
+      "tiger",
+      "friendship",
+      "potato"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_friendship_4"
+  },
+  {
+    "id": "quiz_draft2_emotion_frustration_13",
+    "type": "choose_translation",
+    "question": "frustration",
+    "correct": "frustration",
+    "options": [
+      "course",
+      "cold front",
+      "frustration",
+      "tooth"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_frustration_13"
+  },
+  {
+    "id": "quiz_draft2_emotion_gratitude_12",
+    "type": "choose_translation",
+    "question": "gratitude",
+    "correct": "gratitude",
+    "options": [
+      "rabbit",
+      "gratitude",
+      "training",
+      "to answer"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_gratitude_12"
+  },
+  {
+    "id": "quiz_draft2_emotion_inspiration_24",
+    "type": "choose_translation",
+    "question": "inspiration",
+    "correct": "inspiration",
+    "options": [
+      "marker",
+      "early",
+      "inspiration",
+      "grandfather"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_inspiration_24"
+  },
+  {
+    "id": "quiz_draft2_emotion_jealousy_7",
+    "type": "choose_translation",
+    "question": "jealousy",
+    "correct": "jealousy",
+    "options": [
+      "exam",
+      "sunlight",
+      "tomato",
+      "jealousy"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_jealousy_7"
+  },
+  {
+    "id": "quiz_draft2_emotion_laughter_2",
+    "type": "choose_translation",
+    "question": "laughter",
+    "correct": "laughter",
+    "options": [
+      "laughter",
+      "yogurt",
+      "chair",
+      "professor"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_laughter_2"
+  },
+  {
+    "id": "quiz_draft2_emotion_loneliness_8",
+    "type": "choose_translation",
+    "question": "loneliness",
+    "correct": "loneliness",
+    "options": [
+      "overtime",
+      "tears",
+      "loneliness",
+      "moon"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_loneliness_8"
+  },
+  {
+    "id": "quiz_draft2_emotion_motivation_10",
+    "type": "choose_translation",
+    "question": "motivation",
+    "correct": "motivation",
+    "options": [
+      "language",
+      "жай",
+      "worry",
+      "motivation"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_motivation_10"
+  },
+  {
+    "id": "quiz_draft2_emotion_nervousness_20",
+    "type": "choose_translation",
+    "question": "nervousness",
+    "correct": "nervousness",
+    "options": [
+      "subject",
+      "nervousness",
+      "to begin",
+      "snowy"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_nervousness_20"
+  },
+  {
+    "id": "quiz_draft2_emotion_relief_14",
+    "type": "choose_translation",
+    "question": "relief",
+    "correct": "relief",
+    "options": [
+      "relief",
+      "salary",
+      "respect",
+      "elephant"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_relief_14"
+  },
+  {
+    "id": "quiz_draft2_emotion_respect_5",
+    "type": "choose_translation",
+    "question": "respect",
+    "correct": "respect",
+    "options": [
+      "sky",
+      "healthy",
+      "cheese",
+      "respect"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_respect_5"
+  },
+  {
+    "id": "quiz_draft2_emotion_satisfaction_16",
+    "type": "choose_translation",
+    "question": "satisfaction",
+    "correct": "satisfaction",
+    "options": [
+      "subject",
+      "satisfaction",
+      "Ат",
+      "eye"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_satisfaction_16"
+  },
+  {
+    "id": "quiz_draft2_emotion_smile_1",
+    "type": "choose_translation",
+    "question": "smile",
+    "correct": "smile",
+    "options": [
+      "fever",
+      "smile",
+      "to do",
+      "son"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_smile_1"
+  },
+  {
+    "id": "quiz_draft2_emotion_tears_3",
+    "type": "choose_translation",
+    "question": "tears",
+    "correct": "tears",
+    "options": [
+      "ancestor",
+      "university",
+      "tears",
+      "Бүркүт"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "draft2_emotion_tears_3"
+  },
+  {
+    "id": "quiz_friend",
+    "type": "choose_translation",
+    "question": "friend",
+    "correct": "дос",
+    "options": [
+      "yogurt",
+      "sunset",
+      "дос",
+      "toddler"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "friend"
+  },
+  {
+    "id": "quiz_draft_family_aunt_3",
+    "type": "choose_translation",
+    "question": "aunt",
+    "correct": "aunt",
+    "options": [
+      "aunt",
+      "kitchen",
+      "seminar",
+      "ат"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_aunt_3"
+  },
+  {
+    "id": "quiz_draft_family_cousin_4",
+    "type": "choose_translation",
+    "question": "cousin",
+    "correct": "cousin",
+    "options": [
+      "cousin",
+      "to drink",
+      "excuse me",
+      "gratitude"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_cousin_4"
+  },
+  {
+    "id": "quiz_draft_family_daughter_6",
+    "type": "choose_translation",
+    "question": "daughter",
+    "correct": "daughter",
+    "options": [
+      "daughter",
+      "hard",
+      "rooster",
+      "alphabet"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_daughter_6"
+  },
+  {
+    "id": "quiz_draft_family_grandfather_1",
+    "type": "choose_translation",
+    "question": "grandfather",
+    "correct": "grandfather",
+    "options": [
+      "grandfather",
+      "тез",
+      "dry",
+      "ambulance"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_grandfather_1"
+  },
+  {
+    "id": "quiz_draft_family_home_12",
+    "type": "choose_translation",
+    "question": "home",
+    "correct": "home",
+    "options": [
+      "empathy",
+      "question",
+      "home",
+      "motivation"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_home_12"
+  },
+  {
+    "id": "quiz_draft_family_husband_9",
+    "type": "choose_translation",
+    "question": "husband",
+    "correct": "husband",
+    "options": [
+      "route",
+      "husband",
+      "now",
+      "task"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_husband_9"
+  },
+  {
+    "id": "quiz_draft_family_parents_7",
+    "type": "choose_translation",
+    "question": "parents",
+    "correct": "parents",
+    "options": [
+      "passenger",
+      "sharp",
+      "dirty",
+      "parents"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_parents_7"
+  },
+  {
+    "id": "quiz_draft_family_relatives_8",
+    "type": "choose_translation",
+    "question": "relatives",
+    "correct": "relatives",
+    "options": [
+      "relatives",
+      "employee",
+      "board",
+      "anger"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_relatives_8"
+  },
+  {
+    "id": "quiz_draft_family_respect_14",
+    "type": "choose_translation",
+    "question": "respect",
+    "correct": "respect",
+    "options": [
+      "respect",
+      "therapy",
+      "to go",
+      "butterfly"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_respect_14"
+  },
+  {
+    "id": "quiz_draft_family_son_5",
+    "type": "choose_translation",
+    "question": "son",
+    "correct": "son",
+    "options": [
+      "dry",
+      "border",
+      "egg",
+      "son"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_son_5"
+  },
+  {
+    "id": "quiz_draft_family_support_13",
+    "type": "choose_translation",
+    "question": "support",
+    "correct": "support",
+    "options": [
+      "fog",
+      "тоо",
+      "honey",
+      "support"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_support_13"
+  },
+  {
+    "id": "quiz_draft_family_uncle_2",
+    "type": "choose_translation",
+    "question": "uncle",
+    "correct": "uncle",
+    "options": [
+      "hard",
+      "strategy",
+      "uncle",
+      "pasta"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_uncle_2"
+  },
+  {
+    "id": "quiz_draft_family_wedding_11",
+    "type": "choose_translation",
+    "question": "wedding",
+    "correct": "wedding",
+    "options": [
+      "strategy",
+      "granddaughter",
+      "wedding",
+      "goat"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_wedding_11"
+  },
+  {
+    "id": "quiz_draft_family_wife_10",
+    "type": "choose_translation",
+    "question": "wife",
+    "correct": "wife",
+    "options": [
+      "wife",
+      "goose",
+      "drizzle",
+      "to choose"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft_family_wife_10"
+  },
+  {
+    "id": "quiz_draft2_family_adult_16",
+    "type": "choose_translation",
+    "question": "adult",
+    "correct": "adult",
+    "options": [
+      "enthusiasm",
+      "adult",
+      "pasta",
+      "rabbit"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_adult_16"
+  },
+  {
+    "id": "quiz_draft2_family_ancestor_10",
+    "type": "choose_translation",
+    "question": "ancestor",
+    "correct": "ancestor",
+    "options": [
+      "sad",
+      "ancestor",
+      "to understand",
+      "mouse"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_ancestor_10"
+  },
+  {
+    "id": "quiz_draft2_family_baby_13",
+    "type": "choose_translation",
+    "question": "baby",
+    "correct": "baby",
+    "options": [
+      "ear",
+      "baby",
+      "tomato",
+      "board"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_baby_13"
+  },
+  {
+    "id": "quiz_draft2_family_brother_in_law_7",
+    "type": "choose_translation",
+    "question": "brother-in-law",
+    "correct": "brother-in-law",
+    "options": [
+      "жеңил",
+      "forecasting",
+      "fear",
+      "brother-in-law"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_brother_in_law_7"
+  },
+  {
+    "id": "quiz_draft2_family_descendant_11",
+    "type": "choose_translation",
+    "question": "descendant",
+    "correct": "descendant",
+    "options": [
+      "curiosity",
+      "descendant",
+      "homework",
+      "Куш"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_descendant_11"
+  },
+  {
+    "id": "quiz_draft2_family_family_tree_17",
+    "type": "choose_translation",
+    "question": "family tree",
+    "correct": "family tree",
+    "options": [
+      "family tree",
+      "to carry",
+      "lamb",
+      "happy"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_family_tree_17"
+  },
+  {
+    "id": "quiz_draft2_family_granddaughter_4",
+    "type": "choose_translation",
+    "question": "granddaughter",
+    "correct": "granddaughter",
+    "options": [
+      "medicine",
+      "doctor",
+      "granddaughter",
+      "autumn"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_granddaughter_4"
+  },
+  {
+    "id": "quiz_draft2_family_grandson_3",
+    "type": "choose_translation",
+    "question": "grandson",
+    "correct": "grandson",
+    "options": [
+      "grandson",
+      "friendship",
+      "to go",
+      "wife"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_grandson_3"
+  },
+  {
+    "id": "quiz_draft2_family_guardian_12",
+    "type": "choose_translation",
+    "question": "guardian",
+    "correct": "guardian",
+    "options": [
+      "guardian",
+      "promotion",
+      "language",
+      "snowfall"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_guardian_12"
+  },
+  {
+    "id": "quiz_draft2_family_household_18",
+    "type": "choose_translation",
+    "question": "household",
+    "correct": "household",
+    "options": [
+      "household",
+      "adult",
+      "hospital",
+      "toddler"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_household_18"
+  },
+  {
+    "id": "quiz_draft2_family_nephew_1",
+    "type": "choose_translation",
+    "question": "nephew",
+    "correct": "nephew",
+    "options": [
+      "sentence",
+      "Нан",
+      "nephew",
+      "stone"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_nephew_1"
+  },
+  {
+    "id": "quiz_draft2_family_niece_2",
+    "type": "choose_translation",
+    "question": "niece",
+    "correct": "niece",
+    "options": [
+      "empathy",
+      "rainbow",
+      "niece",
+      "Абамайдан"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_niece_2"
+  },
+  {
+    "id": "quiz_draft2_family_parenthood_19",
+    "type": "choose_translation",
+    "question": "parenthood",
+    "correct": "parenthood",
+    "options": [
+      "stomach",
+      "parenthood",
+      "driver",
+      "camel"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_parenthood_19"
+  },
+  {
+    "id": "quiz_draft2_family_sister_in_law_8",
+    "type": "choose_translation",
+    "question": "sister-in-law",
+    "correct": "sister-in-law",
+    "options": [
+      "visa",
+      "sister-in-law",
+      "lightning",
+      "Ит"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_sister_in_law_8"
+  },
+  {
+    "id": "quiz_draft2_family_stepfather_5",
+    "type": "choose_translation",
+    "question": "stepfather",
+    "correct": "stepfather",
+    "options": [
+      "pressure",
+      "sister-in-law",
+      "vitamin",
+      "stepfather"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_stepfather_5"
+  },
+  {
+    "id": "quiz_draft2_family_stepmother_6",
+    "type": "choose_translation",
+    "question": "stepmother",
+    "correct": "stepmother",
+    "options": [
+      "light",
+      "winter",
+      "кыска",
+      "stepmother"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_stepmother_6"
+  },
+  {
+    "id": "quiz_draft2_family_teenager_15",
+    "type": "choose_translation",
+    "question": "teenager",
+    "correct": "teenager",
+    "options": [
+      "teenager",
+      "summer",
+      "red",
+      "honey"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_teenager_15"
+  },
+  {
+    "id": "quiz_draft2_family_toddler_14",
+    "type": "choose_translation",
+    "question": "toddler",
+    "correct": "toddler",
+    "options": [
+      "good",
+      "clean",
+      "sentence",
+      "toddler"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_toddler_14"
+  },
+  {
+    "id": "quiz_draft2_family_twins_9",
+    "type": "choose_translation",
+    "question": "twins",
+    "correct": "twins",
+    "options": [
+      "cloudy",
+      "twins",
+      "soft",
+      "soil"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "draft2_family_twins_9"
+  },
+  {
+    "id": "quiz_family",
+    "type": "choose_translation",
+    "question": "family",
+    "correct": "үй-бүлө",
+    "options": [
+      "phone call",
+      "үй-бүлө",
+      "Рахмат",
+      "to return"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family"
+  },
+  {
+    "id": "quiz_family_brother",
+    "type": "choose_translation",
+    "question": "elder brother",
+    "correct": "Агам",
+    "options": [
+      "Агам",
+      "ugly",
+      "sunrise",
+      "to carry"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family_brother"
+  },
+  {
+    "id": "quiz_family_child",
+    "type": "choose_translation",
+    "question": "child",
+    "correct": "Бала",
+    "options": [
+      "to prepare",
+      "cough",
+      "butterfly",
+      "Бала"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family_child"
+  },
+  {
+    "id": "quiz_family_father",
+    "type": "choose_translation",
+    "question": "father",
+    "correct": "Атам",
+    "options": [
+      "to rest",
+      "Мышык",
+      "Атам",
+      "gratitude"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family_father"
+  },
+  {
+    "id": "quiz_family_grandma",
+    "type": "choose_translation",
+    "question": "grandmother",
+    "correct": "Чоң апа",
+    "options": [
+      "sugar",
+      "sleep",
+      "sharp",
+      "Чоң апа"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family_grandma"
+  },
+  {
+    "id": "quiz_family_mother",
+    "type": "choose_translation",
+    "question": "mother",
+    "correct": "Апам",
+    "options": [
+      "Агам",
+      "to know",
+      "Чай",
+      "Апам"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family_mother"
+  },
+  {
+    "id": "quiz_family_sister",
+    "type": "choose_translation",
+    "question": "sister",
+    "correct": "Карындашым",
+    "options": [
+      "Карындашым",
+      "Абамайдан",
+      "leaf",
+      "sky"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family_sister"
+  },
+  {
+    "id": "quiz_bread",
+    "type": "choose_translation",
+    "question": "bread",
+    "correct": "нан",
+    "options": [
+      "нан",
+      "aunt",
+      "good",
+      "potato"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "bread"
+  },
+  {
+    "id": "quiz_draft_food_breakfast_15",
+    "type": "choose_translation",
+    "question": "breakfast",
+    "correct": "breakfast",
+    "options": [
+      "budget",
+      "pasta",
+      "breakfast",
+      "sand"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_breakfast_15"
+  },
+  {
+    "id": "quiz_draft_food_butter_3",
+    "type": "choose_translation",
+    "question": "butter",
+    "correct": "butter",
+    "options": [
+      "root",
+      "bee",
+      "butter",
+      "ocean"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_butter_3"
+  },
+  {
+    "id": "quiz_draft_food_carrot_10",
+    "type": "choose_translation",
+    "question": "carrot",
+    "correct": "carrot",
+    "options": [
+      "carrot",
+      "to learn",
+      "center",
+      "cold front"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_carrot_10"
+  },
+  {
+    "id": "quiz_draft_food_cheese_13",
+    "type": "choose_translation",
+    "question": "cheese",
+    "correct": "cheese",
+    "options": [
+      "cheese",
+      "monsoon",
+      "worry",
+      "country"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_cheese_13"
+  },
+  {
+    "id": "quiz_draft_food_chicken_meat_14",
+    "type": "choose_translation",
+    "question": "chicken meat",
+    "correct": "chicken meat",
+    "options": [
+      "shame",
+      "board",
+      "chicken meat",
+      "house"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_chicken_meat_14"
+  },
+  {
+    "id": "quiz_draft_food_cucumber_11",
+    "type": "choose_translation",
+    "question": "cucumber",
+    "correct": "cucumber",
+    "options": [
+      "toddler",
+      "street",
+      "Жок",
+      "cucumber"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_cucumber_11"
+  },
+  {
+    "id": "quiz_draft_food_dinner_17",
+    "type": "choose_translation",
+    "question": "dinner",
+    "correct": "dinner",
+    "options": [
+      "sad",
+      "house",
+      "turkey",
+      "dinner"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_dinner_17"
+  },
+  {
+    "id": "quiz_draft_food_egg_12",
+    "type": "choose_translation",
+    "question": "egg",
+    "correct": "egg",
+    "options": [
+      "route",
+      "light",
+      "camel",
+      "egg"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_egg_12"
+  },
+  {
+    "id": "quiz_draft_food_kitchen_18",
+    "type": "choose_translation",
+    "question": "kitchen",
+    "correct": "kitchen",
+    "options": [
+      "chapter",
+      "green",
+      "chicken",
+      "kitchen"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_kitchen_18"
+  },
+  {
+    "id": "quiz_draft_food_lunch_16",
+    "type": "choose_translation",
+    "question": "lunch",
+    "correct": "lunch",
+    "options": [
+      "lunch",
+      "hostel",
+      "tears",
+      "room"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_lunch_16"
+  },
+  {
+    "id": "quiz_draft_food_milk_2",
+    "type": "choose_translation",
+    "question": "milk",
+    "correct": "milk",
+    "options": [
+      "overtime",
+      "zebra",
+      "milk",
+      "to become"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_milk_2"
+  },
+  {
+    "id": "quiz_draft_food_onion_8",
+    "type": "choose_translation",
+    "question": "onion",
+    "correct": "onion",
+    "options": [
+      "month",
+      "to call",
+      "onion",
+      "parents"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_onion_8"
+  },
+  {
+    "id": "quiz_draft_food_pepper_6",
+    "type": "choose_translation",
+    "question": "pepper",
+    "correct": "pepper",
+    "options": [
+      "toddler",
+      "pepper",
+      "honey",
+      "Бала"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_pepper_6"
+  },
+  {
+    "id": "quiz_draft_food_potato_7",
+    "type": "choose_translation",
+    "question": "potato",
+    "correct": "potato",
+    "options": [
+      "breeze",
+      "grass",
+      "pepper",
+      "potato"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_potato_7"
+  },
+  {
+    "id": "quiz_draft_food_rice_1",
+    "type": "choose_translation",
+    "question": "rice",
+    "correct": "rice",
+    "options": [
+      "rice",
+      "Апам",
+      "crow",
+      "injury"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_rice_1"
+  },
+  {
+    "id": "quiz_draft_food_salt_4",
+    "type": "choose_translation",
+    "question": "salt",
+    "correct": "salt",
+    "options": [
+      "salt",
+      "egg",
+      "lamb",
+      "porridge"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_salt_4"
+  },
+  {
+    "id": "quiz_draft_food_sugar_5",
+    "type": "choose_translation",
+    "question": "sugar",
+    "correct": "sugar",
+    "options": [
+      "email",
+      "wedding",
+      "sugar",
+      "fish"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_sugar_5"
+  },
+  {
+    "id": "quiz_draft_food_tomato_9",
+    "type": "choose_translation",
+    "question": "tomato",
+    "correct": "tomato",
+    "options": [
+      "hostel",
+      "goodbye",
+      "to come",
+      "tomato"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft_food_tomato_9"
+  },
+  {
+    "id": "quiz_draft2_food_banana_1",
+    "type": "choose_translation",
+    "question": "banana",
+    "correct": "banana",
+    "options": [
+      "stone",
+      "banana",
+      "breakfast",
+      "maybe"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_banana_1"
+  },
+  {
+    "id": "quiz_draft2_food_biscuit_13",
+    "type": "choose_translation",
+    "question": "biscuit",
+    "correct": "biscuit",
+    "options": [
+      "storm",
+      "egg",
+      "pressure",
+      "biscuit"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_biscuit_13"
+  },
+  {
+    "id": "quiz_draft2_food_cake_14",
+    "type": "choose_translation",
+    "question": "cake",
+    "correct": "cake",
+    "options": [
+      "distance",
+      "cake",
+      "үй-бүлө",
+      "island"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_cake_14"
+  },
+  {
+    "id": "quiz_draft2_food_grape_3",
+    "type": "choose_translation",
+    "question": "grape",
+    "correct": "grape",
+    "options": [
+      "grape",
+      "medicine",
+      "knowledge",
+      "ship"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_grape_3"
+  },
+  {
+    "id": "quiz_draft2_food_honey_5",
+    "type": "choose_translation",
+    "question": "honey",
+    "correct": "honey",
+    "options": [
+      "parents",
+      "honey",
+      "notebook",
+      "Ат"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_honey_5"
+  },
+  {
+    "id": "quiz_draft2_food_juice_15",
+    "type": "choose_translation",
+    "question": "juice",
+    "correct": "juice",
+    "options": [
+      "ship",
+      "sister-in-law",
+      "squirrel",
+      "juice"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_juice_15"
+  },
+  {
+    "id": "quiz_draft2_food_noodles_9",
+    "type": "choose_translation",
+    "question": "noodles",
+    "correct": "noodles",
+    "options": [
+      "toddler",
+      "maybe",
+      "breakfast",
+      "noodles"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_noodles_9"
+  },
+  {
+    "id": "quiz_draft2_food_orange_2",
+    "type": "choose_translation",
+    "question": "orange",
+    "correct": "orange",
+    "options": [
+      "first aid",
+      "baby",
+      "orange",
+      "sugar"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_orange_2"
+  },
+  {
+    "id": "quiz_draft2_food_pasta_8",
+    "type": "choose_translation",
+    "question": "pasta",
+    "correct": "pasta",
+    "options": [
+      "кичине",
+      "sister-in-law",
+      "to write",
+      "pasta"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_pasta_8"
+  },
+  {
+    "id": "quiz_draft2_food_porridge_7",
+    "type": "choose_translation",
+    "question": "porridge",
+    "correct": "porridge",
+    "options": [
+      "Атам",
+      "tram",
+      "porridge",
+      "to begin"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_porridge_7"
+  },
+  {
+    "id": "quiz_draft2_food_salad_11",
+    "type": "choose_translation",
+    "question": "salad",
+    "correct": "salad",
+    "options": [
+      "salad",
+      "wedding",
+      "drought",
+      "white"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_salad_11"
+  },
+  {
+    "id": "quiz_draft2_food_sauce_12",
+    "type": "choose_translation",
+    "question": "sauce",
+    "correct": "sauce",
+    "options": [
+      "sauce",
+      "shame",
+      "zebra",
+      "earth"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_sauce_12"
+  },
+  {
+    "id": "quiz_draft2_food_sausage_10",
+    "type": "choose_translation",
+    "question": "sausage",
+    "correct": "sausage",
+    "options": [
+      "кыска",
+      "sausage",
+      "guidebook",
+      "teenager"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_sausage_10"
+  },
+  {
+    "id": "quiz_draft2_food_strawberry_4",
+    "type": "choose_translation",
+    "question": "strawberry",
+    "correct": "strawberry",
+    "options": [
+      "checkpoint",
+      "strawberry",
+      "Жок",
+      "dinner"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_strawberry_4"
+  },
+  {
+    "id": "quiz_draft2_food_yogurt_6",
+    "type": "choose_translation",
+    "question": "yogurt",
+    "correct": "yogurt",
+    "options": [
+      "grass",
+      "yogurt",
+      "to return",
+      "degree"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "draft2_food_yogurt_6"
+  },
+  {
+    "id": "quiz_food_apple",
+    "type": "choose_translation",
+    "question": "apple",
+    "correct": "Алма",
+    "options": [
+      "black",
+      "giraffe",
+      "Алма",
+      "room"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "food_apple"
+  },
+  {
+    "id": "quiz_food_bread",
+    "type": "choose_translation",
+    "question": "bread",
+    "correct": "Нан",
+    "options": [
+      "Көл",
+      "contract",
+      "Нан",
+      "to sleep"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "food_bread"
+  },
+  {
+    "id": "quiz_food_meat",
+    "type": "choose_translation",
+    "question": "meat",
+    "correct": "Эт",
+    "options": [
+      "door",
+      "Эт",
+      "border",
+      "тез"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "food_meat"
+  },
+  {
+    "id": "quiz_food_soup",
+    "type": "choose_translation",
+    "question": "soup",
+    "correct": "Шорпо",
+    "options": [
+      "to open",
+      "mild",
+      "evening",
+      "Шорпо"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "food_soup"
+  },
+  {
+    "id": "quiz_food_tea",
+    "type": "choose_translation",
+    "question": "tea",
+    "correct": "Чай",
+    "options": [
+      "loneliness",
+      "office",
+      "potato",
+      "Чай"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "food_tea"
+  },
+  {
+    "id": "quiz_food_water",
+    "type": "choose_translation",
+    "question": "water",
+    "correct": "Суу",
+    "options": [
+      "calculator",
+      "contract",
+      "to teach",
+      "Суу"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "food_water"
+  },
+  {
+    "id": "quiz_draft_health_blood_10",
+    "type": "choose_translation",
+    "question": "blood",
+    "correct": "blood",
+    "options": [
+      "quiet",
+      "Бүркүт",
+      "blood",
+      "direction"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_blood_10"
+  },
+  {
+    "id": "quiz_draft_health_clinic_4",
+    "type": "choose_translation",
+    "question": "clinic",
+    "correct": "clinic",
+    "options": [
+      "cake",
+      "border",
+      "clinic",
+      "жаш"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_clinic_4"
+  },
+  {
+    "id": "quiz_draft_health_cough_9",
+    "type": "choose_translation",
+    "question": "cough",
+    "correct": "cough",
+    "options": [
+      "cough",
+      "dirty",
+      "sky",
+      "professor"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_cough_9"
+  },
+  {
+    "id": "quiz_draft_health_doctor_1",
+    "type": "choose_translation",
+    "question": "doctor",
+    "correct": "doctor",
+    "options": [
+      "doctor",
+      "knowledge",
+      "tree",
+      "waterfall"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_doctor_1"
+  },
+  {
+    "id": "quiz_draft_health_ear_15",
+    "type": "choose_translation",
+    "question": "ear",
+    "correct": "ear",
+    "options": [
+      "ear",
+      "to do",
+      "door",
+      "subway"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_ear_15"
+  },
+  {
+    "id": "quiz_draft_health_emergency_20",
+    "type": "choose_translation",
+    "question": "emergency",
+    "correct": "emergency",
+    "options": [
+      "affection",
+      "anger",
+      "sentence",
+      "emergency"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_emergency_20"
+  },
+  {
+    "id": "quiz_draft_health_exercise_17",
+    "type": "choose_translation",
+    "question": "exercise",
+    "correct": "exercise",
+    "options": [
+      "baby",
+      "important",
+      "night",
+      "exercise"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_exercise_17"
+  },
+  {
+    "id": "quiz_draft_health_eye_14",
+    "type": "choose_translation",
+    "question": "eye",
+    "correct": "eye",
+    "options": [
+      "fever",
+      "anger",
+      "season",
+      "eye"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_eye_14"
+  },
+  {
+    "id": "quiz_draft_health_fever_8",
+    "type": "choose_translation",
+    "question": "fever",
+    "correct": "fever",
+    "options": [
+      "classroom",
+      "кыска",
+      "orange",
+      "fever"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_fever_8"
+  },
+  {
+    "id": "quiz_draft_health_headache_7",
+    "type": "choose_translation",
+    "question": "headache",
+    "correct": "headache",
+    "options": [
+      "headache",
+      "daughter",
+      "snowy",
+      "dirty"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_headache_7"
+  },
+  {
+    "id": "quiz_draft_health_healthy_16",
+    "type": "choose_translation",
+    "question": "healthy",
+    "correct": "healthy",
+    "options": [
+      "healthy",
+      "family tree",
+      "ocean",
+      "strategy"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_healthy_16"
+  },
+  {
+    "id": "quiz_draft_health_heart_11",
+    "type": "choose_translation",
+    "question": "heart",
+    "correct": "heart",
+    "options": [
+      "university",
+      "summer",
+      "courage",
+      "heart"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_heart_11"
+  },
+  {
+    "id": "quiz_draft_health_hospital_3",
+    "type": "choose_translation",
+    "question": "hospital",
+    "correct": "hospital",
+    "options": [
+      "maybe",
+      "week",
+      "hospital",
+      "infection"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_hospital_3"
+  },
+  {
+    "id": "quiz_draft_health_medicine_5",
+    "type": "choose_translation",
+    "question": "medicine",
+    "correct": "medicine",
+    "options": [
+      "тез",
+      "Бала",
+      "friendship",
+      "medicine"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_medicine_5"
+  },
+  {
+    "id": "quiz_draft_health_nurse_2",
+    "type": "choose_translation",
+    "question": "nurse",
+    "correct": "nurse",
+    "options": [
+      "nurse",
+      "twins",
+      "үй-бүлө",
+      "autumn"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_nurse_2"
+  },
+  {
+    "id": "quiz_draft_health_pain_6",
+    "type": "choose_translation",
+    "question": "pain",
+    "correct": "pain",
+    "options": [
+      "pain",
+      "homework",
+      "tomato",
+      "relief"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_pain_6"
+  },
+  {
+    "id": "quiz_draft_health_sleep_19",
+    "type": "choose_translation",
+    "question": "sleep",
+    "correct": "sleep",
+    "options": [
+      "sleep",
+      "to speak",
+      "to eat",
+      "departure"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_sleep_19"
+  },
+  {
+    "id": "quiz_draft_health_stomach_12",
+    "type": "choose_translation",
+    "question": "stomach",
+    "correct": "stomach",
+    "options": [
+      "stomach",
+      "border",
+      "green",
+      "Эт"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_stomach_12"
+  },
+  {
+    "id": "quiz_draft_health_tooth_13",
+    "type": "choose_translation",
+    "question": "tooth",
+    "correct": "tooth",
+    "options": [
+      "tooth",
+      "hostel",
+      "admiration",
+      "giraffe"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_tooth_13"
+  },
+  {
+    "id": "quiz_draft_health_vitamin_18",
+    "type": "choose_translation",
+    "question": "vitamin",
+    "correct": "vitamin",
+    "options": [
+      "window",
+      "vitamin",
+      "тоо",
+      "grandfather"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft_health_vitamin_18"
+  },
+  {
+    "id": "quiz_draft2_health_allergy_1",
+    "type": "choose_translation",
+    "question": "allergy",
+    "correct": "allergy",
+    "options": [
+      "seed",
+      "hill",
+      "allergy",
+      "swan"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft2_health_allergy_1"
+  },
+  {
+    "id": "quiz_draft2_health_ambulance_9",
+    "type": "choose_translation",
+    "question": "ambulance",
+    "correct": "ambulance",
+    "options": [
+      "Апам",
+      "Алма",
+      "wife",
+      "ambulance"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft2_health_ambulance_9"
+  },
+  {
+    "id": "quiz_draft2_health_appointment_8",
+    "type": "choose_translation",
+    "question": "appointment",
+    "correct": "appointment",
+    "options": [
+      "translation",
+      "salary",
+      "kindness",
+      "appointment"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft2_health_appointment_8"
+  },
+  {
+    "id": "quiz_draft2_health_diagnosis_6",
+    "type": "choose_translation",
+    "question": "diagnosis",
+    "correct": "diagnosis",
+    "options": [
+      "deadline",
+      "diagnosis",
+      "camel",
+      "to speak"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft2_health_diagnosis_6"
+  },
+  {
+    "id": "quiz_draft2_health_first_aid_10",
+    "type": "choose_translation",
+    "question": "first aid",
+    "correct": "first aid",
+    "options": [
+      "schedule",
+      "first aid",
+      "салам",
+      "library"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft2_health_first_aid_10"
+  },
+  {
+    "id": "quiz_draft2_health_infection_2",
+    "type": "choose_translation",
+    "question": "infection",
+    "correct": "infection",
+    "options": [
+      "branch",
+      "courage",
+      "breeze",
+      "infection"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft2_health_infection_2"
+  },
+  {
+    "id": "quiz_draft2_health_injury_3",
+    "type": "choose_translation",
+    "question": "injury",
+    "correct": "injury",
+    "options": [
+      "medicine",
+      "Шамал",
+      "strawberry",
+      "injury"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft2_health_injury_3"
+  },
+  {
+    "id": "quiz_draft2_health_recovery_4",
+    "type": "choose_translation",
+    "question": "recovery",
+    "correct": "recovery",
+    "options": [
+      "stress",
+      "pen",
+      "to think",
+      "recovery"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft2_health_recovery_4"
+  },
+  {
+    "id": "quiz_draft2_health_therapy_5",
+    "type": "choose_translation",
+    "question": "therapy",
+    "correct": "therapy",
+    "options": [
+      "autumn",
+      "eraser",
+      "meeting",
+      "therapy"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft2_health_therapy_5"
+  },
+  {
+    "id": "quiz_draft2_health_treatment_7",
+    "type": "choose_translation",
+    "question": "treatment",
+    "correct": "treatment",
+    "options": [
+      "to wait",
+      "treatment",
+      "course",
+      "cold front"
+    ],
+    "level": 1,
+    "category": "health",
+    "wordId": "draft2_health_treatment_7"
+  },
+  {
+    "id": "quiz_draft_nature_cloud_13",
+    "type": "choose_translation",
+    "question": "cloud",
+    "correct": "cloud",
+    "options": [
+      "cloud",
+      "elephant",
+      "friendship",
+      "fish"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_cloud_13"
+  },
+  {
+    "id": "quiz_draft_nature_earth_9",
+    "type": "choose_translation",
+    "question": "earth",
+    "correct": "earth",
+    "options": [
+      "journey",
+      "wife",
+      "earth",
+      "seed"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_earth_9"
+  },
+  {
+    "id": "quiz_draft_nature_fire_10",
+    "type": "choose_translation",
+    "question": "fire",
+    "correct": "fire",
+    "options": [
+      "sunlight",
+      "chilly",
+      "lesson",
+      "fire"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_fire_10"
+  },
+  {
+    "id": "quiz_draft_nature_flower_3",
+    "type": "choose_translation",
+    "question": "flower",
+    "correct": "flower",
+    "options": [
+      "grass",
+      "to teach",
+      "butterfly",
+      "flower"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_flower_3"
+  },
+  {
+    "id": "quiz_draft_nature_forest_1",
+    "type": "choose_translation",
+    "question": "forest",
+    "correct": "forest",
+    "options": [
+      "night",
+      "forest",
+      "grape",
+      "eye"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_forest_1"
+  },
+  {
+    "id": "quiz_draft_nature_grass_4",
+    "type": "choose_translation",
+    "question": "grass",
+    "correct": "grass",
+    "options": [
+      "grass",
+      "soil",
+      "chicken",
+      "deadline"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_grass_4"
+  },
+  {
+    "id": "quiz_draft_nature_hill_6",
+    "type": "choose_translation",
+    "question": "hill",
+    "correct": "hill",
+    "options": [
+      "hotel",
+      "hill",
+      "hour",
+      "white"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_hill_6"
+  },
+  {
+    "id": "quiz_draft_nature_ice_11",
+    "type": "choose_translation",
+    "question": "ice",
+    "correct": "ice",
+    "options": [
+      "ice",
+      "professor",
+      "course",
+      "emergency"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_ice_11"
+  },
+  {
+    "id": "quiz_draft_nature_rain_12",
+    "type": "choose_translation",
+    "question": "rain",
+    "correct": "rain",
+    "options": [
+      "flight",
+      "to answer",
+      "rain",
+      "professor"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_rain_12"
+  },
+  {
+    "id": "quiz_draft_nature_season_15",
+    "type": "choose_translation",
+    "question": "season",
+    "correct": "season",
+    "options": [
+      "Суранам",
+      "sunrise",
+      "season",
+      "later"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_season_15"
+  },
+  {
+    "id": "quiz_draft_nature_sky_8",
+    "type": "choose_translation",
+    "question": "sky",
+    "correct": "sky",
+    "options": [
+      "therapy",
+      "sky",
+      "university",
+      "exercise"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_sky_8"
+  },
+  {
+    "id": "quiz_draft_nature_stone_5",
+    "type": "choose_translation",
+    "question": "stone",
+    "correct": "stone",
+    "options": [
+      "relief",
+      "stone",
+      "to understand",
+      "tomato"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_stone_5"
+  },
+  {
+    "id": "quiz_draft_nature_storm_14",
+    "type": "choose_translation",
+    "question": "storm",
+    "correct": "storm",
+    "options": [
+      "island",
+      "storm",
+      "journey",
+      "shame"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_storm_14"
+  },
+  {
+    "id": "quiz_draft_nature_tree_2",
+    "type": "choose_translation",
+    "question": "tree",
+    "correct": "tree",
+    "options": [
+      "tree",
+      "weak",
+      "cloudy",
+      "дос"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_tree_2"
+  },
+  {
+    "id": "quiz_draft_nature_valley_7",
+    "type": "choose_translation",
+    "question": "valley",
+    "correct": "valley",
+    "options": [
+      "thunder",
+      "valley",
+      "classroom",
+      "customs"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft_nature_valley_7"
+  },
+  {
+    "id": "quiz_draft2_nature_branch_12",
+    "type": "choose_translation",
+    "question": "branch",
+    "correct": "branch",
+    "options": [
+      "branch",
+      "ат",
+      "жеңил",
+      "soft"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_branch_12"
+  },
+  {
+    "id": "quiz_draft2_nature_cave_6",
+    "type": "choose_translation",
+    "question": "cave",
+    "correct": "cave",
+    "options": [
+      "hope",
+      "to do",
+      "cave",
+      "motorcycle"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_cave_6"
+  },
+  {
+    "id": "quiz_draft2_nature_cliff_7",
+    "type": "choose_translation",
+    "question": "cliff",
+    "correct": "cliff",
+    "options": [
+      "cliff",
+      "cough",
+      "direction",
+      "door"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_cliff_7"
+  },
+  {
+    "id": "quiz_draft2_nature_desert_1",
+    "type": "choose_translation",
+    "question": "desert",
+    "correct": "desert",
+    "options": [
+      "desert",
+      "to travel",
+      "leopard",
+      "to learn"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_desert_1"
+  },
+  {
+    "id": "quiz_draft2_nature_island_3",
+    "type": "choose_translation",
+    "question": "island",
+    "correct": "island",
+    "options": [
+      "warm",
+      "island",
+      "anger",
+      "deadline"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_island_3"
+  },
+  {
+    "id": "quiz_draft2_nature_leaf_11",
+    "type": "choose_translation",
+    "question": "leaf",
+    "correct": "leaf",
+    "options": [
+      "leaf",
+      "family tree",
+      "comfort",
+      "welcome"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_leaf_11"
+  },
+  {
+    "id": "quiz_draft2_nature_meadow_5",
+    "type": "choose_translation",
+    "question": "meadow",
+    "correct": "meadow",
+    "options": [
+      "Шорпо",
+      "kitchen",
+      "heatwave",
+      "meadow"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_meadow_5"
+  },
+  {
+    "id": "quiz_draft2_nature_moon_15",
+    "type": "choose_translation",
+    "question": "moon",
+    "correct": "moon",
+    "options": [
+      "moon",
+      "teenager",
+      "kitten",
+      "rice"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_moon_15"
+  },
+  {
+    "id": "quiz_draft2_nature_ocean_2",
+    "type": "choose_translation",
+    "question": "ocean",
+    "correct": "ocean",
+    "options": [
+      "month",
+      "ocean",
+      "worry",
+      "flight"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_ocean_2"
+  },
+  {
+    "id": "quiz_draft2_nature_root_13",
+    "type": "choose_translation",
+    "question": "root",
+    "correct": "root",
+    "options": [
+      "answer",
+      "schedule",
+      "to eat",
+      "root"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_root_13"
+  },
+  {
+    "id": "quiz_draft2_nature_sand_9",
+    "type": "choose_translation",
+    "question": "sand",
+    "correct": "sand",
+    "options": [
+      "medicine",
+      "Ооба",
+      "aunt",
+      "sand"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_sand_9"
+  },
+  {
+    "id": "quiz_draft2_nature_seed_14",
+    "type": "choose_translation",
+    "question": "seed",
+    "correct": "seed",
+    "options": [
+      "seed",
+      "door",
+      "эски",
+      "meadow"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_seed_14"
+  },
+  {
+    "id": "quiz_draft2_nature_shadow_18",
+    "type": "choose_translation",
+    "question": "shadow",
+    "correct": "shadow",
+    "options": [
+      "to help",
+      "shadow",
+      "to do",
+      "infection"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_shadow_18"
+  },
+  {
+    "id": "quiz_draft2_nature_soil_10",
+    "type": "choose_translation",
+    "question": "soil",
+    "correct": "soil",
+    "options": [
+      "sausage",
+      "Дарыя",
+      "climate",
+      "soil"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_soil_10"
+  },
+  {
+    "id": "quiz_draft2_nature_star_16",
+    "type": "choose_translation",
+    "question": "star",
+    "correct": "star",
+    "options": [
+      "treatment",
+      "star",
+      "ice",
+      "китеп"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_star_16"
+  },
+  {
+    "id": "quiz_draft2_nature_sunlight_17",
+    "type": "choose_translation",
+    "question": "sunlight",
+    "correct": "sunlight",
+    "options": [
+      "colleague",
+      "vitamin",
+      "mouse",
+      "sunlight"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_sunlight_17"
+  },
+  {
+    "id": "quiz_draft2_nature_volcano_8",
+    "type": "choose_translation",
+    "question": "volcano",
+    "correct": "volcano",
+    "options": [
+      "күн",
+      "узун",
+      "volcano",
+      "temperature"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_volcano_8"
+  },
+  {
+    "id": "quiz_draft2_nature_waterfall_4",
+    "type": "choose_translation",
+    "question": "waterfall",
+    "correct": "waterfall",
+    "options": [
+      "calf",
+      "дос",
+      "donkey",
+      "waterfall"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "draft2_nature_waterfall_4"
+  },
+  {
+    "id": "quiz_mountain",
+    "type": "choose_translation",
+    "question": "mountain",
+    "correct": "тоо",
+    "options": [
+      "тоо",
+      "lunch",
+      "adult",
+      "strong"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "mountain"
+  },
+  {
+    "id": "quiz_nature_lake",
+    "type": "choose_translation",
+    "question": "lake",
+    "correct": "Көл",
+    "options": [
+      "Көл",
+      "beautiful",
+      "dinner",
+      "pressure"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "nature_lake"
+  },
+  {
+    "id": "quiz_nature_mountain",
+    "type": "choose_translation",
+    "question": "mountain",
+    "correct": "Тоолор",
+    "options": [
+      "healthy",
+      "quiet",
+      "Тоолор",
+      "Ооба"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "nature_mountain"
+  },
+  {
+    "id": "quiz_nature_river",
+    "type": "choose_translation",
+    "question": "river",
+    "correct": "Дарыя",
+    "options": [
+      "wife",
+      "home",
+      "Дарыя",
+      "beautiful"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "nature_river"
+  },
+  {
+    "id": "quiz_nature_snow",
+    "type": "choose_translation",
+    "question": "snow",
+    "correct": "Кар",
+    "options": [
+      "cucumber",
+      "Кар",
+      "to see",
+      "task"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "nature_snow"
+  },
+  {
+    "id": "quiz_nature_sun",
+    "type": "choose_translation",
+    "question": "sun",
+    "correct": "Күн",
+    "options": [
+      "passenger",
+      "checkpoint",
+      "Күн",
+      "sausage"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "nature_sun"
+  },
+  {
+    "id": "quiz_nature_wind",
+    "type": "choose_translation",
+    "question": "wind",
+    "correct": "Шамал",
+    "options": [
+      "Шамал",
+      "library",
+      "sunrise",
+      "to wait"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "nature_wind"
+  },
+  {
+    "id": "quiz_draft_travel_border_11",
+    "type": "choose_translation",
+    "question": "border",
+    "correct": "border",
+    "options": [
+      "border",
+      "китеп",
+      "mouse",
+      "blood"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_border_11"
+  },
+  {
+    "id": "quiz_draft_travel_direction_14",
+    "type": "choose_translation",
+    "question": "direction",
+    "correct": "direction",
+    "options": [
+      "comfort",
+      "compassion",
+      "sister-in-law",
+      "direction"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_direction_14"
+  },
+  {
+    "id": "quiz_draft_travel_distance_13",
+    "type": "choose_translation",
+    "question": "distance",
+    "correct": "distance",
+    "options": [
+      "household",
+      "distance",
+      "twins",
+      "autumn"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_distance_13"
+  },
+  {
+    "id": "quiz_draft_travel_driver_4",
+    "type": "choose_translation",
+    "question": "driver",
+    "correct": "driver",
+    "options": [
+      "driver",
+      "stepfather",
+      "Билет",
+      "fog"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_driver_4"
+  },
+  {
+    "id": "quiz_draft_travel_hotel_7",
+    "type": "choose_translation",
+    "question": "hotel",
+    "correct": "hotel",
+    "options": [
+      "degree",
+      "hotel",
+      "kitten",
+      "жеңил"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_hotel_7"
+  },
+  {
+    "id": "quiz_draft_travel_luggage_6",
+    "type": "choose_translation",
+    "question": "luggage",
+    "correct": "luggage",
+    "options": [
+      "cliff",
+      "name",
+      "luggage",
+      "distance"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_luggage_6"
+  },
+  {
+    "id": "quiz_draft_travel_map_1",
+    "type": "choose_translation",
+    "question": "map",
+    "correct": "map",
+    "options": [
+      "exam",
+      "blue",
+      "interview",
+      "map"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_map_1"
+  },
+  {
+    "id": "quiz_draft_travel_passenger_5",
+    "type": "choose_translation",
+    "question": "passenger",
+    "correct": "passenger",
+    "options": [
+      "to do",
+      "sentence",
+      "subject",
+      "passenger"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_passenger_5"
+  },
+  {
+    "id": "quiz_draft_travel_passport_9",
+    "type": "choose_translation",
+    "question": "passport",
+    "correct": "passport",
+    "options": [
+      "village",
+      "grandfather",
+      "passport",
+      "butterfly"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_passport_9"
+  },
+  {
+    "id": "quiz_draft_travel_platform_3",
+    "type": "choose_translation",
+    "question": "platform",
+    "correct": "platform",
+    "options": [
+      "Рахмат",
+      "platform",
+      "student",
+      "black"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_platform_3"
+  },
+  {
+    "id": "quiz_draft_travel_reservation_8",
+    "type": "choose_translation",
+    "question": "reservation",
+    "correct": "reservation",
+    "options": [
+      "reservation",
+      "evening",
+      "schedule",
+      "teacher"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_reservation_8"
+  },
+  {
+    "id": "quiz_draft_travel_route_12",
+    "type": "choose_translation",
+    "question": "route",
+    "correct": "route",
+    "options": [
+      "pepper",
+      "right",
+      "minute",
+      "route"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_route_12"
+  },
+  {
+    "id": "quiz_draft_travel_station_2",
+    "type": "choose_translation",
+    "question": "station",
+    "correct": "station",
+    "options": [
+      "station",
+      "trust",
+      "patience",
+      "door"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_station_2"
+  },
+  {
+    "id": "quiz_draft_travel_visa_10",
+    "type": "choose_translation",
+    "question": "visa",
+    "correct": "visa",
+    "options": [
+      "crow",
+      "visa",
+      "clinic",
+      "honey"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft_travel_visa_10"
+  },
+  {
+    "id": "quiz_draft2_travel_adventure_17",
+    "type": "choose_translation",
+    "question": "adventure",
+    "correct": "adventure",
+    "options": [
+      "to go",
+      "customs",
+      "adventure",
+      "to understand"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_adventure_17"
+  },
+  {
+    "id": "quiz_draft2_travel_arrival_9",
+    "type": "choose_translation",
+    "question": "arrival",
+    "correct": "arrival",
+    "options": [
+      "to ask",
+      "to sell",
+      "arrival",
+      "uncle"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_arrival_9"
+  },
+  {
+    "id": "quiz_draft2_travel_bicycle_4",
+    "type": "choose_translation",
+    "question": "bicycle",
+    "correct": "bicycle",
+    "options": [
+      "laughter",
+      "bicycle",
+      "cucumber",
+      "Бүркүт"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_bicycle_4"
+  },
+  {
+    "id": "quiz_draft2_travel_camp_18",
+    "type": "choose_translation",
+    "question": "camp",
+    "correct": "camp",
+    "options": [
+      "fire",
+      "to drink",
+      "to teach",
+      "camp"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_camp_18"
+  },
+  {
+    "id": "quiz_draft2_travel_checkpoint_10",
+    "type": "choose_translation",
+    "question": "checkpoint",
+    "correct": "checkpoint",
+    "options": [
+      "to do",
+      "pride",
+      "Шамал",
+      "checkpoint"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_checkpoint_10"
+  },
+  {
+    "id": "quiz_draft2_travel_customs_11",
+    "type": "choose_translation",
+    "question": "customs",
+    "correct": "customs",
+    "options": [
+      "light",
+      "rooster",
+      "customs",
+      "wedding"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_customs_11"
+  },
+  {
+    "id": "quiz_draft2_travel_departure_8",
+    "type": "choose_translation",
+    "question": "departure",
+    "correct": "departure",
+    "options": [
+      "allergy",
+      "important",
+      "departure",
+      "classroom"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_departure_8"
+  },
+  {
+    "id": "quiz_draft2_travel_flight_7",
+    "type": "choose_translation",
+    "question": "flight",
+    "correct": "flight",
+    "options": [
+      "forecasting",
+      "Бала",
+      "calm",
+      "flight"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_flight_7"
+  },
+  {
+    "id": "quiz_draft2_travel_guidebook_12",
+    "type": "choose_translation",
+    "question": "guidebook",
+    "correct": "guidebook",
+    "options": [
+      "toddler",
+      "guidebook",
+      "training",
+      "sad"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_guidebook_12"
+  },
+  {
+    "id": "quiz_draft2_travel_hostel_19",
+    "type": "choose_translation",
+    "question": "hostel",
+    "correct": "hostel",
+    "options": [
+      "hostel",
+      "shadow",
+      "ship",
+      "eraser"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_hostel_19"
+  },
+  {
+    "id": "quiz_draft2_travel_journey_15",
+    "type": "choose_translation",
+    "question": "journey",
+    "correct": "journey",
+    "options": [
+      "Билет",
+      "attendance",
+      "to drink",
+      "journey"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_journey_15"
+  },
+  {
+    "id": "quiz_draft2_travel_motorcycle_5",
+    "type": "choose_translation",
+    "question": "motorcycle",
+    "correct": "motorcycle",
+    "options": [
+      "Суу",
+      "dirty",
+      "motorcycle",
+      "pressure"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_motorcycle_5"
+  },
+  {
+    "id": "quiz_draft2_travel_rental_car_20",
+    "type": "choose_translation",
+    "question": "rental car",
+    "correct": "rental car",
+    "options": [
+      "distance",
+      "lion",
+      "chapter",
+      "rental car"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_rental_car_20"
+  },
+  {
+    "id": "quiz_draft2_travel_ship_6",
+    "type": "choose_translation",
+    "question": "ship",
+    "correct": "ship",
+    "options": [
+      "answer",
+      "board",
+      "motorcycle",
+      "ship"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_ship_6"
+  },
+  {
+    "id": "quiz_draft2_travel_sightseeing_13",
+    "type": "choose_translation",
+    "question": "sightseeing",
+    "correct": "sightseeing",
+    "options": [
+      "rooster",
+      "sightseeing",
+      "yesterday",
+      "Ит"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_sightseeing_13"
+  },
+  {
+    "id": "quiz_draft2_travel_souvenir_14",
+    "type": "choose_translation",
+    "question": "souvenir",
+    "correct": "souvenir",
+    "options": [
+      "souvenir",
+      "valley",
+      "sunrise",
+      "rooster"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_souvenir_14"
+  },
+  {
+    "id": "quiz_draft2_travel_subway_2",
+    "type": "choose_translation",
+    "question": "subway",
+    "correct": "subway",
+    "options": [
+      "cloud",
+      "hill",
+      "subway",
+      "wife"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_subway_2"
+  },
+  {
+    "id": "quiz_draft2_travel_taxi_1",
+    "type": "choose_translation",
+    "question": "taxi",
+    "correct": "taxi",
+    "options": [
+      "taxi",
+      "wedding",
+      "twins",
+      "sand"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_taxi_1"
+  },
+  {
+    "id": "quiz_draft2_travel_tram_3",
+    "type": "choose_translation",
+    "question": "tram",
+    "correct": "tram",
+    "options": [
+      "tooth",
+      "Бүркүт",
+      "desert",
+      "tram"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_tram_3"
+  },
+  {
+    "id": "quiz_draft2_travel_trip_16",
+    "type": "choose_translation",
+    "question": "trip",
+    "correct": "trip",
+    "options": [
+      "grape",
+      "lightning",
+      "right",
+      "trip"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "draft2_travel_trip_16"
+  },
+  {
+    "id": "quiz_travel_airport",
+    "type": "choose_translation",
+    "question": "airport",
+    "correct": "Абамайдан",
+    "options": [
+      "squirrel",
+      "Абамайдан",
+      "gratitude",
+      "tears"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "travel_airport"
+  },
+  {
+    "id": "quiz_travel_bus",
+    "type": "choose_translation",
+    "question": "bus",
+    "correct": "Автобус",
+    "options": [
+      "Автобус",
+      "quiet",
+      "pressure",
+      "rain"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "travel_bus"
+  },
+  {
+    "id": "quiz_travel_city",
+    "type": "choose_translation",
+    "question": "city",
+    "correct": "Шаар",
+    "options": [
+      "lamb",
+      "carrot",
+      "Шаар",
+      "soil"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "travel_city"
+  },
+  {
+    "id": "quiz_travel_road",
+    "type": "choose_translation",
+    "question": "road",
+    "correct": "Жол",
+    "options": [
+      "kitchen",
+      "Кутман таң",
+      "Жол",
+      "eraser"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "travel_road"
+  },
+  {
+    "id": "quiz_travel_ticket",
+    "type": "choose_translation",
+    "question": "ticket",
+    "correct": "Билет",
+    "options": [
+      "Билет",
+      "injury",
+      "driver",
+      "seed"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "travel_ticket"
+  },
+  {
+    "id": "quiz_travel_train",
+    "type": "choose_translation",
+    "question": "train",
+    "correct": "Поезд",
+    "options": [
+      "кыска",
+      "flight",
+      "bicycle",
+      "Поезд"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "travel_train"
+  },
+  {
+    "id": "quiz_draft_verbs_to_answer_23",
+    "type": "choose_translation",
+    "question": "to answer",
+    "correct": "to answer",
+    "options": [
+      "beautiful",
+      "to answer",
+      "waterfall",
+      "brother-in-law"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_answer_23"
+  },
+  {
+    "id": "quiz_draft_verbs_to_ask_22",
+    "type": "choose_translation",
+    "question": "to ask",
+    "correct": "to ask",
+    "options": [
+      "room",
+      "to ask",
+      "to do",
+      "snowfall"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_ask_22"
+  },
+  {
+    "id": "quiz_draft_verbs_to_be_1",
+    "type": "choose_translation",
+    "question": "to be",
+    "correct": "to be",
+    "options": [
+      "banana",
+      "to do",
+      "affection",
+      "to be"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_be_1"
+  },
+  {
+    "id": "quiz_draft_verbs_to_buy_26",
+    "type": "choose_translation",
+    "question": "to buy",
+    "correct": "to buy",
+    "options": [
+      "to buy",
+      "exam",
+      "жеңил",
+      "hope"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_buy_26"
+  },
+  {
+    "id": "quiz_draft_verbs_to_call_28",
+    "type": "choose_translation",
+    "question": "to call",
+    "correct": "to call",
+    "options": [
+      "Жок",
+      "Шаар",
+      "cow",
+      "to call"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_call_28"
+  },
+  {
+    "id": "quiz_draft_verbs_to_close_25",
+    "type": "choose_translation",
+    "question": "to close",
+    "correct": "to close",
+    "options": [
+      "tears",
+      "to close",
+      "sightseeing",
+      "fox"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_close_25"
+  },
+  {
+    "id": "quiz_draft_verbs_to_come_5",
+    "type": "choose_translation",
+    "question": "to come",
+    "correct": "to come",
+    "options": [
+      "stomach",
+      "hope",
+      "cousin",
+      "to come"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_come_5"
+  },
+  {
+    "id": "quiz_draft_verbs_to_do_3",
+    "type": "choose_translation",
+    "question": "to do",
+    "correct": "to do",
+    "options": [
+      "to do",
+      "family tree",
+      "exercise",
+      "ат"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_do_3"
+  },
+  {
+    "id": "quiz_draft_verbs_to_drink_17",
+    "type": "choose_translation",
+    "question": "to drink",
+    "correct": "to drink",
+    "options": [
+      "injury",
+      "sharp",
+      "strong",
+      "to drink"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_drink_17"
+  },
+  {
+    "id": "quiz_draft_verbs_to_eat_16",
+    "type": "choose_translation",
+    "question": "to eat",
+    "correct": "to eat",
+    "options": [
+      "right",
+      "Дарыя",
+      "heart",
+      "to eat"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_eat_16"
+  },
+  {
+    "id": "quiz_draft_verbs_to_go_4",
+    "type": "choose_translation",
+    "question": "to go",
+    "correct": "to go",
+    "options": [
+      "afternoon",
+      "tree",
+      "duck",
+      "to go"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_go_4"
+  },
+  {
+    "id": "quiz_draft_verbs_to_have_2",
+    "type": "choose_translation",
+    "question": "to have",
+    "correct": "to have",
+    "options": [
+      "to wait",
+      "windy",
+      "to have",
+      "Атам"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_have_2"
+  },
+  {
+    "id": "quiz_draft_verbs_to_hear_7",
+    "type": "choose_translation",
+    "question": "to hear",
+    "correct": "to hear",
+    "options": [
+      "vitamin",
+      "week",
+      "Чоң апа",
+      "to hear"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_hear_7"
+  },
+  {
+    "id": "quiz_draft_verbs_to_help_29",
+    "type": "choose_translation",
+    "question": "to help",
+    "correct": "to help",
+    "options": [
+      "to help",
+      "rain",
+      "tooth",
+      "gratitude"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_help_29"
+  },
+  {
+    "id": "quiz_draft_verbs_to_know_20",
+    "type": "choose_translation",
+    "question": "to know",
+    "correct": "to know",
+    "options": [
+      "to know",
+      "arrival",
+      "month",
+      "Чай"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_know_20"
+  },
+  {
+    "id": "quiz_draft_verbs_to_learn_12",
+    "type": "choose_translation",
+    "question": "to learn",
+    "correct": "to learn",
+    "options": [
+      "paragraph",
+      "to learn",
+      "direction",
+      "answer"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_learn_12"
+  },
+  {
+    "id": "quiz_draft_verbs_to_listen_11",
+    "type": "choose_translation",
+    "question": "to listen",
+    "correct": "to listen",
+    "options": [
+      "to listen",
+      "adventure",
+      "night",
+      "employee"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_listen_11"
+  },
+  {
+    "id": "quiz_draft_verbs_to_open_24",
+    "type": "choose_translation",
+    "question": "to open",
+    "correct": "to open",
+    "options": [
+      "infection",
+      "to begin",
+      "to go",
+      "to open"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_open_24"
+  },
+  {
+    "id": "quiz_draft_verbs_to_read_8",
+    "type": "choose_translation",
+    "question": "to read",
+    "correct": "to read",
+    "options": [
+      "warm",
+      "baby",
+      "salary",
+      "to read"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_read_8"
+  },
+  {
+    "id": "quiz_draft_verbs_to_rest_15",
+    "type": "choose_translation",
+    "question": "to rest",
+    "correct": "to rest",
+    "options": [
+      "жай",
+      "today",
+      "to rest",
+      "house"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_rest_15"
+  },
+  {
+    "id": "quiz_draft_verbs_to_see_6",
+    "type": "choose_translation",
+    "question": "to see",
+    "correct": "to see",
+    "options": [
+      "deer",
+      "to see",
+      "mouse",
+      "minute"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_see_6"
+  },
+  {
+    "id": "quiz_draft_verbs_to_sell_27",
+    "type": "choose_translation",
+    "question": "to sell",
+    "correct": "to sell",
+    "options": [
+      "temperature",
+      "to sell",
+      "twins",
+      "to learn"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_sell_27"
+  },
+  {
+    "id": "quiz_draft_verbs_to_sleep_18",
+    "type": "choose_translation",
+    "question": "to sleep",
+    "correct": "to sleep",
+    "options": [
+      "calculator",
+      "snowy",
+      "китеп",
+      "to sleep"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_sleep_18"
+  },
+  {
+    "id": "quiz_draft_verbs_to_speak_10",
+    "type": "choose_translation",
+    "question": "to speak",
+    "correct": "to speak",
+    "options": [
+      "to speak",
+      "question",
+      "professor",
+      "border"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_speak_10"
+  },
+  {
+    "id": "quiz_draft_verbs_to_teach_13",
+    "type": "choose_translation",
+    "question": "to teach",
+    "correct": "to teach",
+    "options": [
+      "red",
+      "to teach",
+      "тез",
+      "task"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_teach_13"
+  },
+  {
+    "id": "quiz_draft_verbs_to_think_19",
+    "type": "choose_translation",
+    "question": "to think",
+    "correct": "to think",
+    "options": [
+      "to answer",
+      "season",
+      "husband",
+      "to think"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_think_19"
+  },
+  {
+    "id": "quiz_draft_verbs_to_understand_21",
+    "type": "choose_translation",
+    "question": "to understand",
+    "correct": "to understand",
+    "options": [
+      "strong",
+      "to understand",
+      "rainy",
+      "street"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_understand_21"
+  },
+  {
+    "id": "quiz_draft_verbs_to_wait_30",
+    "type": "choose_translation",
+    "question": "to wait",
+    "correct": "to wait",
+    "options": [
+      "жаңы",
+      "to wait",
+      "squirrel",
+      "cheese"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_wait_30"
+  },
+  {
+    "id": "quiz_draft_verbs_to_work_14",
+    "type": "choose_translation",
+    "question": "to work",
+    "correct": "to work",
+    "options": [
+      "courage",
+      "to work",
+      "good",
+      "Поезд"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_work_14"
+  },
+  {
+    "id": "quiz_draft_verbs_to_write_9",
+    "type": "choose_translation",
+    "question": "to write",
+    "correct": "to write",
+    "options": [
+      "year",
+      "to write",
+      "Чай",
+      "to help"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft_verbs_to_write_9"
+  },
+  {
+    "id": "quiz_draft2_verbs_to_become_1",
+    "type": "choose_translation",
+    "question": "to become",
+    "correct": "to become",
+    "options": [
+      "жаңы",
+      "cough",
+      "eraser",
+      "to become"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft2_verbs_to_become_1"
+  },
+  {
+    "id": "quiz_draft2_verbs_to_begin_2",
+    "type": "choose_translation",
+    "question": "to begin",
+    "correct": "to begin",
+    "options": [
+      "to begin",
+      "root",
+      "household",
+      "patience"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft2_verbs_to_begin_2"
+  },
+  {
+    "id": "quiz_draft2_verbs_to_build_6",
+    "type": "choose_translation",
+    "question": "to build",
+    "correct": "to build",
+    "options": [
+      "pepper",
+      "to build",
+      "wet",
+      "calf"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft2_verbs_to_build_6"
+  },
+  {
+    "id": "quiz_draft2_verbs_to_carry_5",
+    "type": "choose_translation",
+    "question": "to carry",
+    "correct": "to carry",
+    "options": [
+      "to carry",
+      "to close",
+      "goodbye",
+      "cloud"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft2_verbs_to_carry_5"
+  },
+  {
+    "id": "quiz_draft2_verbs_to_celebrate_10",
+    "type": "choose_translation",
+    "question": "to celebrate",
+    "correct": "to celebrate",
+    "options": [
+      "to celebrate",
+      "salad",
+      "orange",
+      "to read"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft2_verbs_to_celebrate_10"
+  },
+  {
+    "id": "quiz_draft2_verbs_to_choose_4",
+    "type": "choose_translation",
+    "question": "to choose",
+    "correct": "to choose",
+    "options": [
+      "cold",
+      "to choose",
+      "company",
+      "calculator"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft2_verbs_to_choose_4"
+  },
+  {
+    "id": "quiz_draft2_verbs_to_finish_3",
+    "type": "choose_translation",
+    "question": "to finish",
+    "correct": "to finish",
+    "options": [
+      "relief",
+      "to finish",
+      "nephew",
+      "cake"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft2_verbs_to_finish_3"
+  },
+  {
+    "id": "quiz_draft2_verbs_to_prepare_7",
+    "type": "choose_translation",
+    "question": "to prepare",
+    "correct": "to prepare",
+    "options": [
+      "rabbit",
+      "notebook",
+      "chicken",
+      "to prepare"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft2_verbs_to_prepare_7"
+  },
+  {
+    "id": "quiz_draft2_verbs_to_return_9",
+    "type": "choose_translation",
+    "question": "to return",
+    "correct": "to return",
+    "options": [
+      "Чай",
+      "to return",
+      "cold front",
+      "kitten"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft2_verbs_to_return_9"
+  },
+  {
+    "id": "quiz_draft2_verbs_to_travel_8",
+    "type": "choose_translation",
+    "question": "to travel",
+    "correct": "to travel",
+    "options": [
+      "to travel",
+      "rainy",
+      "backpack",
+      "shadow"
+    ],
+    "level": 1,
+    "category": "verbs",
+    "wordId": "draft2_verbs_to_travel_8"
+  },
+  {
+    "id": "quiz_draft_weather_autumn_11",
+    "type": "choose_translation",
+    "question": "autumn",
+    "correct": "autumn",
+    "options": [
+      "Кутман таң",
+      "autumn",
+      "university",
+      "baby"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_autumn_11"
+  },
+  {
+    "id": "quiz_draft_weather_degree_5",
+    "type": "choose_translation",
+    "question": "degree",
+    "correct": "degree",
+    "options": [
+      "station",
+      "degree",
+      "giraffe",
+      "to choose"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_degree_5"
+  },
+  {
+    "id": "quiz_draft_weather_dry_weather_14",
+    "type": "choose_translation",
+    "question": "dry weather",
+    "correct": "dry weather",
+    "options": [
+      "rain",
+      "dry weather",
+      "treatment",
+      "nurse"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_dry_weather_14"
+  },
+  {
+    "id": "quiz_draft_weather_fog_3",
+    "type": "choose_translation",
+    "question": "fog",
+    "correct": "fog",
+    "options": [
+      "appointment",
+      "goose",
+      "bad",
+      "fog"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_fog_3"
+  },
+  {
+    "id": "quiz_draft_weather_forecast_12",
+    "type": "choose_translation",
+    "question": "forecast",
+    "correct": "forecast",
+    "options": [
+      "forecast",
+      "branch",
+      "bee",
+      "bicycle"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_forecast_12"
+  },
+  {
+    "id": "quiz_draft_weather_humid_13",
+    "type": "choose_translation",
+    "question": "humid",
+    "correct": "humid",
+    "options": [
+      "humid",
+      "island",
+      "squirrel",
+      "right"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_humid_13"
+  },
+  {
+    "id": "quiz_draft_weather_rain_1",
+    "type": "choose_translation",
+    "question": "rain",
+    "correct": "rain",
+    "options": [
+      "rice",
+      "rain",
+      "to celebrate",
+      "respect"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_rain_1"
+  },
+  {
+    "id": "quiz_draft_weather_snowfall_2",
+    "type": "choose_translation",
+    "question": "snowfall",
+    "correct": "snowfall",
+    "options": [
+      "squirrel",
+      "Алма",
+      "forecasting",
+      "snowfall"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_snowfall_2"
+  },
+  {
+    "id": "quiz_draft_weather_spring_9",
+    "type": "choose_translation",
+    "question": "spring",
+    "correct": "spring",
+    "options": [
+      "heart",
+      "to carry",
+      "treatment",
+      "spring"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_spring_9"
+  },
+  {
+    "id": "quiz_draft_weather_summer_10",
+    "type": "choose_translation",
+    "question": "summer",
+    "correct": "summer",
+    "options": [
+      "degree",
+      "summer",
+      "headache",
+      "tram"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_summer_10"
+  },
+  {
+    "id": "quiz_draft_weather_sunrise_6",
+    "type": "choose_translation",
+    "question": "sunrise",
+    "correct": "sunrise",
+    "options": [
+      "rice",
+      "son",
+      "white",
+      "sunrise"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_sunrise_6"
+  },
+  {
+    "id": "quiz_draft_weather_sunset_7",
+    "type": "choose_translation",
+    "question": "sunset",
+    "correct": "sunset",
+    "options": [
+      "to celebrate",
+      "desk",
+      "reservation",
+      "sunset"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_sunset_7"
+  },
+  {
+    "id": "quiz_draft_weather_temperature_4",
+    "type": "choose_translation",
+    "question": "temperature",
+    "correct": "temperature",
+    "options": [
+      "temperature",
+      "deadline",
+      "Шаар",
+      "minute"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_temperature_4"
+  },
+  {
+    "id": "quiz_draft_weather_windy_15",
+    "type": "choose_translation",
+    "question": "windy",
+    "correct": "windy",
+    "options": [
+      "station",
+      "windy",
+      "Салам",
+      "forecast"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_windy_15"
+  },
+  {
+    "id": "quiz_draft_weather_winter_8",
+    "type": "choose_translation",
+    "question": "winter",
+    "correct": "winter",
+    "options": [
+      "grass",
+      "winter",
+      "stepmother",
+      "patience"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft_weather_winter_8"
+  },
+  {
+    "id": "quiz_draft2_weather_blizzard_5",
+    "type": "choose_translation",
+    "question": "blizzard",
+    "correct": "blizzard",
+    "options": [
+      "clinic",
+      "blizzard",
+      "monkey",
+      "house"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_blizzard_5"
+  },
+  {
+    "id": "quiz_draft2_weather_breeze_4",
+    "type": "choose_translation",
+    "question": "breeze",
+    "correct": "breeze",
+    "options": [
+      "donkey",
+      "empathy",
+      "temperature",
+      "breeze"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_breeze_4"
+  },
+  {
+    "id": "quiz_draft2_weather_chilly_17",
+    "type": "choose_translation",
+    "question": "chilly",
+    "correct": "chilly",
+    "options": [
+      "Тоолор",
+      "respect",
+      "Салам",
+      "chilly"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_chilly_17"
+  },
+  {
+    "id": "quiz_draft2_weather_climate_10",
+    "type": "choose_translation",
+    "question": "climate",
+    "correct": "climate",
+    "options": [
+      "sentence",
+      "drizzle",
+      "climate",
+      "report"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_climate_10"
+  },
+  {
+    "id": "quiz_draft2_weather_cloudy_13",
+    "type": "choose_translation",
+    "question": "cloudy",
+    "correct": "cloudy",
+    "options": [
+      "cucumber",
+      "right",
+      "cloudy",
+      "to be"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_cloudy_13"
+  },
+  {
+    "id": "quiz_draft2_weather_cold_front_8",
+    "type": "choose_translation",
+    "question": "cold front",
+    "correct": "cold front",
+    "options": [
+      "breakfast",
+      "тез",
+      "cold front",
+      "blizzard"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_cold_front_8"
+  },
+  {
+    "id": "quiz_draft2_weather_drizzle_1",
+    "type": "choose_translation",
+    "question": "drizzle",
+    "correct": "drizzle",
+    "options": [
+      "drizzle",
+      "bad",
+      "forecast",
+      "to have"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_drizzle_1"
+  },
+  {
+    "id": "quiz_draft2_weather_drought_23",
+    "type": "choose_translation",
+    "question": "drought",
+    "correct": "drought",
+    "options": [
+      "bear",
+      "drought",
+      "to write",
+      "sentence"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_drought_23"
+  },
+  {
+    "id": "quiz_draft2_weather_dry_21",
+    "type": "choose_translation",
+    "question": "dry",
+    "correct": "dry",
+    "options": [
+      "curiosity",
+      "degree",
+      "dry",
+      "porridge"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_dry_21"
+  },
+  {
+    "id": "quiz_draft2_weather_forecasting_11",
+    "type": "choose_translation",
+    "question": "forecasting",
+    "correct": "forecasting",
+    "options": [
+      "cake",
+      "happy",
+      "forecasting",
+      "wolf"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_forecasting_11"
+  },
+  {
+    "id": "quiz_draft2_weather_freezing_18",
+    "type": "choose_translation",
+    "question": "freezing",
+    "correct": "freezing",
+    "options": [
+      "minute",
+      "research",
+      "earth",
+      "freezing"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_freezing_18"
+  },
+  {
+    "id": "quiz_draft2_weather_hail_6",
+    "type": "choose_translation",
+    "question": "hail",
+    "correct": "hail",
+    "options": [
+      "Кой",
+      "hail",
+      "autumn",
+      "seed"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_hail_6"
+  },
+  {
+    "id": "quiz_draft2_weather_heatwave_7",
+    "type": "choose_translation",
+    "question": "heatwave",
+    "correct": "heatwave",
+    "options": [
+      "heatwave",
+      "to drink",
+      "dinner",
+      "orange"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_heatwave_7"
+  },
+  {
+    "id": "quiz_draft2_weather_lightning_3",
+    "type": "choose_translation",
+    "question": "lightning",
+    "correct": "lightning",
+    "options": [
+      "stormy",
+      "center",
+      "lightning",
+      "rainbow"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_lightning_3"
+  },
+  {
+    "id": "quiz_draft2_weather_mild_19",
+    "type": "choose_translation",
+    "question": "mild",
+    "correct": "mild",
+    "options": [
+      "taxi",
+      "mild",
+      "hostel",
+      "to carry"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_mild_19"
+  },
+  {
+    "id": "quiz_draft2_weather_monsoon_22",
+    "type": "choose_translation",
+    "question": "monsoon",
+    "correct": "monsoon",
+    "options": [
+      "monsoon",
+      "library",
+      "red",
+      "report"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_monsoon_22"
+  },
+  {
+    "id": "quiz_draft2_weather_pressure_9",
+    "type": "choose_translation",
+    "question": "pressure",
+    "correct": "pressure",
+    "options": [
+      "marker",
+      "pressure",
+      "healthy",
+      "notebook"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_pressure_9"
+  },
+  {
+    "id": "quiz_draft2_weather_rainbow_24",
+    "type": "choose_translation",
+    "question": "rainbow",
+    "correct": "rainbow",
+    "options": [
+      "recovery",
+      "course",
+      "rainbow",
+      "chicken meat"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_rainbow_24"
+  },
+  {
+    "id": "quiz_draft2_weather_rainy_14",
+    "type": "choose_translation",
+    "question": "rainy",
+    "correct": "rainy",
+    "options": [
+      "translation",
+      "porridge",
+      "rainy",
+      "route"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_rainy_14"
+  },
+  {
+    "id": "quiz_draft2_weather_snowy_15",
+    "type": "choose_translation",
+    "question": "snowy",
+    "correct": "snowy",
+    "options": [
+      "sister-in-law",
+      "happy",
+      "snowy",
+      "күн"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_snowy_15"
+  },
+  {
+    "id": "quiz_draft2_weather_stormy_16",
+    "type": "choose_translation",
+    "question": "stormy",
+    "correct": "stormy",
+    "options": [
+      "stormy",
+      "emergency",
+      "fog",
+      "brother-in-law"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_stormy_16"
+  },
+  {
+    "id": "quiz_draft2_weather_sunny_12",
+    "type": "choose_translation",
+    "question": "sunny",
+    "correct": "sunny",
+    "options": [
+      "cave",
+      "sunny",
+      "Шорпо",
+      "excitement"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_sunny_12"
+  },
+  {
+    "id": "quiz_draft2_weather_thunder_2",
+    "type": "choose_translation",
+    "question": "thunder",
+    "correct": "thunder",
+    "options": [
+      "ambulance",
+      "pressure",
+      "thunder",
+      "summer"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_thunder_2"
+  },
+  {
+    "id": "quiz_draft2_weather_wet_20",
+    "type": "choose_translation",
+    "question": "wet",
+    "correct": "wet",
+    "options": [
+      "grass",
+      "wet",
+      "sauce",
+      "yesterday"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "draft2_weather_wet_20"
+  },
+  {
+    "id": "quiz_sun",
+    "type": "choose_translation",
+    "question": "sun",
+    "correct": "күн",
+    "options": [
+      "sausage",
+      "Шорпо",
+      "күн",
+      "important"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "sun"
+  },
+  {
+    "id": "quiz_draft_work_business_20",
+    "type": "choose_translation",
+    "question": "business",
+    "correct": "business",
+    "options": [
+      "ear",
+      "honey",
+      "business",
+      "department"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_business_20"
+  },
+  {
+    "id": "quiz_draft_work_career_10",
+    "type": "choose_translation",
+    "question": "career",
+    "correct": "career",
+    "options": [
+      "strategy",
+      "potato",
+      "career",
+      "Жол"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_career_10"
+  },
+  {
+    "id": "quiz_draft_work_company_3",
+    "type": "choose_translation",
+    "question": "company",
+    "correct": "company",
+    "options": [
+      "company",
+      "stone",
+      "autumn",
+      "translation"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_company_3"
+  },
+  {
+    "id": "quiz_draft_work_deadline_8",
+    "type": "choose_translation",
+    "question": "deadline",
+    "correct": "deadline",
+    "options": [
+      "autumn",
+      "diagnosis",
+      "deadline",
+      "heatwave"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_deadline_8"
+  },
+  {
+    "id": "quiz_draft_work_email_14",
+    "type": "choose_translation",
+    "question": "email",
+    "correct": "email",
+    "options": [
+      "baby",
+      "backpack",
+      "email",
+      "calculator"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_email_14"
+  },
+  {
+    "id": "quiz_draft_work_employee_5",
+    "type": "choose_translation",
+    "question": "employee",
+    "correct": "employee",
+    "options": [
+      "nurse",
+      "employee",
+      "to sleep",
+      "night"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_employee_5"
+  },
+  {
+    "id": "quiz_draft_work_experience_18",
+    "type": "choose_translation",
+    "question": "experience",
+    "correct": "experience",
+    "options": [
+      "stepfather",
+      "Агам",
+      "butterfly",
+      "experience"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_experience_18"
+  },
+  {
+    "id": "quiz_draft_work_job_1",
+    "type": "choose_translation",
+    "question": "job",
+    "correct": "job",
+    "options": [
+      "sleep",
+      "to do",
+      "job",
+      "eraser"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_job_1"
+  },
+  {
+    "id": "quiz_draft_work_manager_4",
+    "type": "choose_translation",
+    "question": "manager",
+    "correct": "manager",
+    "options": [
+      "therapy",
+      "seminar",
+      "manager",
+      "breakfast"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_manager_4"
+  },
+  {
+    "id": "quiz_draft_work_meeting_6",
+    "type": "choose_translation",
+    "question": "meeting",
+    "correct": "meeting",
+    "options": [
+      "meeting",
+      "sister-in-law",
+      "country",
+      "later"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_meeting_6"
+  },
+  {
+    "id": "quiz_draft_work_office_2",
+    "type": "choose_translation",
+    "question": "office",
+    "correct": "office",
+    "options": [
+      "cake",
+      "dry weather",
+      "office",
+      "Ооба"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_office_2"
+  },
+  {
+    "id": "quiz_draft_work_phone_call_15",
+    "type": "choose_translation",
+    "question": "phone call",
+    "correct": "phone call",
+    "options": [
+      "Жол",
+      "interesting",
+      "juice",
+      "phone call"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_phone_call_15"
+  },
+  {
+    "id": "quiz_draft_work_project_7",
+    "type": "choose_translation",
+    "question": "project",
+    "correct": "project",
+    "options": [
+      "hot",
+      "later",
+      "project",
+      "stone"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_project_7"
+  },
+  {
+    "id": "quiz_draft_work_promotion_19",
+    "type": "choose_translation",
+    "question": "promotion",
+    "correct": "promotion",
+    "options": [
+      "deer",
+      "lion",
+      "promotion",
+      "maybe"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_promotion_19"
+  },
+  {
+    "id": "quiz_draft_work_report_13",
+    "type": "choose_translation",
+    "question": "report",
+    "correct": "report",
+    "options": [
+      "tree",
+      "wolf",
+      "report",
+      "lion"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_report_13"
+  },
+  {
+    "id": "quiz_draft_work_salary_9",
+    "type": "choose_translation",
+    "question": "salary",
+    "correct": "salary",
+    "options": [
+      "lesson",
+      "salary",
+      "lab",
+      "afternoon"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_salary_9"
+  },
+  {
+    "id": "quiz_draft_work_schedule_16",
+    "type": "choose_translation",
+    "question": "schedule",
+    "correct": "schedule",
+    "options": [
+      "to come",
+      "center",
+      "күн",
+      "schedule"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_schedule_16"
+  },
+  {
+    "id": "quiz_draft_work_task_12",
+    "type": "choose_translation",
+    "question": "task",
+    "correct": "task",
+    "options": [
+      "Абамайдан",
+      "sauce",
+      "task",
+      "to buy"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_task_12"
+  },
+  {
+    "id": "quiz_draft_work_team_11",
+    "type": "choose_translation",
+    "question": "team",
+    "correct": "team",
+    "options": [
+      "to learn",
+      "team",
+      "to speak",
+      "bear"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_team_11"
+  },
+  {
+    "id": "quiz_draft_work_training_17",
+    "type": "choose_translation",
+    "question": "training",
+    "correct": "training",
+    "options": [
+      "star",
+      "minute",
+      "business",
+      "training"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft_work_training_17"
+  },
+  {
+    "id": "quiz_draft2_work_budget_5",
+    "type": "choose_translation",
+    "question": "budget",
+    "correct": "budget",
+    "options": [
+      "distance",
+      "budget",
+      "wedding",
+      "month"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft2_work_budget_5"
+  },
+  {
+    "id": "quiz_draft2_work_colleague_3",
+    "type": "choose_translation",
+    "question": "colleague",
+    "correct": "colleague",
+    "options": [
+      "calm",
+      "lion",
+      "clinic",
+      "colleague"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft2_work_colleague_3"
+  },
+  {
+    "id": "quiz_draft2_work_contract_2",
+    "type": "choose_translation",
+    "question": "contract",
+    "correct": "contract",
+    "options": [
+      "important",
+      "calm",
+      "yogurt",
+      "contract"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft2_work_contract_2"
+  },
+  {
+    "id": "quiz_draft2_work_customer_7",
+    "type": "choose_translation",
+    "question": "customer",
+    "correct": "customer",
+    "options": [
+      "exam",
+      "fox",
+      "customer",
+      "paragraph"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft2_work_customer_7"
+  },
+  {
+    "id": "quiz_draft2_work_department_4",
+    "type": "choose_translation",
+    "question": "department",
+    "correct": "department",
+    "options": [
+      "paragraph",
+      "sunset",
+      "department",
+      "kitchen"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft2_work_department_4"
+  },
+  {
+    "id": "quiz_draft2_work_interview_1",
+    "type": "choose_translation",
+    "question": "interview",
+    "correct": "interview",
+    "options": [
+      "тез",
+      "star",
+      "interview",
+      "ship"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft2_work_interview_1"
+  },
+  {
+    "id": "quiz_draft2_work_invoice_8",
+    "type": "choose_translation",
+    "question": "invoice",
+    "correct": "invoice",
+    "options": [
+      "giraffe",
+      "кичине",
+      "invoice",
+      "season"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft2_work_invoice_8"
+  },
+  {
+    "id": "quiz_draft2_work_overtime_10",
+    "type": "choose_translation",
+    "question": "overtime",
+    "correct": "overtime",
+    "options": [
+      "tears",
+      "жаңы",
+      "overtime",
+      "stepmother"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft2_work_overtime_10"
+  },
+  {
+    "id": "quiz_draft2_work_presentation_9",
+    "type": "choose_translation",
+    "question": "presentation",
+    "correct": "presentation",
+    "options": [
+      "to build",
+      "bee",
+      "to buy",
+      "presentation"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft2_work_presentation_9"
+  },
+  {
+    "id": "quiz_draft2_work_strategy_6",
+    "type": "choose_translation",
+    "question": "strategy",
+    "correct": "strategy",
+    "options": [
+      "to prepare",
+      "love",
+      "Абамайдан",
+      "strategy"
+    ],
+    "level": 1,
+    "category": "work",
+    "wordId": "draft2_work_strategy_6"
+  }
+]

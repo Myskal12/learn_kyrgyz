@@ -8,7 +8,6 @@ import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
-import '../../../shared/widgets/app_chip.dart';
 import '../../../shared/widgets/app_shell.dart';
 import '../../../shared/widgets/learning_direction_control.dart';
 import '../providers/progress_provider.dart';
@@ -20,7 +19,9 @@ class ProfileSettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final onboarding = ref.watch(onboardingProvider);
+    final progress = ref.watch(progressProvider);
     final themeMode = ref.watch(themeModeProvider);
+    final weeklyMinutes = onboarding.dailyGoalMinutes * 7;
 
     final themeLabel = themeMode == ThemeMode.dark
         ? 'Караңгы'
@@ -78,25 +79,28 @@ class ProfileSettingsScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _SettingsHeader(
-                  icon: Icons.notifications,
+                  icon: Icons.cloud_sync,
                   color: AppColors.accent,
-                  title: 'Эскертмелер',
-                  subtitle: 'Окуу эскертмелерин башкаруу',
-                  trailing: const AppChip(
-                    label: 'Жакында',
-                    variant: AppChipVariant.defaultChip,
-                  ),
+                  title: 'Сактоо абалы',
+                  subtitle: 'Түзмөк жана аккаунт',
                 ),
                 const SizedBox(height: 12),
                 _SettingsRow(
-                  title: 'Күндөлүк эскертме',
-                  value:
-                      'Firebase Cloud Messaging азырынча туташтырылган эмес.',
+                  title: progress.syncTitle,
+                  value: progress.syncSubtitle,
+                  action: progress.canRetrySync
+                      ? _InlineAction(
+                          label: 'Кайра синк',
+                          onTap: progress.retrySync,
+                        )
+                      : null,
                 ),
                 const SizedBox(height: 8),
                 _SettingsRow(
-                  title: 'Апталык отчет',
-                  value: 'Push жана email отчеттор кийинки итерацияда кошулат.',
+                  title: 'Учурдагы абал',
+                  value: progress.isGuest
+                      ? 'Конок режиминде маалымат түзмөктө сакталат.'
+                      : 'Аккаунт кошулган.',
                 ),
               ],
             ),
@@ -128,15 +132,6 @@ class ProfileSettingsScreen extends ConsumerWidget {
                         ref.read(themeModeProvider.notifier).toggleTheme(),
                   ),
                 ),
-                const SizedBox(height: 8),
-                _SettingsRow(
-                  title: 'Текст өлчөмү',
-                  value: 'Орточо',
-                  trailing: const AppChip(
-                    label: 'Жакында',
-                    variant: AppChipVariant.defaultChip,
-                  ),
-                ),
               ],
             ),
           ),
@@ -150,13 +145,12 @@ class ProfileSettingsScreen extends ConsumerWidget {
                   icon: Icons.shield,
                   color: const Color(0xFF1976D2),
                   title: 'Коомчулук жана купуялык',
-                  subtitle: 'Рейтинг жана профилди башкаруу',
+                  subtitle: 'Рейтинг жана профиль',
                 ),
                 const SizedBox(height: 12),
                 _SettingsRow(
                   title: 'Рейтингде көрүнүү',
-                  value:
-                      'Профиль Firebase рейтингине жалпы статистика менен чыгат.',
+                  value: 'Статистика рейтингде колдонулат.',
                 ),
                 const SizedBox(height: 8),
                 _SettingsRow(
@@ -181,7 +175,7 @@ class ProfileSettingsScreen extends ConsumerWidget {
                 const SizedBox(height: 12),
                 _SettingsRow(
                   title: 'Кийинки максат',
-                  value: '6 сабак / жума',
+                  value: '$weeklyMinutes мүнөт / жума',
                   action: _InlineAction(
                     label: 'Ачуу',
                     onTap: () => context.push('/study-plan'),
@@ -260,7 +254,9 @@ class ProfileSettingsScreen extends ConsumerWidget {
   }
 
   Future<void> _showDailyGoalPicker(BuildContext context, WidgetRef ref) async {
-    final current = ref.read(onboardingProvider).dailyGoalMinutes;
+    final onboarding = ref.read(onboardingProvider);
+    final current = onboarding.dailyGoalMinutes;
+    final options = onboarding.dailyGoalOptions;
     final selected = await showModalBottomSheet<int>(
       context: context,
       builder: (context) {
@@ -276,7 +272,7 @@ class ProfileSettingsScreen extends ConsumerWidget {
                 style: AppTextStyles.muted,
               ),
               const SizedBox(height: 16),
-              ...const [10, 20, 30].map((minutes) {
+              ...options.map((minutes) {
                 final active = current == minutes;
                 return ListTile(
                   leading: Icon(
@@ -305,14 +301,12 @@ class _SettingsHeader extends StatelessWidget {
     required this.color,
     required this.title,
     required this.subtitle,
-    this.trailing,
   });
 
   final IconData icon;
   final Color color;
   final String title;
   final String subtitle;
-  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -334,30 +328,23 @@ class _SettingsHeader extends StatelessWidget {
             ],
           ),
         ),
-        if (trailing != null) trailing!,
       ],
     );
   }
 }
 
 class _SettingsRow extends StatelessWidget {
-  const _SettingsRow({
-    required this.title,
-    required this.value,
-    this.action,
-    this.trailing,
-  });
+  const _SettingsRow({required this.title, required this.value, this.action});
 
   final String title;
   final String value;
   final Widget? action;
-  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final accessory = action ?? trailing;
+        final accessory = action;
         final content = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

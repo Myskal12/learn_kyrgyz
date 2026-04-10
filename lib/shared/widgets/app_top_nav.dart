@@ -32,10 +32,10 @@ class AppTopNav extends StatelessWidget {
     final isDark = tone == AppTopNavTone.dark;
     final backgroundColor = isDark
         ? Colors.white.withValues(alpha: 0.1)
-        : AppColors.background;
+        : Colors.white;
     final borderColor = isDark
         ? Colors.white.withValues(alpha: 0.2)
-        : AppColors.border;
+        : Colors.white.withValues(alpha: 0.82);
     final iconColor = isDark ? Colors.white : AppColors.textDark;
     final subtitleColor = isDark
         ? Colors.white.withValues(alpha: 0.7)
@@ -49,6 +49,14 @@ class AppTopNav extends StatelessWidget {
           decoration: BoxDecoration(
             color: backgroundColor.withValues(alpha: isDark ? 0.12 : 0.85),
             border: Border(bottom: BorderSide(color: borderColor)),
+            boxShadow: [
+              if (!isDark)
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 18,
+                  offset: const Offset(0, 8),
+                ),
+            ],
           ),
           child: SafeArea(
             bottom: false,
@@ -83,7 +91,7 @@ class AppTopNav extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyles.title.copyWith(
-                                fontSize: 18,
+                                fontSize: 17,
                                 color: iconColor,
                               ),
                               textAlign: TextAlign.center,
@@ -141,10 +149,10 @@ class _NavIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final background = isDark
         ? Colors.white.withValues(alpha: 0.15)
-        : AppColors.surface;
+        : Colors.white.withValues(alpha: 0.82);
     final borderColor = isDark
         ? Colors.white.withValues(alpha: 0.2)
-        : AppColors.border;
+        : AppColors.outline.withValues(alpha: 0.8);
     final iconColor = isDark ? Colors.white : AppColors.textDark;
 
     return SizedBox(
@@ -162,9 +170,9 @@ class _NavIconButton extends StatelessWidget {
               border: Border.all(color: borderColor),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 6,
-                  offset: Offset(0, 2),
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),

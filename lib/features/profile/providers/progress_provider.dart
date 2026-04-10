@@ -18,7 +18,7 @@ class ProgressProvider extends ChangeNotifier {
     _authSub = _firebase.userStream.listen(_handleAuthChange);
   }
 
-  static const _storageKey = 'user_progress';
+  static const _legacyStorageKey = 'user_progress';
   static const _milestoneTargets = <int>[5, 15, 30, 50];
 
   final LocalStorageService _storage;
@@ -50,51 +50,40 @@ class ProgressProvider extends ChangeNotifier {
   String get syncTitle {
     switch (_syncState) {
       case ProgressSyncState.localOnly:
-        return 'Жергиликтүү сакталды';
+        return 'Түзмөктө';
       case ProgressSyncState.pending:
-        return 'Синхрондоштуруу күтүлүүдө';
+        return 'Кезекте';
       case ProgressSyncState.syncing:
-        return 'Синхрондошуп жатат';
+        return 'Жөнөтүлүүдө';
       case ProgressSyncState.synced:
-        return 'Булут менен шайкеш';
+        return 'Аккаунтта';
       case ProgressSyncState.failed:
-        return 'Синхрондоштуруу токтоду';
+        return 'Жеткирилген жок';
     }
   }
 
   String get syncSubtitle {
     switch (_syncState) {
       case ProgressSyncState.localOnly:
-        return 'Прогресс ушул түзмөктө сакталат. Кирсеңиз, булутка да жөнөтөбүз.';
+        return 'Маалымат ушул түзмөктө сакталат.';
       case ProgressSyncState.pending:
-        return 'Өзгөртүүлөр локалдык түрдө сакталды жана кезекке коюлду.';
+        return 'Өзгөрүү сакталды.';
       case ProgressSyncState.syncing:
-        return 'Акыркы жыйынтыктар булут сактагычка жөнөтүлүп жатат.';
+        return 'Аккаунтка көчүрмө кетип жатат.';
       case ProgressSyncState.synced:
         if (_lastSyncedAt == null) {
-          return 'Прогресс локалдык жана булут сактагычта бирдей.';
+          return 'Түзмөк жана аккаунт даяр.';
         }
-        return 'Акыркы синк: ${_formatTime(_lastSyncedAt!)}.';
+        return 'Акыркы көчүрмө: ${_formatTime(_lastSyncedAt!)}.';
       case ProgressSyncState.failed:
-        return _syncError ??
-            'Интернетти текшерип, дайындарды кайра синхрондоп көрүңүз.';
+        return _syncError ?? 'Кийин кайра аракет кылыңыз.';
     }
   }
 
   Future<void> load() async {
     if (_loaded) return;
-    final raw = await _storage.getString(_storageKey);
-    if (raw != null && raw.isNotEmpty) {
-      try {
-        final data = jsonDecode(raw) as Map<String, dynamic>;
-        _progress = UserProgressModel.fromJson(data);
-      } catch (_) {
-        _progress = UserProgressModel(userId: 'guest');
-      }
-    }
-    _progress = _migrateLegacyWordProgress(_progress);
+    await _loadLocalProgress(_remoteUid);
     _loaded = true;
-    _recalculateTotals();
     _syncState = _remoteUid == null
         ? ProgressSyncState.localOnly
         : ProgressSyncState.pending;
@@ -316,18 +305,16 @@ class ProgressProvider extends ChangeNotifier {
 
   Future<void> _saveLocal() async {
     final payload = jsonEncode(_progress.toJson());
-    await _storage.setString(_storageKey, payload);
+    await _storage.setString(_storageKeyFor(_remoteUid), payload);
   }
 
   Future<void> _handleAuthChange(String? uid) async {
     _remoteUid = uid;
-    if (!_loaded) {
-      await load();
-    }
+    final hadLocalProgress = await _loadLocalProgress(uid);
+    _loaded = true;
+    _lastSyncedAt = null;
 
     if (uid == null) {
-      _progress = _progress.copyWith(userId: 'guest');
-      await _saveLocal();
       _setSyncState(ProgressSyncState.localOnly, clearError: true);
       notifyListeners();
       return;
@@ -350,10 +337,18 @@ class ProgressProvider extends ChangeNotifier {
       return;
     }
 
-    _progress = _migrateLegacyWordProgress(_progress.copyWith(userId: uid));
+    if (hadLocalProgress && _hasMeaningfulProgress(_progress)) {
+      _setSyncState(ProgressSyncState.pending, clearError: true);
+      notifyListeners();
+      await _enqueueSync();
+      return;
+    }
+
+    _progress = UserProgressModel(userId: uid);
     _recalculateTotals();
+    await _saveLocal();
+    _setSyncState(ProgressSyncState.synced, clearError: true);
     notifyListeners();
-    await _persist();
   }
 
   Future<void> _enqueueSync() async {
@@ -573,13 +568,68 @@ class ProgressProvider extends ChangeNotifier {
         message.contains('timeout')) {
       return 'Интернет жок же Firebase жеткиликсиз. Кайра аракет кылыңыз.';
     }
-    return 'Булутка жөнөтүү ишке ашкан жок. Кийинчерээк кайра аракет кылыңыз.';
+    return 'Аккаунтка жөнөтүү ишке ашкан жок.';
   }
 
   String _formatTime(DateTime value) {
     final hour = value.hour.toString().padLeft(2, '0');
     final minute = value.minute.toString().padLeft(2, '0');
     return '$hour:$minute';
+  }
+
+  Future<bool> _loadLocalProgress(String? uid) async {
+    final loaded = await _readStoredProgress(uid);
+    _progress =
+        loaded != null
+            ? _migrateLegacyWordProgress(loaded.copyWith(userId: uid ?? 'guest'))
+            : UserProgressModel(userId: uid ?? 'guest');
+    _recalculateTotals();
+    return loaded != null;
+  }
+
+  Future<UserProgressModel?> _readStoredProgress(String? uid) async {
+    final scopedRaw = await _storage.getString(_storageKeyFor(uid));
+    final scoped = _parseProgress(scopedRaw);
+    if (scoped != null) {
+      return scoped;
+    }
+
+    final legacyRaw = await _storage.getString(_legacyStorageKey);
+    final legacy = _parseProgress(legacyRaw);
+    if (legacy == null) {
+      return null;
+    }
+
+    final expectedUserId = uid ?? 'guest';
+    if (legacy.userId != expectedUserId) {
+      return null;
+    }
+
+    await _storage.setString(
+      _storageKeyFor(uid),
+      jsonEncode(legacy.copyWith(userId: expectedUserId).toJson()),
+    );
+    return legacy;
+  }
+
+  UserProgressModel? _parseProgress(String? raw) {
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      final data = jsonDecode(raw) as Map<String, dynamic>;
+      return UserProgressModel.fromJson(data);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  String _storageKeyFor(String? uid) => 'user_progress_${uid ?? 'guest'}';
+
+  bool _hasMeaningfulProgress(UserProgressModel progress) {
+    return progress.wordProgressById.isNotEmpty ||
+        progress.seenByWordId.isNotEmpty ||
+        progress.correctByWordId.isNotEmpty ||
+        progress.streakDays > 0 ||
+        progress.lastSessionAt != null;
   }
 
   @override

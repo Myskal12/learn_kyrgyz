@@ -19,27 +19,27 @@ class AppBottomNav extends StatelessWidget {
     final tabs = [
       _NavItem(
         tab: AppTab.learn,
-        label: 'Үйрөнүү',
-        shortLabel: 'Үйрөн',
-        icon: Icons.school,
+        label: 'Башкы',
+        shortLabel: 'Башкы',
+        icon: Icons.home_rounded,
       ),
       _NavItem(
         tab: AppTab.practice,
         label: 'Практика',
         shortLabel: 'Практ.',
-        icon: Icons.flash_on,
+        icon: Icons.layers_rounded,
       ),
       _NavItem(
         tab: AppTab.progress,
         label: 'Прогресс',
         shortLabel: 'Прогр.',
-        icon: Icons.bar_chart,
+        icon: Icons.insights_rounded,
       ),
       _NavItem(
         tab: AppTab.profile,
         label: 'Профиль',
         shortLabel: 'Проф.',
-        icon: Icons.person,
+        icon: Icons.person_rounded,
       ),
     ];
 
@@ -50,13 +50,15 @@ class AppBottomNav extends StatelessWidget {
 
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.surface.withValues(alpha: 0.95),
-            border: Border(top: BorderSide(color: AppColors.border)),
+            color: Colors.white.withValues(alpha: 0.82),
+            border: Border(
+              top: BorderSide(color: Colors.white.withValues(alpha: 0.9)),
+            ),
             boxShadow: [
               BoxShadow(
-                color: const Color.fromRGBO(31, 31, 31, 0.12),
-                blurRadius: 24,
-                offset: Offset(0, -10),
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 30,
+                offset: const Offset(0, -10),
               ),
             ],
           ),
@@ -118,9 +120,9 @@ class _BottomNavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isActive ? AppColors.textDark : AppColors.muted;
+    final color = isActive ? AppColors.primary : AppColors.navInactive;
     final background = isActive
-        ? AppColors.primary.withValues(alpha: 0.2)
+        ? AppColors.primary.withValues(alpha: 0.06)
         : Colors.transparent;
 
     return Material(
@@ -131,7 +133,7 @@ class _BottomNavButton extends StatelessWidget {
         child: Ink(
           decoration: BoxDecoration(
             color: background,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(18),
           ),
           padding: EdgeInsets.symmetric(
             horizontal: compact ? 6 : 12,
@@ -148,7 +150,7 @@ class _BottomNavButton extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: compact ? 10 : 11,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   color: color,
                 ),
               ),

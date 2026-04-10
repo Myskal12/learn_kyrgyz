@@ -6,7 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../data/models/achievement_rule_model.dart';
 import '../../data/models/category_model.dart';
+import '../../data/models/learning_resource_model.dart';
+import '../../data/models/onboarding_config_model.dart';
 import '../../data/models/quiz_question_model.dart';
 import '../../data/models/sentence_model.dart';
 import '../../data/models/user_progress_model.dart';
@@ -47,7 +50,7 @@ class FirebaseService {
   }
 
   String get googleSignInUnavailableMessage =>
-      'Google менен кирүү бул түзмөктө жеткиликтүү эмес. Email же демо аккаунтту колдонуңуз.';
+      'Google менен кирүү бул түзмөктө жеткиликтүү эмес. Email же конок режимин колдонуңуз.';
 
   String get googleSignInConfigurationMessage =>
       'Google Sign-In Android үчүн толук жөндөлгөн эмес. Firebase долбоорунда SHA-1/SHA-256 кошуп, жаңы google-services.json жүктөп, колдонмону кайра куруңуз.';
@@ -386,6 +389,92 @@ class FirebaseService {
     return order[id] ?? 999;
   }
 
+  Future<OnboardingConfigModel?> fetchOnboardingConfig() async {
+    try {
+      final snap = await _firestore
+          .collection('app_config')
+          .doc('onboarding')
+          .get();
+      if (!snap.exists) return null;
+      final data = snap.data();
+      if (data == null) return null;
+      return OnboardingConfigModel.fromJson(data);
+    } catch (e) {
+      debugPrint('Failed to fetch onboarding config: $e');
+      return null;
+    }
+  }
+
+  Future<List<AchievementRuleModel>> fetchAchievementRules() async {
+    try {
+      final snap = await _firestore
+          .collection('app_config')
+          .doc('achievements')
+          .get();
+      if (!snap.exists) return const [];
+
+      final data = snap.data();
+      if (data == null) return const [];
+
+      final rawItems = (data['items'] as List?) ?? const [];
+      final rules = <AchievementRuleModel>[];
+
+      for (final item in rawItems) {
+        if (item is! Map) continue;
+        try {
+          rules.add(
+            AchievementRuleModel.fromJson(Map<String, dynamic>.from(item)),
+          );
+        } catch (_) {
+          // Ignore malformed entries and keep valid rules.
+        }
+      }
+
+      rules
+        ..removeWhere((rule) => !rule.active)
+        ..sort((a, b) => a.order.compareTo(b.order));
+      return rules;
+    } catch (e) {
+      debugPrint('Failed to fetch achievements config: $e');
+      return const [];
+    }
+  }
+
+  Future<List<LearningResourceModel>> fetchLearningResources() async {
+    try {
+      final snap = await _firestore
+          .collection('app_config')
+          .doc('resources')
+          .get();
+      if (!snap.exists) return const [];
+
+      final data = snap.data();
+      if (data == null) return const [];
+
+      final rawItems = (data['items'] as List?) ?? const [];
+      final resources = <LearningResourceModel>[];
+
+      for (final item in rawItems) {
+        if (item is! Map) continue;
+        try {
+          resources.add(
+            LearningResourceModel.fromJson(Map<String, dynamic>.from(item)),
+          );
+        } catch (_) {
+          // Ignore malformed entries and keep valid resources.
+        }
+      }
+
+      resources
+        ..removeWhere((resource) => !resource.active)
+        ..sort((a, b) => a.order.compareTo(b.order));
+      return resources;
+    } catch (e) {
+      debugPrint('Failed to fetch resources config: $e');
+      return const [];
+    }
+  }
+
   Future<List<CategoryModel>> fetchCategories() async {
     try {
       final snapshot = await _firestore.collection('words').get();
@@ -552,6 +641,19 @@ class FirebaseService {
   }
 
   String? get currentUserId => _auth.currentUser?.uid;
+  String? get currentUserEmail => _auth.currentUser?.email;
+  String? get currentUserDisplayName => _auth.currentUser?.displayName;
+  bool get isCurrentUserEmailVerificationRequired =>
+      _requiresEmailVerification(_auth.currentUser);
+  String? get currentUserFirstName {
+    final raw = currentUserDisplayName?.trim();
+    if (raw == null || raw.isEmpty) return null;
+    final parts = raw.split(RegExp(r'\s+'));
+    if (parts.isEmpty) return null;
+    final first = parts.first.trim();
+    return first.isEmpty ? null : first;
+  }
+
   Stream<String?> get userStream =>
       _auth.authStateChanges().map((user) => user?.uid);
 
@@ -672,35 +774,65 @@ class FirebaseService {
       );
     }
     try {
-      final provider = _buildGoogleProvider();
       if (kIsWeb) {
-        await _auth.signInWithPopup(provider);
-        return true;
-      }
-      if (defaultTargetPlatform == TargetPlatform.android) {
-        await _auth.signInWithProvider(provider);
+        await _auth.signInWithPopup(_buildGoogleProvider());
         return true;
       }
       if (defaultTargetPlatform == TargetPlatform.windows) {
-        await _auth.signInWithProvider(provider);
+        await _auth.signInWithProvider(_buildGoogleProvider());
         return true;
       }
       final account = await _googleSignIn.signIn();
       if (account == null) return false;
       final googleAuth = await account.authentication;
+      final idToken = googleAuth.idToken;
+      if (idToken == null || idToken.isEmpty) {
+        // Some Android/iOS devices may not return an ID token via GoogleSignIn.
+        // Use Firebase native provider flow as a resilient fallback.
+        if (_canUseNativeProviderFallback) {
+          await _auth.signInWithProvider(_buildGoogleProvider());
+          return true;
+        }
+        throw FirebaseAuthException(
+          code: 'google-sign-in-missing-id-token',
+          message:
+              'Google Sign-In ID token алынган жок. Firebase конфигурациясын жана OAuth кардарын текшериңиз.',
+        );
+      }
       final credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
+        idToken: idToken,
         accessToken: googleAuth.accessToken,
       );
       await _auth.signInWithCredential(credential);
       return true;
     } on PlatformException catch (e) {
       debugPrint('Failed to sign in with Google: $e');
+      if (_isGoogleSignInCancelled(e)) {
+        return false;
+      }
       if (_isAndroidGoogleConfigurationIssue(e)) {
         throw FirebaseAuthException(
           code: 'google-sign-in-config-missing',
           message: googleSignInConfigurationMessage,
         );
+      }
+      if (_isGooglePlayServicesIssue(e)) {
+        throw FirebaseAuthException(
+          code: 'google-play-services-unavailable',
+          message:
+              'Google Play Services жеткиликсиз же эски. Google APIs бар эмуляторду же кадимки Android түзмөктү колдонуңуз.',
+        );
+      }
+
+      if (_canUseNativeProviderFallback) {
+        try {
+          await _auth.signInWithProvider(_buildGoogleProvider());
+          return true;
+        } on FirebaseAuthException {
+          rethrow;
+        } catch (_) {
+          rethrow;
+        }
       }
       rethrow;
     } on FirebaseAuthException catch (e) {
@@ -722,14 +854,25 @@ class FirebaseService {
         email: email,
         password: password,
       );
+      final trimmedNickname = nickname?.trim();
+      if (trimmedNickname != null && trimmedNickname.isNotEmpty) {
+        await _auth.currentUser?.updateDisplayName(trimmedNickname);
+      }
       final uid = _auth.currentUser?.uid;
       if (uid != null) {
         await updateUserProfile(
           uid: uid,
-          nickname: nickname?.trim().isNotEmpty == true
-              ? nickname!.trim()
+          nickname: trimmedNickname?.isNotEmpty == true
+              ? trimmedNickname
               : null,
         );
+      }
+      try {
+        await sendCurrentUserEmailVerification();
+      } on FirebaseAuthException catch (e) {
+        debugPrint('Failed to send verification email after register: $e');
+      } catch (e) {
+        debugPrint('Failed to send verification email after register: $e');
       }
       return true;
     } on FirebaseAuthException catch (e) {
@@ -749,6 +892,35 @@ class FirebaseService {
       rethrow;
     } catch (e) {
       debugPrint('Failed to send password reset email: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> sendCurrentUserEmailVerification() async {
+    final user = _auth.currentUser;
+    if (!_requiresEmailVerification(user)) return;
+    try {
+      await user!.sendEmailVerification();
+    } on FirebaseAuthException catch (e) {
+      debugPrint('Failed to send verification email: $e');
+      rethrow;
+    } catch (e) {
+      debugPrint('Failed to send verification email: $e');
+      rethrow;
+    }
+  }
+
+  Future<bool> refreshEmailVerificationStatus() async {
+    final user = _auth.currentUser;
+    if (user == null) return false;
+    try {
+      await user.reload();
+      return _auth.currentUser?.emailVerified ?? false;
+    } on FirebaseAuthException catch (e) {
+      debugPrint('Failed to refresh email verification status: $e');
+      rethrow;
+    } catch (e) {
+      debugPrint('Failed to refresh email verification status: $e');
       rethrow;
     }
   }
@@ -776,8 +948,48 @@ class FirebaseService {
     final raw = '${error.code} ${error.message} ${error.details}'.toLowerCase();
     return raw.contains('apiexception: 10') ||
         raw.contains('developer_error') ||
-        raw.contains('12500') ||
-        raw.contains('sign_in_failed');
+        raw.contains('12500');
+  }
+
+  bool get _canUseNativeProviderFallback {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return true;
+      case TargetPlatform.windows:
+      case TargetPlatform.linux:
+      case TargetPlatform.fuchsia:
+        return false;
+    }
+  }
+
+  bool _isGoogleSignInCancelled(PlatformException error) {
+    final raw = '${error.code} ${error.message} ${error.details}'.toLowerCase();
+    return raw.contains('canceled') ||
+        raw.contains('cancelled') ||
+        raw.contains('sign_in_canceled') ||
+        raw.contains('12501');
+  }
+
+  bool _isGooglePlayServicesIssue(PlatformException error) {
+    if (defaultTargetPlatform != TargetPlatform.android) {
+      return false;
+    }
+    final raw = '${error.code} ${error.message} ${error.details}'.toLowerCase();
+    return raw.contains('google play services') ||
+        raw.contains('play services') ||
+        raw.contains('service_missing') ||
+        raw.contains('service_version_update_required') ||
+        raw.contains('service_disabled');
+  }
+
+  bool _requiresEmailVerification(User? user) {
+    if (user == null || user.emailVerified) return false;
+    final email = user.email?.trim();
+    if (email == null || email.isEmpty) return false;
+    final providerIds = user.providerData.map((entry) => entry.providerId);
+    return providerIds.contains(EmailAuthProvider.PROVIDER_ID);
   }
 
   Future<List<QuizQuestionModel>> fetchQuizQuestions(

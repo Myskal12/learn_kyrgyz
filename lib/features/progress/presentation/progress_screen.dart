@@ -64,7 +64,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
           Text('Прогресс', style: AppTextStyles.heading.copyWith(fontSize: 28)),
           const SizedBox(height: 6),
           Text(
-            'Кайсы жер бекеди, эмнени азыр жабуу керек жана кийинки чекит кайда экенин ушул жерден көрөсүз.',
+            'Өсүшүңүздү ушул жерден көрөсүз.',
             style: AppTextStyles.body.copyWith(color: AppColors.muted),
           ),
           const SizedBox(height: 20),
@@ -82,8 +82,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
               height: 280,
               child: AppEmptyState(
                 title: 'Азырынча прогресс жок',
-                message:
-                    'Биринчи карточканы, сүйлөмдү же квизди өткөндөн кийин бул жерде review focus, milestone жана жетишкендиктер көрүнөт.',
+                message: 'Биринчи машыгуудан кийин көрсөткүчтөр чыгат.',
                 icon: Icons.insights_outlined,
                 actionLabel: 'Биринчи сабакты ачуу',
                 onAction: () => context.go('/categories'),
@@ -100,28 +99,6 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
             _ReviewStatusCard(
               progress: progress,
               dailyGoalMinutes: onboarding.dailyGoalMinutes,
-            ),
-            const SizedBox(height: 16),
-            AppCard(
-              padding: const EdgeInsets.all(18),
-              backgroundColor: AppColors.primary.withValues(alpha: 0.05),
-              borderColor: AppColors.primary.withValues(alpha: 0.18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Чынчыл чек',
-                    style: AppTextStyles.body.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Биз азырынча жума-жума графикти сактабайбыз. Ошондуктан бул экран сизге реалдуу нерсени гана көрсөтөт: review due, алсыз сөздөр, milestone жана streak.',
-                    style: AppTextStyles.muted,
-                  ),
-                ],
-              ),
             ),
           ],
           const SizedBox(height: 20),
@@ -242,7 +219,7 @@ class _HeroSummary extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     reviewDueWordsCount > 0
-                        ? '$reviewDueWordsCount сөз кайра бекемдөөнү күтөт'
+                        ? '$reviewDueWordsCount сөз даяр'
                         : 'Темп сакталууда',
                     style: AppTextStyles.muted.copyWith(color: Colors.white70),
                   ),
@@ -269,7 +246,7 @@ class _HeroSummary extends StatelessWidget {
             children: [
               _Metric(label: 'Сөздөр', value: totalWordsMastered),
               _Metric(label: 'Тактык', value: accuracyPercent, suffix: '%'),
-              _Metric(label: 'Review', value: reviewDueWordsCount),
+              _Metric(label: 'Кайталоо', value: reviewDueWordsCount),
             ],
           ),
         ],
@@ -333,8 +310,8 @@ class _MilestoneCard extends StatelessWidget {
     final isMaxed = target == null;
     final label = progress.nextMilestoneLabel;
     final subtitle = isMaxed
-        ? 'Сиз негизги roadmap чегинен өттүңүз. Эми ритмди сактап, review queue жана аралаш practice менен сапатты кармаңыз.'
-        : 'Дагы ${progress.wordsToNextMilestone} сөз бекемдесеңиз, кийинки чекитке чыгасыз. Күндүк $dailyGoalMinutes мүнөт темп бул аралыкты тездик менен жабат.';
+        ? 'Негизги чекиттер ачылды.'
+        : 'Дагы ${progress.wordsToNextMilestone} сөз калды.';
 
     return AppCard(
       padding: const EdgeInsets.all(20),
@@ -408,7 +385,7 @@ class _ReviewStatusCard extends StatelessWidget {
             spacing: 12,
             children: [
               _StatusTile(
-                label: 'Review күтөт',
+                label: 'Кайталоо',
                 value: progress.reviewDueWordsCount.toString(),
                 color: AppColors.accent,
               ),
@@ -418,7 +395,7 @@ class _ReviewStatusCard extends StatelessWidget {
                 color: AppColors.primary,
               ),
               _StatusTile(
-                label: 'Күндүк goal',
+                label: 'Күндүк максат',
                 value: '$dailyGoalMinutes мүн',
                 color: AppColors.success,
               ),
@@ -427,8 +404,8 @@ class _ReviewStatusCard extends StatelessWidget {
           const SizedBox(height: 14),
           Text(
             progress.hasReviewFocus
-                ? 'Кийинки сапат өсүшү review queue жабылганда келет. Андан кийин гана жаңы режимге өтүү пайдалуураак.'
-                : 'Review басымы азайды. Эми sentence builder же quiz менен активдүү колдонууга басым жасасаңыз болот.',
+                ? 'Адегенде кайталоону жабыңыз.'
+                : 'Эми жаңы режимге өтсөңүз болот.',
             style: AppTextStyles.muted,
           ),
         ],
@@ -659,22 +636,20 @@ class _ProgressFocus {
   }) {
     if (progress.reviewDueWordsCount > 0 && reviewCategory != null) {
       return _ProgressFocus(
-        title: 'Алгач review кезегин жабыңыз',
-        message:
-            '${reviewCategory.title} ичинде мөөнөтү жеткен сөздөр бар. Кыска review цикли тактыкты тезирээк оңдойт, анан гана жаңы режимге өтүү пайдалуу.',
+        title: 'Алгач кайталоону жабыңыз',
+        message: '${reviewCategory.title} ичинде мөөнөтү жеткен сөздөр бар.',
         primaryLabel: 'Кайталоону баштоо',
         primaryRoute: '/flashcards/${reviewCategory.id}?mode=review',
-        badge: '${progress.reviewDueWordsCount} review күтөт',
+        badge: '${progress.reviewDueWordsCount} кайталоо',
         badgeVariant: AppChipVariant.accent,
-        helperChip: 'Goal: $dailyGoalMinutes мүн',
+        helperChip: '$dailyGoalMinutes мүн максат',
       );
     }
 
     if (progress.weakWordsCount > 0) {
       return _ProgressFocus(
         title: 'Алсыз сөздөрдү бекемдеңиз',
-        message:
-            '${progress.weakWordsCount} сөз дагы эле туруксуз. Практика хабынан карточка же сүйлөм режимин ачсаңыз, recall тезирээк түзөлөт.',
+        message: '${progress.weakWordsCount} сөз дагы эле туруксуз.',
         primaryLabel: 'Практикага өтүү',
         primaryRoute: '/practice',
         badge: 'Алсыз фокус',
@@ -686,8 +661,7 @@ class _ProgressFocus {
     if (progress.totalWordsReviewed == 0) {
       return _ProgressFocus(
         title: 'Биринчи циклди баштаңыз',
-        message:
-            'Азырынча чогулган статистика жок. Алгач бир карточка же квиз циклин бүтүрсөңүз, бул жерде персоналдуу кеңеш пайда болот.',
+        message: 'Алгач бир кыска машыгууну бүтүрүңүз.',
         primaryLabel: 'Жол картасын ачуу',
         primaryRoute: '/categories',
         badge: 'Старт',
@@ -697,8 +671,7 @@ class _ProgressFocus {
 
     return _ProgressFocus(
       title: 'Темпти сактап туруңуз',
-      message:
-          'Review басымы азайды. Эми $dailyGoalMinutes мүнөттүк темпти сактап, жаңы материалды quiz же sentence builder менен активдүү колдонууга өткөрүңүз.',
+      message: '$dailyGoalMinutes мүнөттүк темпти сактаңыз.',
       primaryLabel: 'Практикага өтүү',
       primaryRoute: '/practice',
       badge: 'Таза темп',

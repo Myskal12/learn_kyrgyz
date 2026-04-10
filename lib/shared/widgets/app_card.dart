@@ -38,31 +38,62 @@ class AppCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final decoration = BoxDecoration(
-      color: gradient ? null : (backgroundColor ?? AppColors.surface),
+      color: gradient
+          ? null
+          : (backgroundColor ?? AppColors.surface.withValues(alpha: 0.9)),
       gradient: gradient
           ? LinearGradient(
-              colors: [AppColors.primary, AppColors.accent],
+              colors: [
+                AppColors.primary,
+                Color.lerp(AppColors.primary, AppColors.accent, 0.38)!,
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             )
           : null,
       borderRadius: BorderRadius.circular(_radiusValue),
-      border:
-          gradient ? null : Border.all(color: borderColor ?? AppColors.border),
+      border: Border.all(
+        color: gradient
+            ? Colors.white.withValues(alpha: 0.08)
+            : (borderColor ?? AppColors.border),
+      ),
       boxShadow: [
         BoxShadow(
           color: gradient
-              ? const Color.fromRGBO(31, 31, 31, 0.16)
-              : const Color.fromRGBO(31, 31, 31, 0.12),
-          blurRadius: gradient ? 30 : 24,
-          offset: Offset(0, gradient ? 16 : 12),
+              ? AppColors.primary.withValues(alpha: 0.2)
+              : AppColors.cardShadow,
+          blurRadius: gradient ? 28 : 22,
+          offset: Offset(0, gradient ? 14 : 10),
         ),
       ],
     );
 
-    final content = Padding(
-      padding: padding ?? EdgeInsets.zero,
-      child: child,
+    final content = ClipRRect(
+      borderRadius: BorderRadius.circular(_radiusValue),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: gradient
+                      ? [
+                          Colors.white.withValues(alpha: 0.14),
+                          Colors.transparent,
+                        ]
+                      : [
+                          Colors.white.withValues(alpha: 0.45),
+                          Colors.transparent,
+                        ],
+                ),
+              ),
+            ),
+          ),
+          Padding(padding: padding ?? EdgeInsets.zero, child: child),
+        ],
+      ),
     );
 
     if (onTap == null) {

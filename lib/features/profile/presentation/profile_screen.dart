@@ -30,10 +30,10 @@ class ProfileScreen extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final rankingTitle = profileProvider.isGuest
         ? 'Конок режиминде рейтинг жок'
-        : 'Рейтинг толук тизмекте эсептелет';
+        : 'Рейтингди ачыңыз';
     final rankingSubtitle = profileProvider.isGuest
-        ? 'Киргенден кийин сиз дагы лидерборддо көрүнөсүз.'
-        : 'Чынчыл орунду көрүү үчүн лидерборд экранын ачыңыз.';
+        ? 'Кирсеңиз, орун көрүнөт.'
+        : 'Ордуңузду ушул жерден көрөсүз.';
 
     final themeLabel = themeMode == ThemeMode.dark
         ? 'Караңгы'
@@ -51,7 +51,7 @@ class ProfileScreen extends ConsumerWidget {
           Text('Профиль', style: AppTextStyles.heading.copyWith(fontSize: 28)),
           const SizedBox(height: 6),
           Text(
-            'Сиздин прогресс жана жеке жөндөөлөр',
+            'Жеке баракчаңыз',
             style: AppTextStyles.body.copyWith(color: AppColors.muted),
           ),
           const SizedBox(height: 20),
@@ -138,7 +138,7 @@ class ProfileScreen extends ConsumerWidget {
                   runSpacing: 8,
                   children: [
                     AppChip(
-                      label: '${progress.reviewDueWordsCount} review',
+                      label: '${progress.reviewDueWordsCount} кайталоо',
                       variant: progress.reviewDueWordsCount > 0
                           ? AppChipVariant.accent
                           : AppChipVariant.success,
@@ -156,10 +156,10 @@ class ProfileScreen extends ConsumerWidget {
                 const SizedBox(height: 10),
                 Text(
                   progress.reviewDueWordsCount > 0
-                      ? 'Азыр эң жакшы кадам review queue жабуу. Андан кийин quiz же sentence builder натыйжалуураак болот.'
+                      ? 'Адегенде кайталоону жабыңыз.'
                       : progress.wordsToNextMilestone > 0
-                      ? 'Кийинки чекитке чейин дагы ${progress.wordsToNextMilestone} сөз калды. Темпти сактоо жетиштүү.'
-                      : 'Негизги чекиттер ачылган. Эми сапатты review жана mixed practice менен кармаңыз.',
+                      ? 'Дагы ${progress.wordsToNextMilestone} сөз калды.'
+                      : 'Темпти кармап туруңуз.',
                   style: AppTextStyles.muted,
                 ),
                 const SizedBox(height: 12),

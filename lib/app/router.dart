@@ -2,12 +2,14 @@ import 'package:go_router/go_router.dart';
 
 import '../features/auth/presentation/login_screen.dart';
 import '../features/auth/presentation/register_screen.dart';
+import '../features/auth/presentation/auth_complete_screen.dart';
+import '../features/auth/presentation/email_verification_screen.dart';
+import '../features/auth/presentation/profile_setup_screen.dart';
 import '../features/categories/presentation/categories_screen.dart';
 import '../features/extras/presentation/achievements_screen.dart';
 import '../features/extras/presentation/resources_screen.dart';
 import '../features/extras/presentation/study_plan_screen.dart';
 import '../features/learning/presentation/flashcard_screen.dart';
-import '../features/learning/presentation/lesson_overview_screen.dart';
 import '../features/learning/presentation/sentence_builder_screen.dart';
 import '../features/learning/providers/flashcard_provider.dart';
 import '../features/progress/presentation/progress_screen.dart';
@@ -31,6 +33,18 @@ final GoRouter router = GoRouter(
     GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
     GoRoute(
+      path: '/auth-complete',
+      builder: (context, state) => const AuthCompleteScreen(),
+    ),
+    GoRoute(
+      path: '/verify-email',
+      builder: (context, state) => const EmailVerificationScreen(),
+    ),
+    GoRoute(
+      path: '/profile-setup',
+      builder: (context, state) => const ProfileSetupScreen(),
+    ),
+    GoRoute(
       path: '/signup',
       builder: (context, state) => const RegisterScreen(),
     ),
@@ -42,10 +56,7 @@ final GoRouter router = GoRouter(
       path: '/categories',
       builder: (context, state) => const CategoriesScreen(),
     ),
-    GoRoute(
-      path: '/lesson',
-      builder: (context, state) => const LessonOverviewScreen(),
-    ),
+    GoRoute(path: '/lesson', redirect: (_, __) => '/practice'),
     GoRoute(
       path: '/flashcards',
       builder: (context, state) => FlashcardScreen(
@@ -102,6 +113,10 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/study-plan',
+      builder: (context, state) => const StudyPlanScreen(),
+    ),
+    GoRoute(
+      path: '/roadmap',
       builder: (context, state) => const StudyPlanScreen(),
     ),
     GoRoute(

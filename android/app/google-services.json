@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "330519490780-rtp5fbga7785g6p9a3jhiep6bdh0iv3l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.learn_kyrgyz",
+            "certificate_hash": "8ec46365cbf2994cf84514bfd58f196692c1e72f"
+          }
+        },
+        {
           "client_id": "330519490780-jr2brgrghmnpn14ojbai0amdhl2n51vt.apps.googleusercontent.com",
           "client_type": 3
         }

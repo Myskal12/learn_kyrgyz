@@ -1,10 +1,829 @@
 [
   {
-    "id": "water",
-    "en": "water",
-    "ky": "суу",
-    "transcription_en": "[ˈwɔːtər]",
-    "transcription_ky": "[суу]",
+    "id": "draft_adjectives_bad_24",
+    "en": "bad",
+    "ky": "bad",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_beautiful_17",
+    "en": "beautiful",
+    "ky": "beautiful",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_big_1",
+    "en": "big",
+    "ky": "чоң",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_clean_15",
+    "en": "clean",
+    "ky": "clean",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_cold_13",
+    "en": "cold",
+    "ky": "cold",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_dirty_16",
+    "en": "dirty",
+    "ky": "dirty",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_early_29",
+    "en": "early",
+    "ky": "early",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_easy_10",
+    "en": "easy",
+    "ky": "жеңил",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_fast_8",
+    "en": "fast",
+    "ky": "тез",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_good_23",
+    "en": "good",
+    "ky": "good",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_happy_21",
+    "en": "happy",
+    "ky": "happy",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_hard_11",
+    "en": "hard",
+    "ky": "hard",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_hot_12",
+    "en": "hot",
+    "ky": "hot",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_important_25",
+    "en": "important",
+    "ky": "important",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_interesting_26",
+    "en": "interesting",
+    "ky": "interesting",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_late_30",
+    "en": "late",
+    "ky": "late",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_long_3",
+    "en": "long",
+    "ky": "узун",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_loud_28",
+    "en": "loud",
+    "ky": "loud",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_new_5",
+    "en": "new",
+    "ky": "жаңы",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_old_6",
+    "en": "old",
+    "ky": "эски",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_quiet_27",
+    "en": "quiet",
+    "ky": "quiet",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_sad_22",
+    "en": "sad",
+    "ky": "sad",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_short_4",
+    "en": "short",
+    "ky": "кыска",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_slow_9",
+    "en": "slow",
+    "ky": "жай",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_small_2",
+    "en": "small",
+    "ky": "кичине",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_strong_19",
+    "en": "strong",
+    "ky": "strong",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_ugly_18",
+    "en": "ugly",
+    "ky": "ugly",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_warm_14",
+    "en": "warm",
+    "ky": "warm",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_weak_20",
+    "en": "weak",
+    "ky": "weak",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_young_7",
+    "en": "young",
+    "ky": "жаш",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft2_adjectives_black_5",
+    "en": "black",
+    "ky": "black",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft2_adjectives_blue_2",
+    "en": "blue",
+    "ky": "blue",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft2_adjectives_green_3",
+    "en": "green",
+    "ky": "green",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft2_adjectives_heavy_6",
+    "en": "heavy",
+    "ky": "heavy",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft2_adjectives_light_7",
+    "en": "light",
+    "ky": "light",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft2_adjectives_red_1",
+    "en": "red",
+    "ky": "red",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft2_adjectives_sharp_9",
+    "en": "sharp",
+    "ky": "sharp",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft2_adjectives_soft_8",
+    "en": "soft",
+    "ky": "soft",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft2_adjectives_sweet_10",
+    "en": "sweet",
+    "ky": "sweet",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft2_adjectives_white_4",
+    "en": "white",
+    "ky": "white",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "animals_bird",
+    "en": "bird",
+    "ky": "Куш",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "animals_cat",
+    "en": "cat",
+    "ky": "Мышык",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "animals_dog",
+    "en": "dog",
+    "ky": "Ит",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "animals_eagle",
+    "en": "eagle",
+    "ky": "Бүркүт",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "animals_horse",
+    "en": "horse",
+    "ky": "Ат",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "animals_sheep",
+    "en": "sheep",
+    "ky": "Кой",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_bear_7",
+    "en": "bear",
+    "ky": "bear",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_bee_15",
+    "en": "bee",
+    "ky": "bee",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_butterfly_16",
+    "en": "butterfly",
+    "ky": "butterfly",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_camel_3",
+    "en": "camel",
+    "ky": "camel",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_chicken_10",
+    "en": "chicken",
+    "ky": "chicken",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_cow_1",
+    "en": "cow",
+    "ky": "cow",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_deer_13",
+    "en": "deer",
+    "ky": "deer",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_donkey_14",
+    "en": "donkey",
+    "ky": "donkey",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_duck_9",
+    "en": "duck",
+    "ky": "duck",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_fish_8",
+    "en": "fish",
+    "ky": "fish",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_fox_5",
+    "en": "fox",
+    "ky": "fox",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_goat_2",
+    "en": "goat",
+    "ky": "goat",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_mouse_12",
+    "en": "mouse",
+    "ky": "mouse",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_rabbit_6",
+    "en": "rabbit",
+    "ky": "rabbit",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_rooster_11",
+    "en": "rooster",
+    "ky": "rooster",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft_animals_wolf_4",
+    "en": "wolf",
+    "ky": "wolf",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_calf_14",
+    "en": "calf",
+    "ky": "calf",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_crow_10",
+    "en": "crow",
+    "ky": "crow",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_elephant_7",
+    "en": "elephant",
+    "ky": "elephant",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_giraffe_5",
+    "en": "giraffe",
+    "ky": "giraffe",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_goose_11",
+    "en": "goose",
+    "ky": "goose",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_kitten_15",
+    "en": "kitten",
+    "ky": "kitten",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_lamb_13",
+    "en": "lamb",
+    "ky": "lamb",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_leopard_3",
+    "en": "leopard",
+    "ky": "leopard",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_lion_1",
+    "en": "lion",
+    "ky": "lion",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_monkey_6",
+    "en": "monkey",
+    "ky": "monkey",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_pigeon_9",
+    "en": "pigeon",
+    "ky": "pigeon",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_puppy_16",
+    "en": "puppy",
+    "ky": "puppy",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_squirrel_17",
+    "en": "squirrel",
+    "ky": "squirrel",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_swan_8",
+    "en": "swan",
+    "ky": "swan",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_tiger_2",
+    "en": "tiger",
+    "ky": "tiger",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_turkey_12",
+    "en": "turkey",
+    "ky": "turkey",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "draft2_animals_zebra_4",
+    "en": "zebra",
+    "ky": "zebra",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "horse",
+    "en": "horse",
+    "ky": "ат",
+    "transcription_en": "[hɔːrs]",
+    "transcription_ky": "[ат]",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "basics_good_morning",
+    "en": "good morning",
+    "ky": "Кутман таң",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "basics_hello",
+    "en": "hello",
+    "ky": "Салам",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "basics_no",
+    "en": "no",
+    "ky": "Жок",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "basics_please",
+    "en": "please",
+    "ky": "Суранам",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "basics_thanks",
+    "en": "thank you",
+    "ky": "Рахмат",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "basics_yes",
+    "en": "yes",
+    "ky": "Ооба",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_answer_12",
+    "en": "answer",
+    "ky": "answer",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_country_15",
+    "en": "country",
+    "ky": "country",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_excuse_me_4",
+    "en": "excuse me",
+    "ky": "excuse me",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_goodbye_1",
+    "en": "goodbye",
+    "ky": "goodbye",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_language_14",
+    "en": "language",
+    "ky": "language",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_later_7",
+    "en": "later",
+    "ky": "later",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_maybe_5",
+    "en": "maybe",
+    "ky": "maybe",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_name_13",
+    "en": "name",
+    "ky": "name",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_now_6",
+    "en": "now",
+    "ky": "now",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_question_11",
+    "en": "question",
+    "ky": "question",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_sorry_3",
+    "en": "sorry",
+    "ky": "sorry",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_today_8",
+    "en": "today",
+    "ky": "today",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_tomorrow_9",
+    "en": "tomorrow",
+    "ky": "tomorrow",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_village_16",
+    "en": "village",
+    "ky": "village",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_welcome_2",
+    "en": "welcome",
+    "ky": "welcome",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft_basic_yesterday_10",
+    "en": "yesterday",
+    "ky": "yesterday",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_afternoon_1",
+    "en": "afternoon",
+    "ky": "afternoon",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_center_16",
+    "en": "center",
+    "ky": "center",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_door_12",
+    "en": "door",
+    "ky": "door",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_evening_2",
+    "en": "evening",
+    "ky": "evening",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_hour_8",
+    "en": "hour",
+    "ky": "hour",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_house_10",
+    "en": "house",
+    "ky": "house",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_left_15",
+    "en": "left",
+    "ky": "left",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_minute_7",
+    "en": "minute",
+    "ky": "minute",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_month_5",
+    "en": "month",
+    "ky": "month",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_night_3",
+    "en": "night",
+    "ky": "night",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_right_14",
+    "en": "right",
+    "ky": "right",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_room_11",
+    "en": "room",
+    "ky": "room",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_street_9",
+    "en": "street",
+    "ky": "street",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_week_4",
+    "en": "week",
+    "ky": "week",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_window_13",
+    "en": "window",
+    "ky": "window",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "draft2_basic_year_6",
+    "en": "year",
+    "ky": "year",
     "level": 1,
     "category": "basic"
   },
@@ -18,11 +837,859 @@
     "category": "basic"
   },
   {
+    "id": "water",
+    "en": "water",
+    "ky": "суу",
+    "transcription_en": "[ˈwɔːtər]",
+    "transcription_ky": "[суу]",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "book",
+    "en": "book",
+    "ky": "китеп",
+    "transcription_en": "[bʊk]",
+    "transcription_ky": "[китеп]",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_alphabet_11",
+    "en": "alphabet",
+    "ky": "alphabet",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_classroom_3",
+    "en": "classroom",
+    "ky": "classroom",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_dictionary_10",
+    "en": "dictionary",
+    "ky": "dictionary",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_exam_6",
+    "en": "exam",
+    "ky": "exam",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_grade_7",
+    "en": "grade",
+    "ky": "grade",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_homework_5",
+    "en": "homework",
+    "ky": "homework",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_knowledge_15",
+    "en": "knowledge",
+    "ky": "knowledge",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_lesson_4",
+    "en": "lesson",
+    "ky": "lesson",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_notebook_9",
+    "en": "notebook",
+    "ky": "notebook",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_sentence_12",
+    "en": "sentence",
+    "ky": "sentence",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_story_13",
+    "en": "story",
+    "ky": "story",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_student_2",
+    "en": "student",
+    "ky": "student",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_subject_8",
+    "en": "subject",
+    "ky": "subject",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_teacher_1",
+    "en": "teacher",
+    "ky": "teacher",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_education_university_14",
+    "en": "university",
+    "ky": "university",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_attendance_23",
+    "en": "attendance",
+    "ky": "attendance",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_backpack_22",
+    "en": "backpack",
+    "ky": "backpack",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_board_5",
+    "en": "board",
+    "ky": "board",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_calculator_21",
+    "en": "calculator",
+    "ky": "calculator",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_campus_9",
+    "en": "campus",
+    "ky": "campus",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_chair_7",
+    "en": "chair",
+    "ky": "chair",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_chapter_14",
+    "en": "chapter",
+    "ky": "chapter",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_course_13",
+    "en": "course",
+    "ky": "course",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_desk_6",
+    "en": "desk",
+    "ky": "desk",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_eraser_3",
+    "en": "eraser",
+    "ky": "eraser",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_grammar_16",
+    "en": "grammar",
+    "ky": "grammar",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_lab_20",
+    "en": "lab",
+    "ky": "lab",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_lecture_11",
+    "en": "lecture",
+    "ky": "lecture",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_library_8",
+    "en": "library",
+    "ky": "library",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_marker_4",
+    "en": "marker",
+    "ky": "marker",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_paragraph_15",
+    "en": "paragraph",
+    "ky": "paragraph",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_pen_1",
+    "en": "pen",
+    "ky": "pen",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_pencil_2",
+    "en": "pencil",
+    "ky": "pencil",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_professor_10",
+    "en": "professor",
+    "ky": "professor",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_research_19",
+    "en": "research",
+    "ky": "research",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_seminar_12",
+    "en": "seminar",
+    "ky": "seminar",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_translation_18",
+    "en": "translation",
+    "ky": "translation",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft2_education_vocabulary_17",
+    "en": "vocabulary",
+    "ky": "vocabulary",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "school",
+    "en": "school",
+    "ky": "мектеп",
+    "transcription_en": "[skuːl]",
+    "transcription_ky": "[мектеп]",
+    "level": 1,
+    "category": "education"
+  },
+  {
+    "id": "draft_emotion_anger_3",
+    "en": "anger",
+    "ky": "anger",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_calm_7",
+    "en": "calm",
+    "ky": "calm",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_courage_15",
+    "en": "courage",
+    "ky": "courage",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_fear_2",
+    "en": "fear",
+    "ky": "fear",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_hope_5",
+    "en": "hope",
+    "ky": "hope",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_joy_4",
+    "en": "joy",
+    "ky": "joy",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_kindness_13",
+    "en": "kindness",
+    "ky": "kindness",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_love_1",
+    "en": "love",
+    "ky": "love",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_patience_14",
+    "en": "patience",
+    "ky": "patience",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_pride_10",
+    "en": "pride",
+    "ky": "pride",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_shame_11",
+    "en": "shame",
+    "ky": "shame",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_stress_8",
+    "en": "stress",
+    "ky": "stress",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_surprise_12",
+    "en": "surprise",
+    "ky": "surprise",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_trust_6",
+    "en": "trust",
+    "ky": "trust",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_emotion_worry_9",
+    "en": "worry",
+    "ky": "worry",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_admiration_22",
+    "en": "admiration",
+    "ky": "admiration",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_affection_19",
+    "en": "affection",
+    "ky": "affection",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_comfort_21",
+    "en": "comfort",
+    "ky": "comfort",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_compassion_18",
+    "en": "compassion",
+    "ky": "compassion",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_confidence_11",
+    "en": "confidence",
+    "ky": "confidence",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_curiosity_17",
+    "en": "curiosity",
+    "ky": "curiosity",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_disappointment_15",
+    "en": "disappointment",
+    "ky": "disappointment",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_empathy_6",
+    "en": "empathy",
+    "ky": "empathy",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_enthusiasm_23",
+    "en": "enthusiasm",
+    "ky": "enthusiasm",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_excitement_9",
+    "en": "excitement",
+    "ky": "excitement",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_friendship_4",
+    "en": "friendship",
+    "ky": "friendship",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_frustration_13",
+    "en": "frustration",
+    "ky": "frustration",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_gratitude_12",
+    "en": "gratitude",
+    "ky": "gratitude",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_inspiration_24",
+    "en": "inspiration",
+    "ky": "inspiration",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_jealousy_7",
+    "en": "jealousy",
+    "ky": "jealousy",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_laughter_2",
+    "en": "laughter",
+    "ky": "laughter",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_loneliness_8",
+    "en": "loneliness",
+    "ky": "loneliness",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_motivation_10",
+    "en": "motivation",
+    "ky": "motivation",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_nervousness_20",
+    "en": "nervousness",
+    "ky": "nervousness",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_relief_14",
+    "en": "relief",
+    "ky": "relief",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_respect_5",
+    "en": "respect",
+    "ky": "respect",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_satisfaction_16",
+    "en": "satisfaction",
+    "ky": "satisfaction",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_smile_1",
+    "en": "smile",
+    "ky": "smile",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft2_emotion_tears_3",
+    "en": "tears",
+    "ky": "tears",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "friend",
+    "en": "friend",
+    "ky": "дос",
+    "transcription_en": "[frɛnd]",
+    "transcription_ky": "[дос]",
+    "level": 1,
+    "category": "emotion"
+  },
+  {
+    "id": "draft_family_aunt_3",
+    "en": "aunt",
+    "ky": "aunt",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft_family_cousin_4",
+    "en": "cousin",
+    "ky": "cousin",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft_family_daughter_6",
+    "en": "daughter",
+    "ky": "daughter",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft_family_grandfather_1",
+    "en": "grandfather",
+    "ky": "grandfather",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft_family_home_12",
+    "en": "home",
+    "ky": "home",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft_family_husband_9",
+    "en": "husband",
+    "ky": "husband",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft_family_parents_7",
+    "en": "parents",
+    "ky": "parents",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft_family_relatives_8",
+    "en": "relatives",
+    "ky": "relatives",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft_family_respect_14",
+    "en": "respect",
+    "ky": "respect",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft_family_son_5",
+    "en": "son",
+    "ky": "son",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft_family_support_13",
+    "en": "support",
+    "ky": "support",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft_family_uncle_2",
+    "en": "uncle",
+    "ky": "uncle",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft_family_wedding_11",
+    "en": "wedding",
+    "ky": "wedding",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft_family_wife_10",
+    "en": "wife",
+    "ky": "wife",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_adult_16",
+    "en": "adult",
+    "ky": "adult",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_ancestor_10",
+    "en": "ancestor",
+    "ky": "ancestor",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_baby_13",
+    "en": "baby",
+    "ky": "baby",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_brother_in_law_7",
+    "en": "brother-in-law",
+    "ky": "brother-in-law",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_descendant_11",
+    "en": "descendant",
+    "ky": "descendant",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_family_tree_17",
+    "en": "family tree",
+    "ky": "family tree",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_granddaughter_4",
+    "en": "granddaughter",
+    "ky": "granddaughter",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_grandson_3",
+    "en": "grandson",
+    "ky": "grandson",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_guardian_12",
+    "en": "guardian",
+    "ky": "guardian",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_household_18",
+    "en": "household",
+    "ky": "household",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_nephew_1",
+    "en": "nephew",
+    "ky": "nephew",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_niece_2",
+    "en": "niece",
+    "ky": "niece",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_parenthood_19",
+    "en": "parenthood",
+    "ky": "parenthood",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_sister_in_law_8",
+    "en": "sister-in-law",
+    "ky": "sister-in-law",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_stepfather_5",
+    "en": "stepfather",
+    "ky": "stepfather",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_stepmother_6",
+    "en": "stepmother",
+    "ky": "stepmother",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_teenager_15",
+    "en": "teenager",
+    "ky": "teenager",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_toddler_14",
+    "en": "toddler",
+    "ky": "toddler",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "draft2_family_twins_9",
+    "en": "twins",
+    "ky": "twins",
+    "level": 1,
+    "category": "family"
+  },
+  {
     "id": "family",
     "en": "family",
     "ky": "үй-бүлө",
     "transcription_en": "[ˈfæməli]",
     "transcription_ky": "[үй-бүлө]",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "family_brother",
+    "en": "elder brother",
+    "ky": "Агам",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "family_child",
+    "en": "child",
+    "ky": "Бала",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "family_father",
+    "en": "father",
+    "ky": "Атам",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "family_grandma",
+    "en": "grandmother",
+    "ky": "Чоң апа",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "family_mother",
+    "en": "mother",
+    "ky": "Апам",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "family_sister",
+    "en": "sister",
+    "ky": "Карындашым",
     "level": 1,
     "category": "family"
   },
@@ -36,6 +1703,720 @@
     "category": "food"
   },
   {
+    "id": "draft_food_breakfast_15",
+    "en": "breakfast",
+    "ky": "breakfast",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_butter_3",
+    "en": "butter",
+    "ky": "butter",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_carrot_10",
+    "en": "carrot",
+    "ky": "carrot",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_cheese_13",
+    "en": "cheese",
+    "ky": "cheese",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_chicken_meat_14",
+    "en": "chicken meat",
+    "ky": "chicken meat",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_cucumber_11",
+    "en": "cucumber",
+    "ky": "cucumber",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_dinner_17",
+    "en": "dinner",
+    "ky": "dinner",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_egg_12",
+    "en": "egg",
+    "ky": "egg",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_kitchen_18",
+    "en": "kitchen",
+    "ky": "kitchen",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_lunch_16",
+    "en": "lunch",
+    "ky": "lunch",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_milk_2",
+    "en": "milk",
+    "ky": "milk",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_onion_8",
+    "en": "onion",
+    "ky": "onion",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_pepper_6",
+    "en": "pepper",
+    "ky": "pepper",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_potato_7",
+    "en": "potato",
+    "ky": "potato",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_rice_1",
+    "en": "rice",
+    "ky": "rice",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_salt_4",
+    "en": "salt",
+    "ky": "salt",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_sugar_5",
+    "en": "sugar",
+    "ky": "sugar",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_food_tomato_9",
+    "en": "tomato",
+    "ky": "tomato",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_banana_1",
+    "en": "banana",
+    "ky": "banana",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_biscuit_13",
+    "en": "biscuit",
+    "ky": "biscuit",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_cake_14",
+    "en": "cake",
+    "ky": "cake",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_grape_3",
+    "en": "grape",
+    "ky": "grape",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_honey_5",
+    "en": "honey",
+    "ky": "honey",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_juice_15",
+    "en": "juice",
+    "ky": "juice",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_noodles_9",
+    "en": "noodles",
+    "ky": "noodles",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_orange_2",
+    "en": "orange",
+    "ky": "orange",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_pasta_8",
+    "en": "pasta",
+    "ky": "pasta",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_porridge_7",
+    "en": "porridge",
+    "ky": "porridge",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_salad_11",
+    "en": "salad",
+    "ky": "salad",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_sauce_12",
+    "en": "sauce",
+    "ky": "sauce",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_sausage_10",
+    "en": "sausage",
+    "ky": "sausage",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_strawberry_4",
+    "en": "strawberry",
+    "ky": "strawberry",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft2_food_yogurt_6",
+    "en": "yogurt",
+    "ky": "yogurt",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "food_apple",
+    "en": "apple",
+    "ky": "Алма",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "food_bread",
+    "en": "bread",
+    "ky": "Нан",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "food_meat",
+    "en": "meat",
+    "ky": "Эт",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "food_soup",
+    "en": "soup",
+    "ky": "Шорпо",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "food_tea",
+    "en": "tea",
+    "ky": "Чай",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "food_water",
+    "en": "water",
+    "ky": "Суу",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "draft_health_blood_10",
+    "en": "blood",
+    "ky": "blood",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_clinic_4",
+    "en": "clinic",
+    "ky": "clinic",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_cough_9",
+    "en": "cough",
+    "ky": "cough",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_doctor_1",
+    "en": "doctor",
+    "ky": "doctor",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_ear_15",
+    "en": "ear",
+    "ky": "ear",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_emergency_20",
+    "en": "emergency",
+    "ky": "emergency",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_exercise_17",
+    "en": "exercise",
+    "ky": "exercise",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_eye_14",
+    "en": "eye",
+    "ky": "eye",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_fever_8",
+    "en": "fever",
+    "ky": "fever",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_headache_7",
+    "en": "headache",
+    "ky": "headache",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_healthy_16",
+    "en": "healthy",
+    "ky": "healthy",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_heart_11",
+    "en": "heart",
+    "ky": "heart",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_hospital_3",
+    "en": "hospital",
+    "ky": "hospital",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_medicine_5",
+    "en": "medicine",
+    "ky": "medicine",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_nurse_2",
+    "en": "nurse",
+    "ky": "nurse",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_pain_6",
+    "en": "pain",
+    "ky": "pain",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_sleep_19",
+    "en": "sleep",
+    "ky": "sleep",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_stomach_12",
+    "en": "stomach",
+    "ky": "stomach",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_tooth_13",
+    "en": "tooth",
+    "ky": "tooth",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_health_vitamin_18",
+    "en": "vitamin",
+    "ky": "vitamin",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft2_health_allergy_1",
+    "en": "allergy",
+    "ky": "allergy",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft2_health_ambulance_9",
+    "en": "ambulance",
+    "ky": "ambulance",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft2_health_appointment_8",
+    "en": "appointment",
+    "ky": "appointment",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft2_health_diagnosis_6",
+    "en": "diagnosis",
+    "ky": "diagnosis",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft2_health_first_aid_10",
+    "en": "first aid",
+    "ky": "first aid",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft2_health_infection_2",
+    "en": "infection",
+    "ky": "infection",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft2_health_injury_3",
+    "en": "injury",
+    "ky": "injury",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft2_health_recovery_4",
+    "en": "recovery",
+    "ky": "recovery",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft2_health_therapy_5",
+    "en": "therapy",
+    "ky": "therapy",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft2_health_treatment_7",
+    "en": "treatment",
+    "ky": "treatment",
+    "level": 1,
+    "category": "health"
+  },
+  {
+    "id": "draft_nature_cloud_13",
+    "en": "cloud",
+    "ky": "cloud",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_earth_9",
+    "en": "earth",
+    "ky": "earth",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_fire_10",
+    "en": "fire",
+    "ky": "fire",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_flower_3",
+    "en": "flower",
+    "ky": "flower",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_forest_1",
+    "en": "forest",
+    "ky": "forest",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_grass_4",
+    "en": "grass",
+    "ky": "grass",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_hill_6",
+    "en": "hill",
+    "ky": "hill",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_ice_11",
+    "en": "ice",
+    "ky": "ice",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_rain_12",
+    "en": "rain",
+    "ky": "rain",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_season_15",
+    "en": "season",
+    "ky": "season",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_sky_8",
+    "en": "sky",
+    "ky": "sky",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_stone_5",
+    "en": "stone",
+    "ky": "stone",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_storm_14",
+    "en": "storm",
+    "ky": "storm",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_tree_2",
+    "en": "tree",
+    "ky": "tree",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_nature_valley_7",
+    "en": "valley",
+    "ky": "valley",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_branch_12",
+    "en": "branch",
+    "ky": "branch",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_cave_6",
+    "en": "cave",
+    "ky": "cave",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_cliff_7",
+    "en": "cliff",
+    "ky": "cliff",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_desert_1",
+    "en": "desert",
+    "ky": "desert",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_island_3",
+    "en": "island",
+    "ky": "island",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_leaf_11",
+    "en": "leaf",
+    "ky": "leaf",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_meadow_5",
+    "en": "meadow",
+    "ky": "meadow",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_moon_15",
+    "en": "moon",
+    "ky": "moon",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_ocean_2",
+    "en": "ocean",
+    "ky": "ocean",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_root_13",
+    "en": "root",
+    "ky": "root",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_sand_9",
+    "en": "sand",
+    "ky": "sand",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_seed_14",
+    "en": "seed",
+    "ky": "seed",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_shadow_18",
+    "en": "shadow",
+    "ky": "shadow",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_soil_10",
+    "en": "soil",
+    "ky": "soil",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_star_16",
+    "en": "star",
+    "ky": "star",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_sunlight_17",
+    "en": "sunlight",
+    "ky": "sunlight",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_volcano_8",
+    "en": "volcano",
+    "ky": "volcano",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft2_nature_waterfall_4",
+    "en": "waterfall",
+    "ky": "waterfall",
+    "level": 1,
+    "category": "nature"
+  },
+  {
     "id": "mountain",
     "en": "mountain",
     "ky": "тоо",
@@ -45,31 +2426,879 @@
     "category": "nature"
   },
   {
-    "id": "horse",
-    "en": "horse",
-    "ky": "ат",
-    "transcription_en": "[hɔːrs]",
-    "transcription_ky": "[ат]",
+    "id": "nature_lake",
+    "en": "lake",
+    "ky": "Көл",
     "level": 1,
-    "category": "animals"
+    "category": "nature"
   },
   {
-    "id": "school",
-    "en": "school",
-    "ky": "мектеп",
-    "transcription_en": "[skuːl]",
-    "transcription_ky": "[мектеп]",
+    "id": "nature_mountain",
+    "en": "mountain",
+    "ky": "Тоолор",
     "level": 1,
-    "category": "education"
+    "category": "nature"
   },
   {
-    "id": "book",
-    "en": "book",
-    "ky": "китеп",
-    "transcription_en": "[bʊk]",
-    "transcription_ky": "[китеп]",
+    "id": "nature_river",
+    "en": "river",
+    "ky": "Дарыя",
     "level": 1,
-    "category": "education"
+    "category": "nature"
+  },
+  {
+    "id": "nature_snow",
+    "en": "snow",
+    "ky": "Кар",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "nature_sun",
+    "en": "sun",
+    "ky": "Күн",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "nature_wind",
+    "en": "wind",
+    "ky": "Шамал",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "draft_travel_border_11",
+    "en": "border",
+    "ky": "border",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_travel_direction_14",
+    "en": "direction",
+    "ky": "direction",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_travel_distance_13",
+    "en": "distance",
+    "ky": "distance",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_travel_driver_4",
+    "en": "driver",
+    "ky": "driver",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_travel_hotel_7",
+    "en": "hotel",
+    "ky": "hotel",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_travel_luggage_6",
+    "en": "luggage",
+    "ky": "luggage",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_travel_map_1",
+    "en": "map",
+    "ky": "map",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_travel_passenger_5",
+    "en": "passenger",
+    "ky": "passenger",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_travel_passport_9",
+    "en": "passport",
+    "ky": "passport",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_travel_platform_3",
+    "en": "platform",
+    "ky": "platform",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_travel_reservation_8",
+    "en": "reservation",
+    "ky": "reservation",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_travel_route_12",
+    "en": "route",
+    "ky": "route",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_travel_station_2",
+    "en": "station",
+    "ky": "station",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_travel_visa_10",
+    "en": "visa",
+    "ky": "visa",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_adventure_17",
+    "en": "adventure",
+    "ky": "adventure",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_arrival_9",
+    "en": "arrival",
+    "ky": "arrival",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_bicycle_4",
+    "en": "bicycle",
+    "ky": "bicycle",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_camp_18",
+    "en": "camp",
+    "ky": "camp",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_checkpoint_10",
+    "en": "checkpoint",
+    "ky": "checkpoint",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_customs_11",
+    "en": "customs",
+    "ky": "customs",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_departure_8",
+    "en": "departure",
+    "ky": "departure",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_flight_7",
+    "en": "flight",
+    "ky": "flight",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_guidebook_12",
+    "en": "guidebook",
+    "ky": "guidebook",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_hostel_19",
+    "en": "hostel",
+    "ky": "hostel",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_journey_15",
+    "en": "journey",
+    "ky": "journey",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_motorcycle_5",
+    "en": "motorcycle",
+    "ky": "motorcycle",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_rental_car_20",
+    "en": "rental car",
+    "ky": "rental car",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_ship_6",
+    "en": "ship",
+    "ky": "ship",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_sightseeing_13",
+    "en": "sightseeing",
+    "ky": "sightseeing",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_souvenir_14",
+    "en": "souvenir",
+    "ky": "souvenir",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_subway_2",
+    "en": "subway",
+    "ky": "subway",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_taxi_1",
+    "en": "taxi",
+    "ky": "taxi",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_tram_3",
+    "en": "tram",
+    "ky": "tram",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft2_travel_trip_16",
+    "en": "trip",
+    "ky": "trip",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "travel_airport",
+    "en": "airport",
+    "ky": "Абамайдан",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "travel_bus",
+    "en": "bus",
+    "ky": "Автобус",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "travel_city",
+    "en": "city",
+    "ky": "Шаар",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "travel_road",
+    "en": "road",
+    "ky": "Жол",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "travel_ticket",
+    "en": "ticket",
+    "ky": "Билет",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "travel_train",
+    "en": "train",
+    "ky": "Поезд",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "draft_verbs_to_answer_23",
+    "en": "to answer",
+    "ky": "to answer",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_ask_22",
+    "en": "to ask",
+    "ky": "to ask",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_be_1",
+    "en": "to be",
+    "ky": "to be",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_buy_26",
+    "en": "to buy",
+    "ky": "to buy",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_call_28",
+    "en": "to call",
+    "ky": "to call",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_close_25",
+    "en": "to close",
+    "ky": "to close",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_come_5",
+    "en": "to come",
+    "ky": "to come",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_do_3",
+    "en": "to do",
+    "ky": "to do",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_drink_17",
+    "en": "to drink",
+    "ky": "to drink",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_eat_16",
+    "en": "to eat",
+    "ky": "to eat",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_go_4",
+    "en": "to go",
+    "ky": "to go",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_have_2",
+    "en": "to have",
+    "ky": "to have",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_hear_7",
+    "en": "to hear",
+    "ky": "to hear",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_help_29",
+    "en": "to help",
+    "ky": "to help",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_know_20",
+    "en": "to know",
+    "ky": "to know",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_learn_12",
+    "en": "to learn",
+    "ky": "to learn",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_listen_11",
+    "en": "to listen",
+    "ky": "to listen",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_open_24",
+    "en": "to open",
+    "ky": "to open",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_read_8",
+    "en": "to read",
+    "ky": "to read",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_rest_15",
+    "en": "to rest",
+    "ky": "to rest",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_see_6",
+    "en": "to see",
+    "ky": "to see",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_sell_27",
+    "en": "to sell",
+    "ky": "to sell",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_sleep_18",
+    "en": "to sleep",
+    "ky": "to sleep",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_speak_10",
+    "en": "to speak",
+    "ky": "to speak",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_teach_13",
+    "en": "to teach",
+    "ky": "to teach",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_think_19",
+    "en": "to think",
+    "ky": "to think",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_understand_21",
+    "en": "to understand",
+    "ky": "to understand",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_wait_30",
+    "en": "to wait",
+    "ky": "to wait",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_work_14",
+    "en": "to work",
+    "ky": "to work",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_verbs_to_write_9",
+    "en": "to write",
+    "ky": "to write",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft2_verbs_to_become_1",
+    "en": "to become",
+    "ky": "to become",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft2_verbs_to_begin_2",
+    "en": "to begin",
+    "ky": "to begin",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft2_verbs_to_build_6",
+    "en": "to build",
+    "ky": "to build",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft2_verbs_to_carry_5",
+    "en": "to carry",
+    "ky": "to carry",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft2_verbs_to_celebrate_10",
+    "en": "to celebrate",
+    "ky": "to celebrate",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft2_verbs_to_choose_4",
+    "en": "to choose",
+    "ky": "to choose",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft2_verbs_to_finish_3",
+    "en": "to finish",
+    "ky": "to finish",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft2_verbs_to_prepare_7",
+    "en": "to prepare",
+    "ky": "to prepare",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft2_verbs_to_return_9",
+    "en": "to return",
+    "ky": "to return",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft2_verbs_to_travel_8",
+    "en": "to travel",
+    "ky": "to travel",
+    "level": 1,
+    "category": "verbs"
+  },
+  {
+    "id": "draft_weather_autumn_11",
+    "en": "autumn",
+    "ky": "autumn",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_degree_5",
+    "en": "degree",
+    "ky": "degree",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_dry_weather_14",
+    "en": "dry weather",
+    "ky": "dry weather",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_fog_3",
+    "en": "fog",
+    "ky": "fog",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_forecast_12",
+    "en": "forecast",
+    "ky": "forecast",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_humid_13",
+    "en": "humid",
+    "ky": "humid",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_rain_1",
+    "en": "rain",
+    "ky": "rain",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_snowfall_2",
+    "en": "snowfall",
+    "ky": "snowfall",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_spring_9",
+    "en": "spring",
+    "ky": "spring",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_summer_10",
+    "en": "summer",
+    "ky": "summer",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_sunrise_6",
+    "en": "sunrise",
+    "ky": "sunrise",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_sunset_7",
+    "en": "sunset",
+    "ky": "sunset",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_temperature_4",
+    "en": "temperature",
+    "ky": "temperature",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_windy_15",
+    "en": "windy",
+    "ky": "windy",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft_weather_winter_8",
+    "en": "winter",
+    "ky": "winter",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_blizzard_5",
+    "en": "blizzard",
+    "ky": "blizzard",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_breeze_4",
+    "en": "breeze",
+    "ky": "breeze",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_chilly_17",
+    "en": "chilly",
+    "ky": "chilly",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_climate_10",
+    "en": "climate",
+    "ky": "climate",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_cloudy_13",
+    "en": "cloudy",
+    "ky": "cloudy",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_cold_front_8",
+    "en": "cold front",
+    "ky": "cold front",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_drizzle_1",
+    "en": "drizzle",
+    "ky": "drizzle",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_drought_23",
+    "en": "drought",
+    "ky": "drought",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_dry_21",
+    "en": "dry",
+    "ky": "dry",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_forecasting_11",
+    "en": "forecasting",
+    "ky": "forecasting",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_freezing_18",
+    "en": "freezing",
+    "ky": "freezing",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_hail_6",
+    "en": "hail",
+    "ky": "hail",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_heatwave_7",
+    "en": "heatwave",
+    "ky": "heatwave",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_lightning_3",
+    "en": "lightning",
+    "ky": "lightning",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_mild_19",
+    "en": "mild",
+    "ky": "mild",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_monsoon_22",
+    "en": "monsoon",
+    "ky": "monsoon",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_pressure_9",
+    "en": "pressure",
+    "ky": "pressure",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_rainbow_24",
+    "en": "rainbow",
+    "ky": "rainbow",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_rainy_14",
+    "en": "rainy",
+    "ky": "rainy",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_snowy_15",
+    "en": "snowy",
+    "ky": "snowy",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_stormy_16",
+    "en": "stormy",
+    "ky": "stormy",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_sunny_12",
+    "en": "sunny",
+    "ky": "sunny",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_thunder_2",
+    "en": "thunder",
+    "ky": "thunder",
+    "level": 1,
+    "category": "weather"
+  },
+  {
+    "id": "draft2_weather_wet_20",
+    "en": "wet",
+    "ky": "wet",
+    "level": 1,
+    "category": "weather"
   },
   {
     "id": "sun",
@@ -81,12 +3310,213 @@
     "category": "weather"
   },
   {
-    "id": "friend",
-    "en": "friend",
-    "ky": "дос",
-    "transcription_en": "[frɛnd]",
-    "transcription_ky": "[дос]",
+    "id": "draft_work_business_20",
+    "en": "business",
+    "ky": "business",
     "level": 1,
-    "category": "emotion"
+    "category": "work"
+  },
+  {
+    "id": "draft_work_career_10",
+    "en": "career",
+    "ky": "career",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_company_3",
+    "en": "company",
+    "ky": "company",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_deadline_8",
+    "en": "deadline",
+    "ky": "deadline",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_email_14",
+    "en": "email",
+    "ky": "email",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_employee_5",
+    "en": "employee",
+    "ky": "employee",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_experience_18",
+    "en": "experience",
+    "ky": "experience",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_job_1",
+    "en": "job",
+    "ky": "job",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_manager_4",
+    "en": "manager",
+    "ky": "manager",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_meeting_6",
+    "en": "meeting",
+    "ky": "meeting",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_office_2",
+    "en": "office",
+    "ky": "office",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_phone_call_15",
+    "en": "phone call",
+    "ky": "phone call",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_project_7",
+    "en": "project",
+    "ky": "project",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_promotion_19",
+    "en": "promotion",
+    "ky": "promotion",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_report_13",
+    "en": "report",
+    "ky": "report",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_salary_9",
+    "en": "salary",
+    "ky": "salary",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_schedule_16",
+    "en": "schedule",
+    "ky": "schedule",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_task_12",
+    "en": "task",
+    "ky": "task",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_team_11",
+    "en": "team",
+    "ky": "team",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft_work_training_17",
+    "en": "training",
+    "ky": "training",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft2_work_budget_5",
+    "en": "budget",
+    "ky": "budget",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft2_work_colleague_3",
+    "en": "colleague",
+    "ky": "colleague",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft2_work_contract_2",
+    "en": "contract",
+    "ky": "contract",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft2_work_customer_7",
+    "en": "customer",
+    "ky": "customer",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft2_work_department_4",
+    "en": "department",
+    "ky": "department",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft2_work_interview_1",
+    "en": "interview",
+    "ky": "interview",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft2_work_invoice_8",
+    "en": "invoice",
+    "ky": "invoice",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft2_work_overtime_10",
+    "en": "overtime",
+    "ky": "overtime",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft2_work_presentation_9",
+    "en": "presentation",
+    "ky": "presentation",
+    "level": 1,
+    "category": "work"
+  },
+  {
+    "id": "draft2_work_strategy_6",
+    "en": "strategy",
+    "ky": "strategy",
+    "level": 1,
+    "category": "work"
   }
 ]

@@ -53,6 +53,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final focusWords = wordsRepo.getCachedWords(focusCategory.id);
     final focusMastered = progress.masteredWordsForCategory(focusWords);
     final focusReviewDue = progress.reviewDueForCategory(focusWords);
+    final focusCompletion = focusWords.isEmpty
+        ? 0.0
+        : focusMastered / focusWords.length;
     final totalReviewDue = categories.fold<int>(0, (sum, category) {
       final words = wordsRepo.getCachedWords(category.id);
       return sum + progress.reviewDueForCategory(words);
@@ -93,14 +96,41 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         children: [
-          Text(
-            '$displayName, салам!',
-            style: AppTextStyles.heading.copyWith(fontSize: 28),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            recommendedAction.supportingText,
-            style: AppTextStyles.body.copyWith(color: AppColors.muted),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Кандайсың, $displayName!',
+                      style: AppTextStyles.caption.copyWith(
+                        letterSpacing: 1.2,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Бүгүн эмнеден баштайбыз?',
+                      style: AppTextStyles.heading.copyWith(
+                        fontSize: 30,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      recommendedAction.supportingText,
+                      style: AppTextStyles.body.copyWith(
+                        color: AppColors.muted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              _StreakBadge(streakDays: progress.streakDays),
+            ],
           ),
           const SizedBox(height: 20),
           AppCard(
@@ -112,14 +142,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _HeroChip(
-                      goalMinutes: onboarding.dailyGoalMinutes,
-                      streakDays: progress.streakDays,
-                      reviewDue: totalReviewDue,
+                    Row(
+                      children: [
+                        _GlassTag(
+                          label: focusWords.isEmpty
+                              ? 'Ушул жерден баштаңыз'
+                              : '${focusWords.length} сөз',
+                        ),
+                        const Spacer(),
+                        Container(
+                          width: 42,
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.18),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.22),
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.auto_awesome_rounded,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16),
                     Text(
-                      recommendedAction.title,
+                      focusCategory.title,
                       style: AppTextStyles.heading.copyWith(
                         color: Colors.white,
                         fontSize: 30,
@@ -131,6 +182,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       style: AppTextStyles.body.copyWith(
                         color: Colors.white.withValues(alpha: 0.9),
                       ),
+                    ),
+                    const SizedBox(height: 14),
+                    _HeroProgressBar(value: focusCompletion),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '$focusMastered/${focusWords.length} сөз өздөштү',
+                          style: AppTextStyles.caption.copyWith(
+                            color: Colors.white.withValues(alpha: 0.82),
+                          ),
+                        ),
+                        Text(
+                          focusReviewDue > 0
+                              ? '$focusReviewDue сөз кайталоодо'
+                              : 'Улантууга даяр',
+                          style: AppTextStyles.caption.copyWith(
+                            color: Colors.white.withValues(alpha: 0.82),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 20),
                     _HeroButton(
@@ -170,7 +243,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Катталып алсаңыз, жыйынтыктар Firebase менен синхрондолот.',
+                            'Аккаунт ачсаңыз, жыйынтык аккаунтка байланат.',
                             style: AppTextStyles.muted,
                           ),
                           const SizedBox(height: 12),
@@ -211,7 +284,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ],
           ),
           const SizedBox(height: 24),
-          Text('Бүгүнкү план', style: AppTextStyles.title),
+          Text('Кийинкилер', style: AppTextStyles.title),
           const SizedBox(height: 12),
           ...todayPlan.map(
             (item) => Padding(
@@ -228,26 +301,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             totalWords: focusWords.length,
             reviewDue: focusReviewDue,
             hasProgress: progress.totalWordsMastered > 0,
-          ),
-          const SizedBox(height: 12),
-          AppCard(
-            padding: const EdgeInsets.all(18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Экрандардын жаңы ролу',
-                  style: AppTextStyles.body.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Бул экран эми “эмне кылышым керек?” деген суроого жооп берет. Терең машыгуу үчүн Практикага, ал эми толук сабак тартиби үчүн Жол картасына өтөсүз.',
-                  style: AppTextStyles.muted,
-                ),
-              ],
-            ),
           ),
         ],
       ),
@@ -359,27 +412,40 @@ class _HeroBackdrop extends StatelessWidget {
   }
 }
 
-class _HeroChip extends StatelessWidget {
-  const _HeroChip({
-    required this.goalMinutes,
-    required this.streakDays,
-    required this.reviewDue,
-  });
+class _StreakBadge extends StatelessWidget {
+  const _StreakBadge({required this.streakDays});
 
-  final int goalMinutes;
   final int streakDays;
-  final int reviewDue;
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: [
-        _GlassTag(label: 'Максат: $goalMinutes мүн'),
-        _GlassTag(label: 'Серия: $streakDays күн'),
-        _GlassTag(label: 'Кайталоо: $reviewDue'),
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.76),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.9)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Icon(Icons.local_fire_department, color: AppColors.accent, size: 20),
+          const SizedBox(height: 4),
+          Text(
+            '$streakDays',
+            style: AppTextStyles.title.copyWith(
+              fontSize: 20,
+              color: AppColors.accent,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -434,6 +500,37 @@ class _HeroButton extends StatelessWidget {
             style: AppTextStyles.body.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColors.textDark,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HeroProgressBar extends StatelessWidget {
+  const _HeroProgressBar({required this.value});
+
+  final double value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 8,
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.18),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: FractionallySizedBox(
+          widthFactor: value.clamp(0, 1),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFFFF8C00), Color(0xFFFFB74D)],
+              ),
+              borderRadius: BorderRadius.circular(999),
             ),
           ),
         ),
@@ -623,7 +720,7 @@ class _FocusLessonCard extends StatelessWidget {
           AppButton(
             fullWidth: true,
             variant: AppButtonVariant.outlined,
-            onPressed: () => context.push('/categories'),
+            onPressed: () => context.push('/study-plan'),
             child: const Text('Жол картасын көрүү'),
           ),
         ],
@@ -707,10 +804,8 @@ class _RecommendedAction {
     if (totalWordsMastered == 0) {
       return const _RecommendedAction(
         title: 'Бүгүн биринчи сабакты баштаңыз',
-        subtitle:
-            'Алгач категория тандап, биринчи flashcard циклин аягына чыгарыңыз.',
-        supportingText:
-            'Бул экран эми жөн гана модулдар жыйындысы эмес, бүгүнкү эң жакшы стартты көрсөтөт.',
+        subtitle: 'Категория тандап, биринчи циклди баштаңыз.',
+        supportingText: 'Бүгүнкү эң жакшы старт ушул.',
         primaryLabel: 'Сабак тандаңыз',
         primaryRoute: '/categories',
       );
@@ -719,10 +814,8 @@ class _RecommendedAction {
     if (totalReviewDue > 0 && reviewCategoryId != null) {
       return _RecommendedAction(
         title: 'Адегенде кайталоону жабыңыз',
-        subtitle:
-            '$totalReviewDue сөз кайра бекемдөөнү күтүп турат. Кыска review цикли ритмди түздөйт.',
-        supportingText:
-            'Эстеп калган сөздөрдү эмес, мөөнөтү жеткен сөздөрдү биринчи жабуу retention үчүн пайдалуураак.',
+        subtitle: '$totalReviewDue сөз даяр турат.',
+        supportingText: 'Алгач кайталоо жакшыраак.',
         primaryLabel: 'Кайталоону баштоо',
         primaryRoute: '/flashcards/$reviewCategoryId?mode=review',
       );
@@ -731,10 +824,8 @@ class _RecommendedAction {
     if (!hasActivityToday) {
       return _RecommendedAction(
         title: 'Бүгүнкү максатты ач',
-        subtitle:
-            '$dailyGoalMinutes мүнөттүк практика үчүн акыркы сабакка кайтып, серияны сактаңыз.',
-        supportingText:
-            'Негизги аракетти жогоруга чыгардык: бүгүн эмнеден баштоо керек экени дароо көрүнөт.',
+        subtitle: '$dailyGoalMinutes мүнөт үчүн сабакты улантыңыз.',
+        supportingText: 'Азыркы эң туура кадам ушул.',
         primaryLabel: 'Практиканы улантуу',
         primaryRoute: '/flashcards/$categoryId',
       );
@@ -742,10 +833,8 @@ class _RecommendedAction {
 
     return _RecommendedAction(
       title: 'Бүгүн жакшы темптесиз',
-      subtitle:
-          'Натыйжаны бекемдөө үчүн кыска текшерүү же колдонуу режимине өтүңүз.',
-      supportingText:
-          'Home эми кийинки кадамды берет, ал эми режим тандоону Практикага өткөрөт.',
+      subtitle: 'Кыска текшерүү же колдонуу режимине өтүңүз.',
+      supportingText: 'Темпти кармап туруңуз.',
       primaryLabel: 'Экспресс-квиз',
       primaryRoute: '/quick-quiz',
     );

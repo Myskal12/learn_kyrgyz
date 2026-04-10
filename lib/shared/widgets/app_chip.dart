@@ -27,14 +27,14 @@ class AppChip extends StatelessWidget {
 
     switch (variant) {
       case AppChipVariant.primary:
-        background = AppColors.primary.withValues(alpha: 0.1);
+        background = AppColors.primary.withValues(alpha: 0.08);
         textColor = AppColors.primary;
-        borderColor = AppColors.primary.withValues(alpha: 0.2);
+        borderColor = AppColors.primary.withValues(alpha: 0.16);
         break;
       case AppChipVariant.accent:
-        background = AppColors.accent.withValues(alpha: 0.1);
+        background = AppColors.accent.withValues(alpha: 0.12);
         textColor = AppColors.accent;
-        borderColor = AppColors.accent.withValues(alpha: 0.2);
+        borderColor = AppColors.accent.withValues(alpha: 0.18);
         break;
       case AppChipVariant.success:
         background = AppColors.success.withValues(alpha: 0.1);
@@ -42,9 +42,9 @@ class AppChip extends StatelessWidget {
         borderColor = AppColors.success.withValues(alpha: 0.2);
         break;
       case AppChipVariant.defaultChip:
-        background = AppColors.mutedSurface;
+        background = Colors.white.withValues(alpha: 0.78);
         textColor = AppColors.textDark;
-        borderColor = AppColors.border;
+        borderColor = AppColors.outline.withValues(alpha: 0.8);
         break;
     }
 
@@ -63,11 +63,7 @@ class AppChip extends StatelessWidget {
                 color: textColor.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                Icons.close,
-                size: 12,
-                color: textColor,
-              ),
+              child: Icon(Icons.close, size: 12, color: textColor),
             ),
           ),
         ],

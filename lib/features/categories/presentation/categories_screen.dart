@@ -84,7 +84,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
         ),
         const SizedBox(height: 8),
         Text(
-          'Бул экран кайсы сабак ачылганын, эмнени улантуу керек экенин жана кайда баратканыңызды көрсөтөт.',
+          'Ачылган сабактарды жана кийинки кадамды көрүңүз.',
           style: AppTextStyles.body.copyWith(color: AppColors.muted),
         ),
         const SizedBox(height: 20),
@@ -123,9 +123,9 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
               Text(
                 nextLesson != null
                     ? nextLesson.active
-                          ? 'Бул жерде прогресс бар. Азыр улантуу эң жакшы кадам.'
-                          : 'Бул сабак ачылган. Жаңы циклди ушул жерден баштаңыз.'
-                    : 'Эми Практикага өтүп, алсыз сөздөрдү же квизди тандаңыз.',
+                          ? 'Улантууга даяр.'
+                          : 'Жаңы циклди ушул жерден баштаңыз.'
+                    : 'Эми Практикага өтүңүз.',
                 style: AppTextStyles.body.copyWith(
                   color: Colors.white.withValues(alpha: 0.9),
                 ),
@@ -166,8 +166,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
             height: 280,
             child: AppEmptyState(
               title: 'Сабактар табылган жок',
-              message:
-                  'Firebase же локалдык кэштен бир да категория табылган жок.',
+              message: 'Азырынча категория жок.',
               icon: Icons.menu_book_outlined,
               actionLabel: 'Кайра жүктөө',
               onAction: () => ref.read(categoriesProvider).load(force: true),

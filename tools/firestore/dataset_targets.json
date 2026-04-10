@@ -1,0 +1,18 @@
+{
+    "minTotal": 500,
+    "categoryMinimums": {
+        "basic": 40,
+        "family": 40,
+        "food": 40,
+        "nature": 40,
+        "animals": 40,
+        "travel": 40,
+        "education": 40,
+        "emotion": 40,
+        "weather": 40,
+        "work": 30,
+        "health": 30,
+        "verbs": 40,
+        "adjectives": 40
+    }
+}

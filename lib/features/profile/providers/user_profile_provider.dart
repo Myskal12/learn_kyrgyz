@@ -19,10 +19,12 @@ class UserProfileProvider extends ChangeNotifier {
   StreamSubscription<String?>? _sub;
 
   static const _cacheKeyPrefix = 'user_profile_';
+  static const _guestNickname = 'Конок';
+  static const _defaultNickname = 'Колдонуучу';
 
   UserProfileModel _profile = const UserProfileModel(
     id: 'guest',
-    nickname: 'Конок',
+    nickname: _guestNickname,
     avatar: '🙂',
     totalMastered: 0,
     totalSessions: 0,
@@ -31,10 +33,24 @@ class UserProfileProvider extends ChangeNotifier {
 
   bool _isGuest = true;
   bool _loading = false;
+  bool _needsProfileSetup = false;
+  String? _suggestedNickname;
 
   bool get isGuest => _isGuest;
   bool get isLoading => _loading;
+  bool get needsProfileSetup => _needsProfileSetup;
   UserProfileModel get profile => _profile;
+  String? get suggestedNickname {
+    final suggested = _suggestedNickname?.trim();
+    if (suggested != null && suggested.isNotEmpty) {
+      return suggested;
+    }
+    final nickname = _profile.nickname.trim();
+    if (_requiresNicknameSetup(nickname)) {
+      return null;
+    }
+    return nickname;
+  }
 
   Future<void> updateNickname(String value) async {
     final uid = _profile.id;
@@ -60,19 +76,53 @@ class UserProfileProvider extends ChangeNotifier {
     if (_isGuest || _profile.id == 'guest') return;
     final remote = await _firebase.fetchUserProfile(_profile.id);
     if (remote != null) {
-      _profile = remote;
+      final normalized = _preferredNickname(remote.nickname);
+      _profile = remote.copyWith(nickname: normalized);
+      _needsProfileSetup = _requiresNicknameSetup(normalized);
+      if (normalized != remote.nickname) {
+        await _firebase.updateUserProfile(uid: _profile.id, nickname: normalized);
+      }
       notifyListeners();
       await _persistProfile();
     }
+  }
+
+  Future<void> completeProfileSetup(String nickname) async {
+    final uid = _firebase.currentUserId;
+    final trimmed = nickname.trim();
+    if (uid == null || uid.isEmpty || trimmed.isEmpty) return;
+
+    _profile = UserProfileModel(
+      id: uid,
+      nickname: trimmed,
+      avatar: _profile.avatar,
+      totalMastered: _profile.totalMastered,
+      totalSessions: _profile.totalSessions,
+      accuracy: _profile.accuracy,
+    );
+    _isGuest = false;
+    _loading = false;
+    _needsProfileSetup = false;
+    _suggestedNickname = trimmed;
+    notifyListeners();
+
+    await _persistProfile();
+    await _firebase.updateUserProfile(
+      uid: uid,
+      nickname: trimmed,
+      avatar: _profile.avatar,
+    );
   }
 
   Future<void> _handleUserChange(String? uid) async {
     if (uid == null) {
       _isGuest = true;
       _loading = false;
+      _needsProfileSetup = false;
+      _suggestedNickname = null;
       _profile = const UserProfileModel(
         id: 'guest',
-        nickname: 'Конок',
+        nickname: _guestNickname,
         avatar: '🙂',
         totalMastered: 0,
         totalSessions: 0,
@@ -84,34 +134,51 @@ class UserProfileProvider extends ChangeNotifier {
 
     _isGuest = false;
     _loading = true;
+    _suggestedNickname = _firebase.currentUserFirstName;
     notifyListeners();
 
     final cached = await _readCache(uid);
     if (cached != null) {
-      _profile = cached;
+      _profile = cached.copyWith(
+        nickname: _preferredNickname(cached.nickname),
+      );
+      _needsProfileSetup = _requiresNicknameSetup(_profile.nickname);
       _loading = false;
       notifyListeners();
     }
 
     final remote = await _firebase.fetchUserProfile(uid);
     if (remote != null) {
-      _profile = remote;
+      final normalized = _preferredNickname(remote.nickname);
+      _profile = remote.copyWith(nickname: normalized);
+      _needsProfileSetup = _requiresNicknameSetup(normalized);
+      if (normalized != remote.nickname) {
+        await _firebase.updateUserProfile(uid: uid, nickname: normalized);
+      }
       await _persistProfile();
     } else if (cached == null) {
+      final nickname = _preferredNickname(null);
       _profile = UserProfileModel(
         id: uid,
-        nickname: 'Колдонуучу',
+        nickname: nickname,
         avatar: '🙂',
         totalMastered: 0,
         totalSessions: 0,
         accuracy: 0,
       );
+      _needsProfileSetup = _requiresNicknameSetup(nickname);
       await _firebase.updateUserProfile(
         uid: uid,
-        nickname: _profile.nickname,
+        nickname: _requiresNicknameSetup(nickname) ? null : nickname,
         avatar: _profile.avatar,
       );
       await _persistProfile();
+    } else {
+      _needsProfileSetup = _requiresNicknameSetup(_profile.nickname);
+      if (_profile.nickname != cached.nickname) {
+        await _firebase.updateUserProfile(uid: uid, nickname: _profile.nickname);
+        await _persistProfile();
+      }
     }
 
     _loading = false;
@@ -134,6 +201,23 @@ class UserProfileProvider extends ChangeNotifier {
     if (uid.isEmpty || uid == 'guest') return;
     final payload = jsonEncode(_profile.toJson());
     await _storage.setString('$_cacheKeyPrefix$uid', payload);
+  }
+
+  String _preferredNickname(String? value) {
+    final trimmed = value?.trim() ?? '';
+    if (trimmed.isNotEmpty && !_requiresNicknameSetup(trimmed)) {
+      return trimmed;
+    }
+    final suggested = _suggestedNickname?.trim() ?? '';
+    if (suggested.isNotEmpty) {
+      return suggested;
+    }
+    return _defaultNickname;
+  }
+
+  bool _requiresNicknameSetup(String nickname) {
+    final trimmed = nickname.trim();
+    return trimmed.isEmpty || trimmed == _defaultNickname;
   }
 
   @override

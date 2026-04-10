@@ -1,0 +1,254 @@
+[
+    {
+        "id": "basics_hello",
+        "en": "hello",
+        "ky": "Салам",
+        "level": 1,
+        "category": "basic"
+    },
+    {
+        "id": "basics_thanks",
+        "en": "thank you",
+        "ky": "Рахмат",
+        "level": 1,
+        "category": "basic"
+    },
+    {
+        "id": "basics_yes",
+        "en": "yes",
+        "ky": "Ооба",
+        "level": 1,
+        "category": "basic"
+    },
+    {
+        "id": "basics_no",
+        "en": "no",
+        "ky": "Жок",
+        "level": 1,
+        "category": "basic"
+    },
+    {
+        "id": "basics_please",
+        "en": "please",
+        "ky": "Суранам",
+        "level": 1,
+        "category": "basic"
+    },
+    {
+        "id": "basics_good_morning",
+        "en": "good morning",
+        "ky": "Кутман таң",
+        "level": 1,
+        "category": "basic"
+    },
+    {
+        "id": "food_bread",
+        "en": "bread",
+        "ky": "Нан",
+        "level": 1,
+        "category": "food"
+    },
+    {
+        "id": "food_tea",
+        "en": "tea",
+        "ky": "Чай",
+        "level": 1,
+        "category": "food"
+    },
+    {
+        "id": "food_soup",
+        "en": "soup",
+        "ky": "Шорпо",
+        "level": 1,
+        "category": "food"
+    },
+    {
+        "id": "food_meat",
+        "en": "meat",
+        "ky": "Эт",
+        "level": 1,
+        "category": "food"
+    },
+    {
+        "id": "food_apple",
+        "en": "apple",
+        "ky": "Алма",
+        "level": 1,
+        "category": "food"
+    },
+    {
+        "id": "food_water",
+        "en": "water",
+        "ky": "Суу",
+        "level": 1,
+        "category": "food"
+    },
+    {
+        "id": "family_mother",
+        "en": "mother",
+        "ky": "Апам",
+        "level": 1,
+        "category": "family"
+    },
+    {
+        "id": "family_father",
+        "en": "father",
+        "ky": "Атам",
+        "level": 1,
+        "category": "family"
+    },
+    {
+        "id": "family_brother",
+        "en": "elder brother",
+        "ky": "Агам",
+        "level": 1,
+        "category": "family"
+    },
+    {
+        "id": "family_sister",
+        "en": "sister",
+        "ky": "Карындашым",
+        "level": 1,
+        "category": "family"
+    },
+    {
+        "id": "family_child",
+        "en": "child",
+        "ky": "Бала",
+        "level": 1,
+        "category": "family"
+    },
+    {
+        "id": "family_grandma",
+        "en": "grandmother",
+        "ky": "Чоң апа",
+        "level": 1,
+        "category": "family"
+    },
+    {
+        "id": "nature_mountain",
+        "en": "mountain",
+        "ky": "Тоолор",
+        "level": 1,
+        "category": "nature"
+    },
+    {
+        "id": "nature_river",
+        "en": "river",
+        "ky": "Дарыя",
+        "level": 1,
+        "category": "nature"
+    },
+    {
+        "id": "nature_sun",
+        "en": "sun",
+        "ky": "Күн",
+        "level": 1,
+        "category": "nature"
+    },
+    {
+        "id": "nature_snow",
+        "en": "snow",
+        "ky": "Кар",
+        "level": 1,
+        "category": "nature"
+    },
+    {
+        "id": "nature_wind",
+        "en": "wind",
+        "ky": "Шамал",
+        "level": 1,
+        "category": "nature"
+    },
+    {
+        "id": "nature_lake",
+        "en": "lake",
+        "ky": "Көл",
+        "level": 1,
+        "category": "nature"
+    },
+    {
+        "id": "animals_horse",
+        "en": "horse",
+        "ky": "Ат",
+        "level": 1,
+        "category": "animals"
+    },
+    {
+        "id": "animals_eagle",
+        "en": "eagle",
+        "ky": "Бүркүт",
+        "level": 1,
+        "category": "animals"
+    },
+    {
+        "id": "animals_sheep",
+        "en": "sheep",
+        "ky": "Кой",
+        "level": 1,
+        "category": "animals"
+    },
+    {
+        "id": "animals_dog",
+        "en": "dog",
+        "ky": "Ит",
+        "level": 1,
+        "category": "animals"
+    },
+    {
+        "id": "animals_cat",
+        "en": "cat",
+        "ky": "Мышык",
+        "level": 1,
+        "category": "animals"
+    },
+    {
+        "id": "animals_bird",
+        "en": "bird",
+        "ky": "Куш",
+        "level": 1,
+        "category": "animals"
+    },
+    {
+        "id": "travel_bus",
+        "en": "bus",
+        "ky": "Автобус",
+        "level": 1,
+        "category": "travel"
+    },
+    {
+        "id": "travel_ticket",
+        "en": "ticket",
+        "ky": "Билет",
+        "level": 1,
+        "category": "travel"
+    },
+    {
+        "id": "travel_city",
+        "en": "city",
+        "ky": "Шаар",
+        "level": 1,
+        "category": "travel"
+    },
+    {
+        "id": "travel_road",
+        "en": "road",
+        "ky": "Жол",
+        "level": 1,
+        "category": "travel"
+    },
+    {
+        "id": "travel_airport",
+        "en": "airport",
+        "ky": "Абамайдан",
+        "level": 1,
+        "category": "travel"
+    },
+    {
+        "id": "travel_train",
+        "en": "train",
+        "ky": "Поезд",
+        "level": 1,
+        "category": "travel"
+    }
+]

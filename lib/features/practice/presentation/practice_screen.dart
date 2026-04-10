@@ -9,6 +9,7 @@ import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../data/models/category_model.dart';
 import '../../../shared/widgets/adaptive_panel_grid.dart';
+import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_chip.dart';
 import '../../../shared/widgets/app_shell.dart';
@@ -118,51 +119,69 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
           Text('Практика', style: AppTextStyles.heading.copyWith(fontSize: 28)),
           const SizedBox(height: 8),
           Text(
-            'Бул жерде режимди өзүңүз тандайсыз: эстөө, текшерүү же колдонуу.',
+            'Эстөө, текшерүү же колдонуу режимин тандаңыз.',
             style: AppTextStyles.body.copyWith(color: AppColors.muted),
           ),
           const SizedBox(height: 20),
           AppCard(
-            gradient: true,
-            padding: const EdgeInsets.all(24),
-            child: Stack(
+            padding: const EdgeInsets.all(18),
+            borderColor: AppColors.accent.withValues(alpha: 0.16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Positioned(right: -10, top: -18, child: _HeroGlow()),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _GlassTag(
-                          label: 'Максат: ${onboarding.dailyGoalMinutes} мүн',
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18),
+                    color: AppColors.accent.withValues(alpha: 0.12),
+                  ),
+                  child: Icon(
+                    Icons.fact_check_rounded,
+                    color: AppColors.accent,
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Күндүк review',
+                        style: AppTextStyles.body.copyWith(
+                          fontWeight: FontWeight.w700,
                         ),
-                        _GlassTag(label: 'Серия: ${progress.streakDays} күн'),
-                        _GlassTag(label: 'Кайталоо: $totalReviewDue сөз'),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      plan.title,
-                      style: AppTextStyles.heading.copyWith(
-                        color: Colors.white,
-                        fontSize: 30,
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      plan.subtitle,
-                      style: AppTextStyles.body.copyWith(
-                        color: Colors.white.withValues(alpha: 0.9),
+                      const SizedBox(height: 4),
+                      Text(
+                        totalReviewDue > 0
+                            ? '$totalReviewDue сөз даяр.'
+                            : 'Азыр каалаган режимди тандаңыз.',
+                        style: AppTextStyles.muted,
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    _HeroAction(
-                      label: plan.primaryLabel,
-                      onTap: () => context.push(plan.primaryRoute),
-                    ),
-                  ],
+                      const SizedBox(height: 10),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          AppChip(
+                            label: '${onboarding.dailyGoalMinutes} мүн максат',
+                            variant: AppChipVariant.primary,
+                          ),
+                          AppChip(
+                            label: '${progress.streakDays} күн катар',
+                            variant: AppChipVariant.defaultChip,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                _HeroAction(
+                  label: plan.primaryLabel,
+                  onTap: () => context.push(plan.primaryRoute),
                 ),
               ],
             ),
@@ -171,8 +190,8 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
           Text('Режимдер', style: AppTextStyles.title),
           const SizedBox(height: 12),
           AdaptivePanelGrid(
-            maxColumns: 2,
-            minItemWidth: 156,
+            maxColumns: 1,
+            minItemWidth: 260,
             spacing: 12,
             children: [
               _ModeCard(
@@ -311,25 +330,6 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
   }
 }
 
-class _HeroGlow extends StatelessWidget {
-  const _HeroGlow();
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: 0.14,
-      child: Container(
-        width: 150,
-        height: 150,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
-        ),
-      ),
-    );
-  }
-}
-
 class _HeroAction extends StatelessWidget {
   const _HeroAction({required this.label, required this.onTap});
 
@@ -338,44 +338,12 @@ class _HeroAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(18),
-      child: Ink(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.92),
-          borderRadius: BorderRadius.circular(18),
-        ),
-        child: Text(
-          label,
-          style: AppTextStyles.body.copyWith(
-            fontWeight: FontWeight.w700,
-            color: AppColors.textDark,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _GlassTag extends StatelessWidget {
-  const _GlassTag({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.18),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.24)),
-      ),
-      child: Text(
-        label,
-        style: AppTextStyles.caption.copyWith(color: Colors.white),
+    return SizedBox(
+      width: 116,
+      child: AppButton(
+        size: AppButtonSize.sm,
+        onPressed: onTap,
+        child: Text(label, textAlign: TextAlign.center),
       ),
     );
   }
@@ -401,25 +369,34 @@ class _ModeCard extends StatelessWidget {
     return AppCard(
       padding: const EdgeInsets.all(18),
       onTap: onTap,
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: 46,
             height: 46,
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
+              borderRadius: BorderRadius.circular(16),
               color: color.withValues(alpha: 0.12),
             ),
             child: Icon(icon, color: color),
           ),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppTextStyles.body.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(subtitle, style: AppTextStyles.muted),
+              ],
+            ),
           ),
-          const SizedBox(height: 6),
-          Text(subtitle, style: AppTextStyles.muted),
         ],
       ),
     );
@@ -705,8 +682,7 @@ class _PracticePlan {
     if (progress.totalWordsMastered == 0) {
       return _PracticePlan(
         title: 'Биринчи режимди тандаңыз',
-        subtitle:
-            '${continueSnapshot.category.title} аркылуу негизги сөздөрдү ачып, машыгуу циклин түзүңүз.',
+        subtitle: '${continueSnapshot.category.title} менен баштаңыз.',
         primaryLabel: 'Биринчи карточкалар',
         primaryRoute: '/flashcards/${continueSnapshot.category.id}',
       );
@@ -715,8 +691,7 @@ class _PracticePlan {
     if (!progress.hasActivityToday) {
       return _PracticePlan(
         title: 'Бүгүнкү машыгууну ачыңыз',
-        subtitle:
-            '$dailyGoalMinutes мүнөттүк максат үчүн азыр кайсы режим ылайыктуу экенин тандаңыз.',
+        subtitle: '$dailyGoalMinutes мүнөт үчүн бир режим тандаңыз.',
         primaryLabel: 'Улантуу',
         primaryRoute: '/flashcards/${continueSnapshot.category.id}',
       );
@@ -725,8 +700,7 @@ class _PracticePlan {
     if (reviewSnapshot != null) {
       return _PracticePlan(
         title: 'Алсыз жерлерди тазалаңыз',
-        subtitle:
-            '${reviewSnapshot.category.title} ичинде ${reviewSnapshot.reviewDue} сөз кошумча бекемдөөнү күтүп турат.',
+        subtitle: '${reviewSnapshot.reviewDue} сөз кошумча кайталоодо.',
         primaryLabel: 'Кайталоону баштоо',
         primaryRoute: '/flashcards/${reviewSnapshot.category.id}?mode=review',
       );
@@ -734,8 +708,7 @@ class _PracticePlan {
 
     return _PracticePlan(
       title: 'Режимди өзүңүз тандаңыз',
-      subtitle:
-          'Эстөө, текшерүү жана колдонуу сценарийлерин өзүнчө башкаруу үчүн бул экранды хаб кылып бөлдүк.',
+      subtitle: 'Бүгүн кайсы формат ылайыктуу болсо, ошону ачыңыз.',
       primaryLabel: 'Сүйлөм түзүү',
       primaryRoute: '/sentence-builder/${continueSnapshot.category.id}',
     );

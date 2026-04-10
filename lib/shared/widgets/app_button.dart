@@ -7,7 +7,7 @@ enum AppButtonVariant { primary, outlined, accent, success, danger }
 
 enum AppButtonSize { sm, md, lg }
 
-class AppButton extends StatelessWidget {
+class AppButton extends StatefulWidget {
   const AppButton({
     super.key,
     required this.child,
@@ -25,30 +25,37 @@ class AppButton extends StatelessWidget {
   final bool fullWidth;
   final bool disabled;
 
+  @override
+  State<AppButton> createState() => _AppButtonState();
+}
+
+class _AppButtonState extends State<AppButton> {
+  bool _pressed = false;
+
   EdgeInsets get _padding {
-    switch (size) {
+    switch (widget.size) {
       case AppButtonSize.sm:
         return const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
       case AppButtonSize.md:
-        return const EdgeInsets.symmetric(horizontal: 24, vertical: 12);
+        return const EdgeInsets.symmetric(horizontal: 24, vertical: 13);
       case AppButtonSize.lg:
-        return const EdgeInsets.symmetric(horizontal: 32, vertical: 16);
+        return const EdgeInsets.symmetric(horizontal: 32, vertical: 17);
     }
   }
 
   double get _radius {
-    switch (size) {
+    switch (widget.size) {
       case AppButtonSize.sm:
-        return 14;
+        return 16;
       case AppButtonSize.md:
         return 18;
       case AppButtonSize.lg:
-        return 20;
+        return 22;
     }
   }
 
   double get _fontSize {
-    switch (size) {
+    switch (widget.size) {
       case AppButtonSize.sm:
         return 14;
       case AppButtonSize.md:
@@ -60,87 +67,157 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDisabled = disabled || onPressed == null;
+    final isDisabled = widget.disabled || widget.onPressed == null;
 
-    Color? backgroundColor;
+    Color backgroundColor;
     Color foregroundColor;
+    Color depthColor;
     Border? border;
-    List<BoxShadow>? shadow;
+    bool showSheen = true;
+    List<BoxShadow> outerShadow = [];
 
-    switch (variant) {
+    switch (widget.variant) {
       case AppButtonVariant.primary:
         backgroundColor = AppColors.primary;
-        foregroundColor = AppColors.textDark;
-        shadow = [
+        foregroundColor = Colors.white;
+        depthColor = AppColors.primaryPressed;
+        outerShadow = [
           BoxShadow(
-            color: const Color.fromRGBO(242, 177, 61, 0.32),
-            blurRadius: 16,
-            offset: Offset(0, 6),
+            color: AppColors.primary.withValues(alpha: 0.18),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
           ),
         ];
         break;
       case AppButtonVariant.outlined:
-        backgroundColor = Colors.transparent;
-        foregroundColor = AppColors.accent;
-        border = Border.all(color: AppColors.accent, width: 2);
+        backgroundColor = Colors.white;
+        foregroundColor = AppColors.primary;
+        depthColor = AppColors.outline;
+        border = Border.all(color: AppColors.outline, width: 2);
+        outerShadow = [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 14,
+            offset: const Offset(0, 8),
+          ),
+        ];
+        showSheen = false;
         break;
       case AppButtonVariant.accent:
         backgroundColor = AppColors.accent;
-        foregroundColor = Colors.white;
-        shadow = [
+        foregroundColor = AppColors.textDark;
+        depthColor = AppColors.accentPressed;
+        outerShadow = [
           BoxShadow(
-            color: const Color.fromRGBO(198, 40, 40, 0.32),
-            blurRadius: 16,
-            offset: Offset(0, 6),
+            color: AppColors.accent.withValues(alpha: 0.2),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
           ),
         ];
         break;
       case AppButtonVariant.success:
         backgroundColor = AppColors.success;
         foregroundColor = Colors.white;
-        shadow = [
+        depthColor = const Color(0xFF2E7D32);
+        outerShadow = [
           BoxShadow(
-            color: const Color.fromRGBO(56, 142, 60, 0.3),
-            blurRadius: 16,
-            offset: Offset(0, 6),
+            color: AppColors.success.withValues(alpha: 0.18),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
           ),
         ];
         break;
       case AppButtonVariant.danger:
-        backgroundColor = AppColors.accent;
+        backgroundColor = AppColors.error;
         foregroundColor = Colors.white;
+        depthColor = const Color(0xFF8E1B1B);
+        outerShadow = [
+          BoxShadow(
+            color: AppColors.error.withValues(alpha: 0.18),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ];
         break;
     }
 
-    final decoration = BoxDecoration(
-      color: backgroundColor,
-      borderRadius: BorderRadius.circular(_radius),
-      border: border,
-      boxShadow: shadow,
-    );
-
     final labelStyle = AppTextStyles.body.copyWith(
       fontSize: _fontSize,
-      fontWeight: FontWeight.w600,
+      fontWeight: FontWeight.w700,
       color: foregroundColor,
     );
+    final pressOffset = !isDisabled && _pressed ? 4.0 : 0.0;
+    final baseDepth = !isDisabled && _pressed ? 2.0 : 8.0;
 
     return Opacity(
       opacity: isDisabled ? 0.5 : 1,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: isDisabled ? null : onPressed,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 110),
+        curve: Curves.easeOut,
+        transform: Matrix4.translationValues(0, pressOffset, 0),
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(_radius),
-          child: Ink(
-            decoration: decoration,
-            child: Container(
-              width: fullWidth ? double.infinity : null,
-              padding: _padding,
-              alignment: Alignment.center,
-              child: IconTheme(
-                data: IconThemeData(color: foregroundColor, size: _fontSize + 2),
-                child: DefaultTextStyle(style: labelStyle, child: child),
+          boxShadow: [
+            BoxShadow(
+              color: depthColor,
+              blurRadius: 0,
+              offset: Offset(0, baseDepth),
+            ),
+            ...outerShadow,
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: isDisabled ? null : widget.onPressed,
+            onHighlightChanged: (value) => setState(() => _pressed = value),
+            borderRadius: BorderRadius.circular(_radius),
+            child: Ink(
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(_radius),
+                border: border,
+              ),
+              child: Stack(
+                children: [
+                  if (showSheen)
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        height: _padding.vertical + (_fontSize * 0.9),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(_radius),
+                          ),
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.white.withValues(alpha: 0.18),
+                              Colors.transparent,
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                        ),
+                      ),
+                    ),
+                  Container(
+                    width: widget.fullWidth ? double.infinity : null,
+                    padding: _padding,
+                    alignment: Alignment.center,
+                    child: IconTheme(
+                      data: IconThemeData(
+                        color: foregroundColor,
+                        size: _fontSize + 2,
+                      ),
+                      child: DefaultTextStyle(
+                        style: labelStyle,
+                        child: widget.child,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

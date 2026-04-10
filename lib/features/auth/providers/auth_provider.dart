@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers/app_providers.dart';
 import '../../../core/services/firebase_service.dart';
-import '../auth_demo_account.dart';
 import '../repository/auth_repository.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -19,6 +18,8 @@ class AuthProvider extends ChangeNotifier {
 
   bool _logged;
   bool get logged => _logged;
+  String? get currentUserEmail => _repo.currentUserEmail;
+  bool get requiresEmailVerification => _repo.requiresEmailVerification;
   bool get isGoogleSignInSupported => _repo.isGoogleSignInSupported;
   String get googleSignInUnavailableMessage =>
       _repo.googleSignInUnavailableMessage;
@@ -73,46 +74,6 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> loginWithDemoAccount() async {
-    _loading = true;
-    _error = null;
-    notifyListeners();
-    try {
-      try {
-        await _repo.login(AuthDemoAccount.email, AuthDemoAccount.password);
-        _logged = _repo.isLogged;
-        return true;
-      } on FirebaseAuthException catch (_) {
-        try {
-          await _repo.register(
-            AuthDemoAccount.email,
-            AuthDemoAccount.password,
-            nickname: AuthDemoAccount.name,
-          );
-          _logged = _repo.isLogged;
-          return true;
-        } on FirebaseAuthException catch (registerError) {
-          if (registerError.code == 'email-already-in-use') {
-            await _repo.login(AuthDemoAccount.email, AuthDemoAccount.password);
-            _logged = _repo.isLogged;
-            return true;
-          }
-          _error = _messageForCode(registerError);
-          return false;
-        }
-      }
-    } on FirebaseAuthException catch (e) {
-      _error = _messageForCode(e);
-      return false;
-    } catch (_) {
-      _error = 'Тест аккаунтка кирүү ишке ашкан жок.';
-      return false;
-    } finally {
-      _loading = false;
-      notifyListeners();
-    }
-  }
-
   Future<bool> register(
     String email,
     String password, {
@@ -156,6 +117,58 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> sendEmailVerification() async {
+    if (!_repo.isLogged) {
+      _error = 'Адегенде аккаунтка кириңиз.';
+      notifyListeners();
+      return false;
+    }
+    _loading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      await _repo.sendCurrentUserEmailVerification();
+      return true;
+    } on FirebaseAuthException catch (e) {
+      _error = _messageForCode(e);
+      return false;
+    } catch (_) {
+      _error = 'Ырастоо катын жөнөтүү ишке ашкан жок.';
+      return false;
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> refreshEmailVerificationStatus() async {
+    if (!_repo.isLogged) {
+      _error = 'Сессия аяктады. Кайра кириңиз.';
+      notifyListeners();
+      return false;
+    }
+    _loading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      final verified = await _repo.refreshEmailVerificationStatus();
+      _logged = _repo.isLogged;
+      if (!verified && _repo.requiresEmailVerification) {
+        _error = 'Email дареги али ырастала элек.';
+      }
+      return verified;
+    } on FirebaseAuthException catch (e) {
+      _error = _messageForCode(e);
+      return false;
+    } catch (_) {
+      _error = 'Ырастоо абалын текшерүү ишке ашкан жок.';
+      return false;
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> logout() async {
     await _repo.logout();
     _logged = _repo.isLogged;
@@ -178,10 +191,21 @@ class AuthProvider extends ChangeNotifier {
         return 'Сырсөз күчтүү эмес. 6 символдон узун болсун.';
       case 'too-many-requests':
         return 'Өтө көп аракет жасалды. Бир аздан кийин кайра кылыңыз.';
+      case 'network-request-failed':
+        return 'Интернет байланышын текшерип, кайра аракет кылыңыз.';
+      case 'user-disabled':
+        return 'Бул аккаунт убактылуу өчүрүлгөн.';
+      case 'user-token-expired':
+        return 'Сессияңыз аяктады. Кайра кириңиз.';
       case 'google-sign-in-not-supported':
         return e.message ?? googleSignInUnavailableMessage;
       case 'google-sign-in-config-missing':
         return e.message ?? 'Google Sign-In конфигурациясы толук эмес.';
+      case 'google-play-services-unavailable':
+        return e.message ??
+            'Google Play Services жеткиликсиз. Google APIs бар Android түзмөктү колдонуңуз.';
+      case 'google-sign-in-missing-id-token':
+        return e.message ?? 'Google Sign-In ID token алынган жок.';
       default:
         return e.message ?? 'Аныкталбаган ката.';
     }

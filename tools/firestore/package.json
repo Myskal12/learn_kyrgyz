@@ -1,0 +1,17 @@
+{
+  "name": "firestore",
+  "version": "1.0.0",
+  "description": "This folder contains helper scripts to prepare and upload the 500 words / sentences / quiz documents described in the requirements.",
+  "main": "apply_translation_updates.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "firebase-admin": "^13.7.0",
+    "xlsx": "^0.18.5"
+  }
+}

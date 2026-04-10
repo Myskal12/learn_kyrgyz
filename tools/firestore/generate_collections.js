@@ -5,6 +5,35 @@ const WORDS_FILE = path.resolve(__dirname, 'words.json');
 const SENTENCES_FILE = path.resolve(__dirname, 'sentences.json');
 const QUIZ_FILE = path.resolve(__dirname, 'quiz.json');
 
+function assertNonEmptyString(value, fieldName, index) {
+  if (typeof value !== 'string' || value.trim().length === 0) {
+    throw new Error(`words.json[${index}].${fieldName} is required.`);
+  }
+}
+
+function validateWords(words) {
+  const ids = new Set();
+  words.forEach((word, index) => {
+    if (typeof word !== 'object' || word == null || Array.isArray(word)) {
+      throw new Error(`words.json[${index}] must be an object.`);
+    }
+    assertNonEmptyString(word.id, 'id', index);
+    assertNonEmptyString(word.en, 'en', index);
+    assertNonEmptyString(word.ky, 'ky', index);
+    assertNonEmptyString(word.category, 'category', index);
+
+    if (!Number.isInteger(word.level) || word.level < 1) {
+      throw new Error(`words.json[${index}].level must be an integer >= 1.`);
+    }
+
+    const normalizedId = word.id.trim();
+    if (ids.has(normalizedId)) {
+      throw new Error(`Duplicate id found in words.json: ${normalizedId}`);
+    }
+    ids.add(normalizedId);
+  });
+}
+
 function loadWords() {
   if (!fs.existsSync(WORDS_FILE)) {
     throw new Error(`words.json not found. Place it in ${__dirname}`);
@@ -14,6 +43,7 @@ function loadWords() {
   if (!Array.isArray(data) || data.length < 4) {
     throw new Error('words.json must contain at least 4 entries.');
   }
+  validateWords(data);
   return data;
 }
 

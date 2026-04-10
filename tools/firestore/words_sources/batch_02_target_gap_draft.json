@@ -1,0 +1,1946 @@
+[
+  {
+    "id": "draft2_adjectives_red_1",
+    "en": "red",
+    "ky": "red",
+    "level": 1,
+    "category": "adjectives",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_adjectives_blue_2",
+    "en": "blue",
+    "ky": "blue",
+    "level": 1,
+    "category": "adjectives",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_adjectives_green_3",
+    "en": "green",
+    "ky": "green",
+    "level": 1,
+    "category": "adjectives",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_adjectives_white_4",
+    "en": "white",
+    "ky": "white",
+    "level": 1,
+    "category": "adjectives",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_adjectives_black_5",
+    "en": "black",
+    "ky": "black",
+    "level": 1,
+    "category": "adjectives",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_adjectives_heavy_6",
+    "en": "heavy",
+    "ky": "heavy",
+    "level": 1,
+    "category": "adjectives",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_adjectives_light_7",
+    "en": "light",
+    "ky": "light",
+    "level": 1,
+    "category": "adjectives",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_adjectives_soft_8",
+    "en": "soft",
+    "ky": "soft",
+    "level": 1,
+    "category": "adjectives",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_adjectives_sharp_9",
+    "en": "sharp",
+    "ky": "sharp",
+    "level": 1,
+    "category": "adjectives",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_adjectives_sweet_10",
+    "en": "sweet",
+    "ky": "sweet",
+    "level": 1,
+    "category": "adjectives",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_lion_1",
+    "en": "lion",
+    "ky": "lion",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_tiger_2",
+    "en": "tiger",
+    "ky": "tiger",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_leopard_3",
+    "en": "leopard",
+    "ky": "leopard",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_zebra_4",
+    "en": "zebra",
+    "ky": "zebra",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_giraffe_5",
+    "en": "giraffe",
+    "ky": "giraffe",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_monkey_6",
+    "en": "monkey",
+    "ky": "monkey",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_elephant_7",
+    "en": "elephant",
+    "ky": "elephant",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_swan_8",
+    "en": "swan",
+    "ky": "swan",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_pigeon_9",
+    "en": "pigeon",
+    "ky": "pigeon",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_crow_10",
+    "en": "crow",
+    "ky": "crow",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_goose_11",
+    "en": "goose",
+    "ky": "goose",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_turkey_12",
+    "en": "turkey",
+    "ky": "turkey",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_lamb_13",
+    "en": "lamb",
+    "ky": "lamb",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_calf_14",
+    "en": "calf",
+    "ky": "calf",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_kitten_15",
+    "en": "kitten",
+    "ky": "kitten",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_puppy_16",
+    "en": "puppy",
+    "ky": "puppy",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_animals_squirrel_17",
+    "en": "squirrel",
+    "ky": "squirrel",
+    "level": 1,
+    "category": "animals",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_afternoon_1",
+    "en": "afternoon",
+    "ky": "afternoon",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_evening_2",
+    "en": "evening",
+    "ky": "evening",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_night_3",
+    "en": "night",
+    "ky": "night",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_week_4",
+    "en": "week",
+    "ky": "week",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_month_5",
+    "en": "month",
+    "ky": "month",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_year_6",
+    "en": "year",
+    "ky": "year",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_minute_7",
+    "en": "minute",
+    "ky": "minute",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_hour_8",
+    "en": "hour",
+    "ky": "hour",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_street_9",
+    "en": "street",
+    "ky": "street",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_house_10",
+    "en": "house",
+    "ky": "house",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_room_11",
+    "en": "room",
+    "ky": "room",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_door_12",
+    "en": "door",
+    "ky": "door",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_window_13",
+    "en": "window",
+    "ky": "window",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_right_14",
+    "en": "right",
+    "ky": "right",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_left_15",
+    "en": "left",
+    "ky": "left",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_basic_center_16",
+    "en": "center",
+    "ky": "center",
+    "level": 1,
+    "category": "basic",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_pen_1",
+    "en": "pen",
+    "ky": "pen",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_pencil_2",
+    "en": "pencil",
+    "ky": "pencil",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_eraser_3",
+    "en": "eraser",
+    "ky": "eraser",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_marker_4",
+    "en": "marker",
+    "ky": "marker",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_board_5",
+    "en": "board",
+    "ky": "board",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_desk_6",
+    "en": "desk",
+    "ky": "desk",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_chair_7",
+    "en": "chair",
+    "ky": "chair",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_library_8",
+    "en": "library",
+    "ky": "library",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_campus_9",
+    "en": "campus",
+    "ky": "campus",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_professor_10",
+    "en": "professor",
+    "ky": "professor",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_lecture_11",
+    "en": "lecture",
+    "ky": "lecture",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_seminar_12",
+    "en": "seminar",
+    "ky": "seminar",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_course_13",
+    "en": "course",
+    "ky": "course",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_chapter_14",
+    "en": "chapter",
+    "ky": "chapter",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_paragraph_15",
+    "en": "paragraph",
+    "ky": "paragraph",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_grammar_16",
+    "en": "grammar",
+    "ky": "grammar",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_vocabulary_17",
+    "en": "vocabulary",
+    "ky": "vocabulary",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_translation_18",
+    "en": "translation",
+    "ky": "translation",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_research_19",
+    "en": "research",
+    "ky": "research",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_lab_20",
+    "en": "lab",
+    "ky": "lab",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_calculator_21",
+    "en": "calculator",
+    "ky": "calculator",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_backpack_22",
+    "en": "backpack",
+    "ky": "backpack",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_education_attendance_23",
+    "en": "attendance",
+    "ky": "attendance",
+    "level": 1,
+    "category": "education",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_smile_1",
+    "en": "smile",
+    "ky": "smile",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_laughter_2",
+    "en": "laughter",
+    "ky": "laughter",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_tears_3",
+    "en": "tears",
+    "ky": "tears",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_friendship_4",
+    "en": "friendship",
+    "ky": "friendship",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_respect_5",
+    "en": "respect",
+    "ky": "respect",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_empathy_6",
+    "en": "empathy",
+    "ky": "empathy",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_jealousy_7",
+    "en": "jealousy",
+    "ky": "jealousy",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_loneliness_8",
+    "en": "loneliness",
+    "ky": "loneliness",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_excitement_9",
+    "en": "excitement",
+    "ky": "excitement",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_motivation_10",
+    "en": "motivation",
+    "ky": "motivation",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_confidence_11",
+    "en": "confidence",
+    "ky": "confidence",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_gratitude_12",
+    "en": "gratitude",
+    "ky": "gratitude",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_frustration_13",
+    "en": "frustration",
+    "ky": "frustration",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_relief_14",
+    "en": "relief",
+    "ky": "relief",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_disappointment_15",
+    "en": "disappointment",
+    "ky": "disappointment",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_satisfaction_16",
+    "en": "satisfaction",
+    "ky": "satisfaction",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_curiosity_17",
+    "en": "curiosity",
+    "ky": "curiosity",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_compassion_18",
+    "en": "compassion",
+    "ky": "compassion",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_affection_19",
+    "en": "affection",
+    "ky": "affection",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_nervousness_20",
+    "en": "nervousness",
+    "ky": "nervousness",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_comfort_21",
+    "en": "comfort",
+    "ky": "comfort",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_admiration_22",
+    "en": "admiration",
+    "ky": "admiration",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_enthusiasm_23",
+    "en": "enthusiasm",
+    "ky": "enthusiasm",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_emotion_inspiration_24",
+    "en": "inspiration",
+    "ky": "inspiration",
+    "level": 1,
+    "category": "emotion",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_nephew_1",
+    "en": "nephew",
+    "ky": "nephew",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_niece_2",
+    "en": "niece",
+    "ky": "niece",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_grandson_3",
+    "en": "grandson",
+    "ky": "grandson",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_granddaughter_4",
+    "en": "granddaughter",
+    "ky": "granddaughter",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_stepfather_5",
+    "en": "stepfather",
+    "ky": "stepfather",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_stepmother_6",
+    "en": "stepmother",
+    "ky": "stepmother",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_brother_in_law_7",
+    "en": "brother-in-law",
+    "ky": "brother-in-law",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_sister_in_law_8",
+    "en": "sister-in-law",
+    "ky": "sister-in-law",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_twins_9",
+    "en": "twins",
+    "ky": "twins",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_ancestor_10",
+    "en": "ancestor",
+    "ky": "ancestor",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_descendant_11",
+    "en": "descendant",
+    "ky": "descendant",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_guardian_12",
+    "en": "guardian",
+    "ky": "guardian",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_baby_13",
+    "en": "baby",
+    "ky": "baby",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_toddler_14",
+    "en": "toddler",
+    "ky": "toddler",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_teenager_15",
+    "en": "teenager",
+    "ky": "teenager",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_adult_16",
+    "en": "adult",
+    "ky": "adult",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_family_tree_17",
+    "en": "family tree",
+    "ky": "family tree",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_household_18",
+    "en": "household",
+    "ky": "household",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_family_parenthood_19",
+    "en": "parenthood",
+    "ky": "parenthood",
+    "level": 1,
+    "category": "family",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_banana_1",
+    "en": "banana",
+    "ky": "banana",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_orange_2",
+    "en": "orange",
+    "ky": "orange",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_grape_3",
+    "en": "grape",
+    "ky": "grape",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_strawberry_4",
+    "en": "strawberry",
+    "ky": "strawberry",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_honey_5",
+    "en": "honey",
+    "ky": "honey",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_yogurt_6",
+    "en": "yogurt",
+    "ky": "yogurt",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_porridge_7",
+    "en": "porridge",
+    "ky": "porridge",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_pasta_8",
+    "en": "pasta",
+    "ky": "pasta",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_noodles_9",
+    "en": "noodles",
+    "ky": "noodles",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_sausage_10",
+    "en": "sausage",
+    "ky": "sausage",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_salad_11",
+    "en": "salad",
+    "ky": "salad",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_sauce_12",
+    "en": "sauce",
+    "ky": "sauce",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_biscuit_13",
+    "en": "biscuit",
+    "ky": "biscuit",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_cake_14",
+    "en": "cake",
+    "ky": "cake",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_food_juice_15",
+    "en": "juice",
+    "ky": "juice",
+    "level": 1,
+    "category": "food",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_health_allergy_1",
+    "en": "allergy",
+    "ky": "allergy",
+    "level": 1,
+    "category": "health",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_health_infection_2",
+    "en": "infection",
+    "ky": "infection",
+    "level": 1,
+    "category": "health",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_health_injury_3",
+    "en": "injury",
+    "ky": "injury",
+    "level": 1,
+    "category": "health",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_health_recovery_4",
+    "en": "recovery",
+    "ky": "recovery",
+    "level": 1,
+    "category": "health",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_health_therapy_5",
+    "en": "therapy",
+    "ky": "therapy",
+    "level": 1,
+    "category": "health",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_health_diagnosis_6",
+    "en": "diagnosis",
+    "ky": "diagnosis",
+    "level": 1,
+    "category": "health",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_health_treatment_7",
+    "en": "treatment",
+    "ky": "treatment",
+    "level": 1,
+    "category": "health",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_health_appointment_8",
+    "en": "appointment",
+    "ky": "appointment",
+    "level": 1,
+    "category": "health",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_health_ambulance_9",
+    "en": "ambulance",
+    "ky": "ambulance",
+    "level": 1,
+    "category": "health",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_health_first_aid_10",
+    "en": "first aid",
+    "ky": "first aid",
+    "level": 1,
+    "category": "health",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_desert_1",
+    "en": "desert",
+    "ky": "desert",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_ocean_2",
+    "en": "ocean",
+    "ky": "ocean",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_island_3",
+    "en": "island",
+    "ky": "island",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_waterfall_4",
+    "en": "waterfall",
+    "ky": "waterfall",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_meadow_5",
+    "en": "meadow",
+    "ky": "meadow",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_cave_6",
+    "en": "cave",
+    "ky": "cave",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_cliff_7",
+    "en": "cliff",
+    "ky": "cliff",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_volcano_8",
+    "en": "volcano",
+    "ky": "volcano",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_sand_9",
+    "en": "sand",
+    "ky": "sand",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_soil_10",
+    "en": "soil",
+    "ky": "soil",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_leaf_11",
+    "en": "leaf",
+    "ky": "leaf",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_branch_12",
+    "en": "branch",
+    "ky": "branch",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_root_13",
+    "en": "root",
+    "ky": "root",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_seed_14",
+    "en": "seed",
+    "ky": "seed",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_moon_15",
+    "en": "moon",
+    "ky": "moon",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_star_16",
+    "en": "star",
+    "ky": "star",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_sunlight_17",
+    "en": "sunlight",
+    "ky": "sunlight",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_nature_shadow_18",
+    "en": "shadow",
+    "ky": "shadow",
+    "level": 1,
+    "category": "nature",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_taxi_1",
+    "en": "taxi",
+    "ky": "taxi",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_subway_2",
+    "en": "subway",
+    "ky": "subway",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_tram_3",
+    "en": "tram",
+    "ky": "tram",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_bicycle_4",
+    "en": "bicycle",
+    "ky": "bicycle",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_motorcycle_5",
+    "en": "motorcycle",
+    "ky": "motorcycle",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_ship_6",
+    "en": "ship",
+    "ky": "ship",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_flight_7",
+    "en": "flight",
+    "ky": "flight",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_departure_8",
+    "en": "departure",
+    "ky": "departure",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_arrival_9",
+    "en": "arrival",
+    "ky": "arrival",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_checkpoint_10",
+    "en": "checkpoint",
+    "ky": "checkpoint",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_customs_11",
+    "en": "customs",
+    "ky": "customs",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_guidebook_12",
+    "en": "guidebook",
+    "ky": "guidebook",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_sightseeing_13",
+    "en": "sightseeing",
+    "ky": "sightseeing",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_souvenir_14",
+    "en": "souvenir",
+    "ky": "souvenir",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_journey_15",
+    "en": "journey",
+    "ky": "journey",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_trip_16",
+    "en": "trip",
+    "ky": "trip",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_adventure_17",
+    "en": "adventure",
+    "ky": "adventure",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_camp_18",
+    "en": "camp",
+    "ky": "camp",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_hostel_19",
+    "en": "hostel",
+    "ky": "hostel",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_travel_rental_car_20",
+    "en": "rental car",
+    "ky": "rental car",
+    "level": 1,
+    "category": "travel",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_verbs_to_become_1",
+    "en": "to become",
+    "ky": "to become",
+    "level": 1,
+    "category": "verbs",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_verbs_to_begin_2",
+    "en": "to begin",
+    "ky": "to begin",
+    "level": 1,
+    "category": "verbs",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_verbs_to_finish_3",
+    "en": "to finish",
+    "ky": "to finish",
+    "level": 1,
+    "category": "verbs",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_verbs_to_choose_4",
+    "en": "to choose",
+    "ky": "to choose",
+    "level": 1,
+    "category": "verbs",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_verbs_to_carry_5",
+    "en": "to carry",
+    "ky": "to carry",
+    "level": 1,
+    "category": "verbs",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_verbs_to_build_6",
+    "en": "to build",
+    "ky": "to build",
+    "level": 1,
+    "category": "verbs",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_verbs_to_prepare_7",
+    "en": "to prepare",
+    "ky": "to prepare",
+    "level": 1,
+    "category": "verbs",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_verbs_to_travel_8",
+    "en": "to travel",
+    "ky": "to travel",
+    "level": 1,
+    "category": "verbs",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_verbs_to_return_9",
+    "en": "to return",
+    "ky": "to return",
+    "level": 1,
+    "category": "verbs",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_verbs_to_celebrate_10",
+    "en": "to celebrate",
+    "ky": "to celebrate",
+    "level": 1,
+    "category": "verbs",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_drizzle_1",
+    "en": "drizzle",
+    "ky": "drizzle",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_thunder_2",
+    "en": "thunder",
+    "ky": "thunder",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_lightning_3",
+    "en": "lightning",
+    "ky": "lightning",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_breeze_4",
+    "en": "breeze",
+    "ky": "breeze",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_blizzard_5",
+    "en": "blizzard",
+    "ky": "blizzard",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_hail_6",
+    "en": "hail",
+    "ky": "hail",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_heatwave_7",
+    "en": "heatwave",
+    "ky": "heatwave",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_cold_front_8",
+    "en": "cold front",
+    "ky": "cold front",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_pressure_9",
+    "en": "pressure",
+    "ky": "pressure",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_climate_10",
+    "en": "climate",
+    "ky": "climate",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_forecasting_11",
+    "en": "forecasting",
+    "ky": "forecasting",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_sunny_12",
+    "en": "sunny",
+    "ky": "sunny",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_cloudy_13",
+    "en": "cloudy",
+    "ky": "cloudy",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_rainy_14",
+    "en": "rainy",
+    "ky": "rainy",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_snowy_15",
+    "en": "snowy",
+    "ky": "snowy",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_stormy_16",
+    "en": "stormy",
+    "ky": "stormy",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_chilly_17",
+    "en": "chilly",
+    "ky": "chilly",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_freezing_18",
+    "en": "freezing",
+    "ky": "freezing",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_mild_19",
+    "en": "mild",
+    "ky": "mild",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_wet_20",
+    "en": "wet",
+    "ky": "wet",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_dry_21",
+    "en": "dry",
+    "ky": "dry",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_monsoon_22",
+    "en": "monsoon",
+    "ky": "monsoon",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_drought_23",
+    "en": "drought",
+    "ky": "drought",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_weather_rainbow_24",
+    "en": "rainbow",
+    "ky": "rainbow",
+    "level": 1,
+    "category": "weather",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_work_interview_1",
+    "en": "interview",
+    "ky": "interview",
+    "level": 1,
+    "category": "work",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_work_contract_2",
+    "en": "contract",
+    "ky": "contract",
+    "level": 1,
+    "category": "work",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_work_colleague_3",
+    "en": "colleague",
+    "ky": "colleague",
+    "level": 1,
+    "category": "work",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_work_department_4",
+    "en": "department",
+    "ky": "department",
+    "level": 1,
+    "category": "work",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_work_budget_5",
+    "en": "budget",
+    "ky": "budget",
+    "level": 1,
+    "category": "work",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_work_strategy_6",
+    "en": "strategy",
+    "ky": "strategy",
+    "level": 1,
+    "category": "work",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_work_customer_7",
+    "en": "customer",
+    "ky": "customer",
+    "level": 1,
+    "category": "work",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_work_invoice_8",
+    "en": "invoice",
+    "ky": "invoice",
+    "level": 1,
+    "category": "work",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_work_presentation_9",
+    "en": "presentation",
+    "ky": "presentation",
+    "level": 1,
+    "category": "work",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  },
+  {
+    "id": "draft2_work_overtime_10",
+    "en": "overtime",
+    "ky": "overtime",
+    "level": 1,
+    "category": "work",
+    "ready": true,
+    "notes": "Batch 02: fill ky translation and set ready=true after language review. | AUTO_SEEDED_FROM_ENGLISH_NEEDS_REVIEW"
+  }
+]

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 export 'app_bottom_nav.dart' show AppTab;
 
 import '../../core/utils/app_colors.dart';
+import 'app_pattern_background.dart';
 import 'app_bottom_nav.dart';
 import 'app_sidebar.dart';
 import 'app_top_nav.dart';
@@ -102,6 +103,7 @@ class _AppShellState extends State<AppShell> {
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
+          const Positioned.fill(child: AppPatternBackground()),
           Positioned.fill(
             child: Align(
               alignment: Alignment.topCenter,

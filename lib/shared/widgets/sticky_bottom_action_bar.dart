@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../core/utils/app_colors.dart';
-
 class StickyBottomActionBar extends StatelessWidget {
   const StickyBottomActionBar({
     super.key,
@@ -22,13 +20,15 @@ class StickyBottomActionBar extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColors.background,
-        border: Border(top: BorderSide(color: AppColors.border)),
+        color: Colors.white.withValues(alpha: 0.84),
+        border: Border(
+          top: BorderSide(color: Colors.white.withValues(alpha: 0.9)),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 18,
-            offset: const Offset(0, -6),
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 24,
+            offset: const Offset(0, -8),
           ),
         ],
       ),

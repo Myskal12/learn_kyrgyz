@@ -6,6 +6,9 @@ class AuthRepository {
   final FirebaseService _service;
 
   bool get isLogged => _service.currentUserId != null;
+  String? get currentUserEmail => _service.currentUserEmail;
+  bool get requiresEmailVerification =>
+      _service.isCurrentUserEmailVerificationRequired;
   bool get isGoogleSignInSupported => _service.isGoogleSignInSupported;
   String get googleSignInUnavailableMessage =>
       _service.googleSignInUnavailableMessage;
@@ -20,6 +23,12 @@ class AuthRepository {
 
   Future<void> sendPasswordResetEmail(String email) =>
       _service.sendPasswordResetEmail(email);
+
+  Future<void> sendCurrentUserEmailVerification() =>
+      _service.sendCurrentUserEmailVerification();
+
+  Future<bool> refreshEmailVerificationStatus() =>
+      _service.refreshEmailVerificationStatus();
 
   Future<void> logout() => _service.logout();
 }
