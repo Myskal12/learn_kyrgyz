@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/localization/app_copy.dart';
 import '../../core/utils/app_colors.dart';
 
 enum AppTab { learn, practice, progress, profile }
@@ -19,26 +20,26 @@ class AppBottomNav extends StatelessWidget {
     final tabs = [
       _NavItem(
         tab: AppTab.learn,
-        label: 'Башкы',
-        shortLabel: 'Башкы',
+        label: context.tr(ky: 'Башкы', en: 'Home', ru: 'Главная'),
+        shortLabel: context.tr(ky: 'Башкы', en: 'Home', ru: 'Главн.'),
         icon: Icons.home_rounded,
       ),
       _NavItem(
         tab: AppTab.practice,
-        label: 'Практика',
-        shortLabel: 'Практ.',
+        label: context.tr(ky: 'Практика', en: 'Practice', ru: 'Практика'),
+        shortLabel: context.tr(ky: 'Практ.', en: 'Practice', ru: 'Практ.'),
         icon: Icons.layers_rounded,
       ),
       _NavItem(
         tab: AppTab.progress,
-        label: 'Прогресс',
-        shortLabel: 'Прогр.',
+        label: context.tr(ky: 'Прогресс', en: 'Progress', ru: 'Прогресс'),
+        shortLabel: context.tr(ky: 'Прогр.', en: 'Progress', ru: 'Прогр.'),
         icon: Icons.insights_rounded,
       ),
       _NavItem(
         tab: AppTab.profile,
-        label: 'Профиль',
-        shortLabel: 'Проф.',
+        label: context.tr(ky: 'Профиль', en: 'Profile', ru: 'Профиль'),
+        shortLabel: context.tr(ky: 'Проф.', en: 'Profile', ru: 'Проф.'),
         icon: Icons.person_rounded,
       ),
     ];

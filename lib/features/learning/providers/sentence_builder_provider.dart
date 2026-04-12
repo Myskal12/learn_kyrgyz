@@ -44,6 +44,7 @@ class SentenceBuilderProvider extends ChangeNotifier {
   LearningDirection _direction = LearningDirection.enToKy;
   String? _errorMessage;
   bool _completionTracked = false;
+  DateTime? _sessionStartedAt;
 
   List<SentenceModel> _sentences = [];
   List<SentenceToken> _tokens = [];
@@ -103,6 +104,7 @@ class SentenceBuilderProvider extends ChangeNotifier {
     _sentences = [];
     _mistakes.clear();
     _clearSelection();
+    _sessionStartedAt = DateTime.now();
     notifyListeners();
 
     try {
@@ -147,8 +149,10 @@ class SentenceBuilderProvider extends ChangeNotifier {
   }
 
   void _trackSessionCompleted() {
-    if (_completionTracked || _categoryId.isEmpty) return;
+    if (_completionTracked) return;
     _completionTracked = true;
+    _recordLearningDuration();
+    if (_categoryId.isEmpty) return;
     unawaited(
       _analytics.track(
         'sentence_builder_completed',
@@ -163,6 +167,14 @@ class SentenceBuilderProvider extends ChangeNotifier {
         },
       ),
     );
+  }
+
+  void _recordLearningDuration() {
+    final startedAt = _sessionStartedAt;
+    if (startedAt == null) return;
+    final elapsed = DateTime.now().difference(startedAt);
+    _progress.recordLearningDuration(elapsed);
+    _sessionStartedAt = null;
   }
 
   void _prepareCurrent() {
@@ -283,6 +295,7 @@ class SentenceBuilderProvider extends ChangeNotifier {
     _answered = false;
     _lastCorrect = false;
     _completionTracked = false;
+    _sessionStartedAt = DateTime.now();
     _prepareCurrent();
     notifyListeners();
   }

@@ -83,6 +83,8 @@ class FakeFirebaseService implements FirebaseService {
     required int totalMastered,
     required int totalSessions,
     required int accuracy,
+    required int totalXp,
+    required int streakDays,
   }) async {}
 
   @override

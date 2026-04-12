@@ -5,11 +5,13 @@ import 'package:go_router/go_router.dart';
 import '../../../app/providers/app_providers.dart';
 import '../../../app/providers/onboarding_provider.dart';
 import '../../../core/utils/app_colors.dart';
+import '../../../core/utils/avatar_presets.dart';
 import '../../../core/utils/constants.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_shell.dart';
+import '../../../shared/widgets/profile_avatar.dart';
 import '../../../shared/widgets/sticky_bottom_action_bar.dart';
 import '../../profile/providers/user_profile_provider.dart';
 
@@ -24,6 +26,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
   late final TextEditingController _nameController;
   String? _localError;
   bool _initialized = false;
+  String _selectedAvatar = defaultProfileAvatar;
 
   @override
   void initState() {
@@ -45,7 +48,9 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
     }
 
     setState(() => _localError = null);
-    await ref.read(userProfileProvider).completeProfileSetup(nickname);
+    await ref
+        .read(userProfileProvider)
+        .completeProfileSetup(nickname, avatar: _selectedAvatar);
     await ref
         .read(localStorageServiceProvider)
         .setString(Constants.postLogoutRedirectKey, 'false');
@@ -57,13 +62,13 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
   @override
   Widget build(BuildContext context) {
     final profileState = ref.watch(userProfileProvider);
-    final firebase = ref.read(firebaseServiceProvider);
     if (!_initialized) {
       final initialName =
           profileState.suggestedNickname ?? profileState.profile.nickname;
       if (initialName.trim().isNotEmpty && initialName.trim() != 'Колдонуучу') {
         _nameController.text = initialName.trim();
       }
+      _selectedAvatar = normalizeProfileAvatar(profileState.profile.avatar);
       _initialized = true;
     }
 
@@ -71,16 +76,6 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           context.go('/login');
-        }
-      });
-    }
-
-    if (!profileState.isLoading &&
-        firebase.currentUserId != null &&
-        firebase.isCurrentUserEmailVerificationRequired) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          context.go('/verify-email');
         }
       });
     }
@@ -110,24 +105,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                         padding: const EdgeInsets.all(24),
                         child: Column(
                           children: [
-                            Container(
-                              width: 72,
-                              height: 72,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                gradient: LinearGradient(
-                                  colors: [AppColors.primary, AppColors.accent],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                              ),
-                              alignment: Alignment.center,
-                              child: const Icon(
-                                Icons.badge_outlined,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                            ),
+                            ProfileAvatar(avatar: _selectedAvatar),
                             const SizedBox(height: 16),
                             Text(
                               'Атыңызды коюңуз',
@@ -138,7 +116,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Профилде ушул ысым көрүнөт.',
+                              'Профилде ушул ысым жана аватар көрүнөт.',
                               style: AppTextStyles.muted,
                               textAlign: TextAlign.center,
                             ),
@@ -177,6 +155,20 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                                   ),
                                 ),
                               ),
+                            ),
+                            const SizedBox(height: 18),
+                            Text('Аватар', style: AppTextStyles.body),
+                            const SizedBox(height: 8),
+                            AvatarPresetPicker(
+                              selectedAvatar: _selectedAvatar,
+                              onSelected: (value) {
+                                setState(() => _selectedAvatar = value);
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            const AvatarSelectionHint(
+                              text:
+                                  'Кийин муну жөндөөлөрдөн дагы алмаштырсаңыз болот.',
                             ),
                           ],
                         ),

@@ -48,13 +48,33 @@ class _FakeFirebaseService implements FirebaseService {
       ],
       _words = {
         'basic': [
-          WordModel(id: 'w1', english: 'hello', kyrgyz: 'Салам', category: 'basic'),
-          WordModel(id: 'w2', english: 'yes', kyrgyz: 'Ооба', category: 'basic'),
+          WordModel(
+            id: 'w1',
+            english: 'hello',
+            kyrgyz: 'Салам',
+            category: 'basic',
+          ),
+          WordModel(
+            id: 'w2',
+            english: 'yes',
+            kyrgyz: 'Ооба',
+            category: 'basic',
+          ),
           WordModel(id: 'w3', english: 'no', kyrgyz: 'Жок', category: 'basic'),
-          WordModel(id: 'w4', english: 'thanks', kyrgyz: 'Рахмат', category: 'basic'),
+          WordModel(
+            id: 'w4',
+            english: 'thanks',
+            kyrgyz: 'Рахмат',
+            category: 'basic',
+          ),
         ],
         'food': [
-          WordModel(id: 'f1', english: 'bread', kyrgyz: 'Нан', category: 'food'),
+          WordModel(
+            id: 'f1',
+            english: 'bread',
+            kyrgyz: 'Нан',
+            category: 'food',
+          ),
           WordModel(id: 'f2', english: 'tea', kyrgyz: 'Чай', category: 'food'),
         ],
       };
@@ -89,9 +109,8 @@ class _FakeFirebaseService implements FirebaseService {
   Future<OnboardingConfigModel?> fetchOnboardingConfig() async => null;
 
   @override
-  Future<List<CategoryModel>> fetchCategories() async => List<CategoryModel>.of(
-    _categories,
-  );
+  Future<List<CategoryModel>> fetchCategories() async =>
+      List<CategoryModel>.of(_categories);
 
   @override
   Future<List<WordModel>> fetchWordsByCategory(String categoryId) async =>
@@ -110,6 +129,8 @@ class _FakeFirebaseService implements FirebaseService {
     required int totalMastered,
     required int totalSessions,
     required int accuracy,
+    required int totalXp,
+    required int streakDays,
   }) async {}
 
   @override
@@ -150,7 +171,9 @@ void main() {
 
     expect(find.text('Жол картасы'), findsWidgets);
     expect(
-      find.text('Бул экран реалдуу категория, прогресс жана кайталоо кезеги менен эсептелет.'),
+      find.text(
+        'Бул экран реалдуу категория, прогресс жана кайталоо кезеги менен эсептелет.',
+      ),
       findsOneWidget,
     );
     expect(find.text('Негизги сөздөр'), findsWidgets);

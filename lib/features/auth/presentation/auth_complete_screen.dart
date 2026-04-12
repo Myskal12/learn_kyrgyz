@@ -33,12 +33,8 @@ class _AuthCompleteScreenState extends ConsumerState<AuthCompleteScreen> {
     final profileState = ref.watch(userProfileProvider);
     final firebase = ref.read(firebaseServiceProvider);
     final hasAuthSession = firebase.currentUserId != null;
-    final verificationRequired =
-        hasAuthSession && firebase.isCurrentUserEmailVerificationRequired;
     final stillResolving =
-        hasAuthSession &&
-        !verificationRequired &&
-        (profileState.isLoading || profileState.isGuest);
+        hasAuthSession && (profileState.isLoading || profileState.isGuest);
 
     if (!_redirectScheduled && !stillResolving) {
       _redirectScheduled = true;
@@ -46,10 +42,6 @@ class _AuthCompleteScreenState extends ConsumerState<AuthCompleteScreen> {
         if (!mounted) return;
         if (!hasAuthSession) {
           context.go('/login');
-          return;
-        }
-        if (verificationRequired) {
-          context.go('/verify-email');
           return;
         }
         ref

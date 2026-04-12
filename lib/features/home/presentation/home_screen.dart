@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 import '../../../app/providers/app_providers.dart';
 import '../../../app/providers/onboarding_provider.dart';
 import '../../../core/providers/learning_session_provider.dart';
+import '../../../core/localization/app_copy.dart';
 import '../../../core/utils/app_colors.dart';
+import '../../../core/utils/app_assets.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../data/models/category_model.dart';
 import '../../../shared/widgets/adaptive_panel_grid.dart';
@@ -43,6 +45,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final profileState = ref.watch(userProfileProvider);
     final session = ref.watch(learningSessionProvider);
     final wordsRepo = ref.read(wordsRepositoryProvider);
+    final weeklyChallenge = progress.weeklyChallenge;
 
     final categories = categoriesState.categories;
     final firstCategoryId = categories.isNotEmpty
@@ -71,6 +74,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final displayName = profileState.isGuest
         ? 'Конок'
         : profileState.profile.nickname;
+    final dailyQuests = progress.dailyQuests;
+    DailyQuestSnapshot? nextQuest;
+    for (final quest in dailyQuests) {
+      if (!quest.claimed) {
+        nextQuest = quest;
+        break;
+      }
+    }
 
     final recommendedAction = _RecommendedAction.fromState(
       totalWordsMastered: progress.totalWordsMastered,
@@ -81,17 +92,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       reviewCategoryId: reviewCategory?.id,
     );
 
-    final todayPlan = _buildTodayPlan(
-      recommendedAction: recommendedAction,
-      focusCategory: focusCategory,
-      totalReviewDue: totalReviewDue,
-      reviewDueForFocus: focusReviewDue,
-      hasProgress: progress.totalWordsMastered > 0,
-    );
-
     return AppShell(
-      title: 'Бүгүн',
-      subtitle: 'Кийинки эң жакшы кадам',
+      title: context.tr(ky: 'Бүгүн', en: 'Today', ru: 'Сегодня'),
+      subtitle: context.tr(
+        ky: 'Кийинки эң жакшы кадам',
+        en: 'Best next step',
+        ru: 'Лучший следующий шаг',
+      ),
       activeTab: AppTab.learn,
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -104,7 +111,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Кандайсың, $displayName!',
+                      context.tr(
+                        ky: 'Кандайсың, $displayName!',
+                        en: 'Hi, $displayName!',
+                        ru: 'Привет, $displayName!',
+                      ),
                       style: AppTextStyles.caption.copyWith(
                         letterSpacing: 1.2,
                         fontWeight: FontWeight.w700,
@@ -112,7 +123,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Бүгүн эмнеден баштайбыз?',
+                      context.tr(
+                        ky: 'Бүгүн эмнеден баштайбыз?',
+                        en: 'Where do we start today?',
+                        ru: 'С чего начнём сегодня?',
+                      ),
                       style: AppTextStyles.heading.copyWith(
                         fontSize: 30,
                         color: AppColors.primary,
@@ -276,24 +291,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 label: 'Сөздөр',
               ),
               _StatCard(
-                icon: Icons.gps_fixed,
-                iconColor: AppColors.success,
-                value: '${progress.accuracyPercent}%',
-                label: 'Тактык',
+                icon: Icons.flash_on_rounded,
+                iconColor: AppColors.warning,
+                value: 'Lv ${progress.journeyLevel}',
+                label: 'Деңгээл',
               ),
             ],
           ),
-          const SizedBox(height: 24),
-          Text('Кийинкилер', style: AppTextStyles.title),
-          const SizedBox(height: 12),
-          ...todayPlan.map(
-            (item) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: _TodayPlanCard(item: item),
-            ),
+          const SizedBox(height: 16),
+          _DailyMomentumCard(
+            quests: dailyQuests,
+            completedCount: progress.completedDailyQuestsCount,
+            todayXp: progress.todayXp,
+            nextQuest: nextQuest,
+            weeklyChallenge: weeklyChallenge,
           ),
-          const SizedBox(height: 12),
-          Text('Азыркы фокус', style: AppTextStyles.title),
+          const SizedBox(height: 24),
+          Text(
+            context.tr(
+              ky: 'Азыркы фокус',
+              en: 'Current focus',
+              ru: 'Текущий фокус',
+            ),
+            style: AppTextStyles.title,
+          ),
           const SizedBox(height: 12),
           _FocusLessonCard(
             category: focusCategory,
@@ -324,69 +345,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (category.id == categoryId) return category;
     }
     return categories.first;
-  }
-
-  List<_TodayPlanItem> _buildTodayPlan({
-    required _RecommendedAction recommendedAction,
-    required CategoryModel focusCategory,
-    required int totalReviewDue,
-    required int reviewDueForFocus,
-    required bool hasProgress,
-  }) {
-    final items = <_TodayPlanItem>[
-      _TodayPlanItem(
-        title: recommendedAction.primaryLabel,
-        subtitle: recommendedAction.subtitle,
-        helper: recommendedAction.supportingText,
-        icon: Icons.play_circle_fill,
-        color: AppColors.primary,
-        emphasized: true,
-      ),
-    ];
-
-    if (totalReviewDue > 0) {
-      items.add(
-        _TodayPlanItem(
-          title: 'Кайталоону жабыңыз',
-          subtitle: '$totalReviewDue сөз кайра бекемдөөнү күтүп турат.',
-          helper: reviewDueForFocus > 0
-              ? '${focusCategory.title} ичинде эң жакын кайталоо бар.'
-              : 'Алсыз сөздөрдү жаап, тактыкты көтөрүңүз.',
-          icon: Icons.refresh,
-          color: AppColors.accent,
-        ),
-      );
-    } else {
-      items.add(
-        _TodayPlanItem(
-          title: hasProgress
-              ? 'Кыска квиз менен текшерүү'
-              : 'Сабак жолун көрүү',
-          subtitle: hasProgress
-              ? 'Ритмди сактоо үчүн 5 суроолук текшерүү жасаңыз.'
-              : 'Алгач кайсы темадан баштай турганыңызды тактаңыз.',
-          helper: hasProgress
-              ? 'Карточкадан кийин квиз эң жакшы кийинки кадам болот.'
-              : 'Жол картасы бардык ачылган сабактарды көрсөтөт.',
-          icon: hasProgress ? Icons.flash_on : Icons.alt_route,
-          color: hasProgress ? AppColors.success : AppColors.primary,
-        ),
-      );
-    }
-
-    items.add(
-      _TodayPlanItem(
-        title: 'Терең машыгууга өтүңүз',
-        subtitle:
-            'Карточка, сүйлөм түзүү жана квиз режимдерин өзүнчө тандаңыз.',
-        helper:
-            'Бул экран тандоо эмес, багыт берет; машыгуу режими өзүнчө бөлүмдө.',
-        icon: Icons.dashboard_customize,
-        color: AppColors.success,
-      ),
-    );
-
-    return items;
   }
 }
 
@@ -435,7 +393,15 @@ class _StreakBadge extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(Icons.local_fire_department, color: AppColors.accent, size: 20),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(999),
+            child: Image.asset(
+              AppAssets.streakFlame,
+              width: 22,
+              height: 22,
+              fit: BoxFit.cover,
+            ),
+          ),
           const SizedBox(height: 4),
           Text(
             '$streakDays',
@@ -601,43 +567,180 @@ class _QuickIcon extends StatelessWidget {
   }
 }
 
-class _TodayPlanCard extends StatelessWidget {
-  const _TodayPlanCard({required this.item});
+class _DailyMomentumCard extends StatelessWidget {
+  const _DailyMomentumCard({
+    required this.quests,
+    required this.completedCount,
+    required this.todayXp,
+    required this.nextQuest,
+    required this.weeklyChallenge,
+  });
 
-  final _TodayPlanItem item;
+  final List<DailyQuestSnapshot> quests;
+  final int completedCount;
+  final int todayXp;
+  final DailyQuestSnapshot? nextQuest;
+  final WeeklyChallengeSnapshot weeklyChallenge;
 
   @override
   Widget build(BuildContext context) {
+    final allDone = nextQuest == null;
     return AppCard(
       padding: const EdgeInsets.all(18),
-      child: Row(
+      backgroundColor: AppColors.accent.withValues(alpha: 0.05),
+      borderColor: AppColors.accent.withValues(alpha: 0.14),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _QuickIcon(icon: item.icon, color: item.color),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Бүгүнкү импульс',
+                      style: AppTextStyles.body.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      allDone
+                          ? 'Бүгүнкү квесттер толук жабылды. Темпти сактап калдыңыз.'
+                          : 'Кыска тапшырмалар менен күндү жандуу кармаңыз.',
+                      style: AppTextStyles.muted,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              AppChip(
+                label: '$completedCount/${quests.length} даяр',
+                variant: allDone
+                    ? AppChipVariant.success
+                    : AppChipVariant.accent,
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: quests
+                .map((quest) => _MomentumQuestPill(quest: quest))
+                .toList(),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: 0.12),
+              ),
+            ),
+            child: Row(
               children: [
-                Text(
-                  item.title,
-                  style: AppTextStyles.body.copyWith(
-                    fontWeight: FontWeight.w700,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Апталык толкун',
+                        style: AppTextStyles.caption.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${weeklyChallenge.activeDays}/${weeklyChallenge.targetActiveDays} күн · ${weeklyChallenge.weeklyXp}/${weeklyChallenge.targetXp} XP',
+                        style: AppTextStyles.caption,
+                      ),
+                    ],
                   ),
                 ),
-                if (item.emphasized) ...[
-                  const SizedBox(height: 6),
-                  const AppChip(
-                    label: 'Негизги кадам',
-                    variant: AppChipVariant.primary,
-                  ),
-                ],
-                const SizedBox(height: 6),
-                Text(item.subtitle, style: AppTextStyles.body),
-                const SizedBox(height: 6),
-                Text(item.helper, style: AppTextStyles.muted),
+                AppChip(
+                  label: weeklyChallenge.isCompleted ? 'Жабылды' : 'Жумада',
+                  variant: weeklyChallenge.isCompleted
+                      ? AppChipVariant.success
+                      : AppChipVariant.primary,
+                ),
               ],
             ),
+          ),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Бүгүн +$todayXp XP топтолду.',
+                  style: AppTextStyles.caption,
+                ),
+              ),
+              AppButton(
+                size: AppButtonSize.sm,
+                variant: allDone
+                    ? AppButtonVariant.outlined
+                    : AppButtonVariant.primary,
+                onPressed: () => context.go(nextQuest?.route ?? '/progress'),
+                child: Text(allDone ? 'Прогрессти ачуу' : 'Кийинки квест'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MomentumQuestPill extends StatelessWidget {
+  const _MomentumQuestPill({required this.quest});
+
+  final DailyQuestSnapshot quest;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDone = quest.claimed;
+    final tint = isDone ? AppColors.success : AppColors.primary;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: tint.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: tint.withValues(alpha: 0.14)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                isDone ? Icons.check_circle_rounded : Icons.flag_rounded,
+                color: tint,
+                size: 16,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                quest.title,
+                style: AppTextStyles.caption.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: tint,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            isDone
+                ? 'Аткарылды'
+                : '${quest.displayCurrent} / ${quest.displayTarget}',
+            style: AppTextStyles.caption,
           ),
         ],
       ),
@@ -720,7 +823,7 @@ class _FocusLessonCard extends StatelessWidget {
           AppButton(
             fullWidth: true,
             variant: AppButtonVariant.outlined,
-            onPressed: () => context.push('/study-plan'),
+            onPressed: () => context.go('/categories'),
             child: const Text('Жол картасын көрүү'),
           ),
         ],
@@ -758,24 +861,6 @@ class _LinearProgress extends StatelessWidget {
       ),
     );
   }
-}
-
-class _TodayPlanItem {
-  const _TodayPlanItem({
-    required this.title,
-    required this.subtitle,
-    required this.helper,
-    required this.icon,
-    required this.color,
-    this.emphasized = false,
-  });
-
-  final String title;
-  final String subtitle;
-  final String helper;
-  final IconData icon;
-  final Color color;
-  final bool emphasized;
 }
 
 class _RecommendedAction {

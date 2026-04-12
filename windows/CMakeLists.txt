@@ -2,9 +2,46 @@
 cmake_minimum_required(VERSION 3.14)
 project(learn_kyrgyz LANGUAGES CXX)
 
+# CMake 4 drops compatibility with projects that still call
+# cmake_minimum_required(VERSION 3.1), which is what the Firebase C++ Windows
+# SDK currently ships. Raise the minimum policy floor before plugin CMake files
+# are loaded so Windows builds keep working without editing generated files.
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.0")
+  set(CMAKE_POLICY_VERSION_MINIMUM "3.5")
+endif()
+
 # The name of the executable created for the application. Change this to change
 # the on-disk name of your application.
 set(BINARY_NAME "learn_kyrgyz")
+
+# flutter_tts on Windows shells out to nuget.exe to fetch Microsoft.Windows.CppWinRT.
+# Some environments have CMake but not NuGet on PATH, so bootstrap a local copy
+# and expose it via the cache before plugin CMake files run.
+if(WIN32 AND NOT DEFINED NUGET_EXE)
+  set(LOCAL_NUGET_DIR "${CMAKE_BINARY_DIR}/tooling/nuget")
+  set(LOCAL_NUGET_EXE "${LOCAL_NUGET_DIR}/nuget.exe")
+
+  if(NOT EXISTS "${LOCAL_NUGET_EXE}")
+    file(MAKE_DIRECTORY "${LOCAL_NUGET_DIR}")
+    file(
+      DOWNLOAD
+      "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+      "${LOCAL_NUGET_EXE}"
+      STATUS NUGET_DOWNLOAD_STATUS
+      LOG NUGET_DOWNLOAD_LOG
+      SHOW_PROGRESS
+      TLS_VERIFY ON
+    )
+
+    list(GET NUGET_DOWNLOAD_STATUS 0 NUGET_DOWNLOAD_CODE)
+    if(NOT NUGET_DOWNLOAD_CODE EQUAL 0)
+      message(FATAL_ERROR "Failed to download nuget.exe: ${NUGET_DOWNLOAD_LOG}")
+    endif()
+  endif()
+
+  set(NUGET_EXE "${LOCAL_NUGET_EXE}" CACHE FILEPATH
+    "NuGet executable used by Windows plugin builds." FORCE)
+endif()
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.

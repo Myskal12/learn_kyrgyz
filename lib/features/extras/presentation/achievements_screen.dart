@@ -33,6 +33,9 @@ class AchievementsScreen extends ConsumerWidget {
           final unlocked = item.isUnlocked(
             totalWordsMastered: progress.totalWordsMastered,
             accuracyPercent: progress.accuracyPercent,
+            streakDays: progress.streakDays,
+            totalLearningSeconds: progress.totalLearningSeconds,
+            totalXp: progress.totalXp,
           );
           return ListTile(
             tileColor: AppColors.surface,

@@ -8,7 +8,6 @@ import '../features/auth/presentation/profile_setup_screen.dart';
 import '../features/categories/presentation/categories_screen.dart';
 import '../features/extras/presentation/achievements_screen.dart';
 import '../features/extras/presentation/resources_screen.dart';
-import '../features/extras/presentation/study_plan_screen.dart';
 import '../features/learning/presentation/flashcard_screen.dart';
 import '../features/learning/presentation/sentence_builder_screen.dart';
 import '../features/learning/providers/flashcard_provider.dart';
@@ -16,6 +15,8 @@ import '../features/progress/presentation/progress_screen.dart';
 import '../features/profile/presentation/leaderboard_screen.dart';
 import '../features/profile/presentation/profile_screen.dart';
 import '../features/profile/presentation/profile_settings_screen.dart';
+import '../features/profile/presentation/privacy_policy_screen.dart';
+import '../features/profile/presentation/terms_of_use_screen.dart';
 import '../features/quiz/presentation/quiz_screen.dart';
 import '../features/home/presentation/home_screen.dart';
 import '../features/onboarding/presentation/launch_gate_screen.dart';
@@ -38,7 +39,9 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/verify-email',
-      builder: (context, state) => const EmailVerificationScreen(),
+      builder: (context, state) => EmailVerificationScreen(
+        returnTo: state.uri.queryParameters['returnTo'],
+      ),
     ),
     GoRoute(
       path: '/profile-setup',
@@ -104,21 +107,27 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const ProfileSettingsScreen(),
     ),
     GoRoute(
+      path: '/privacy-policy',
+      builder: (context, state) => const PrivacyPolicyScreen(),
+    ),
+    GoRoute(
+      path: '/terms-of-use',
+      builder: (context, state) => const TermsOfUseScreen(),
+    ),
+    GoRoute(
       path: '/leaderboard',
-      builder: (context, state) => const LeaderboardScreen(),
+      builder: (context, state) {
+        final requestedLimit =
+            int.tryParse(state.uri.queryParameters['limit'] ?? '') ?? 10;
+        return LeaderboardScreen(initialLimit: requestedLimit);
+      },
     ),
     GoRoute(
       path: '/achievements',
       builder: (context, state) => const AchievementsScreen(),
     ),
-    GoRoute(
-      path: '/study-plan',
-      builder: (context, state) => const StudyPlanScreen(),
-    ),
-    GoRoute(
-      path: '/roadmap',
-      builder: (context, state) => const StudyPlanScreen(),
-    ),
+    GoRoute(path: '/study-plan', redirect: (_, __) => '/categories'),
+    GoRoute(path: '/roadmap', redirect: (_, __) => '/categories'),
     GoRoute(
       path: '/resources',
       builder: (context, state) => const ResourcesScreen(),

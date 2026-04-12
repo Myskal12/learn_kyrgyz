@@ -40,6 +40,7 @@ class QuizProvider extends ChangeNotifier {
   String? _errorMessage;
   String _categoryId = '';
   bool _completionTracked = false;
+  DateTime? _sessionStartedAt;
 
   List<QuizQuestionModel> _questions = [];
   List<QuizQuestionModel> _originalQuestions = [];
@@ -104,6 +105,7 @@ class QuizProvider extends ChangeNotifier {
     _firstAttemptMistakes.clear();
     _unresolvedMistakes.clear();
     _optionsCache.clear();
+    _sessionStartedAt = DateTime.now();
     notifyListeners();
 
     try {
@@ -142,8 +144,10 @@ class QuizProvider extends ChangeNotifier {
   }
 
   void _trackSessionCompleted() {
-    if (_completionTracked || _categoryId.isEmpty) return;
+    if (_completionTracked) return;
     _completionTracked = true;
+    _recordLearningDuration();
+    if (_categoryId.isEmpty) return;
     unawaited(
       _analytics.track(
         'quiz_completed',
@@ -162,6 +166,14 @@ class QuizProvider extends ChangeNotifier {
         },
       ),
     );
+  }
+
+  void _recordLearningDuration() {
+    final startedAt = _sessionStartedAt;
+    if (startedAt == null) return;
+    final elapsed = DateTime.now().difference(startedAt);
+    _progress.recordLearningDuration(elapsed);
+    _sessionStartedAt = null;
   }
 
   Future<void> startWithDirection(
@@ -268,6 +280,7 @@ class QuizProvider extends ChangeNotifier {
     _isReviewRound = false;
     _stage = QuizStage.active;
     _completionTracked = false;
+    _sessionStartedAt = DateTime.now();
     _resetOptions();
     notifyListeners();
   }
@@ -288,6 +301,7 @@ class QuizProvider extends ChangeNotifier {
     _isReviewRound = false;
     _stage = QuizStage.active;
     _completionTracked = false;
+    _sessionStartedAt = DateTime.now();
     _resetOptions();
     notifyListeners();
   }

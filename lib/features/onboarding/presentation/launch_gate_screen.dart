@@ -35,9 +35,7 @@ class _LaunchGateScreenState extends ConsumerState<LaunchGateScreen> {
         final route = !onboarding.isCompleted
             ? '/welcome'
             : firebase.currentUserId != null
-            ? firebase.isCurrentUserEmailVerificationRequired
-                  ? '/verify-email'
-                  : '/home'
+            ? '/home'
             : forceLogin
             ? '/login'
             : '/home';

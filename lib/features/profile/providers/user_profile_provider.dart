@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers/app_providers.dart';
+import '../../../core/utils/avatar_presets.dart';
 import '../../../core/services/firebase_service.dart';
 import '../../../core/services/local_storage_service.dart';
 import '../../../data/models/user_profile_model.dart';
@@ -25,10 +26,12 @@ class UserProfileProvider extends ChangeNotifier {
   UserProfileModel _profile = const UserProfileModel(
     id: 'guest',
     nickname: _guestNickname,
-    avatar: '🙂',
+    avatar: defaultProfileAvatar,
     totalMastered: 0,
     totalSessions: 0,
     accuracy: 0,
+    totalXp: 0,
+    streakDays: 0,
   );
 
   bool _isGuest = true;
@@ -66,10 +69,11 @@ class UserProfileProvider extends ChangeNotifier {
   Future<void> updateAvatar(String value) async {
     final uid = _profile.id;
     if (_isGuest || uid == 'guest') return;
-    _profile = _profile.copyWith(avatar: value);
+    final avatar = normalizeProfileAvatar(value);
+    _profile = _profile.copyWith(avatar: avatar);
     notifyListeners();
     await _persistProfile();
-    await _firebase.updateUserProfile(uid: uid, avatar: value);
+    await _firebase.updateUserProfile(uid: uid, avatar: avatar);
   }
 
   Future<void> refresh() async {
@@ -77,28 +81,37 @@ class UserProfileProvider extends ChangeNotifier {
     final remote = await _firebase.fetchUserProfile(_profile.id);
     if (remote != null) {
       final normalized = _preferredNickname(remote.nickname);
-      _profile = remote.copyWith(nickname: normalized);
+      _profile = remote.copyWith(
+        nickname: normalized,
+        avatar: normalizeProfileAvatar(remote.avatar),
+      );
       _needsProfileSetup = _requiresNicknameSetup(normalized);
       if (normalized != remote.nickname) {
-        await _firebase.updateUserProfile(uid: _profile.id, nickname: normalized);
+        await _firebase.updateUserProfile(
+          uid: _profile.id,
+          nickname: normalized,
+        );
       }
       notifyListeners();
       await _persistProfile();
     }
   }
 
-  Future<void> completeProfileSetup(String nickname) async {
+  Future<void> completeProfileSetup(String nickname, {String? avatar}) async {
     final uid = _firebase.currentUserId;
     final trimmed = nickname.trim();
     if (uid == null || uid.isEmpty || trimmed.isEmpty) return;
+    final resolvedAvatar = normalizeProfileAvatar(avatar ?? _profile.avatar);
 
     _profile = UserProfileModel(
       id: uid,
       nickname: trimmed,
-      avatar: _profile.avatar,
+      avatar: resolvedAvatar,
       totalMastered: _profile.totalMastered,
       totalSessions: _profile.totalSessions,
       accuracy: _profile.accuracy,
+      totalXp: _profile.totalXp,
+      streakDays: _profile.streakDays,
     );
     _isGuest = false;
     _loading = false;
@@ -110,7 +123,7 @@ class UserProfileProvider extends ChangeNotifier {
     await _firebase.updateUserProfile(
       uid: uid,
       nickname: trimmed,
-      avatar: _profile.avatar,
+      avatar: resolvedAvatar,
     );
   }
 
@@ -123,10 +136,12 @@ class UserProfileProvider extends ChangeNotifier {
       _profile = const UserProfileModel(
         id: 'guest',
         nickname: _guestNickname,
-        avatar: '🙂',
+        avatar: defaultProfileAvatar,
         totalMastered: 0,
         totalSessions: 0,
         accuracy: 0,
+        totalXp: 0,
+        streakDays: 0,
       );
       notifyListeners();
       return;
@@ -141,6 +156,7 @@ class UserProfileProvider extends ChangeNotifier {
     if (cached != null) {
       _profile = cached.copyWith(
         nickname: _preferredNickname(cached.nickname),
+        avatar: normalizeProfileAvatar(cached.avatar),
       );
       _needsProfileSetup = _requiresNicknameSetup(_profile.nickname);
       _loading = false;
@@ -150,7 +166,10 @@ class UserProfileProvider extends ChangeNotifier {
     final remote = await _firebase.fetchUserProfile(uid);
     if (remote != null) {
       final normalized = _preferredNickname(remote.nickname);
-      _profile = remote.copyWith(nickname: normalized);
+      _profile = remote.copyWith(
+        nickname: normalized,
+        avatar: normalizeProfileAvatar(remote.avatar),
+      );
       _needsProfileSetup = _requiresNicknameSetup(normalized);
       if (normalized != remote.nickname) {
         await _firebase.updateUserProfile(uid: uid, nickname: normalized);
@@ -161,10 +180,12 @@ class UserProfileProvider extends ChangeNotifier {
       _profile = UserProfileModel(
         id: uid,
         nickname: nickname,
-        avatar: '🙂',
+        avatar: defaultProfileAvatar,
         totalMastered: 0,
         totalSessions: 0,
         accuracy: 0,
+        totalXp: 0,
+        streakDays: 0,
       );
       _needsProfileSetup = _requiresNicknameSetup(nickname);
       await _firebase.updateUserProfile(
@@ -176,7 +197,10 @@ class UserProfileProvider extends ChangeNotifier {
     } else {
       _needsProfileSetup = _requiresNicknameSetup(_profile.nickname);
       if (_profile.nickname != cached.nickname) {
-        await _firebase.updateUserProfile(uid: uid, nickname: _profile.nickname);
+        await _firebase.updateUserProfile(
+          uid: uid,
+          nickname: _profile.nickname,
+        );
         await _persistProfile();
       }
     }

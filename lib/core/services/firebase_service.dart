@@ -680,7 +680,17 @@ class FirebaseService {
         'userId': uid,
         'correctByWordId': progress.correctByWordId,
         'seenByWordId': progress.seenByWordId,
+        'wordProgressById': progress.wordProgressById.map(
+          (key, value) => MapEntry(key, value.toJson()),
+        ),
+        'dailyActivityCountByDate': progress.dailyActivityCountByDate,
+        'dailyCorrectCountByDate': progress.dailyCorrectCountByDate,
+        'dailyLearningSecondsByDate': progress.dailyLearningSecondsByDate,
+        'dailyXpByDate': progress.dailyXpByDate,
+        'claimedDailyQuestKeys': progress.claimedDailyQuestKeys,
         'streakDays': progress.streakDays,
+        'totalLearningSeconds': progress.totalLearningSeconds,
+        'totalXp': progress.totalXp,
         'lastSessionAt': progress.lastSessionAt,
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
@@ -695,12 +705,16 @@ class FirebaseService {
     required int totalMastered,
     required int totalSessions,
     required int accuracy,
+    required int totalXp,
+    required int streakDays,
   }) async {
     try {
       await _firestore.collection('users').doc(uid).set({
         'totalMastered': totalMastered,
         'totalSessions': totalSessions,
         'accuracy': accuracy,
+        'totalXp': totalXp,
+        'streakDays': streakDays,
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
     } catch (e) {
@@ -741,12 +755,20 @@ class FirebaseService {
     try {
       final snapshot = await _firestore
           .collection('users')
-          .orderBy('totalMastered', descending: true)
+          .orderBy('totalXp', descending: true)
           .limit(limit)
           .get();
-      return snapshot.docs
+      final items = snapshot.docs
           .map((doc) => UserProfileModel.fromJson(doc.id, doc.data()))
           .toList();
+      items.sort((a, b) {
+        final scoreCompare = b.leaderboardScore.compareTo(a.leaderboardScore);
+        if (scoreCompare != 0) return scoreCompare;
+        final masteredCompare = b.totalMastered.compareTo(a.totalMastered);
+        if (masteredCompare != 0) return masteredCompare;
+        return b.accuracy.compareTo(a.accuracy);
+      });
+      return items;
     } catch (e) {
       debugPrint('Failed to load leaderboard: $e');
       rethrow;

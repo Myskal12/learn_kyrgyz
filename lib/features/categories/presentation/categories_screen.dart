@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/providers/app_providers.dart';
+import '../../../core/localization/app_copy.dart';
 import '../../../core/utils/app_colors.dart';
+import '../../../core/utils/app_assets.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../data/models/category_model.dart';
 import '../../../shared/widgets/app_button.dart';
@@ -76,15 +78,22 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
     final content = ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       children: [
-        AppChip(label: '1-деңгээл', variant: AppChipVariant.primary),
+        AppChip(
+          label: context.tr(ky: '1-деңгээл', en: 'Level 1', ru: '1 уровень'),
+          variant: AppChipVariant.primary,
+        ),
         const SizedBox(height: 12),
         Text(
-          'Жол картасы',
+          context.tr(ky: 'Жол картасы', en: 'Roadmap', ru: 'Дорожная карта'),
           style: AppTextStyles.heading.copyWith(fontSize: 28),
         ),
         const SizedBox(height: 8),
         Text(
-          'Ачылган сабактарды жана кийинки кадамды көрүңүз.',
+          context.tr(
+            ky: 'Ачылган сабактарды жана кийинки кадамды көрүңүз.',
+            en: 'See unlocked lessons and the next best step.',
+            ru: 'Смотрите открытые уроки и следующий лучший шаг.',
+          ),
           style: AppTextStyles.body.copyWith(color: AppColors.muted),
         ),
         const SizedBox(height: 20),
@@ -94,18 +103,63 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _GlassTag(label: '$unlockedCount ачылган'),
-                  _GlassTag(label: '$completedCount аяктаган'),
-                  _GlassTag(label: '$totalReviewDue кайталоо'),
+                  Expanded(
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        _GlassTag(
+                          label: context.tr(
+                            ky: '$unlockedCount ачылган',
+                            en: '$unlockedCount unlocked',
+                            ru: '$unlockedCount открыто',
+                          ),
+                        ),
+                        _GlassTag(
+                          label: context.tr(
+                            ky: '$completedCount аяктаган',
+                            en: '$completedCount complete',
+                            ru: '$completedCount завершено',
+                          ),
+                        ),
+                        _GlassTag(
+                          label: context.tr(
+                            ky: '$totalReviewDue кайталоо',
+                            en: '$totalReviewDue review due',
+                            ru: '$totalReviewDue на повторе',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      AppAssets.yurt,
+                      width: 84,
+                      height: 84,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
               Text(
-                nextLesson != null ? 'Кийинки эң жакшы сабак' : 'Жол даяр',
+                nextLesson != null
+                    ? context.tr(
+                        ky: 'Кийинки эң жакшы сабак',
+                        en: 'Best next lesson',
+                        ru: 'Лучший следующий урок',
+                      )
+                    : context.tr(
+                        ky: 'Жол даяр',
+                        en: 'Roadmap ready',
+                        ru: 'Карта готова',
+                      ),
                 style: AppTextStyles.body.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
@@ -113,7 +167,12 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                nextLesson?.category.title ?? 'Бардык учурдагы сабактар бүткөн',
+                nextLesson?.category.title ??
+                    context.tr(
+                      ky: 'Бардык учурдагы сабактар бүткөн',
+                      en: 'All current lessons are complete',
+                      ru: 'Все текущие уроки завершены',
+                    ),
                 style: AppTextStyles.heading.copyWith(
                   color: Colors.white,
                   fontSize: 28,
@@ -123,9 +182,21 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
               Text(
                 nextLesson != null
                     ? nextLesson.active
-                          ? 'Улантууга даяр.'
-                          : 'Жаңы циклди ушул жерден баштаңыз.'
-                    : 'Эми Практикага өтүңүз.',
+                          ? context.tr(
+                              ky: 'Улантууга даяр.',
+                              en: 'Ready to continue.',
+                              ru: 'Готово к продолжению.',
+                            )
+                          : context.tr(
+                              ky: 'Жаңы циклди ушул жерден баштаңыз.',
+                              en: 'Start a new cycle from here.',
+                              ru: 'Начните новый цикл отсюда.',
+                            )
+                    : context.tr(
+                        ky: 'Эми Практикага өтүңүз.',
+                        en: 'Now continue to Practice.',
+                        ru: 'Теперь переходите к практике.',
+                      ),
                 style: AppTextStyles.body.copyWith(
                   color: Colors.white.withValues(alpha: 0.9),
                 ),
@@ -138,7 +209,17 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                     : () =>
                           context.push('/flashcards/${nextLesson.category.id}'),
                 child: Text(
-                  nextLesson == null ? 'Практикага өтүү' : 'Сабакты ачуу',
+                  nextLesson == null
+                      ? context.tr(
+                          ky: 'Практикага өтүү',
+                          en: 'Go to Practice',
+                          ru: 'Перейти к практике',
+                        )
+                      : context.tr(
+                          ky: 'Сабакты ачуу',
+                          en: 'Open lesson',
+                          ru: 'Открыть урок',
+                        ),
                 ),
               ),
             ],
@@ -165,15 +246,34 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
           SizedBox(
             height: 280,
             child: AppEmptyState(
-              title: 'Сабактар табылган жок',
-              message: 'Азырынча категория жок.',
+              title: context.tr(
+                ky: 'Сабактар табылган жок',
+                en: 'No lessons found',
+                ru: 'Уроки не найдены',
+              ),
+              message: context.tr(
+                ky: 'Азырынча категория жок.',
+                en: 'No categories available yet.',
+                ru: 'Категории пока недоступны.',
+              ),
               icon: Icons.menu_book_outlined,
-              actionLabel: 'Кайра жүктөө',
+              actionLabel: context.tr(
+                ky: 'Кайра жүктөө',
+                en: 'Reload',
+                ru: 'Обновить',
+              ),
               onAction: () => ref.read(categoriesProvider).load(force: true),
             ),
           )
         else ...[
-          Text('Сабактардын ирети', style: AppTextStyles.title),
+          Text(
+            context.tr(
+              ky: 'Сабактардын ирети',
+              en: 'Lesson order',
+              ru: 'Порядок уроков',
+            ),
+            style: AppTextStyles.title,
+          ),
           const SizedBox(height: 12),
           ...roadmapItems.asMap().entries.map((entry) {
             final index = entry.key;
@@ -198,8 +298,12 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
     );
 
     return AppShell(
-      title: 'Жол картасы',
-      subtitle: 'Сабактардын ирети жана статусу',
+      title: context.tr(ky: 'Жол картасы', en: 'Roadmap', ru: 'Дорожная карта'),
+      subtitle: context.tr(
+        ky: 'Сабактардын ирети жана статусу',
+        en: 'Lesson order and status',
+        ru: 'Порядок уроков и статус',
+      ),
       activeTab: AppTab.learn,
       child: content,
     );
@@ -242,15 +346,23 @@ class _RoadmapEntry extends StatelessWidget {
         ? AppColors.primary
         : AppColors.accent;
 
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(
-            width: 28,
-            child: Column(
-              children: [
-                Container(
+    return Stack(
+      children: [
+        if (showConnector)
+          Positioned(
+            left: 8,
+            top: 18,
+            bottom: 0,
+            child: Container(width: 2, color: AppColors.border),
+          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 28,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Container(
                   width: 18,
                   height: 18,
                   decoration: BoxDecoration(
@@ -271,27 +383,19 @@ class _RoadmapEntry extends StatelessWidget {
                         : null,
                   ),
                 ),
-                if (showConnector)
-                  Expanded(
-                    child: Container(
-                      width: 2,
-                      margin: const EdgeInsets.symmetric(vertical: 6),
-                      color: AppColors.border,
-                    ),
-                  ),
-              ],
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: _LessonCard(
-              item: item,
-              highlighted: highlighted,
-              onTap: onTap,
+            const SizedBox(width: 8),
+            Expanded(
+              child: _LessonCard(
+                item: item,
+                highlighted: highlighted,
+                onTap: onTap,
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 }

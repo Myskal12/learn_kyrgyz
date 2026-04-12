@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/providers/app_providers.dart';
+import '../../core/localization/app_copy.dart';
 import '../../core/utils/constants.dart';
 import '../../core/utils/app_colors.dart';
 import '../../core/utils/app_text_styles.dart';
 import '../../features/auth/providers/auth_provider.dart';
 import '../../features/profile/providers/user_profile_provider.dart';
 import 'app_card.dart';
+import 'profile_avatar.dart';
 
 class AppSidebar extends ConsumerWidget {
   const AppSidebar({
@@ -28,30 +30,102 @@ class AppSidebar extends ConsumerWidget {
     final profileProvider = ref.watch(userProfileProvider);
     final isGuest = profileProvider.isGuest;
     final profile = profileProvider.profile;
-    final displayName = isGuest ? 'Guest' : profile.nickname;
-    final subtitle = isGuest ? 'Guest mode' : 'Башталгыч деңгээл';
-    final avatar = isGuest ? 'G' : profile.avatar;
+    final displayName = isGuest
+        ? context.tr(ky: 'Конок', en: 'Guest', ru: 'Гость')
+        : profile.nickname;
+    final subtitle = isGuest
+        ? context.tr(ky: 'Конок режими', en: 'Guest mode', ru: 'Гостевой режим')
+        : context.tr(
+            ky: 'Окуу профили',
+            en: 'Learning profile',
+            ru: 'Учебный профиль',
+          );
+    final avatar = isGuest ? profile.avatar : profile.avatar;
 
     final destinations = [
-      _SidebarItem('Башкы бет', Icons.home, '/home'),
-      _SidebarItem('Сабактар', Icons.layers, '/categories'),
-      _SidebarItem('Практика', Icons.flash_on, '/practice'),
-      _SidebarItem('Карточкалар', Icons.menu_book, '/flashcards'),
-      _SidebarItem('Сүйлөм түзүү', Icons.text_fields, '/sentence-builder'),
-      _SidebarItem('Квиз', Icons.check_circle, '/quiz'),
-      _SidebarItem('Прогресс', Icons.bar_chart, '/progress'),
-      _SidebarItem('Жетишкендиктер', Icons.workspace_premium, '/achievements'),
-      _SidebarItem('Рейтинг', Icons.emoji_events, '/leaderboard'),
-      _SidebarItem('Күндүк план', Icons.calendar_month, '/study-plan'),
-      _SidebarItem('Ресурстар', Icons.open_in_new, '/resources'),
-      _SidebarItem('Профиль', Icons.person, '/profile'),
-      _SidebarItem('Жөндөөлөр', Icons.settings, '/settings'),
+      _SidebarItem(
+        context.tr(ky: 'Башкы бет', en: 'Home', ru: 'Главная'),
+        Icons.home,
+        '/home',
+      ),
+      _SidebarItem(
+        context.tr(ky: 'Сабактар', en: 'Lessons', ru: 'Уроки'),
+        Icons.layers,
+        '/categories',
+      ),
+      _SidebarItem(
+        context.tr(ky: 'Практика', en: 'Practice', ru: 'Практика'),
+        Icons.flash_on,
+        '/practice',
+      ),
+      _SidebarItem(
+        context.tr(ky: 'Карточкалар', en: 'Flashcards', ru: 'Карточки'),
+        Icons.menu_book,
+        '/flashcards',
+      ),
+      _SidebarItem(
+        context.tr(
+          ky: 'Сүйлөм түзүү',
+          en: 'Sentence builder',
+          ru: 'Сборка фраз',
+        ),
+        Icons.text_fields,
+        '/sentence-builder',
+      ),
+      _SidebarItem(
+        context.tr(ky: 'Квиз', en: 'Quiz', ru: 'Квиз'),
+        Icons.check_circle,
+        '/quiz',
+      ),
+      _SidebarItem(
+        context.tr(ky: 'Прогресс', en: 'Progress', ru: 'Прогресс'),
+        Icons.bar_chart,
+        '/progress',
+      ),
+      _SidebarItem(
+        context.tr(ky: 'Жетишкендиктер', en: 'Achievements', ru: 'Достижения'),
+        Icons.workspace_premium,
+        '/achievements',
+      ),
+      _SidebarItem(
+        context.tr(ky: 'Рейтинг', en: 'Leaderboard', ru: 'Рейтинг'),
+        Icons.emoji_events,
+        '/leaderboard',
+      ),
+      _SidebarItem(
+        context.tr(ky: 'Жол картасы', en: 'Roadmap', ru: 'Дорожная карта'),
+        Icons.calendar_month,
+        '/categories',
+      ),
+      _SidebarItem(
+        context.tr(ky: 'Ресурстар', en: 'Resources', ru: 'Ресурсы'),
+        Icons.open_in_new,
+        '/resources',
+      ),
+      _SidebarItem(
+        context.tr(ky: 'Профиль', en: 'Profile', ru: 'Профиль'),
+        Icons.person,
+        '/profile',
+      ),
+      _SidebarItem(
+        context.tr(ky: 'Жөндөөлөр', en: 'Settings', ru: 'Настройки'),
+        Icons.settings,
+        '/settings',
+      ),
     ];
 
     final accountItems = isGuest
         ? [
-            _SidebarItem('Кирүү', Icons.login, '/login'),
-            _SidebarItem('Катталуу', Icons.person_add, '/signup'),
+            _SidebarItem(
+              context.tr(ky: 'Кирүү', en: 'Sign in', ru: 'Войти'),
+              Icons.login,
+              '/login',
+            ),
+            _SidebarItem(
+              context.tr(ky: 'Катталуу', en: 'Sign up', ru: 'Регистрация'),
+              Icons.person_add,
+              '/signup',
+            ),
           ]
         : const <_SidebarItem>[];
 
@@ -100,11 +174,18 @@ class AppSidebar extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Кыргызча / English',
+                              context.tr(
+                                ky: 'Тандалган тил',
+                                en: 'Selected language',
+                                ru: 'Выбранный язык',
+                              ),
                               style: AppTextStyles.caption,
                             ),
                             const SizedBox(height: 4),
-                            Text('Learn Kyrgyz', style: AppTextStyles.title),
+                            Text(
+                              context.appLanguage.nativeLabel,
+                              style: AppTextStyles.title,
+                            ),
                           ],
                         ),
                         _SidebarIconButton(icon: Icons.close, onTap: onClose),
@@ -117,26 +198,7 @@ class AppSidebar extends ConsumerWidget {
                       padding: const EdgeInsets.all(16),
                       child: Row(
                         children: [
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: [AppColors.primary, AppColors.accent],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              avatar,
-                              style: AppTextStyles.body.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
+                          ProfileAvatar(avatar: avatar, size: 48),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
@@ -170,7 +232,11 @@ class AppSidebar extends ConsumerWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
-                            'АККАУНТ',
+                            context.tr(
+                              ky: 'АККАУНТ',
+                              en: 'ACCOUNT',
+                              ru: 'АККАУНТ',
+                            ),
                             style: AppTextStyles.caption.copyWith(
                               letterSpacing: 2.6,
                             ),
@@ -234,7 +300,11 @@ class AppSidebar extends ConsumerWidget {
                                   ),
                                   const SizedBox(width: 12),
                                   Text(
-                                    'Чыгуу',
+                                    context.tr(
+                                      ky: 'Чыгуу',
+                                      en: 'Sign out',
+                                      ru: 'Выйти',
+                                    ),
                                     style: AppTextStyles.body.copyWith(
                                       fontWeight: FontWeight.w600,
                                       color: AppColors.accent,

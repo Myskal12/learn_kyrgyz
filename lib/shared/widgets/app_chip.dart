@@ -21,6 +21,8 @@ class AppChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final maxChipWidth = MediaQuery.sizeOf(context).width * 0.72;
+
     Color background;
     Color textColor;
     Color borderColor;
@@ -48,26 +50,31 @@ class AppChip extends StatelessWidget {
         break;
     }
 
-    final content = Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(label),
-        if (onRemove != null) ...[
-          const SizedBox(width: 8),
-          GestureDetector(
-            onTap: onRemove,
-            child: Container(
-              width: 18,
-              height: 18,
-              decoration: BoxDecoration(
-                color: textColor.withValues(alpha: 0.12),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(Icons.close, size: 12, color: textColor),
-            ),
+    final content = ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: maxChipWidth),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
           ),
+          if (onRemove != null) ...[
+            const SizedBox(width: 8),
+            GestureDetector(
+              onTap: onRemove,
+              child: Container(
+                width: 18,
+                height: 18,
+                decoration: BoxDecoration(
+                  color: textColor.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.close, size: 12, color: textColor),
+              ),
+            ),
+          ],
         ],
-      ],
+      ),
     );
 
     return Material(

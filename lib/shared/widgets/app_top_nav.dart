@@ -98,16 +98,33 @@ class AppTopNav extends StatelessWidget {
                             ),
                             if (showSubtitle) ...[
                               const SizedBox(height: 2),
-                              Text(
-                                subtitle,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyles.caption.copyWith(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
-                                  color: subtitleColor,
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
                                 ),
-                                textAlign: TextAlign.center,
+                                decoration: BoxDecoration(
+                                  color: isDark
+                                      ? Colors.white.withValues(alpha: 0.12)
+                                      : AppColors.mutedSurface,
+                                  borderRadius: BorderRadius.circular(999),
+                                  border: Border.all(
+                                    color: isDark
+                                        ? Colors.white.withValues(alpha: 0.12)
+                                        : AppColors.border,
+                                  ),
+                                ),
+                                child: Text(
+                                  subtitle,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTextStyles.caption.copyWith(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                    color: subtitleColor,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ],
                           ],

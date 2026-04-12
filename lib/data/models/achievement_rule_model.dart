@@ -1,4 +1,10 @@
-enum AchievementMetric { totalWordsMastered, accuracyPercent }
+enum AchievementMetric {
+  totalWordsMastered,
+  accuracyPercent,
+  streakDays,
+  totalLearningSeconds,
+  totalXp,
+}
 
 class AchievementRuleModel {
   const AchievementRuleModel({
@@ -44,6 +50,30 @@ class AchievementRuleModel {
       target: 80,
       order: 40,
     ),
+    AchievementRuleModel(
+      id: 'streak_fire',
+      title: 'Серия оту',
+      description: '7 күн катары менен практикага келдиңиз.',
+      metric: AchievementMetric.streakDays,
+      target: 7,
+      order: 50,
+    ),
+    AchievementRuleModel(
+      id: 'time_keeper',
+      title: 'Убакыт сакчысы',
+      description: '1 саат окуу убактысын топтодуңуз.',
+      metric: AchievementMetric.totalLearningSeconds,
+      target: 3600,
+      order: 60,
+    ),
+    AchievementRuleModel(
+      id: 'xp_flow',
+      title: 'XP агымы',
+      description: '250 XP топтодуңуз.',
+      metric: AchievementMetric.totalXp,
+      target: 250,
+      order: 70,
+    ),
   ];
 
   final String id;
@@ -57,12 +87,21 @@ class AchievementRuleModel {
   bool isUnlocked({
     required int totalWordsMastered,
     required int accuracyPercent,
+    required int streakDays,
+    required int totalLearningSeconds,
+    required int totalXp,
   }) {
     switch (metric) {
       case AchievementMetric.totalWordsMastered:
         return totalWordsMastered >= target;
       case AchievementMetric.accuracyPercent:
         return accuracyPercent >= target;
+      case AchievementMetric.streakDays:
+        return streakDays >= target;
+      case AchievementMetric.totalLearningSeconds:
+        return totalLearningSeconds >= target;
+      case AchievementMetric.totalXp:
+        return totalXp >= target;
     }
   }
 
@@ -116,6 +155,20 @@ class AchievementRuleModel {
       case 'accuracypercent':
       case 'accuracy':
         return AchievementMetric.accuracyPercent;
+      case 'streak_days':
+      case 'streakdays':
+      case 'streak':
+        return AchievementMetric.streakDays;
+      case 'total_learning_seconds':
+      case 'totallearningseconds':
+      case 'learning_seconds':
+      case 'learningseconds':
+      case 'time':
+        return AchievementMetric.totalLearningSeconds;
+      case 'total_xp':
+      case 'totalxp':
+      case 'xp':
+        return AchievementMetric.totalXp;
       default:
         return null;
     }

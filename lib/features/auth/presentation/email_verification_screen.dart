@@ -13,7 +13,9 @@ import '../../../shared/widgets/sticky_bottom_action_bar.dart';
 import '../providers/auth_provider.dart';
 
 class EmailVerificationScreen extends ConsumerStatefulWidget {
-  const EmailVerificationScreen({super.key});
+  const EmailVerificationScreen({super.key, this.returnTo});
+
+  final String? returnTo;
 
   @override
   ConsumerState<EmailVerificationScreen> createState() =>
@@ -51,6 +53,8 @@ class _EmailVerificationScreenState
     ).showSnackBar(SnackBar(content: Text(message)));
   }
 
+  String get _signedInReturnRoute => widget.returnTo ?? '/auth-complete';
+
   Future<void> _refreshVerification({bool silent = false}) async {
     if (_refreshInFlight) return;
     final auth = ref.read(authProvider);
@@ -61,7 +65,7 @@ class _EmailVerificationScreenState
     }
     if (!auth.requiresEmailVerification) {
       if (!mounted) return;
-      context.go('/auth-complete');
+      context.go(_signedInReturnRoute);
       return;
     }
 
@@ -71,7 +75,7 @@ class _EmailVerificationScreenState
 
     if (!mounted) return;
     if (verified) {
-      context.go('/auth-complete');
+      context.go(_signedInReturnRoute);
       return;
     }
     if (!silent) {
@@ -102,6 +106,10 @@ class _EmailVerificationScreenState
     context.go('/login');
   }
 
+  void _skipForNow() {
+    context.go(_signedInReturnRoute);
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authProvider);
@@ -112,7 +120,7 @@ class _EmailVerificationScreenState
       _redirectScheduled = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        context.go(auth.logged ? '/auth-complete' : '/login');
+        context.go(auth.logged ? _signedInReturnRoute : '/login');
       });
     }
 
@@ -121,7 +129,7 @@ class _EmailVerificationScreenState
       showTopNav: false,
       showBottomNav: false,
       navigationMode: AppShellNavigationMode.back,
-      backFallbackRoute: '/login',
+      backFallbackRoute: auth.logged ? _signedInReturnRoute : '/login',
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 360),
@@ -173,6 +181,15 @@ class _EmailVerificationScreenState
                                   ? 'Firebase ырастоо каты жөнөтүлдү. Почтаңызды ачып, шилтемени басыңыз.'
                                   : '$email дарегине кат жөнөтүлдү. Шилтемени ачып, кайра бул жерге келиңиз.',
                               style: AppTextStyles.muted,
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              'Бул кадамды кийин да бүтүрсөңүз болот.',
+                              style: AppTextStyles.body.copyWith(
+                                color: AppColors.link,
+                                fontSize: 13,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -251,6 +268,14 @@ class _EmailVerificationScreenState
                       variant: AppButtonVariant.outlined,
                       onPressed: auth.isLoading ? null : _resendVerification,
                       child: const Text('Катты кайра жөнөтүү'),
+                    ),
+                    const SizedBox(height: 10),
+                    AppButton(
+                      fullWidth: true,
+                      size: AppButtonSize.lg,
+                      variant: AppButtonVariant.outlined,
+                      onPressed: auth.isLoading ? null : _skipForNow,
+                      child: const Text('Кийинчерээк'),
                     ),
                     const SizedBox(height: 8),
                     TextButton(

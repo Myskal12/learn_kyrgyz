@@ -12,6 +12,81 @@ import '../../../data/models/word_model.dart';
 
 enum ProgressSyncState { localOnly, pending, syncing, synced, failed }
 
+class DailyActivitySnapshot {
+  const DailyActivitySnapshot({
+    required this.date,
+    required this.seconds,
+    required this.interactions,
+  });
+
+  final DateTime date;
+  final int seconds;
+  final int interactions;
+
+  bool get isActive => seconds > 0 || interactions > 0;
+}
+
+class DailyQuestSnapshot {
+  const DailyQuestSnapshot({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.current,
+    required this.target,
+    required this.rewardXp,
+    required this.route,
+    required this.displayCurrent,
+    required this.displayTarget,
+    required this.claimed,
+  });
+
+  final String id;
+  final String title;
+  final String description;
+  final int current;
+  final int target;
+  final int rewardXp;
+  final String route;
+  final String displayCurrent;
+  final String displayTarget;
+  final bool claimed;
+
+  bool get isCompleted => current >= target;
+
+  double get progress => target <= 0 ? 1 : (current / target).clamp(0, 1);
+}
+
+class WeeklyChallengeSnapshot {
+  const WeeklyChallengeSnapshot({
+    required this.title,
+    required this.description,
+    required this.activeDays,
+    required this.targetActiveDays,
+    required this.weeklyXp,
+    required this.targetXp,
+    required this.route,
+  });
+
+  final String title;
+  final String description;
+  final int activeDays;
+  final int targetActiveDays;
+  final int weeklyXp;
+  final int targetXp;
+  final String route;
+
+  bool get isCompleted =>
+      activeDays >= targetActiveDays && weeklyXp >= targetXp;
+
+  double get activeDaysProgress =>
+      targetActiveDays <= 0 ? 1 : (activeDays / targetActiveDays).clamp(0, 1);
+
+  double get xpProgress =>
+      targetXp <= 0 ? 1 : (weeklyXp / targetXp).clamp(0, 1);
+
+  double get progress => ((activeDaysProgress + xpProgress) / 2).clamp(0, 1);
+}
+
 class ProgressProvider extends ChangeNotifier {
   ProgressProvider(this._storage, this._firebase)
     : _syncState = ProgressSyncState.localOnly {
@@ -129,10 +204,10 @@ class ProgressProvider extends ChangeNotifier {
   }
 
   void recordWordAttempt(String wordId, {required bool isCorrect}) {
-    _touchSession();
+    final now = DateTime.now();
+    _touchSession(now: now, trackInteraction: true);
     final seen = _progress.seenByWordId[wordId] ?? 0;
     _progress.seenByWordId[wordId] = seen + 1;
-    final now = DateTime.now();
     final current = _progress.wordProgressById[wordId] ?? WordProgressRecord();
     _progress.wordProgressById[wordId] = _nextWordProgressState(
       current,
@@ -144,7 +219,41 @@ class ProgressProvider extends ChangeNotifier {
       final correct = _progress.correctByWordId[wordId] ?? 0;
       _progress.correctByWordId[wordId] = correct + 1;
       _cachedTotalCorrect++;
+      final key = _dateKey(now);
+      final dailyCorrect = Map<String, int>.from(
+        _progress.dailyCorrectCountByDate,
+      );
+      dailyCorrect[key] = (dailyCorrect[key] ?? 0) + 1;
+      _progress = _progress.copyWith(
+        dailyCorrectCountByDate: _trimDailyMap(dailyCorrect),
+      );
     }
+    _awardXp(_xpForAttempt(isCorrect), when: now);
+    _applyDailyQuestRewards(now);
+    notifyListeners();
+    unawaited(_persist());
+  }
+
+  void recordLearningDuration(Duration duration, {DateTime? endedAt}) {
+    var seconds = duration.inSeconds;
+    if (seconds <= 0 && duration.inMilliseconds > 0) {
+      seconds = 1;
+    }
+    if (seconds <= 0) return;
+
+    final moment = endedAt ?? DateTime.now();
+    _touchSession(now: moment, trackInteraction: false);
+    final key = _dateKey(moment);
+    final dailySeconds = Map<String, int>.from(
+      _progress.dailyLearningSecondsByDate,
+    );
+    dailySeconds[key] = (dailySeconds[key] ?? 0) + seconds;
+    _progress = _progress.copyWith(
+      totalLearningSeconds: _progress.totalLearningSeconds + seconds,
+      dailyLearningSecondsByDate: _trimDailyMap(dailySeconds),
+    );
+    _awardXp(_xpForLearningDuration(seconds), when: moment);
+    _applyDailyQuestRewards(moment);
     notifyListeners();
     unawaited(_persist());
   }
@@ -213,6 +322,39 @@ class ProgressProvider extends ChangeNotifier {
   }
 
   int get streakDays => _progress.streakDays;
+  int get totalLearningSeconds => _progress.totalLearningSeconds;
+  Duration get totalLearningDuration =>
+      Duration(seconds: _progress.totalLearningSeconds);
+  int get totalXp => _progress.totalXp;
+
+  int get journeyLevel {
+    var level = 1;
+    while (totalXp >= _xpRequiredForLevel(level + 1)) {
+      level++;
+    }
+    return level;
+  }
+
+  String get journeyRank {
+    final level = journeyLevel;
+    if (level >= 8) return 'Тоо чебери';
+    if (level >= 6) return 'Ритм устаты';
+    if (level >= 4) return 'Туруктуу саякатчы';
+    if (level >= 2) return 'Өсүп жаткан тилчи';
+    return 'Алгачкы от';
+  }
+
+  int get xpIntoCurrentLevel => totalXp - _xpRequiredForLevel(journeyLevel);
+
+  int get xpToNextLevel => _xpRequiredForLevel(journeyLevel + 1) - totalXp;
+
+  double get journeyLevelProgress {
+    final currentStart = _xpRequiredForLevel(journeyLevel);
+    final nextStart = _xpRequiredForLevel(journeyLevel + 1);
+    final span = nextStart - currentStart;
+    if (span <= 0) return 1;
+    return ((totalXp - currentStart) / span).clamp(0, 1);
+  }
 
   bool get hasActivityToday {
     final last = _progress.lastSessionAt;
@@ -220,6 +362,96 @@ class ProgressProvider extends ChangeNotifier {
     final today = DateUtils.dateOnly(DateTime.now());
     return DateUtils.isSameDay(today, DateUtils.dateOnly(last));
   }
+
+  List<DailyActivitySnapshot> activityForLastDays([int days = 7]) {
+    final today = DateUtils.dateOnly(DateTime.now());
+    return List.generate(days, (index) {
+      final date = today.subtract(Duration(days: days - index - 1));
+      final key = _dateKey(date);
+      return DailyActivitySnapshot(
+        date: date,
+        seconds: _progress.dailyLearningSecondsByDate[key] ?? 0,
+        interactions: _progress.dailyActivityCountByDate[key] ?? 0,
+      );
+    });
+  }
+
+  List<DailyActivitySnapshot> get recentWeekActivity => activityForLastDays(7);
+
+  int get activeDaysThisWeek =>
+      recentWeekActivity.where((day) => day.isActive).length;
+
+  int get todayInteractionCount =>
+      _progress.dailyActivityCountByDate[_dateKey(DateTime.now())] ?? 0;
+
+  int get todayCorrectAnswers =>
+      _progress.dailyCorrectCountByDate[_dateKey(DateTime.now())] ?? 0;
+
+  int get todayLearningSeconds =>
+      _progress.dailyLearningSecondsByDate[_dateKey(DateTime.now())] ?? 0;
+
+  int get todayXp => _progress.dailyXpByDate[_dateKey(DateTime.now())] ?? 0;
+
+  int get weeklyXp => recentWeekActivity.fold<int>(0, (sum, day) {
+    final key = _dateKey(day.date);
+    return sum + (_progress.dailyXpByDate[key] ?? 0);
+  });
+
+  List<DailyQuestSnapshot> get dailyQuests {
+    final todayKey = _dateKey(DateTime.now());
+    final claimed = _progress.claimedDailyQuestKeys.toSet();
+    return [
+      DailyQuestSnapshot(
+        id: 'time_bloom',
+        title: 'Темпти ач',
+        description: 'Бүгүн 10 мүнөт практика жаса.',
+        current: todayLearningSeconds,
+        target: 10 * 60,
+        rewardXp: 40,
+        route: '/practice',
+        displayCurrent: _formatMinutes(todayLearningSeconds),
+        displayTarget: '10 мүн',
+        claimed: claimed.contains(_questKey(todayKey, 'time_bloom')),
+      ),
+      DailyQuestSnapshot(
+        id: 'steady_hands',
+        title: '12 аракет',
+        description: 'Бүгүн 12 жооп же аракет топто.',
+        current: todayInteractionCount,
+        target: 12,
+        rewardXp: 30,
+        route: '/practice',
+        displayCurrent: '$todayInteractionCount',
+        displayTarget: '12',
+        claimed: claimed.contains(_questKey(todayKey, 'steady_hands')),
+      ),
+      DailyQuestSnapshot(
+        id: 'sharp_focus',
+        title: 'Так жооп сериясы',
+        description: 'Бүгүн 8 туура жооп ал.',
+        current: todayCorrectAnswers,
+        target: 8,
+        rewardXp: 35,
+        route: '/practice',
+        displayCurrent: '$todayCorrectAnswers',
+        displayTarget: '8',
+        claimed: claimed.contains(_questKey(todayKey, 'sharp_focus')),
+      ),
+    ];
+  }
+
+  int get completedDailyQuestsCount =>
+      dailyQuests.where((quest) => quest.claimed).length;
+
+  WeeklyChallengeSnapshot get weeklyChallenge => WeeklyChallengeSnapshot(
+    title: 'Апталык толкун',
+    description: '5 актив күн жана 180 XP менен жуманы жап.',
+    activeDays: activeDaysThisWeek,
+    targetActiveDays: 5,
+    weeklyXp: weeklyXp,
+    targetXp: 180,
+    route: '/practice',
+  );
 
   int masteredWordsForCategory(List<WordModel> words) {
     if (words.isEmpty) return 0;
@@ -323,7 +555,7 @@ class ProgressProvider extends ChangeNotifier {
     try {
       final remote = await _firebase.fetchUserProgress(uid);
       if (remote != null) {
-        _progress = _migrateLegacyWordProgress(remote);
+        _progress = _normalizeGamification(_migrateLegacyWordProgress(remote));
         _recalculateTotals();
         await _saveLocal();
         _lastSyncedAt = DateTime.now();
@@ -388,6 +620,8 @@ class ProgressProvider extends ChangeNotifier {
           totalMastered: totalMastered,
           totalSessions: totalSessions,
           accuracy: accuracy,
+          totalXp: snapshot.totalXp,
+          streakDays: snapshot.streakDays,
         );
         _lastSyncedAt = DateTime.now();
         _setSyncState(ProgressSyncState.synced, clearError: true);
@@ -404,8 +638,8 @@ class ProgressProvider extends ChangeNotifier {
     _syncInFlight = false;
   }
 
-  void _touchSession() {
-    final today = DateUtils.dateOnly(DateTime.now());
+  void _touchSession({DateTime? now, required bool trackInteraction}) {
+    final today = DateUtils.dateOnly(now ?? DateTime.now());
     final last = _progress.lastSessionAt == null
         ? null
         : DateUtils.dateOnly(_progress.lastSessionAt!);
@@ -422,7 +656,53 @@ class ProgressProvider extends ChangeNotifier {
       }
     }
 
-    _progress = _progress.copyWith(streakDays: streak, lastSessionAt: today);
+    final activityByDate = Map<String, int>.from(
+      _progress.dailyActivityCountByDate,
+    );
+    if (trackInteraction) {
+      final key = _dateKey(today);
+      activityByDate[key] = (activityByDate[key] ?? 0) + 1;
+    }
+
+    _progress = _progress.copyWith(
+      streakDays: streak,
+      lastSessionAt: today,
+      dailyActivityCountByDate: _trimDailyMap(activityByDate),
+    );
+  }
+
+  void _awardXp(int amount, {required DateTime when}) {
+    if (amount <= 0) return;
+    final key = _dateKey(when);
+    final dailyXp = Map<String, int>.from(_progress.dailyXpByDate);
+    dailyXp[key] = (dailyXp[key] ?? 0) + amount;
+    _progress = _progress.copyWith(
+      totalXp: _progress.totalXp + amount,
+      dailyXpByDate: _trimDailyMap(dailyXp),
+    );
+  }
+
+  void _applyDailyQuestRewards(DateTime when) {
+    final todayKey = _dateKey(when);
+    final claimed = List<String>.from(_progress.claimedDailyQuestKeys);
+    var bonusXp = 0;
+
+    for (final quest in dailyQuests) {
+      final key = _questKey(todayKey, quest.id);
+      if (quest.isCompleted && !claimed.contains(key)) {
+        claimed.add(key);
+        bonusXp += quest.rewardXp;
+      }
+    }
+
+    if (bonusXp <= 0) return;
+    final dailyXp = Map<String, int>.from(_progress.dailyXpByDate);
+    dailyXp[todayKey] = (dailyXp[todayKey] ?? 0) + bonusXp;
+    _progress = _progress.copyWith(
+      totalXp: _progress.totalXp + bonusXp,
+      dailyXpByDate: _trimDailyMap(dailyXp),
+      claimedDailyQuestKeys: _trimClaimedQuestKeys(claimed),
+    );
   }
 
   WordProgressRecord? progressForWord(String wordId) {
@@ -579,10 +859,11 @@ class ProgressProvider extends ChangeNotifier {
 
   Future<bool> _loadLocalProgress(String? uid) async {
     final loaded = await _readStoredProgress(uid);
-    _progress =
-        loaded != null
-            ? _migrateLegacyWordProgress(loaded.copyWith(userId: uid ?? 'guest'))
-            : UserProgressModel(userId: uid ?? 'guest');
+    _progress = loaded != null
+        ? _normalizeGamification(
+            _migrateLegacyWordProgress(loaded.copyWith(userId: uid ?? 'guest')),
+          )
+        : UserProgressModel(userId: uid ?? 'guest');
     _recalculateTotals();
     return loaded != null;
   }
@@ -628,8 +909,122 @@ class ProgressProvider extends ChangeNotifier {
     return progress.wordProgressById.isNotEmpty ||
         progress.seenByWordId.isNotEmpty ||
         progress.correctByWordId.isNotEmpty ||
+        progress.dailyActivityCountByDate.isNotEmpty ||
+        progress.dailyCorrectCountByDate.isNotEmpty ||
+        progress.dailyLearningSecondsByDate.isNotEmpty ||
+        progress.dailyXpByDate.isNotEmpty ||
+        progress.claimedDailyQuestKeys.isNotEmpty ||
+        progress.totalLearningSeconds > 0 ||
+        progress.totalXp > 0 ||
         progress.streakDays > 0 ||
         progress.lastSessionAt != null;
+  }
+
+  UserProgressModel _normalizeGamification(UserProgressModel progress) {
+    final normalized = progress.copyWith(
+      dailyActivityCountByDate: _trimDailyMap(
+        Map<String, int>.from(progress.dailyActivityCountByDate),
+      ),
+      dailyCorrectCountByDate: _trimDailyMap(
+        Map<String, int>.from(progress.dailyCorrectCountByDate),
+      ),
+      dailyLearningSecondsByDate: _trimDailyMap(
+        Map<String, int>.from(progress.dailyLearningSecondsByDate),
+      ),
+      dailyXpByDate: _trimDailyMap(
+        Map<String, int>.from(progress.dailyXpByDate),
+      ),
+      claimedDailyQuestKeys: _trimClaimedQuestKeys(
+        List<String>.from(progress.claimedDailyQuestKeys),
+      ),
+    );
+
+    if (normalized.totalXp > 0) {
+      return normalized;
+    }
+
+    final records = normalized.wordProgressById.values;
+    final attemptCount = records.isNotEmpty
+        ? records.fold<int>(0, (sum, value) => sum + value.attemptCount)
+        : normalized.seenByWordId.values.fold<int>(
+            0,
+            (sum, value) => sum + value,
+          );
+    final successCount = records.isNotEmpty
+        ? records.fold<int>(0, (sum, value) => sum + value.successCount)
+        : normalized.correctByWordId.values.fold<int>(
+            0,
+            (sum, value) => sum + value,
+          );
+    final failureCount = (attemptCount - successCount).clamp(0, attemptCount);
+
+    if (attemptCount == 0 && normalized.totalLearningSeconds <= 0) {
+      return normalized;
+    }
+
+    final estimatedXp =
+        (successCount * _xpForAttempt(true)) +
+        (failureCount * _xpForAttempt(false)) +
+        _xpForLearningDuration(normalized.totalLearningSeconds);
+    return normalized.copyWith(totalXp: estimatedXp);
+  }
+
+  String _dateKey(DateTime date) {
+    final year = date.year.toString().padLeft(4, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    final day = date.day.toString().padLeft(2, '0');
+    return '$year-$month-$day';
+  }
+
+  Map<String, int> _trimDailyMap(
+    Map<String, int> values, {
+    int keepDays = 120,
+  }) {
+    if (values.length <= keepDays) {
+      return values;
+    }
+    final keys = values.keys.toList()..sort();
+    final trimmed = <String, int>{};
+    for (final key in keys.skip(keys.length - keepDays)) {
+      trimmed[key] = values[key] ?? 0;
+    }
+    return trimmed;
+  }
+
+  List<String> _trimClaimedQuestKeys(
+    List<String> values, {
+    int keepItems = 90,
+  }) {
+    if (values.length <= keepItems) {
+      return values;
+    }
+    final sorted = List<String>.from(values)..sort();
+    return sorted.skip(sorted.length - keepItems).toList();
+  }
+
+  int _xpRequiredForLevel(int level) {
+    if (level <= 1) return 0;
+    var total = 0;
+    for (var current = 1; current < level; current++) {
+      total += 80 + ((current - 1) * 35);
+    }
+    return total;
+  }
+
+  int _xpForAttempt(bool isCorrect) => isCorrect ? 12 : 5;
+
+  int _xpForLearningDuration(int seconds) {
+    if (seconds < 60) return 0;
+    final minutes = (seconds / 60).floor();
+    return (minutes * 3).clamp(0, 1800);
+  }
+
+  String _questKey(String dateKey, String questId) => '$dateKey:$questId';
+
+  String _formatMinutes(int totalSeconds) {
+    if (totalSeconds <= 0) return '0 мүн';
+    final minutes = (totalSeconds / 60).ceil();
+    return '$minutes мүн';
   }
 
   @override

@@ -36,6 +36,8 @@ class MockFirebaseService implements FirebaseService {
     required int totalMastered,
     required int totalSessions,
     required int accuracy,
+    required int totalXp,
+    required int streakDays,
   }) async {}
 
   @override
@@ -101,6 +103,9 @@ void main() {
         userId: 'guest',
         seenByWordId: {'w1': 10, 'w2': 5},
         correctByWordId: {'w1': 5, 'w2': 1},
+        totalLearningSeconds: 600,
+        dailyActivityCountByDate: {'2026-01-01': 3},
+        dailyLearningSecondsByDate: {'2026-01-01': 600},
       );
       await storage.setString('user_progress', jsonEncode(progress.toJson()));
 
@@ -108,6 +113,7 @@ void main() {
 
       expect(provider.totalReviewSessions, 15);
       expect(provider.accuracyPercent, ((6 / 15) * 100).round());
+      expect(provider.totalLearningSeconds, 600);
       expect(provider.progressForWord('w1'), isNotNull);
     });
 
@@ -161,6 +167,63 @@ void main() {
       provider.recordWordAttempt('word2', isCorrect: false);
       expect(provider.weakWordsCount, 1);
       expect(provider.hasReviewFocus, isTrue);
+    });
+
+    test(
+      'recordLearningDuration tracks total time and recent week activity',
+      () {
+        provider.recordLearningDuration(const Duration(minutes: 12));
+
+        expect(provider.totalLearningSeconds, 720);
+        expect(provider.activeDaysThisWeek, 1);
+        expect(provider.recentWeekActivity.last.seconds, 720);
+        expect(provider.recentWeekActivity.last.isActive, isTrue);
+      },
+    );
+
+    test('word attempts populate daily activity history', () {
+      provider.recordWordAttempt('word1', isCorrect: true);
+
+      expect(provider.activeDaysThisWeek, 1);
+      expect(provider.recentWeekActivity.last.interactions, 1);
+      expect(provider.recentWeekActivity.last.isActive, isTrue);
+    });
+
+    test('xp grows with practice and exposes journey level helpers', () {
+      provider.recordLearningDuration(const Duration(minutes: 5));
+      provider.recordWordAttempt('word1', isCorrect: true);
+      provider.recordWordAttempt('word2', isCorrect: false);
+
+      expect(provider.totalXp, greaterThan(0));
+      expect(provider.todayXp, provider.totalXp);
+      expect(provider.journeyLevel, greaterThanOrEqualTo(1));
+      expect(provider.xpToNextLevel, greaterThan(0));
+      expect(provider.journeyLevelProgress, inInclusiveRange(0.0, 1.0));
+    });
+
+    test('daily quests claim reward once after thresholds are reached', () {
+      provider.recordLearningDuration(const Duration(minutes: 10));
+      for (var index = 0; index < 12; index++) {
+        provider.recordWordAttempt('word_$index', isCorrect: true);
+      }
+
+      expect(provider.completedDailyQuestsCount, 3);
+      final xpAfterAllQuests = provider.todayXp;
+
+      provider.recordWordAttempt('bonus_check', isCorrect: true);
+
+      expect(provider.completedDailyQuestsCount, 3);
+      expect(provider.todayXp, xpAfterAllQuests + 12);
+    });
+
+    test('weekly challenge reflects active days and weekly xp', () {
+      provider.recordLearningDuration(const Duration(minutes: 15));
+      final challenge = provider.weeklyChallenge;
+
+      expect(challenge.activeDays, 1);
+      expect(challenge.weeklyXp, provider.weeklyXp);
+      expect(challenge.progress, greaterThan(0));
+      expect(challenge.isCompleted, isFalse);
     });
   });
 }

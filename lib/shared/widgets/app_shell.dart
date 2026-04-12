@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 export 'app_bottom_nav.dart' show AppTab;
 
+import '../../core/localization/app_copy.dart';
 import '../../core/utils/app_colors.dart';
 import 'app_pattern_background.dart';
 import 'app_bottom_nav.dart';
@@ -83,8 +84,9 @@ class _AppShellState extends State<AppShell> {
 
   @override
   Widget build(BuildContext context) {
-    const topNavContentHeight = 64.0;
-    const bottomNavContentHeight = 62.0;
+    // Match rendered nav sizes so page content never sits under overlays.
+    const topNavContentHeight = 68.0;
+    const bottomNavContentHeight = 84.0;
 
     final media = MediaQuery.of(context);
     final maxWidth = media.size.width >= 900
@@ -99,7 +101,7 @@ class _AppShellState extends State<AppShell> {
         ? media.padding.bottom + bottomNavContentHeight
         : media.padding.bottom;
 
-    return Scaffold(
+    final scaffold = Scaffold(
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
@@ -130,7 +132,13 @@ class _AppShellState extends State<AppShell> {
                   constraints: BoxConstraints(maxWidth: maxWidth),
                   child: AppTopNav(
                     title: widget.title,
-                    subtitle: widget.subtitle ?? 'Кыргызча / English',
+                    subtitle:
+                        widget.subtitle ??
+                        context.tr(
+                          ky: 'Интерфейс тили',
+                          en: 'Interface language',
+                          ru: 'Язык интерфейса',
+                        ),
                     onLeadingTap:
                         widget.navigationMode == AppShellNavigationMode.back
                         ? _handleBack
@@ -168,6 +176,19 @@ class _AppShellState extends State<AppShell> {
             ),
         ],
       ),
+    );
+
+    if (widget.navigationMode != AppShellNavigationMode.back) {
+      return scaffold;
+    }
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        _handleBack();
+      },
+      child: scaffold,
     );
   }
 }

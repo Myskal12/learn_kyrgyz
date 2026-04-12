@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/localization/app_copy.dart';
 import '../../../core/utils/app_colors.dart';
+import '../../../core/utils/app_assets.dart';
 import '../../../core/utils/app_text_styles.dart';
+import '../../../shared/widgets/app_button.dart';
 import '../../../data/models/user_profile_model.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/app_chip.dart';
 import '../../../shared/widgets/app_shell.dart';
 import '../../../shared/widgets/app_state_views.dart';
+import '../../../shared/widgets/profile_avatar.dart';
 import '../providers/leaderboard_provider.dart';
 import '../providers/progress_provider.dart';
 import '../providers/user_profile_provider.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
-  const LeaderboardScreen({super.key});
+  const LeaderboardScreen({super.key, this.initialLimit = 10});
+
+  final int initialLimit;
 
   @override
   ConsumerState<LeaderboardScreen> createState() => _LeaderboardScreenState();
@@ -24,7 +30,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(leaderboardProvider).load();
+      ref.read(leaderboardProvider).load(limit: widget.initialLimit);
     });
   }
 
@@ -33,9 +39,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     final leaderboard = ref.watch(leaderboardProvider);
     final profileState = ref.watch(userProfileProvider);
     final progress = ref.watch(progressProvider);
-    final entries = leaderboard.entries
-        .map(_LeaderboardEntry.fromUserProfile)
-        .toList();
+    final weeklyChallenge = progress.weeklyChallenge;
+    final currentLimit = leaderboard.currentLimit;
+    final entries =
+        leaderboard.entries.map(_LeaderboardEntry.fromUserProfile).toList()
+          ..sort((a, b) {
+            final scoreCompare = b.points.compareTo(a.points);
+            if (scoreCompare != 0) return scoreCompare;
+            return b.accuracy.compareTo(a.accuracy);
+          });
     final currentUserId = profileState.isGuest ? null : profileState.profile.id;
     final currentIndex = currentUserId == null
         ? -1
@@ -79,7 +91,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
               icon: Icons.cloud_off,
               accentColor: AppColors.accent,
               actionLabel: 'Кайра жүктөө',
-              onAction: () => ref.read(leaderboardProvider).load(force: true),
+              onAction: () => ref
+                  .read(leaderboardProvider)
+                  .load(force: true, limit: currentLimit),
             ),
           ],
           const SizedBox(height: 20),
@@ -87,11 +101,11 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Топ катышуучулар',
+                'Топ оюнчулар',
                 style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
               ),
-              const AppChip(
-                label: 'Жандуу тизме',
+              AppChip(
+                label: 'Көрсөтүлдү: ${entries.length}',
                 variant: AppChipVariant.primary,
               ),
             ],
@@ -105,7 +119,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                 message: 'Азырынча катышуучу жок.',
                 icon: Icons.emoji_events_outlined,
                 actionLabel: 'Кайра жүктөө',
-                onAction: () => ref.read(leaderboardProvider).load(force: true),
+                onAction: () => ref
+                    .read(leaderboardProvider)
+                    .load(force: true, limit: currentLimit),
               ),
             )
           else
@@ -122,33 +138,48 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                   padding: const EdgeInsets.all(16),
                   child: Row(
                     children: [
-                      Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          gradient: isTop
-                              ? LinearGradient(colors: highlightColors)
-                              : null,
-                          color: isTop ? null : AppColors.mutedSurface,
-                        ),
-                        alignment: Alignment.center,
-                        child: isTop
-                            ? Icon(
-                                index == 0
-                                    ? Icons.workspace_premium
-                                    : index == 1
-                                    ? Icons.emoji_events
-                                    : Icons.star,
-                                color: AppColors.textDark,
-                              )
-                            : Text(
-                                '${index + 1}',
-                                style: AppTextStyles.body.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.muted,
+                      Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          ProfileAvatar(avatar: item.avatar, size: 52),
+                          Positioned(
+                            left: -6,
+                            top: -6,
+                            child: Container(
+                              width: 26,
+                              height: 26,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                gradient: isTop
+                                    ? LinearGradient(colors: highlightColors)
+                                    : null,
+                                color: isTop ? null : AppColors.mutedSurface,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 2,
                                 ),
                               ),
+                              alignment: Alignment.center,
+                              child: isTop
+                                  ? Icon(
+                                      index == 0
+                                          ? Icons.workspace_premium
+                                          : index == 1
+                                          ? Icons.emoji_events
+                                          : Icons.star,
+                                      color: AppColors.textDark,
+                                      size: 14,
+                                    )
+                                  : Text(
+                                      '${index + 1}',
+                                      style: AppTextStyles.caption.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.muted,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -163,8 +194,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                     style: AppTextStyles.body.copyWith(
                                       fontWeight: FontWeight.w600,
                                     ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
+                                AppChip(
+                                  label: 'Lv ${item.level}',
+                                  variant: AppChipVariant.defaultChip,
+                                ),
+                                const SizedBox(width: 8),
                                 if (item.id == currentUserId)
                                   const AppChip(
                                     label: 'Сиз',
@@ -174,8 +212,25 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              '${item.points} упай · ${item.activity} аракет · ${item.accuracy}% тактык',
+                              '${item.xp} XP · ${item.activity} аракет · ${item.accuracy}% тактык',
                               style: AppTextStyles.muted,
+                            ),
+                            const SizedBox(height: 8),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: [
+                                AppChip(
+                                  label: '${item.streakDays} күн серия',
+                                  variant: item.streakDays >= 7
+                                      ? AppChipVariant.success
+                                      : AppChipVariant.accent,
+                                ),
+                                AppChip(
+                                  label: item.rank,
+                                  variant: AppChipVariant.defaultChip,
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -185,15 +240,30 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                 ),
               );
             }),
+          if (!leaderboard.isExpanded && entries.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            AppButton(
+              fullWidth: true,
+              variant: AppButtonVariant.outlined,
+              onPressed: leaderboard.isLoading
+                  ? null
+                  : () => ref.read(leaderboardProvider).loadExpanded(),
+              child: const Text('Алгачкы 100 оюнчуну көрсөтүү'),
+            ),
+          ],
           const SizedBox(height: 8),
-          _WeeklyChallengeCard(progress: progress),
+          _WeeklyChallengeCard(challenge: weeklyChallenge),
         ],
       );
     }
 
     return AppShell(
-      title: 'Рейтинг',
-      subtitle: 'Жума жана сезон',
+      title: context.tr(ky: 'Рейтинг', en: 'Leaderboard', ru: 'Рейтинг'),
+      subtitle: context.tr(
+        ky: 'Жума жана сезон',
+        en: 'Week and season',
+        ru: 'Неделя и сезон',
+      ),
       activeTab: AppTab.progress,
       navigationMode: AppShellNavigationMode.back,
       backFallbackRoute: '/progress',
@@ -247,8 +317,7 @@ class _LeaderboardSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localPoints =
-        progress.totalWordsMastered * 6 + progress.totalReviewSessions * 2;
+    final localPoints = progress.totalXp;
 
     String title;
     String subtitle;
@@ -295,13 +364,16 @@ class _LeaderboardSummaryCard extends StatelessWidget {
                 ],
               ),
               Container(
-                width: 48,
+                width: 72,
                 height: 48,
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.2),
-                  shape: BoxShape.circle,
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Icon(Icons.emoji_events, color: Colors.white),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.asset(AppAssets.trophies, fit: BoxFit.cover),
+                ),
               ),
             ],
           ),
@@ -313,9 +385,11 @@ class _LeaderboardSummaryCard extends StatelessWidget {
           const SizedBox(height: 16),
           Row(
             children: [
-              _GlassChip(label: '$localPoints упай'),
+              _GlassChip(label: '$localPoints XP'),
               const SizedBox(width: 8),
               _GlassChip(label: '${progress.streakDays} күн катар'),
+              const SizedBox(width: 8),
+              _GlassChip(label: 'Lv ${progress.journeyLevel}'),
             ],
           ),
         ],
@@ -325,15 +399,12 @@ class _LeaderboardSummaryCard extends StatelessWidget {
 }
 
 class _WeeklyChallengeCard extends StatelessWidget {
-  const _WeeklyChallengeCard({required this.progress});
+  const _WeeklyChallengeCard({required this.challenge});
 
-  final ProgressProvider progress;
+  final WeeklyChallengeSnapshot challenge;
 
   @override
   Widget build(BuildContext context) {
-    final completedDays = progress.streakDays.clamp(0, 7);
-    final value = completedDays / 7;
-
     return AppCard(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -354,24 +425,24 @@ class _WeeklyChallengeCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      '7 күн катары менен окусаңыз, жаңы белги ачылат.',
-                      style: AppTextStyles.muted,
-                    ),
+                    Text(challenge.description, style: AppTextStyles.muted),
                   ],
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          _ProgressBar(value: value),
+          _ProgressBar(value: challenge.progress),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('$completedDays/7 күн', style: AppTextStyles.muted),
               Text(
-                completedDays >= 7 ? 'Ачылды' : 'Улантыңыз',
+                '${challenge.activeDays}/${challenge.targetActiveDays} күн · ${challenge.weeklyXp}/${challenge.targetXp} XP',
+                style: AppTextStyles.muted,
+              ),
+              Text(
+                challenge.isCompleted ? 'Жабылды' : 'Улантыңыз',
                 style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
               ),
             ],
@@ -502,26 +573,41 @@ class _LeaderboardEntry {
   const _LeaderboardEntry({
     required this.id,
     required this.name,
+    required this.avatar,
     required this.points,
+    required this.xp,
     required this.activity,
     required this.accuracy,
+    required this.streakDays,
+    required this.level,
+    required this.rank,
   });
 
   factory _LeaderboardEntry.fromUserProfile(UserProfileModel user) {
     return _LeaderboardEntry(
       id: user.id,
       name: user.nickname,
-      points: user.totalMastered * 6 + user.totalSessions * 2,
+      avatar: user.avatar,
+      points: user.leaderboardScore,
+      xp: user.totalXp,
       activity: user.totalSessions,
       accuracy: user.accuracy,
+      streakDays: user.streakDays,
+      level: user.journeyLevel,
+      rank: user.journeyRank,
     );
   }
 
   final String id;
   final String name;
+  final String avatar;
   final int points;
+  final int xp;
   final int activity;
   final int accuracy;
+  final int streakDays;
+  final int level;
+  final String rank;
 }
 
 enum _Highlight { none, gold, silver, bronze }

@@ -110,7 +110,14 @@ class UserProgressModel {
   final Map<String, int> correctByWordId;
   final Map<String, int> seenByWordId;
   final Map<String, WordProgressRecord> wordProgressById;
+  final Map<String, int> dailyActivityCountByDate;
+  final Map<String, int> dailyCorrectCountByDate;
+  final Map<String, int> dailyLearningSecondsByDate;
+  final Map<String, int> dailyXpByDate;
+  final List<String> claimedDailyQuestKeys;
   final int streakDays;
+  final int totalLearningSeconds;
+  final int totalXp;
   final DateTime? lastSessionAt;
 
   UserProgressModel({
@@ -118,25 +125,37 @@ class UserProgressModel {
     Map<String, int>? correctByWordId,
     Map<String, int>? seenByWordId,
     Map<String, WordProgressRecord>? wordProgressById,
+    Map<String, int>? dailyActivityCountByDate,
+    Map<String, int>? dailyCorrectCountByDate,
+    Map<String, int>? dailyLearningSecondsByDate,
+    Map<String, int>? dailyXpByDate,
+    List<String>? claimedDailyQuestKeys,
     this.streakDays = 0,
+    this.totalLearningSeconds = 0,
+    this.totalXp = 0,
     this.lastSessionAt,
   }) : correctByWordId = correctByWordId ?? {},
        seenByWordId = seenByWordId ?? {},
-       wordProgressById = wordProgressById ?? {};
+       wordProgressById = wordProgressById ?? {},
+       dailyActivityCountByDate = dailyActivityCountByDate ?? {},
+       dailyCorrectCountByDate = dailyCorrectCountByDate ?? {},
+       dailyLearningSecondsByDate = dailyLearningSecondsByDate ?? {},
+       dailyXpByDate = dailyXpByDate ?? {},
+       claimedDailyQuestKeys = claimedDailyQuestKeys ?? const [];
 
   factory UserProgressModel.fromJson(Map<String, dynamic> json) {
-    final correct = <String, int>{};
-    final seen = <String, int>{};
+    final correct = _parseIntMap(json['correctByWordId']);
+    final seen = _parseIntMap(json['seenByWordId']);
+    final dailyActivity = _parseIntMap(json['dailyActivityCountByDate']);
+    final dailyCorrect = _parseIntMap(json['dailyCorrectCountByDate']);
+    final dailyLearningSeconds = _parseIntMap(
+      json['dailyLearningSecondsByDate'],
+    );
+    final dailyXp = _parseIntMap(json['dailyXpByDate']);
+    final claimedDailyQuestKeys = _parseStringList(
+      json['claimedDailyQuestKeys'],
+    );
     final wordProgress = <String, WordProgressRecord>{};
-    (json['correctByWordId'] as Map<String, dynamic>? ?? {}).forEach((
-      key,
-      value,
-    ) {
-      correct[key] = (value as num).toInt();
-    });
-    (json['seenByWordId'] as Map<String, dynamic>? ?? {}).forEach((key, value) {
-      seen[key] = (value as num).toInt();
-    });
     (json['wordProgressById'] as Map<String, dynamic>? ?? {}).forEach((
       key,
       value,
@@ -150,7 +169,15 @@ class UserProgressModel {
       correctByWordId: correct,
       seenByWordId: seen,
       wordProgressById: wordProgress,
+      dailyActivityCountByDate: dailyActivity,
+      dailyCorrectCountByDate: dailyCorrect,
+      dailyLearningSecondsByDate: dailyLearningSeconds,
+      dailyXpByDate: dailyXp,
+      claimedDailyQuestKeys: claimedDailyQuestKeys,
       streakDays: (json['streakDays'] as num?)?.toInt() ?? 0,
+      totalLearningSeconds:
+          (json['totalLearningSeconds'] as num?)?.toInt() ?? 0,
+      totalXp: (json['totalXp'] as num?)?.toInt() ?? 0,
       lastSessionAt: _parseDate(json['lastSessionAt']),
     );
   }
@@ -162,7 +189,14 @@ class UserProgressModel {
     'wordProgressById': wordProgressById.map(
       (key, value) => MapEntry(key, value.toJson()),
     ),
+    'dailyActivityCountByDate': dailyActivityCountByDate,
+    'dailyCorrectCountByDate': dailyCorrectCountByDate,
+    'dailyLearningSecondsByDate': dailyLearningSecondsByDate,
+    'dailyXpByDate': dailyXpByDate,
+    'claimedDailyQuestKeys': claimedDailyQuestKeys,
     'streakDays': streakDays,
+    'totalLearningSeconds': totalLearningSeconds,
+    'totalXp': totalXp,
     'lastSessionAt': lastSessionAt?.millisecondsSinceEpoch,
   };
 
@@ -171,7 +205,14 @@ class UserProgressModel {
     Map<String, int>? correctByWordId,
     Map<String, int>? seenByWordId,
     Map<String, WordProgressRecord>? wordProgressById,
+    Map<String, int>? dailyActivityCountByDate,
+    Map<String, int>? dailyCorrectCountByDate,
+    Map<String, int>? dailyLearningSecondsByDate,
+    Map<String, int>? dailyXpByDate,
+    List<String>? claimedDailyQuestKeys,
     int? streakDays,
+    int? totalLearningSeconds,
+    int? totalXp,
     DateTime? lastSessionAt,
   }) {
     return UserProgressModel(
@@ -182,10 +223,41 @@ class UserProgressModel {
       wordProgressById:
           wordProgressById ??
           Map<String, WordProgressRecord>.from(this.wordProgressById),
+      dailyActivityCountByDate:
+          dailyActivityCountByDate ??
+          Map<String, int>.from(this.dailyActivityCountByDate),
+      dailyCorrectCountByDate:
+          dailyCorrectCountByDate ??
+          Map<String, int>.from(this.dailyCorrectCountByDate),
+      dailyLearningSecondsByDate:
+          dailyLearningSecondsByDate ??
+          Map<String, int>.from(this.dailyLearningSecondsByDate),
+      dailyXpByDate: dailyXpByDate ?? Map<String, int>.from(this.dailyXpByDate),
+      claimedDailyQuestKeys:
+          claimedDailyQuestKeys ?? List<String>.from(this.claimedDailyQuestKeys),
       streakDays: streakDays ?? this.streakDays,
+      totalLearningSeconds: totalLearningSeconds ?? this.totalLearningSeconds,
+      totalXp: totalXp ?? this.totalXp,
       lastSessionAt: lastSessionAt ?? this.lastSessionAt,
     );
   }
+}
+
+Map<String, int> _parseIntMap(dynamic value) {
+  final result = <String, int>{};
+  final map = value as Map<String, dynamic>? ?? const <String, dynamic>{};
+  map.forEach((key, entry) {
+    result[key] = (entry as num?)?.toInt() ?? 0;
+  });
+  return result;
+}
+
+List<String> _parseStringList(dynamic value) {
+  final raw = value as List<dynamic>? ?? const [];
+  return raw
+      .map((item) => item.toString().trim())
+      .where((item) => item.isNotEmpty)
+      .toList();
 }
 
 DateTime? _parseDate(dynamic value) {

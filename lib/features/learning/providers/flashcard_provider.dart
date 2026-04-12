@@ -43,6 +43,7 @@ class FlashcardProvider extends ChangeNotifier {
   String? _errorMessage;
   String _categoryId = '';
   bool _completionTracked = false;
+  DateTime? _sessionStartedAt;
 
   List<WordModel> get words => _deck;
   int get index => _index;
@@ -102,6 +103,7 @@ class FlashcardProvider extends ChangeNotifier {
       _mistakeHistory.clear();
       _correctCount = 0;
       _wrongCount = 0;
+      _sessionStartedAt = DateTime.now();
       await _trackSessionStarted();
     } catch (_) {
       _errorMessage =
@@ -168,8 +170,10 @@ class FlashcardProvider extends ChangeNotifier {
   }
 
   void _trackSessionCompleted() {
-    if (_completionTracked || _categoryId.isEmpty) return;
+    if (_completionTracked) return;
     _completionTracked = true;
+    _recordLearningDuration();
+    if (_categoryId.isEmpty) return;
     unawaited(
       _analytics.track(
         'flashcards_completed',
@@ -185,6 +189,14 @@ class FlashcardProvider extends ChangeNotifier {
         },
       ),
     );
+  }
+
+  void _recordLearningDuration() {
+    final startedAt = _sessionStartedAt;
+    if (startedAt == null) return;
+    final elapsed = DateTime.now().difference(startedAt);
+    _progress.recordLearningDuration(elapsed);
+    _sessionStartedAt = null;
   }
 
   void reveal() {
@@ -253,6 +265,7 @@ class FlashcardProvider extends ChangeNotifier {
     _correctCount = 0;
     _wrongCount = 0;
     _completionTracked = false;
+    _sessionStartedAt = DateTime.now();
     notifyListeners();
   }
 
@@ -266,6 +279,7 @@ class FlashcardProvider extends ChangeNotifier {
     _correctCount = 0;
     _wrongCount = 0;
     _completionTracked = false;
+    _sessionStartedAt = DateTime.now();
     notifyListeners();
   }
 }
