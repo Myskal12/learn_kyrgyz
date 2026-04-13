@@ -1,0 +1,414 @@
+[
+  {
+    "id": "basics_good_morning",
+    "en": "good morning",
+    "ky": "Кутман таң",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "basics_hello",
+    "en": "hello",
+    "ky": "Салам",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "basics_no",
+    "en": "no",
+    "ky": "Жок",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "basics_please",
+    "en": "please",
+    "ky": "Суранам",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "basics_thanks",
+    "en": "thank you",
+    "ky": "Рахмат",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "basics_yes",
+    "en": "yes",
+    "ky": "Ооба",
+    "level": 1,
+    "category": "basic"
+  },
+  {
+    "id": "hello",
+    "en": "hello",
+    "ky": "салам",
+    "level": 1,
+    "category": "basic",
+    "transcription_en": "[həˈləʊ]",
+    "transcription_ky": "[салам]"
+  },
+  {
+    "id": "water",
+    "en": "water",
+    "ky": "суу",
+    "level": 1,
+    "category": "basic",
+    "transcription_en": "[ˈwɔːtər]",
+    "transcription_ky": "[суу]"
+  },
+  {
+    "id": "family",
+    "en": "family",
+    "ky": "үй-бүлө",
+    "level": 1,
+    "category": "family",
+    "transcription_en": "[ˈfæməli]",
+    "transcription_ky": "[үй-бүлө]"
+  },
+  {
+    "id": "family_brother",
+    "en": "elder brother",
+    "ky": "Агам",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "family_child",
+    "en": "child",
+    "ky": "Бала",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "family_father",
+    "en": "father",
+    "ky": "Атам",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "family_grandma",
+    "en": "grandmother",
+    "ky": "Чоң апа",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "family_mother",
+    "en": "mother",
+    "ky": "Апам",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "family_sister",
+    "en": "sister",
+    "ky": "Карындашым",
+    "level": 1,
+    "category": "family"
+  },
+  {
+    "id": "bread",
+    "en": "bread",
+    "ky": "нан",
+    "level": 1,
+    "category": "food",
+    "transcription_en": "[brɛd]",
+    "transcription_ky": "[нан]"
+  },
+  {
+    "id": "food_apple",
+    "en": "apple",
+    "ky": "Алма",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "food_bread",
+    "en": "bread",
+    "ky": "Нан",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "food_meat",
+    "en": "meat",
+    "ky": "Эт",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "food_soup",
+    "en": "soup",
+    "ky": "Шорпо",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "food_tea",
+    "en": "tea",
+    "ky": "Чай",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "food_water",
+    "en": "water",
+    "ky": "Суу",
+    "level": 1,
+    "category": "food"
+  },
+  {
+    "id": "mountain",
+    "en": "mountain",
+    "ky": "тоо",
+    "level": 1,
+    "category": "nature",
+    "transcription_en": "[ˈmaʊntən]",
+    "transcription_ky": "[тоо]"
+  },
+  {
+    "id": "nature_lake",
+    "en": "lake",
+    "ky": "Көл",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "nature_mountain",
+    "en": "mountain",
+    "ky": "Тоолор",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "nature_river",
+    "en": "river",
+    "ky": "Дарыя",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "nature_snow",
+    "en": "snow",
+    "ky": "Кар",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "nature_sun",
+    "en": "sun",
+    "ky": "Күн",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "nature_wind",
+    "en": "wind",
+    "ky": "Шамал",
+    "level": 1,
+    "category": "nature"
+  },
+  {
+    "id": "animals_bird",
+    "en": "bird",
+    "ky": "Куш",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "animals_cat",
+    "en": "cat",
+    "ky": "Мышык",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "animals_dog",
+    "en": "dog",
+    "ky": "Ит",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "animals_eagle",
+    "en": "eagle",
+    "ky": "Бүркүт",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "animals_horse",
+    "en": "horse",
+    "ky": "Ат",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "animals_sheep",
+    "en": "sheep",
+    "ky": "Кой",
+    "level": 1,
+    "category": "animals"
+  },
+  {
+    "id": "horse",
+    "en": "horse",
+    "ky": "ат",
+    "level": 1,
+    "category": "animals",
+    "transcription_en": "[hɔːrs]",
+    "transcription_ky": "[ат]"
+  },
+  {
+    "id": "travel_airport",
+    "en": "airport",
+    "ky": "Абамайдан",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "travel_bus",
+    "en": "bus",
+    "ky": "Автобус",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "travel_city",
+    "en": "city",
+    "ky": "Шаар",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "travel_road",
+    "en": "road",
+    "ky": "Жол",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "travel_ticket",
+    "en": "ticket",
+    "ky": "Билет",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "travel_train",
+    "en": "train",
+    "ky": "Поезд",
+    "level": 1,
+    "category": "travel"
+  },
+  {
+    "id": "book",
+    "en": "book",
+    "ky": "китеп",
+    "level": 1,
+    "category": "education",
+    "transcription_en": "[bʊk]",
+    "transcription_ky": "[китеп]"
+  },
+  {
+    "id": "school",
+    "en": "school",
+    "ky": "мектеп",
+    "level": 1,
+    "category": "education",
+    "transcription_en": "[skuːl]",
+    "transcription_ky": "[мектеп]"
+  },
+  {
+    "id": "friend",
+    "en": "friend",
+    "ky": "дос",
+    "level": 1,
+    "category": "emotion",
+    "transcription_en": "[frɛnd]",
+    "transcription_ky": "[дос]"
+  },
+  {
+    "id": "draft_adjectives_big_1",
+    "en": "big",
+    "ky": "чоң",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_easy_10",
+    "en": "easy",
+    "ky": "жеңил",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_fast_8",
+    "en": "fast",
+    "ky": "тез",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_long_3",
+    "en": "long",
+    "ky": "узун",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_new_5",
+    "en": "new",
+    "ky": "жаңы",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_old_6",
+    "en": "old",
+    "ky": "эски",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_short_4",
+    "en": "short",
+    "ky": "кыска",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_slow_9",
+    "en": "slow",
+    "ky": "жай",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_small_2",
+    "en": "small",
+    "ky": "кичине",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "draft_adjectives_young_7",
+    "en": "young",
+    "ky": "жаш",
+    "level": 1,
+    "category": "adjectives"
+  },
+  {
+    "id": "sun",
+    "en": "sun",
+    "ky": "күн",
+    "level": 1,
+    "category": "weather",
+    "transcription_en": "[sʌn]",
+    "transcription_ky": "[күн]"
+  }
+]

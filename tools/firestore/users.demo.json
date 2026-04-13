@@ -1,0 +1,362 @@
+[
+  {
+    "id": "demo_user_001",
+    "nickname": "Aruzhan 1",
+    "avatar": "assets/images/photo_1_2026-04-10_18-59-53.jpg",
+    "totalMastered": 89,
+    "totalSessions": 147,
+    "accuracy": 80,
+    "totalXp": 2768,
+    "streakDays": 15,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_1_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_002",
+    "nickname": "Bekzat 2",
+    "avatar": "assets/images/photo_2_2026-04-10_18-59-53.jpg",
+    "totalMastered": 88,
+    "totalSessions": 136,
+    "accuracy": 85,
+    "totalXp": 2672,
+    "streakDays": 14,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_2_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_003",
+    "nickname": "Nurai 3",
+    "avatar": "assets/images/photo_3_2026-04-10_18-59-53.jpg",
+    "totalMastered": 87,
+    "totalSessions": 135,
+    "accuracy": 75,
+    "totalXp": 2603,
+    "streakDays": 14,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_3_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_004",
+    "nickname": "Tilek 4",
+    "avatar": "assets/images/photo_4_2026-04-10_18-59-53.jpg",
+    "totalMastered": 79,
+    "totalSessions": 127,
+    "accuracy": 87,
+    "totalXp": 2451,
+    "streakDays": 18,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_4_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_005",
+    "nickname": "Aigerim 5",
+    "avatar": "assets/images/photo_1_2026-04-10_18-59-53.jpg",
+    "totalMastered": 85,
+    "totalSessions": 120,
+    "accuracy": 88,
+    "totalXp": 2355,
+    "streakDays": 15,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_1_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_006",
+    "nickname": "Emir 6",
+    "avatar": "assets/images/photo_2_2026-04-10_18-59-53.jpg",
+    "totalMastered": 78,
+    "totalSessions": 122,
+    "accuracy": 83,
+    "totalXp": 2255,
+    "streakDays": 9,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_2_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_007",
+    "nickname": "Saniya 7",
+    "avatar": "assets/images/photo_3_2026-04-10_18-59-53.jpg",
+    "totalMastered": 80,
+    "totalSessions": 123,
+    "accuracy": 73,
+    "totalXp": 2231,
+    "streakDays": 11,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_3_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_008",
+    "nickname": "Nursultan 8",
+    "avatar": "assets/images/photo_4_2026-04-10_18-59-53.jpg",
+    "totalMastered": 73,
+    "totalSessions": 111,
+    "accuracy": 80,
+    "totalXp": 2089,
+    "streakDays": 11,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_4_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_009",
+    "nickname": "Amina 9",
+    "avatar": "assets/images/photo_1_2026-04-10_18-59-53.jpg",
+    "totalMastered": 65,
+    "totalSessions": 105,
+    "accuracy": 73,
+    "totalXp": 2043,
+    "streakDays": 11,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_1_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_010",
+    "nickname": "Askar 10",
+    "avatar": "assets/images/photo_2_2026-04-10_18-59-53.jpg",
+    "totalMastered": 70,
+    "totalSessions": 98,
+    "accuracy": 72,
+    "totalXp": 1920,
+    "streakDays": 10,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_2_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_011",
+    "nickname": "Elmira 11",
+    "avatar": "assets/images/photo_3_2026-04-10_18-59-53.jpg",
+    "totalMastered": 59,
+    "totalSessions": 82,
+    "accuracy": 81,
+    "totalXp": 1782,
+    "streakDays": 12,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_3_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_012",
+    "nickname": "Rinat 12",
+    "avatar": "assets/images/photo_4_2026-04-10_18-59-53.jpg",
+    "totalMastered": 56,
+    "totalSessions": 98,
+    "accuracy": 79,
+    "totalXp": 1756,
+    "streakDays": 6,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_4_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_013",
+    "nickname": "Aibek 13",
+    "avatar": "assets/images/photo_1_2026-04-10_18-59-53.jpg",
+    "totalMastered": 50,
+    "totalSessions": 90,
+    "accuracy": 78,
+    "totalXp": 1679,
+    "streakDays": 10,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_1_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_014",
+    "nickname": "Dana 14",
+    "avatar": "assets/images/photo_2_2026-04-10_18-59-53.jpg",
+    "totalMastered": 55,
+    "totalSessions": 99,
+    "accuracy": 83,
+    "totalXp": 1501,
+    "streakDays": 5,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_2_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_015",
+    "nickname": "Meder 15",
+    "avatar": "assets/images/photo_3_2026-04-10_18-59-53.jpg",
+    "totalMastered": 54,
+    "totalSessions": 80,
+    "accuracy": 71,
+    "totalXp": 1480,
+    "streakDays": 5,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_3_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_016",
+    "nickname": "Samat 16",
+    "avatar": "assets/images/photo_4_2026-04-10_18-59-53.jpg",
+    "totalMastered": 48,
+    "totalSessions": 76,
+    "accuracy": 64,
+    "totalXp": 1376,
+    "streakDays": 5,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_4_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_017",
+    "nickname": "Mira 17",
+    "avatar": "assets/images/photo_1_2026-04-10_18-59-53.jpg",
+    "totalMastered": 49,
+    "totalSessions": 87,
+    "accuracy": 64,
+    "totalXp": 1234,
+    "streakDays": 8,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_1_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_018",
+    "nickname": "Timur 18",
+    "avatar": "assets/images/photo_2_2026-04-10_18-59-53.jpg",
+    "totalMastered": 45,
+    "totalSessions": 71,
+    "accuracy": 72,
+    "totalXp": 1123,
+    "streakDays": 4,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_2_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_019",
+    "nickname": "Nurgul 19",
+    "avatar": "assets/images/photo_3_2026-04-10_18-59-53.jpg",
+    "totalMastered": 42,
+    "totalSessions": 75,
+    "accuracy": 64,
+    "totalXp": 1068,
+    "streakDays": 7,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_3_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_020",
+    "nickname": "Azamat 20",
+    "avatar": "assets/images/photo_4_2026-04-10_18-59-53.jpg",
+    "totalMastered": 27,
+    "totalSessions": 52,
+    "accuracy": 77,
+    "totalXp": 956,
+    "streakDays": 10,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_4_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_021",
+    "nickname": "Kamila 21",
+    "avatar": "assets/images/photo_1_2026-04-10_18-59-53.jpg",
+    "totalMastered": 24,
+    "totalSessions": 49,
+    "accuracy": 71,
+    "totalXp": 864,
+    "streakDays": 6,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_1_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_022",
+    "nickname": "Arsen 22",
+    "avatar": "assets/images/photo_2_2026-04-10_18-59-53.jpg",
+    "totalMastered": 29,
+    "totalSessions": 42,
+    "accuracy": 69,
+    "totalXp": 751,
+    "streakDays": 1,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_2_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_023",
+    "nickname": "Madina 23",
+    "avatar": "assets/images/photo_3_2026-04-10_18-59-53.jpg",
+    "totalMastered": 29,
+    "totalSessions": 48,
+    "accuracy": 66,
+    "totalXp": 672,
+    "streakDays": 9,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_3_2026-04-10_18-59-53.jpg"
+    }
+  },
+  {
+    "id": "demo_user_024",
+    "nickname": "Adilet 24",
+    "avatar": "assets/images/photo_4_2026-04-10_18-59-53.jpg",
+    "totalMastered": 17,
+    "totalSessions": 37,
+    "accuracy": 67,
+    "totalXp": 560,
+    "streakDays": 3,
+    "isDemo": true,
+    "avatarProfile": {
+      "type": "preset_asset",
+      "value": "assets/images/photo_4_2026-04-10_18-59-53.jpg"
+    }
+  }
+]

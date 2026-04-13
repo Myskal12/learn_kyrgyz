@@ -20,8 +20,8 @@ class App extends ConsumerWidget {
     return MaterialApp.router(
       title: 'LearnKyrgyz',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
       themeMode: themeMode,
       locale: appLanguage.locale,
       supportedLocales: AppLanguage.values

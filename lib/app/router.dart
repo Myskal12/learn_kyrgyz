@@ -23,8 +23,13 @@ import '../features/onboarding/presentation/launch_gate_screen.dart';
 import '../features/onboarding/presentation/welcome_screen.dart';
 import '../features/practice/presentation/practice_screen.dart';
 
+const _initialRoute = String.fromEnvironment(
+  'INITIAL_ROUTE',
+  defaultValue: '/',
+);
+
 final GoRouter router = GoRouter(
-  initialLocation: '/',
+  initialLocation: _initialRoute,
   routes: [
     GoRoute(path: '/', builder: (context, state) => const LaunchGateScreen()),
     GoRoute(
@@ -103,34 +108,73 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const ProfileScreen(),
     ),
     GoRoute(
+      path: '/settings/profile',
+      builder: (context, state) => ProfileSettingsScreen(
+        initialSection: 'account',
+        viewMode: SettingsViewMode.profile,
+        backFallbackRoute: _safeReturnToOrFallback(state, '/settings'),
+      ),
+    ),
+    GoRoute(
+      path: '/settings/security',
+      builder: (context, state) => ProfileSettingsScreen(
+        initialSection: 'privacy',
+        viewMode: SettingsViewMode.security,
+        backFallbackRoute: _safeReturnToOrFallback(state, '/settings'),
+      ),
+    ),
+    GoRoute(
+      path: '/settings/interface',
+      builder: (context, state) => ProfileSettingsScreen(
+        initialSection: 'interface',
+        viewMode: SettingsViewMode.interface,
+        backFallbackRoute: _safeReturnToOrFallback(state, '/settings'),
+      ),
+    ),
+    GoRoute(
       path: '/settings',
-      builder: (context, state) => const ProfileSettingsScreen(),
+      builder: (context, state) => ProfileSettingsScreen(
+        initialSection: state.uri.queryParameters['section'],
+        viewMode: SettingsViewMode.all,
+        backFallbackRoute: _safeReturnToOrFallback(state, '/profile'),
+      ),
     ),
     GoRoute(
       path: '/privacy-policy',
-      builder: (context, state) => const PrivacyPolicyScreen(),
+      builder: (context, state) => PrivacyPolicyScreen(
+        backFallbackRoute: _safeReturnToOrFallback(state, '/settings'),
+      ),
     ),
     GoRoute(
       path: '/terms-of-use',
-      builder: (context, state) => const TermsOfUseScreen(),
+      builder: (context, state) => TermsOfUseScreen(
+        backFallbackRoute: _safeReturnToOrFallback(state, '/settings'),
+      ),
     ),
     GoRoute(
       path: '/leaderboard',
       builder: (context, state) {
         final requestedLimit =
             int.tryParse(state.uri.queryParameters['limit'] ?? '') ?? 10;
-        return LeaderboardScreen(initialLimit: requestedLimit);
+        return LeaderboardScreen(
+          initialLimit: requestedLimit,
+          backFallbackRoute: _safeReturnToOrFallback(state, '/progress'),
+        );
       },
     ),
     GoRoute(
       path: '/achievements',
-      builder: (context, state) => const AchievementsScreen(),
+      builder: (context, state) => AchievementsScreen(
+        backFallbackRoute: _safeReturnToOrFallback(state, '/progress'),
+      ),
     ),
     GoRoute(path: '/study-plan', redirect: (_, __) => '/categories'),
     GoRoute(path: '/roadmap', redirect: (_, __) => '/categories'),
     GoRoute(
       path: '/resources',
-      builder: (context, state) => const ResourcesScreen(),
+      builder: (context, state) => ResourcesScreen(
+        backFallbackRoute: _safeReturnToOrFallback(state, '/profile'),
+      ),
     ),
     GoRoute(
       path: '/quick-quiz',
@@ -143,4 +187,18 @@ FlashcardSessionMode _flashcardModeFromState(GoRouterState state) {
   return state.uri.queryParameters['mode'] == 'review'
       ? FlashcardSessionMode.reviewDue
       : FlashcardSessionMode.fullDeck;
+}
+
+String _safeReturnToOrFallback(GoRouterState state, String fallback) {
+  final returnTo = state.uri.queryParameters['returnTo']?.trim();
+  if (returnTo == null || returnTo.isEmpty || !returnTo.startsWith('/')) {
+    return fallback;
+  }
+
+  final parsed = Uri.tryParse(returnTo);
+  if (parsed == null || parsed.hasScheme || parsed.hasAuthority) {
+    return fallback;
+  }
+
+  return returnTo;
 }

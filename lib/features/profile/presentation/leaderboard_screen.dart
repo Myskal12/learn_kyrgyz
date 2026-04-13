@@ -17,9 +17,14 @@ import '../providers/progress_provider.dart';
 import '../providers/user_profile_provider.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
-  const LeaderboardScreen({super.key, this.initialLimit = 10});
+  const LeaderboardScreen({
+    super.key,
+    this.initialLimit = 10,
+    this.backFallbackRoute = '/progress',
+  });
 
   final int initialLimit;
+  final String backFallbackRoute;
 
   @override
   ConsumerState<LeaderboardScreen> createState() => _LeaderboardScreenState();
@@ -55,9 +60,17 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
     Widget content;
     if (leaderboard.isLoading && entries.isEmpty) {
-      content = const AppLoadingState(
-        title: 'Рейтинг жүктөлүүдө',
-        message: 'Тизмедеги акыркы катышуучулар даярдалып жатат.',
+      content = AppLoadingState(
+        title: context.tr(
+          ky: 'Рейтинг жүктөлүүдө',
+          en: 'Leaderboard is loading',
+          ru: 'Рейтинг загружается',
+        ),
+        message: context.tr(
+          ky: 'Тизмедеги акыркы катышуучулар даярдалып жатат.',
+          en: 'Latest participants are being prepared.',
+          ru: 'Подготавливаются последние участники списка.',
+        ),
       );
     } else if (leaderboard.errorMessage != null && entries.isEmpty) {
       content = AppErrorState(
@@ -68,10 +81,17 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       content = ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         children: [
-          Text('Рейтинг', style: AppTextStyles.heading.copyWith(fontSize: 28)),
+          Text(
+            context.tr(ky: 'Рейтинг', en: 'Leaderboard', ru: 'Рейтинг'),
+            style: AppTextStyles.heading.copyWith(fontSize: 28),
+          ),
           const SizedBox(height: 6),
           Text(
-            'Катышуучулар жана орундар',
+            context.tr(
+              ky: 'Катышуучулар жана орундар',
+              en: 'Participants and positions',
+              ru: 'Участники и позиции',
+            ),
             style: AppTextStyles.body.copyWith(color: AppColors.muted),
           ),
           const SizedBox(height: 20),
@@ -86,11 +106,19 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           if (leaderboard.errorMessage != null && entries.isNotEmpty) ...[
             const SizedBox(height: 16),
             AppSyncBanner(
-              title: 'Тизме толук жаңыланган жок',
+              title: context.tr(
+                ky: 'Тизме толук жаңыланган жок',
+                en: 'List was not fully refreshed',
+                ru: 'Список обновился не полностью',
+              ),
               message: leaderboard.errorMessage!,
               icon: Icons.cloud_off,
               accentColor: AppColors.accent,
-              actionLabel: 'Кайра жүктөө',
+              actionLabel: context.tr(
+                ky: 'Кайра жүктөө',
+                en: 'Reload',
+                ru: 'Перезагрузить',
+              ),
               onAction: () => ref
                   .read(leaderboardProvider)
                   .load(force: true, limit: currentLimit),
@@ -101,11 +129,19 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Топ оюнчулар',
+                context.tr(
+                  ky: 'Топ оюнчулар',
+                  en: 'Top players',
+                  ru: 'Топ игроков',
+                ),
                 style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
               ),
               AppChip(
-                label: 'Көрсөтүлдү: ${entries.length}',
+                label: context.tr(
+                  ky: 'Көрсөтүлдү: ${entries.length}',
+                  en: 'Shown: ${entries.length}',
+                  ru: 'Показано: ${entries.length}',
+                ),
                 variant: AppChipVariant.primary,
               ),
             ],
@@ -115,10 +151,22 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             SizedBox(
               height: 260,
               child: AppEmptyState(
-                title: 'Лидерборд азырынча бош',
-                message: 'Азырынча катышуучу жок.',
+                title: context.tr(
+                  ky: 'Лидерборд азырынча бош',
+                  en: 'Leaderboard is empty for now',
+                  ru: 'Лидерборд пока пуст',
+                ),
+                message: context.tr(
+                  ky: 'Азырынча катышуучу жок.',
+                  en: 'There are no participants yet.',
+                  ru: 'Участников пока нет.',
+                ),
                 icon: Icons.emoji_events_outlined,
-                actionLabel: 'Кайра жүктөө',
+                actionLabel: context.tr(
+                  ky: 'Кайра жүктөө',
+                  en: 'Reload',
+                  ru: 'Перезагрузить',
+                ),
                 onAction: () => ref
                     .read(leaderboardProvider)
                     .load(force: true, limit: currentLimit),
@@ -204,15 +252,23 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                 ),
                                 const SizedBox(width: 8),
                                 if (item.id == currentUserId)
-                                  const AppChip(
-                                    label: 'Сиз',
+                                  AppChip(
+                                    label: context.tr(
+                                      ky: 'Сиз',
+                                      en: 'You',
+                                      ru: 'Вы',
+                                    ),
                                     variant: AppChipVariant.primary,
                                   ),
                               ],
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              '${item.xp} XP · ${item.activity} аракет · ${item.accuracy}% тактык',
+                              context.tr(
+                                ky: '${item.xp} XP · ${item.activity} аракет · ${item.accuracy}% тактык',
+                                en: '${item.xp} XP · ${item.activity} actions · ${item.accuracy}% accuracy',
+                                ru: '${item.xp} XP · ${item.activity} действий · ${item.accuracy}% точность',
+                              ),
                               style: AppTextStyles.muted,
                             ),
                             const SizedBox(height: 8),
@@ -221,13 +277,20 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                               runSpacing: 8,
                               children: [
                                 AppChip(
-                                  label: '${item.streakDays} күн серия',
+                                  label: context.tr(
+                                    ky: '${item.streakDays} күн серия',
+                                    en: '${item.streakDays} day streak',
+                                    ru: 'Серия ${item.streakDays} дней',
+                                  ),
                                   variant: item.streakDays >= 7
                                       ? AppChipVariant.success
                                       : AppChipVariant.accent,
                                 ),
                                 AppChip(
-                                  label: item.rank,
+                                  label: localizedJourneyRank(
+                                    context,
+                                    item.level,
+                                  ),
                                   variant: AppChipVariant.defaultChip,
                                 ),
                               ],
@@ -248,7 +311,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
               onPressed: leaderboard.isLoading
                   ? null
                   : () => ref.read(leaderboardProvider).loadExpanded(),
-              child: const Text('Алгачкы 100 оюнчуну көрсөтүү'),
+              child: Text(
+                context.tr(
+                  ky: 'Алгачкы 100 оюнчуну көрсөтүү',
+                  en: 'Show top 100 players',
+                  ru: 'Показать топ-100 игроков',
+                ),
+              ),
             ),
           ],
           const SizedBox(height: 8),
@@ -266,7 +335,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       ),
       activeTab: AppTab.progress,
       navigationMode: AppShellNavigationMode.back,
-      backFallbackRoute: '/progress',
+      backFallbackRoute: widget.backFallbackRoute,
       showBottomNav: false,
       child: content,
     );
@@ -322,17 +391,49 @@ class _LeaderboardSummaryCard extends StatelessWidget {
     String title;
     String subtitle;
     if (isGuest) {
-      title = 'Конок режиминде рейтинг жок';
-      subtitle = 'Кирсеңиз, орун көрүнөт.';
+      title = context.tr(
+        ky: 'Конок режиминде рейтинг жок',
+        en: 'No ranking in guest mode',
+        ru: 'В гостевом режиме рейтинга нет',
+      );
+      subtitle = context.tr(
+        ky: 'Кирсеңиз, орун көрүнөт.',
+        en: 'Sign in to see your position.',
+        ru: 'Войдите, чтобы увидеть своё место.',
+      );
     } else if (entries.isEmpty) {
-      title = 'Лидерборд жаңыдан толот';
-      subtitle = 'Азырынча тизмеде катышуучу жок.';
+      title = context.tr(
+        ky: 'Лидерборд жаңыдан толот',
+        en: 'Leaderboard is just starting',
+        ru: 'Лидерборд только наполняется',
+      );
+      subtitle = context.tr(
+        ky: 'Азырынча тизмеде катышуучу жок.',
+        en: 'There are no participants in the list yet.',
+        ru: 'В списке пока нет участников.',
+      );
     } else if (currentIndex >= 0) {
-      title = '${currentIndex + 1}-орун';
-      subtitle = 'Учурдагы ордуңуз.';
+      title = context.tr(
+        ky: '${currentIndex + 1}-орун',
+        en: 'Place ${currentIndex + 1}',
+        ru: '${currentIndex + 1}-е место',
+      );
+      subtitle = context.tr(
+        ky: 'Учурдагы ордуңуз.',
+        en: 'Your current position.',
+        ru: 'Ваше текущее место.',
+      );
     } else {
-      title = 'Топ тизмеге чыга элексиз';
-      subtitle = 'Дагы бир аз упай топтоңуз.';
+      title = context.tr(
+        ky: 'Топ тизмеге чыга элексиз',
+        en: 'You are not on the top list yet',
+        ru: 'Вы пока не попали в топ',
+      );
+      subtitle = context.tr(
+        ky: 'Дагы бир аз упай топтоңуз.',
+        en: 'Earn a bit more points.',
+        ru: 'Наберите ещё немного очков.',
+      );
     }
 
     return AppCard(
@@ -348,7 +449,11 @@ class _LeaderboardSummaryCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Сиздин абал',
+                    context.tr(
+                      ky: 'Сиздин абал',
+                      en: 'Your status',
+                      ru: 'Ваш статус',
+                    ),
                     style: AppTextStyles.muted.copyWith(
                       color: Colors.white.withValues(alpha: 0.8),
                     ),
@@ -387,7 +492,13 @@ class _LeaderboardSummaryCard extends StatelessWidget {
             children: [
               _GlassChip(label: '$localPoints XP'),
               const SizedBox(width: 8),
-              _GlassChip(label: '${progress.streakDays} күн катар'),
+              _GlassChip(
+                label: context.tr(
+                  ky: '${progress.streakDays} күн катар',
+                  en: '${progress.streakDays} days in a row',
+                  ru: '${progress.streakDays} дней подряд',
+                ),
+              ),
               const SizedBox(width: 8),
               _GlassChip(label: 'Lv ${progress.journeyLevel}'),
             ],
@@ -419,13 +530,20 @@ class _WeeklyChallengeCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Апталык чакырык',
+                      context.tr(
+                        ky: 'Апталык чакырык',
+                        en: 'Weekly challenge',
+                        ru: 'Недельный вызов',
+                      ),
                       style: AppTextStyles.body.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(challenge.description, style: AppTextStyles.muted),
+                    Text(
+                      challenge.descriptionOf(context),
+                      style: AppTextStyles.muted,
+                    ),
                   ],
                 ),
               ),
@@ -438,11 +556,21 @@ class _WeeklyChallengeCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${challenge.activeDays}/${challenge.targetActiveDays} күн · ${challenge.weeklyXp}/${challenge.targetXp} XP',
+                context.tr(
+                  ky: '${challenge.activeDays}/${challenge.targetActiveDays} күн · ${challenge.weeklyXp}/${challenge.targetXp} XP',
+                  en: '${challenge.activeDays}/${challenge.targetActiveDays} days · ${challenge.weeklyXp}/${challenge.targetXp} XP',
+                  ru: '${challenge.activeDays}/${challenge.targetActiveDays} дней · ${challenge.weeklyXp}/${challenge.targetXp} XP',
+                ),
                 style: AppTextStyles.muted,
               ),
               Text(
-                challenge.isCompleted ? 'Жабылды' : 'Улантыңыз',
+                challenge.isCompleted
+                    ? context.tr(ky: 'Жабылды', en: 'Completed', ru: 'Закрыто')
+                    : context.tr(
+                        ky: 'Улантыңыз',
+                        en: 'Keep going',
+                        ru: 'Продолжайте',
+                      ),
                 style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
               ),
             ],
@@ -463,33 +591,37 @@ class _SyncNotice extends StatelessWidget {
     switch (progress.syncState) {
       case ProgressSyncState.localOnly:
         return AppSyncBanner(
-          title: progress.syncTitle,
-          message: progress.syncSubtitle,
+          title: progress.syncTitleOf(context),
+          message: progress.syncSubtitleOf(context),
           icon: Icons.save_outlined,
           accentColor: AppColors.primary,
         );
       case ProgressSyncState.pending:
       case ProgressSyncState.syncing:
         return AppSyncBanner(
-          title: progress.syncTitle,
-          message: progress.syncSubtitle,
+          title: progress.syncTitleOf(context),
+          message: progress.syncSubtitleOf(context),
           icon: Icons.sync,
           accentColor: AppColors.accent,
         );
       case ProgressSyncState.synced:
         return AppSyncBanner(
-          title: progress.syncTitle,
-          message: progress.syncSubtitle,
+          title: progress.syncTitleOf(context),
+          message: progress.syncSubtitleOf(context),
           icon: Icons.cloud_done,
           accentColor: AppColors.success,
         );
       case ProgressSyncState.failed:
         return AppSyncBanner(
-          title: progress.syncTitle,
-          message: progress.syncSubtitle,
+          title: progress.syncTitleOf(context),
+          message: progress.syncSubtitleOf(context),
           icon: Icons.cloud_off,
           accentColor: AppColors.accent,
-          actionLabel: 'Кайра синк кылуу',
+          actionLabel: context.tr(
+            ky: 'Кайра синк кылуу',
+            en: 'Retry sync',
+            ru: 'Повторить синхронизацию',
+          ),
           onAction: progress.canRetrySync ? progress.retrySync : null,
         );
     }

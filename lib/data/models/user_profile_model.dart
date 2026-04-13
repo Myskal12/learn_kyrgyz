@@ -27,7 +27,9 @@ class UserProfileModel {
       nickname: (json['nickname'] as String?)?.trim().isNotEmpty == true
           ? json['nickname'] as String
           : 'Колдонуучу',
-      avatar: normalizeProfileAvatar(json['avatar'] as String?),
+      avatar: normalizeProfileAvatar(
+        json['avatarProfile'] ?? json['avatar'] ?? json['avatarPath'],
+      ),
       totalMastered: (json['totalMastered'] as num?)?.toInt() ?? 0,
       totalSessions: (json['totalSessions'] as num?)?.toInt() ?? 0,
       accuracy: (json['accuracy'] as num?)?.toInt() ?? 0,
@@ -39,6 +41,7 @@ class UserProfileModel {
   Map<String, dynamic> toJson() => {
     'nickname': nickname,
     'avatar': avatar,
+    'avatarProfile': {'type': 'preset_asset', 'value': avatar},
     'totalMastered': totalMastered,
     'totalSessions': totalSessions,
     'accuracy': accuracy,

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/providers/learning_direction_provider.dart';
 import '../../../core/providers/learning_session_provider.dart';
+import '../../../core/localization/app_copy.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../core/utils/learning_direction.dart';
@@ -12,6 +13,7 @@ import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_shell.dart';
 import '../../../shared/widgets/app_state_views.dart';
 import '../../../shared/widgets/app_top_nav.dart';
+import '../../../shared/widgets/learning_direction_nav_button.dart';
 import '../../../shared/widgets/session_summary_panel.dart';
 import '../providers/quiz_provider.dart';
 
@@ -24,33 +26,62 @@ class QuizScreen extends ConsumerStatefulWidget {
 }
 
 class _QuizScreenState extends ConsumerState<QuizScreen> {
-  late final LearningDirection _direction;
+  late final ProviderSubscription<LearningDirection> _directionSubscription;
 
   @override
   void initState() {
     super.initState();
-    _direction = ref.read(learningDirectionProvider);
+    _directionSubscription = ref.listenManual<LearningDirection>(
+      learningDirectionProvider,
+      (previous, next) {
+        if (previous == next) return;
+        ref.read(quizProvider).startWithDirection(widget.categoryId, next);
+      },
+    );
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final direction = ref.read(learningDirectionProvider);
       if (widget.categoryId.isNotEmpty) {
         ref.read(learningSessionProvider).setLastCategoryId(widget.categoryId);
       }
-      ref.read(quizProvider).startWithDirection(widget.categoryId, _direction);
+      ref.read(quizProvider).startWithDirection(widget.categoryId, direction);
     });
+  }
+
+  @override
+  void dispose() {
+    _directionSubscription.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final isQuick = widget.categoryId.isEmpty;
     final quiz = ref.watch(quizProvider);
+    final direction = ref.watch(learningDirectionProvider);
 
     return AppShell(
-      title: isQuick ? 'Экспресс-квиз' : 'Квиз',
-      subtitle: 'Кыска текшерүү',
+      title: isQuick
+          ? context.tr(
+              ky: 'Экспресс-квиз',
+              en: 'Quick quiz',
+              ru: 'Экспресс-квиз',
+            )
+          : context.tr(ky: 'Квиз', en: 'Quiz', ru: 'Квиз'),
+      subtitle: context.tr(
+        ky: 'Кыска текшерүү',
+        en: 'Short check',
+        ru: 'Короткая проверка',
+      ),
       activeTab: AppTab.learn,
       tone: AppTopNavTone.dark,
       navigationMode: AppShellNavigationMode.back,
       backFallbackRoute: '/practice',
       showBottomNav: false,
+      topNavTrailing: const LearningDirectionNavButton(
+        tone: AppTopNavTone.dark,
+      ),
+      topNavTrailingWidth: 108,
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Container(
@@ -66,9 +97,17 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
             child: Builder(
               builder: (context) {
                 if (quiz.isLoading) {
-                  return const AppLoadingState(
-                    title: 'Квиз жүктөлүүдө',
-                    message: 'Суроолор жана варианттар даярдалып жатат.',
+                  return AppLoadingState(
+                    title: context.tr(
+                      ky: 'Квиз жүктөлүүдө',
+                      en: 'Quiz is loading',
+                      ru: 'Квиз загружается',
+                    ),
+                    message: context.tr(
+                      ky: 'Суроолор жана варианттар даярдалып жатат.',
+                      en: 'Questions and options are being prepared.',
+                      ru: 'Подготавливаются вопросы и варианты.',
+                    ),
                     foregroundColor: Colors.white,
                     indicatorColor: Colors.white,
                   );
@@ -85,22 +124,33 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                     foregroundColor: Colors.white,
                     buttonVariant: AppButtonVariant.accent,
                     onAction: () =>
-                        quiz.startWithDirection(widget.categoryId, _direction),
+                        quiz.startWithDirection(widget.categoryId, direction),
                   );
                 }
 
                 final question = quiz.currentQuestion;
                 if (question == null) {
                   return AppEmptyState(
-                    title: 'Суроолор табылган жок',
-                    message:
-                        'Бул категория үчүн суроолор же fallback сөздөр табылган жок.',
+                    title: context.tr(
+                      ky: 'Суроолор табылган жок',
+                      en: 'No questions found',
+                      ru: 'Вопросы не найдены',
+                    ),
+                    message: context.tr(
+                      ky: 'Бул категория үчүн суроолор же fallback сөздөр табылган жок.',
+                      en: 'No questions or fallback words were found for this category.',
+                      ru: 'Для этой категории не найдены вопросы или резервные слова.',
+                    ),
                     icon: Icons.quiz_outlined,
                     foregroundColor: Colors.white,
                     buttonVariant: AppButtonVariant.accent,
-                    actionLabel: 'Кайра жүктөө',
+                    actionLabel: context.tr(
+                      ky: 'Кайра жүктөө',
+                      en: 'Reload',
+                      ru: 'Перезагрузить',
+                    ),
                     onAction: () =>
-                        quiz.startWithDirection(widget.categoryId, _direction),
+                        quiz.startWithDirection(widget.categoryId, direction),
                   );
                 }
 
@@ -113,7 +163,11 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Суроо ${quiz.index + 1} / ${quiz.totalQuestions}',
+                            context.tr(
+                              ky: 'Суроо ${quiz.index + 1} / ${quiz.totalQuestions}',
+                              en: 'Question ${quiz.index + 1} / ${quiz.totalQuestions}',
+                              ru: 'Вопрос ${quiz.index + 1} / ${quiz.totalQuestions}',
+                            ),
                             style: AppTextStyles.body.copyWith(
                               color: Colors.white70,
                             ),
@@ -134,6 +188,30 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                         backgroundColor: Colors.white.withValues(alpha: 0.2),
                         valueColor: const AlwaysStoppedAnimation<Color>(
                           Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.16),
+                            borderRadius: BorderRadius.circular(999),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.24),
+                            ),
+                          ),
+                          child: Text(
+                            direction.helperTextOf(context),
+                            style: AppTextStyles.caption.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 24),
@@ -158,10 +236,22 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                             : (quiz.selected == null ? null : quiz.submit),
                         child: Text(
                           quiz.answered
-                              ? 'Кийинки'
+                              ? context.tr(
+                                  ky: 'Кийинки',
+                                  en: 'Next',
+                                  ru: 'Дальше',
+                                )
                               : (quiz.selected == null
-                                    ? 'Жоопту тандаңыз'
-                                    : 'Текшерүү'),
+                                    ? context.tr(
+                                        ky: 'Жоопту тандаңыз',
+                                        en: 'Choose an answer',
+                                        ru: 'Выберите ответ',
+                                      )
+                                    : context.tr(
+                                        ky: 'Текшерүү',
+                                        en: 'Check',
+                                        ru: 'Проверить',
+                                      )),
                         ),
                       ),
                     ],
@@ -366,50 +456,94 @@ class _QuizSummary extends StatelessWidget {
         ? '/sentence-builder/$categoryId'
         : '/categories';
     final nextLabel = categoryId.isNotEmpty
-        ? 'Сүйлөм түзүүгө өтүү'
-        : 'Категория тандаңыз';
+        ? context.tr(
+            ky: 'Сүйлөм түзүүгө өтүү',
+            en: 'Go to sentence builder',
+            ru: 'Перейти к построению предложений',
+          )
+        : context.tr(
+            ky: 'Категория тандаңыз',
+            en: 'Choose a category',
+            ru: 'Выберите категорию',
+          );
     final reviewRoute = categoryId.isNotEmpty
         ? '/flashcards/$categoryId?mode=review'
         : '/categories';
     final reviewLabel = categoryId.isNotEmpty
-        ? 'Кайталоо кезегин ачуу'
-        : 'Категория тандаңыз';
+        ? context.tr(
+            ky: 'Кайталоо кезегин ачуу',
+            en: 'Open review queue',
+            ru: 'Открыть очередь повторения',
+          )
+        : context.tr(
+            ky: 'Категория тандаңыз',
+            en: 'Choose a category',
+            ru: 'Выберите категорию',
+          );
 
     return SessionSummaryPanel(
-      title: 'Квиз аяктады',
-      headline: _headline(accuracy),
+      title: context.tr(
+        ky: 'Квиз аяктады',
+        en: 'Quiz completed',
+        ru: 'Квиз завершён',
+      ),
+      headline: _headline(context, accuracy),
       message: provider.reviewSucceeded
-          ? 'Каталар жабылды. Эми натыйжаны активдүү колдонуу үчүн башка режимге өтүңүз.'
-          : 'Дагы ${provider.unresolvedMistakesCount} суроо толук бекей элек. Аларды review queue аркылуу жабуу жакшы кийинки кадам болот.',
+          ? context.tr(
+              ky: 'Каталар жабылды. Эми натыйжаны активдүү колдонуу үчүн башка режимге өтүңүз.',
+              en: 'Mistakes are cleared. Now switch to another mode to actively use the result.',
+              ru: 'Ошибки закрыты. Теперь перейдите в другой режим, чтобы активнее использовать результат.',
+            )
+          : context.tr(
+              ky: 'Дагы ${provider.unresolvedMistakesCount} суроо толук бекей элек. Аларды review queue аркылуу жабуу жакшы кийинки кадам болот.',
+              en: '${provider.unresolvedMistakesCount} questions are still not fully solid. Closing them through the review queue is the best next step.',
+              ru: 'Ещё ${provider.unresolvedMistakesCount} вопросов не закреплены полностью. Лучший следующий шаг — закрыть их через очередь повторения.',
+            ),
       metrics: [
         SessionSummaryMetric(
-          label: 'Туура',
+          label: context.tr(ky: 'Туура', en: 'Correct', ru: 'Верно'),
           value: provider.correctAnswers.toString(),
           color: AppColors.success,
         ),
         SessionSummaryMetric(
-          label: 'Ката',
+          label: context.tr(ky: 'Ката', en: 'Wrong', ru: 'Ошибки'),
           value: provider.incorrectAnswers.toString(),
           color: AppColors.accent,
         ),
         SessionSummaryMetric(
-          label: 'Кайра окуу',
+          label: context.tr(ky: 'Кайра окуу', en: 'Review', ru: 'Повтор'),
           value:
               '${provider.reviewCorrectAnswers + provider.reviewIncorrectAnswers}',
           color: AppColors.primary,
         ),
         SessionSummaryMetric(
-          label: 'Тактык',
+          label: context.tr(ky: 'Тактык', en: 'Accuracy', ru: 'Точность'),
           value: '$accuracy%',
           color: AppColors.primary,
         ),
       ],
-      noteTitle: 'Жакшы кийинки кадам',
+      noteTitle: context.tr(
+        ky: 'Жакшы кийинки кадам',
+        en: 'Best next step',
+        ru: 'Лучший следующий шаг',
+      ),
       noteMessage: provider.reviewSucceeded
-          ? 'Квизден кийин сүйлөм түзүү же карточка режими маалыматты узагыраак сактоого жардам берет.'
-          : 'Ката кеткен жооптор буга чейин эле прогресске review item болуп жазылды. Аларды карточка режиминде кайра жабуу ылдамыраак бекемдейт.',
+          ? context.tr(
+              ky: 'Квизден кийин сүйлөм түзүү же карточка режими маалыматты узагыраак сактоого жардам берет.',
+              en: 'After the quiz, sentence building or flashcards help retain the material longer.',
+              ru: 'После квиза построение предложений или карточки помогают дольше удерживать материал.',
+            )
+          : context.tr(
+              ky: 'Ката кеткен жооптор буга чейин эле прогресске review item болуп жазылды. Аларды карточка режиминде кайра жабуу ылдамыраак бекемдейт.',
+              en: 'Incorrect answers are already added to progress as review items. Closing them in flashcards reinforces them faster.',
+              ru: 'Ошибочные ответы уже записаны в прогресс как элементы повторения. Закрыть их в карточках получится быстрее.',
+            ),
       tagsTitle: mistakeTags.isNotEmpty
-          ? 'Кайра кароого калган суроолор'
+          ? context.tr(
+              ky: 'Кайра кароого калган суроолор',
+              en: 'Questions left for review',
+              ru: 'Вопросы, оставшиеся на повторение',
+            )
           : null,
       tags: mistakeTags,
       primaryAction: SessionSummaryAction(
@@ -420,26 +554,50 @@ class _QuizSummary extends StatelessWidget {
       ),
       secondaryAction: SessionSummaryAction(
         label: mistakeTags.isNotEmpty
-            ? 'Каталарды кайра өтүү'
-            : 'Квизди кайра баштоо',
+            ? context.tr(
+                ky: 'Каталарды кайра өтүү',
+                en: 'Retry mistakes',
+                ru: 'Повторить ошибки',
+              )
+            : context.tr(
+                ky: 'Квизди кайра баштоо',
+                en: 'Restart quiz',
+                ru: 'Начать квиз заново',
+              ),
         onPressed: mistakeTags.isNotEmpty
             ? provider.reviewMistakesAgain
             : provider.restartFull,
         variant: AppButtonVariant.outlined,
       ),
-      tertiaryLabel: 'Практикага кайтуу',
+      tertiaryLabel: context.tr(
+        ky: 'Практикага кайтуу',
+        en: 'Back to practice',
+        ru: 'Вернуться к практике',
+      ),
       onTertiaryTap: () => context.go('/practice'),
     );
   }
 
-  String _headline(int accuracy) {
+  String _headline(BuildContext context, int accuracy) {
     if (provider.reviewSucceeded && accuracy >= 80) {
-      return 'Жакшы текшерүү болду';
+      return context.tr(
+        ky: 'Жакшы текшерүү болду',
+        en: 'Strong check',
+        ru: 'Хорошая проверка',
+      );
     }
     if (accuracy >= 60) {
-      return 'Негизги темп жакшы';
+      return context.tr(
+        ky: 'Негизги темп жакшы',
+        en: 'Core pace looks good',
+        ru: 'Базовый темп хороший',
+      );
     }
-    return 'Дагы бир айлампа жардам берет';
+    return context.tr(
+      ky: 'Дагы бир айлампа жардам берет',
+      en: 'One more round will help',
+      ru: 'Ещё один круг поможет',
+    );
   }
 }
 
@@ -467,7 +625,17 @@ class _AnswerFeedbackCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            isCorrect ? 'Туура жооп' : 'Жооп түшүндүрмөсү',
+            isCorrect
+                ? context.tr(
+                    ky: 'Туура жооп',
+                    en: 'Correct answer',
+                    ru: 'Правильный ответ',
+                  )
+                : context.tr(
+                    ky: 'Жооп түшүндүрмөсү',
+                    en: 'Answer explanation',
+                    ru: 'Пояснение ответа',
+                  ),
             style: AppTextStyles.body.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w700,
@@ -476,14 +644,26 @@ class _AnswerFeedbackCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             isCorrect
-                ? 'Сиз туура вариантты тандадыңыз: $correct'
-                : 'Сиз тандадыңыз: ${selected ?? 'жооп жок'}',
+                ? context.tr(
+                    ky: 'Сиз туура вариантты тандадыңыз: $correct',
+                    en: 'You chose the correct option: $correct',
+                    ru: 'Вы выбрали правильный вариант: $correct',
+                  )
+                : context.tr(
+                    ky: 'Сиз тандадыңыз: ${selected ?? 'жооп жок'}',
+                    en: 'You selected: ${selected ?? 'no answer'}',
+                    ru: 'Вы выбрали: ${selected ?? 'нет ответа'}',
+                  ),
             style: AppTextStyles.body.copyWith(color: Colors.white),
           ),
           if (!isCorrect) ...[
             const SizedBox(height: 4),
             Text(
-              'Туурасы: $correct',
+              context.tr(
+                ky: 'Туурасы: $correct',
+                en: 'Correct: $correct',
+                ru: 'Правильно: $correct',
+              ),
               style: AppTextStyles.body.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,

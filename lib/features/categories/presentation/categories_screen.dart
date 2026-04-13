@@ -5,21 +5,24 @@ import 'package:go_router/go_router.dart';
 import '../../../app/providers/app_providers.dart';
 import '../../../core/localization/app_copy.dart';
 import '../../../core/utils/app_colors.dart';
-import '../../../core/utils/app_assets.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../data/models/category_model.dart';
 import '../../../shared/widgets/app_button.dart';
-import '../../../shared/widgets/app_card.dart';
-import '../../../shared/widgets/app_chip.dart';
 import '../../../shared/widgets/app_shell.dart';
 import '../../../shared/widgets/app_state_views.dart';
+import '../../../shared/widgets/learning_direction_nav_button.dart';
 import '../../profile/providers/progress_provider.dart';
 import '../providers/categories_provider.dart';
 
 class CategoriesScreen extends ConsumerStatefulWidget {
-  const CategoriesScreen({super.key, this.showAppBar = true});
+  const CategoriesScreen({
+    super.key,
+    this.showAppBar = true,
+    this.homeMode = false,
+  });
 
   final bool showAppBar;
+  final bool homeMode;
 
   @override
   ConsumerState<CategoriesScreen> createState() => _CategoriesScreenState();
@@ -37,606 +40,614 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final wordsRepo = ref.read(wordsRepositoryProvider);
     final categoriesState = ref.watch(categoriesProvider);
     final progress = ref.watch(progressProvider);
+    final wordsRepo = ref.read(wordsRepositoryProvider);
     final categories = categoriesState.categories;
 
-    final roadmapItems = categories.asMap().entries.map((entry) {
+    if (categoriesState.isLoading && categories.isEmpty) {
+      return AppShell(
+        title: _shellTitle(context),
+        subtitle: _shellSubtitle(context),
+        activeTab: AppTab.learn,
+        showTopNav: widget.showAppBar,
+        topNavTrailing: const LearningDirectionNavButton(),
+        topNavTrailingWidth: 108,
+        child: AppLoadingState(
+          title: context.tr(
+            ky: 'Сабактар жүктөлүүдө',
+            en: 'Lessons are loading',
+            ru: 'Уроки загружаются',
+          ),
+          message: context.tr(
+            ky: 'Жол картасы даярдалып жатат.',
+            en: 'The roadmap is being prepared.',
+            ru: 'Дорожная карта подготавливается.',
+          ),
+        ),
+      );
+    }
+
+    if (categoriesState.errorMessage != null && categories.isEmpty) {
+      return AppShell(
+        title: _shellTitle(context),
+        subtitle: _shellSubtitle(context),
+        activeTab: AppTab.learn,
+        showTopNav: widget.showAppBar,
+        topNavTrailing: const LearningDirectionNavButton(),
+        topNavTrailingWidth: 108,
+        child: AppErrorState(
+          message: categoriesState.errorMessage!,
+          onAction: () => ref.read(categoriesProvider).load(force: true),
+        ),
+      );
+    }
+
+    if (categories.isEmpty) {
+      return AppShell(
+        title: _shellTitle(context),
+        subtitle: _shellSubtitle(context),
+        activeTab: AppTab.learn,
+        showTopNav: widget.showAppBar,
+        topNavTrailing: const LearningDirectionNavButton(),
+        topNavTrailingWidth: 108,
+        child: AppEmptyState(
+          title: context.tr(
+            ky: 'Сабактар табылган жок',
+            en: 'No lessons found',
+            ru: 'Уроки не найдены',
+          ),
+          message: context.tr(
+            ky: 'Азырынча категория жок.',
+            en: 'No categories available yet.',
+            ru: 'Категории пока недоступны.',
+          ),
+          icon: Icons.map_outlined,
+          actionLabel: context.tr(
+            ky: 'Кайра жүктөө',
+            en: 'Reload',
+            ru: 'Обновить',
+          ),
+          onAction: () => ref.read(categoriesProvider).load(force: true),
+        ),
+      );
+    }
+
+    final steps = categories.asMap().entries.map((entry) {
       final index = entry.key;
       final category = entry.value;
       final words = wordsRepo.getCachedWords(category.id);
-      final mastery = progress.completionForCategory(words);
-      final remaining = (words.length - (words.length * mastery))
-          .clamp(0, words.length)
-          .round();
-      final unlockThreshold = index * 5;
-      final locked = index > 0 && progress.totalWordsMastered < unlockThreshold;
-      final completed = mastery >= 0.9;
-      final active = !locked && mastery > 0 && mastery < 0.9;
-      return _RoadmapItem(
+      final completion = progress.completionForCategory(words);
+      final unlockTarget = index * 5;
+      final locked = index > 0 && progress.totalWordsMastered < unlockTarget;
+      final isCompleted = completion >= 0.95;
+      final isActive = !locked && completion > 0 && completion < 0.95;
+      final status = locked
+          ? _JourneyStepStatus.locked
+          : isCompleted
+          ? _JourneyStepStatus.completed
+          : isActive
+          ? _JourneyStepStatus.active
+          : _JourneyStepStatus.unlocked;
+
+      return _JourneyStep(
         category: category,
-        index: index + 1,
-        mastery: mastery,
-        remaining: remaining,
-        locked: locked,
-        completed: completed,
-        active: active,
-        reviewDue: progress.reviewDueForCategory(words),
+        index: index,
         wordsCount: words.length,
+        completion: completion,
+        reviewDue: progress.reviewDueForCategory(words),
+        status: status,
       );
     }).toList();
 
-    final nextLesson = _resolveNextLesson(roadmapItems);
-    final unlockedCount = roadmapItems.where((item) => !item.locked).length;
-    final completedCount = roadmapItems.where((item) => item.completed).length;
-    final totalReviewDue = roadmapItems.fold<int>(
+    final completedCount = steps
+        .where((step) => step.status == _JourneyStepStatus.completed)
+        .length;
+    final totalReviewDue = steps.fold<int>(
       0,
-      (sum, item) => sum + item.reviewDue,
+      (sum, step) => sum + step.reviewDue,
     );
+    final primaryStep = _resolvePrimaryStep(steps);
 
-    final content = ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      children: [
-        AppChip(
-          label: context.tr(ky: '1-деңгээл', en: 'Level 1', ru: '1 уровень'),
-          variant: AppChipVariant.primary,
-        ),
-        const SizedBox(height: 12),
-        Text(
-          context.tr(ky: 'Жол картасы', en: 'Roadmap', ru: 'Дорожная карта'),
-          style: AppTextStyles.heading.copyWith(fontSize: 28),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          context.tr(
-            ky: 'Ачылган сабактарды жана кийинки кадамды көрүңүз.',
-            en: 'See unlocked lessons and the next best step.',
-            ru: 'Смотрите открытые уроки и следующий лучший шаг.',
+    return AppShell(
+      title: _shellTitle(context),
+      subtitle: _shellSubtitle(context),
+      activeTab: AppTab.learn,
+      showTopNav: widget.showAppBar,
+      topNavTrailing: const LearningDirectionNavButton(),
+      topNavTrailingWidth: 108,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+        children: [
+          Text(
+            context.tr(ky: 'Сиздин жол', en: 'Your journey', ru: 'Ваш путь'),
+            style: AppTextStyles.heading.copyWith(fontSize: 30),
           ),
-          style: AppTextStyles.body.copyWith(color: AppColors.muted),
-        ),
-        const SizedBox(height: 20),
-        AppCard(
-          gradient: true,
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          const SizedBox(height: 6),
+          Text(
+            context.tr(
+              ky: 'Ар бир теманы бүтүрүп, кийинкисин ачыңыз.',
+              en: 'Complete each lesson to unlock the next one.',
+              ru: 'Завершайте уроки, чтобы открыть следующие.',
+            ),
+            style: AppTextStyles.body.copyWith(color: AppColors.muted),
+          ),
+          const SizedBox(height: 14),
+          _OverallProgressCard(
+            completedCount: completedCount,
+            totalCount: steps.length,
+            reviewDue: totalReviewDue,
+            onContinue: primaryStep == null
+                ? () => context.push('/practice')
+                : () => context.push('/flashcards/${primaryStep.category.id}'),
+          ),
+          const SizedBox(height: 14),
+          Stack(
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _GlassTag(
-                          label: context.tr(
-                            ky: '$unlockedCount ачылган',
-                            en: '$unlockedCount unlocked',
-                            ru: '$unlockedCount открыто',
-                          ),
-                        ),
-                        _GlassTag(
-                          label: context.tr(
-                            ky: '$completedCount аяктаган',
-                            en: '$completedCount complete',
-                            ru: '$completedCount завершено',
-                          ),
-                        ),
-                        _GlassTag(
-                          label: context.tr(
-                            ky: '$totalReviewDue кайталоо',
-                            en: '$totalReviewDue review due',
-                            ru: '$totalReviewDue на повторе',
-                          ),
-                        ),
-                      ],
-                    ),
+              Positioned(
+                left: 18,
+                top: 12,
+                bottom: 20,
+                child: Container(
+                  width: 3,
+                  decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(999),
                   ),
-                  const SizedBox(width: 12),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.asset(
-                      AppAssets.yurt,
-                      width: 84,
-                      height: 84,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Text(
-                nextLesson != null
-                    ? context.tr(
-                        ky: 'Кийинки эң жакшы сабак',
-                        en: 'Best next lesson',
-                        ru: 'Лучший следующий урок',
-                      )
-                    : context.tr(
-                        ky: 'Жол даяр',
-                        en: 'Roadmap ready',
-                        ru: 'Карта готова',
-                      ),
-                style: AppTextStyles.body.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                nextLesson?.category.title ??
-                    context.tr(
-                      ky: 'Бардык учурдагы сабактар бүткөн',
-                      en: 'All current lessons are complete',
-                      ru: 'Все текущие уроки завершены',
-                    ),
-                style: AppTextStyles.heading.copyWith(
-                  color: Colors.white,
-                  fontSize: 28,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                nextLesson != null
-                    ? nextLesson.active
-                          ? context.tr(
-                              ky: 'Улантууга даяр.',
-                              en: 'Ready to continue.',
-                              ru: 'Готово к продолжению.',
-                            )
-                          : context.tr(
-                              ky: 'Жаңы циклди ушул жерден баштаңыз.',
-                              en: 'Start a new cycle from here.',
-                              ru: 'Начните новый цикл отсюда.',
-                            )
-                    : context.tr(
-                        ky: 'Эми Практикага өтүңүз.',
-                        en: 'Now continue to Practice.',
-                        ru: 'Теперь переходите к практике.',
-                      ),
-                style: AppTextStyles.body.copyWith(
-                  color: Colors.white.withValues(alpha: 0.9),
-                ),
-              ),
-              const SizedBox(height: 18),
-              AppButton(
-                fullWidth: true,
-                onPressed: nextLesson == null
-                    ? () => context.push('/practice')
-                    : () =>
-                          context.push('/flashcards/${nextLesson.category.id}'),
-                child: Text(
-                  nextLesson == null
-                      ? context.tr(
-                          ky: 'Практикага өтүү',
-                          en: 'Go to Practice',
-                          ru: 'Перейти к практике',
-                        )
-                      : context.tr(
-                          ky: 'Сабакты ачуу',
-                          en: 'Open lesson',
-                          ru: 'Открыть урок',
-                        ),
-                ),
+              Column(
+                children: steps.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final step = entry.value;
+                  return _JourneyStepTile(
+                    step: step,
+                    isLast: index == steps.length - 1,
+                    onTap: step.status == _JourneyStepStatus.locked
+                        ? null
+                        : () => context.push('/flashcards/${step.category.id}'),
+                  );
+                }).toList(),
               ),
             ],
           ),
-        ),
-        const SizedBox(height: 20),
-        if (categoriesState.isLoading && categories.isEmpty)
-          const SizedBox(
-            height: 260,
-            child: AppLoadingState(
-              title: 'Сабактар жүктөлүүдө',
-              message: 'Жол картасы жана статус белгилери даярдалып жатат.',
-            ),
-          )
-        else if (categoriesState.errorMessage != null && categories.isEmpty)
-          SizedBox(
-            height: 280,
-            child: AppErrorState(
-              message: categoriesState.errorMessage!,
-              onAction: () => ref.read(categoriesProvider).load(force: true),
-            ),
-          )
-        else if (categories.isEmpty)
-          SizedBox(
-            height: 280,
-            child: AppEmptyState(
-              title: context.tr(
-                ky: 'Сабактар табылган жок',
-                en: 'No lessons found',
-                ru: 'Уроки не найдены',
-              ),
-              message: context.tr(
-                ky: 'Азырынча категория жок.',
-                en: 'No categories available yet.',
-                ru: 'Категории пока недоступны.',
-              ),
-              icon: Icons.menu_book_outlined,
-              actionLabel: context.tr(
-                ky: 'Кайра жүктөө',
-                en: 'Reload',
-                ru: 'Обновить',
-              ),
-              onAction: () => ref.read(categoriesProvider).load(force: true),
-            ),
-          )
-        else ...[
-          Text(
-            context.tr(
-              ky: 'Сабактардын ирети',
-              en: 'Lesson order',
-              ru: 'Порядок уроков',
-            ),
-            style: AppTextStyles.title,
-          ),
-          const SizedBox(height: 12),
-          ...roadmapItems.asMap().entries.map((entry) {
-            final index = entry.key;
-            final item = entry.value;
-            final highlighted =
-                nextLesson != null &&
-                nextLesson.category.id == item.category.id;
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 14),
-              child: _RoadmapEntry(
-                item: item,
-                highlighted: highlighted,
-                showConnector: index != roadmapItems.length - 1,
-                onTap: item.locked
-                    ? null
-                    : () => context.push('/flashcards/${item.category.id}'),
-              ),
-            );
-          }),
         ],
-      ],
-    );
-
-    return AppShell(
-      title: context.tr(ky: 'Жол картасы', en: 'Roadmap', ru: 'Дорожная карта'),
-      subtitle: context.tr(
-        ky: 'Сабактардын ирети жана статусу',
-        en: 'Lesson order and status',
-        ru: 'Порядок уроков и статус',
       ),
-      activeTab: AppTab.learn,
-      child: content,
     );
   }
 
-  _RoadmapItem? _resolveNextLesson(List<_RoadmapItem> items) {
-    for (final item in items) {
-      if (item.active) return item;
+  _JourneyStep? _resolvePrimaryStep(List<_JourneyStep> steps) {
+    for (final step in steps) {
+      if (step.status == _JourneyStepStatus.active) {
+        return step;
+      }
     }
-    for (final item in items) {
-      if (!item.locked && !item.completed) return item;
-    }
-    for (final item in items) {
-      if (!item.locked) return item;
+    for (final step in steps) {
+      if (step.status == _JourneyStepStatus.unlocked) {
+        return step;
+      }
     }
     return null;
   }
-}
 
-class _RoadmapEntry extends StatelessWidget {
-  const _RoadmapEntry({
-    required this.item,
-    required this.highlighted,
-    required this.showConnector,
-    this.onTap,
-  });
+  String _shellTitle(BuildContext context) {
+    if (widget.homeMode) {
+      return context.tr(ky: 'Башкы', en: 'Home', ru: 'Главная');
+    }
+    return context.tr(ky: 'Жол картасы', en: 'Roadmap', ru: 'Дорожная карта');
+  }
 
-  final _RoadmapItem item;
-  final bool highlighted;
-  final bool showConnector;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final markerColor = item.locked
-        ? AppColors.muted
-        : item.completed
-        ? AppColors.success
-        : item.active
-        ? AppColors.primary
-        : AppColors.accent;
-
-    return Stack(
-      children: [
-        if (showConnector)
-          Positioned(
-            left: 8,
-            top: 18,
-            bottom: 0,
-            child: Container(width: 2, color: AppColors.border),
-          ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 28,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  width: 18,
-                  height: 18,
-                  decoration: BoxDecoration(
-                    color: markerColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: highlighted ? Colors.white : markerColor,
-                      width: highlighted ? 2 : 0,
-                    ),
-                    boxShadow: highlighted
-                        ? [
-                            BoxShadow(
-                              color: markerColor.withValues(alpha: 0.35),
-                              blurRadius: 16,
-                              offset: const Offset(0, 6),
-                            ),
-                          ]
-                        : null,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _LessonCard(
-                item: item,
-                highlighted: highlighted,
-                onTap: onTap,
-              ),
-            ),
-          ],
-        ),
-      ],
+  String _shellSubtitle(BuildContext context) {
+    return context.tr(
+      ky: 'Саякатыңыздын баскычтары',
+      en: 'Your journey steps',
+      ru: 'Шаги вашего пути',
     );
   }
 }
 
-class _LessonCard extends StatelessWidget {
-  const _LessonCard({
-    required this.item,
-    required this.highlighted,
+class _OverallProgressCard extends StatelessWidget {
+  const _OverallProgressCard({
+    required this.completedCount,
+    required this.totalCount,
+    required this.reviewDue,
+    required this.onContinue,
+  });
+
+  final int completedCount;
+  final int totalCount;
+  final int reviewDue;
+  final VoidCallback onContinue;
+
+  @override
+  Widget build(BuildContext context) {
+    final progress = totalCount == 0 ? 0.0 : completedCount / totalCount;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                context.tr(
+                  ky: 'Жалпы прогресс',
+                  en: 'Overall progress',
+                  ru: 'Общий прогресс',
+                ),
+                style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700),
+              ),
+              const Spacer(),
+              Text(
+                '$completedCount/$totalCount',
+                style: AppTextStyles.body.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(999),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 8,
+              backgroundColor: AppColors.mutedSurface,
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _MetricPill(
+                label: context.tr(
+                  ky: '$reviewDue кайталоо даяр',
+                  en: '$reviewDue reviews due',
+                  ru: '$reviewDue готовы к повторению',
+                ),
+              ),
+              _MetricPill(
+                label: context.tr(
+                  ky: '${(progress * 100).round()}% бүттү',
+                  en: '${(progress * 100).round()}% complete',
+                  ru: '${(progress * 100).round()}% завершено',
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          AppButton(
+            fullWidth: true,
+            onPressed: onContinue,
+            child: Text(
+              context.tr(
+                ky: 'Жолду улантуу',
+                en: 'Continue journey',
+                ru: 'Продолжить путь',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _JourneyStepTile extends StatelessWidget {
+  const _JourneyStepTile({
+    required this.step,
+    required this.isLast,
     this.onTap,
   });
 
-  final _RoadmapItem item;
-  final bool highlighted;
+  final _JourneyStep step;
+  final bool isLast;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = highlighted
-        ? AppColors.primary.withValues(alpha: 0.07)
-        : null;
-    final borderColor = highlighted
-        ? AppColors.primary.withValues(alpha: 0.28)
-        : null;
+    final statusConfig = _statusConfig(context, step.status);
+    final xOffset = _offsetForIndex(step.index);
 
-    return Opacity(
-      opacity: item.locked ? 0.56 : 1,
-      child: AppCard(
-        padding: const EdgeInsets.all(18),
-        backgroundColor: backgroundColor,
-        borderColor: borderColor,
-        onTap: onTap,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final badge = AppChip(
-                  label: _statusLabel(),
-                  variant: item.locked
-                      ? AppChipVariant.defaultChip
-                      : item.completed
-                      ? AppChipVariant.success
-                      : item.active
-                      ? AppChipVariant.primary
-                      : AppChipVariant.accent,
-                );
-                final titleBlock = Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Сабак ${item.index.toString().padLeft(2, '0')}',
-                      style: AppTextStyles.caption,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      item.category.title,
-                      style: AppTextStyles.body.copyWith(
-                        fontWeight: FontWeight.w700,
+    return Padding(
+      padding: EdgeInsets.only(bottom: isLast ? 0 : 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 38,
+            child: Column(
+              children: [
+                _StatusNode(
+                  background: statusConfig.nodeBackground,
+                  borderColor: statusConfig.nodeBorder,
+                  icon: statusConfig.icon,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Transform.translate(
+              offset: Offset(xOffset, 0),
+              child: Opacity(
+                opacity: step.status == _JourneyStepStatus.locked ? 0.7 : 1,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: onTap,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Ink(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: statusConfig.cardBorder,
+                          width: step.status == _JourneyStepStatus.active
+                              ? 2
+                              : 1.4,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: statusConfig.shadow,
+                            blurRadius: step.status == _JourneyStepStatus.active
+                                ? 16
+                                : 10,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      step.category.title,
+                                      style: AppTextStyles.body.copyWith(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      context.tr(
+                                        ky: '${step.wordsCount} сөз · ${statusConfig.label}',
+                                        en: '${step.wordsCount} words · ${statusConfig.label}',
+                                        ru: '${step.wordsCount} слов · ${statusConfig.label}',
+                                      ),
+                                      style: AppTextStyles.caption.copyWith(
+                                        color: statusConfig.captionColor,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.mutedSurface,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  '${step.index + 1}',
+                                  style: AppTextStyles.caption.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (step.status != _JourneyStepStatus.locked) ...[
+                            const SizedBox(height: 12),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(999),
+                              child: LinearProgressIndicator(
+                                value: step.completion,
+                                minHeight: 7,
+                                backgroundColor: AppColors.mutedSurface,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  step.status == _JourneyStepStatus.completed
+                                      ? AppColors.success
+                                      : AppColors.primary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
-                  ],
-                );
-
-                if (constraints.maxWidth < 220) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [titleBlock, const SizedBox(height: 8), badge],
-                  );
-                }
-
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(child: titleBlock),
-                    const SizedBox(width: 8),
-                    badge,
-                  ],
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            Text(item.category.description, style: AppTextStyles.muted),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                AppChip(
-                  label: '${item.wordsCount} сөз',
-                  variant: AppChipVariant.defaultChip,
+                  ),
                 ),
-                if (!item.locked) ...[
-                  const SizedBox(width: 8),
-                  AppChip(
-                    label: item.reviewDue > 0
-                        ? '${item.reviewDue} кайталоо'
-                        : '${item.remaining} калды',
-                    variant: item.reviewDue > 0
-                        ? AppChipVariant.accent
-                        : AppChipVariant.defaultChip,
-                  ),
-                ],
-              ],
-            ),
-            const SizedBox(height: 12),
-            if (!item.locked) ...[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Прогресс', style: AppTextStyles.muted),
-                  Text(
-                    '${(item.mastery * 100).round()}%',
-                    style: AppTextStyles.body.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
               ),
-              const SizedBox(height: 6),
-              _ProgressBar(value: item.mastery, color: AppColors.primary),
-              const SizedBox(height: 12),
-            ] else ...[
-              Text(
-                'Бул сабак ачылышы үчүн мурунку бөлүктөрдү бүтүрүңүз.',
-                style: AppTextStyles.muted,
-              ),
-              const SizedBox(height: 12),
-            ],
-            Row(
-              children: [
-                Text(
-                  _actionLabel(),
-                  style: AppTextStyles.body.copyWith(
-                    color: item.locked ? AppColors.muted : AppColors.primary,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Icon(
-                  item.locked ? Icons.lock : Icons.chevron_right,
-                  size: 18,
-                  color: item.locked ? AppColors.muted : AppColors.primary,
-                ),
-              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  String _statusLabel() {
-    if (item.locked) return 'Кулпуланган';
-    if (item.completed) return 'Аяктады';
-    if (item.active) return 'Улантуу';
-    return 'Кийинки';
+  double _offsetForIndex(int index) {
+    switch (index % 3) {
+      case 1:
+        return 8;
+      case 2:
+        return -8;
+      default:
+        return 0;
+    }
   }
 
-  String _actionLabel() {
-    if (item.locked) return 'Азырынча ачылган жок';
-    if (item.active) return 'Улантуу';
-    if (item.completed) return 'Кайра өтүү';
-    return 'Баштоо';
+  _StepVisualConfig _statusConfig(
+    BuildContext context,
+    _JourneyStepStatus status,
+  ) {
+    switch (status) {
+      case _JourneyStepStatus.completed:
+        return _StepVisualConfig(
+          label: context.tr(ky: 'Бүттү', en: 'Completed', ru: 'Завершено'),
+          icon: const Icon(Icons.check, size: 18, color: Colors.white),
+          nodeBackground: AppColors.success,
+          nodeBorder: Colors.transparent,
+          cardBorder: AppColors.success.withValues(alpha: 0.35),
+          captionColor: AppColors.success,
+          shadow: AppColors.success.withValues(alpha: 0.16),
+        );
+      case _JourneyStepStatus.active:
+        return _StepVisualConfig(
+          label: context.tr(ky: 'Учурдагы', en: 'Current', ru: 'Текущий'),
+          icon: Container(
+            width: 10,
+            height: 10,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+          ),
+          nodeBackground: AppColors.primary,
+          nodeBorder: AppColors.primary.withValues(alpha: 0.15),
+          cardBorder: AppColors.primary,
+          captionColor: AppColors.primary,
+          shadow: AppColors.primary.withValues(alpha: 0.18),
+        );
+      case _JourneyStepStatus.unlocked:
+        return _StepVisualConfig(
+          label: context.tr(ky: 'Ачык', en: 'Open', ru: 'Открыто'),
+          icon: Icon(Icons.circle_outlined, size: 16, color: AppColors.primary),
+          nodeBackground: AppColors.surface,
+          nodeBorder: AppColors.primary.withValues(alpha: 0.32),
+          cardBorder: AppColors.border,
+          captionColor: AppColors.muted,
+          shadow: Colors.black.withValues(alpha: 0.06),
+        );
+      case _JourneyStepStatus.locked:
+        return _StepVisualConfig(
+          label: context.tr(ky: 'Кулпуланган', en: 'Locked', ru: 'Закрыто'),
+          icon: Icon(Icons.lock, size: 14, color: AppColors.muted),
+          nodeBackground: AppColors.mutedSurface,
+          nodeBorder: Colors.transparent,
+          cardBorder: AppColors.border,
+          captionColor: AppColors.muted,
+          shadow: Colors.black.withValues(alpha: 0.04),
+        );
+    }
   }
 }
 
-class _ProgressBar extends StatelessWidget {
-  const _ProgressBar({required this.value, required this.color});
+class _StatusNode extends StatelessWidget {
+  const _StatusNode({
+    required this.background,
+    required this.borderColor,
+    required this.icon,
+  });
 
-  final double value;
-  final Color color;
+  final Color background;
+  final Color borderColor;
+  final Widget icon;
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final width = constraints.maxWidth * value.clamp(0, 1);
-        return Container(
-          height: 8,
-          decoration: BoxDecoration(
-            color: AppColors.mutedSurface,
-            borderRadius: BorderRadius.circular(999),
-          ),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              width: width,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [color, const Color(0xFFF7C15C)],
-                ),
-                borderRadius: BorderRadius.circular(999),
-              ),
-            ),
-          ),
-        );
-      },
+    return Container(
+      width: 36,
+      height: 36,
+      decoration: BoxDecoration(
+        color: background,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: borderColor,
+          width: borderColor == Colors.transparent ? 0 : 2,
+        ),
+      ),
+      alignment: Alignment.center,
+      child: icon,
     );
   }
 }
 
-class _GlassTag extends StatelessWidget {
-  const _GlassTag({required this.label});
+class _MetricPill extends StatelessWidget {
+  const _MetricPill({required this.label});
 
   final String label;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.18),
+        color: AppColors.mutedSurface,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.24)),
       ),
       child: Text(
         label,
-        style: AppTextStyles.caption.copyWith(color: Colors.white),
+        style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }
 }
 
-class _RoadmapItem {
-  const _RoadmapItem({
+class _StepVisualConfig {
+  const _StepVisualConfig({
+    required this.label,
+    required this.icon,
+    required this.nodeBackground,
+    required this.nodeBorder,
+    required this.cardBorder,
+    required this.captionColor,
+    required this.shadow,
+  });
+
+  final String label;
+  final Widget icon;
+  final Color nodeBackground;
+  final Color nodeBorder;
+  final Color cardBorder;
+  final Color captionColor;
+  final Color shadow;
+}
+
+enum _JourneyStepStatus { completed, active, unlocked, locked }
+
+class _JourneyStep {
+  const _JourneyStep({
     required this.category,
     required this.index,
-    required this.mastery,
-    required this.remaining,
-    required this.locked,
-    required this.completed,
-    required this.active,
-    required this.reviewDue,
     required this.wordsCount,
+    required this.completion,
+    required this.reviewDue,
+    required this.status,
   });
 
   final CategoryModel category;
   final int index;
-  final double mastery;
-  final int remaining;
-  final bool locked;
-  final bool completed;
-  final bool active;
-  final int reviewDue;
   final int wordsCount;
+  final double completion;
+  final int reviewDue;
+  final _JourneyStepStatus status;
 }

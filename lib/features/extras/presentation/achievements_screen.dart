@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/localization/app_copy.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../data/models/achievement_rule_model.dart';
@@ -9,7 +10,9 @@ import '../providers/content_config_provider.dart';
 import '../../profile/providers/progress_provider.dart';
 
 class AchievementsScreen extends ConsumerWidget {
-  const AchievementsScreen({super.key});
+  const AchievementsScreen({super.key, this.backFallbackRoute = '/progress'});
+
+  final String backFallbackRoute;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,11 +21,19 @@ class AchievementsScreen extends ConsumerWidget {
     final trophies = rulesAsync.valueOrNull ?? AchievementRuleModel.fallback;
 
     return AppShell(
-      title: 'Жетишкендиктер',
-      subtitle: 'Ачылган жана алдыдагы белгилер',
+      title: context.tr(
+        ky: 'Жетишкендиктер',
+        en: 'Achievements',
+        ru: 'Достижения',
+      ),
+      subtitle: context.tr(
+        ky: 'Ачылган жана алдыдагы белгилер',
+        en: 'Unlocked and upcoming badges',
+        ru: 'Открытые и предстоящие достижения',
+      ),
       activeTab: AppTab.progress,
       navigationMode: AppShellNavigationMode.back,
-      backFallbackRoute: '/progress',
+      backFallbackRoute: backFallbackRoute,
       showBottomNav: false,
       child: ListView.separated(
         padding: const EdgeInsets.all(16),
@@ -46,8 +57,8 @@ class AchievementsScreen extends ConsumerWidget {
               unlocked ? Icons.emoji_events : Icons.lock_outline,
               color: unlocked ? Colors.amber : Colors.grey,
             ),
-            title: Text(item.title, style: AppTextStyles.title),
-            subtitle: Text(item.description),
+            title: Text(item.titleOf(context), style: AppTextStyles.title),
+            subtitle: Text(item.descriptionOf(context)),
             trailing: unlocked
                 ? const Icon(Icons.check, color: Colors.green)
                 : null,

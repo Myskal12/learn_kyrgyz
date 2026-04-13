@@ -41,7 +41,7 @@ class SentenceBuilderProvider extends ChangeNotifier {
   bool _answered = false;
   bool _lastCorrect = false;
   String _categoryId = '';
-  LearningDirection _direction = LearningDirection.enToKy;
+  LearningDirection _direction = LearningDirection.kyToEn;
   String? _errorMessage;
   bool _completionTracked = false;
   DateTime? _sessionStartedAt;
@@ -90,7 +90,7 @@ class SentenceBuilderProvider extends ChangeNotifier {
 
   Future<void> load(
     String categoryId, {
-    LearningDirection direction = LearningDirection.enToKy,
+    LearningDirection direction = LearningDirection.kyToEn,
   }) async {
     _categoryId = categoryId;
     _direction = direction;

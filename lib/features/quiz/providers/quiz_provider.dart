@@ -36,7 +36,7 @@ class QuizProvider extends ChangeNotifier {
   int _mainWrong = 0;
   int _reviewCorrect = 0;
   int _reviewWrong = 0;
-  LearningDirection _direction = LearningDirection.enToKy;
+  LearningDirection _direction = LearningDirection.kyToEn;
   String? _errorMessage;
   String _categoryId = '';
   bool _completionTracked = false;

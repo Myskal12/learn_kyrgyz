@@ -10,6 +10,8 @@ class AppCard extends StatelessWidget {
     required this.child,
     this.onTap,
     this.gradient = false,
+    this.showShadow = true,
+    this.showOverlay = true,
     this.radius = AppCardRadius.xl,
     this.padding,
     this.backgroundColor,
@@ -19,6 +21,8 @@ class AppCard extends StatelessWidget {
   final Widget child;
   final VoidCallback? onTap;
   final bool gradient;
+  final bool showShadow;
+  final bool showOverlay;
   final AppCardRadius radius;
   final EdgeInsets? padding;
   final Color? backgroundColor;
@@ -37,10 +41,9 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = AppColors.isDark;
     final decoration = BoxDecoration(
-      color: gradient
-          ? null
-          : (backgroundColor ?? AppColors.surface.withValues(alpha: 0.9)),
+      color: gradient ? null : (backgroundColor ?? AppColors.surface),
       gradient: gradient
           ? LinearGradient(
               colors: [
@@ -57,40 +60,45 @@ class AppCard extends StatelessWidget {
             ? Colors.white.withValues(alpha: 0.08)
             : (borderColor ?? AppColors.border),
       ),
-      boxShadow: [
-        BoxShadow(
-          color: gradient
-              ? AppColors.primary.withValues(alpha: 0.2)
-              : AppColors.cardShadow,
-          blurRadius: gradient ? 28 : 22,
-          offset: Offset(0, gradient ? 14 : 10),
-        ),
-      ],
+      boxShadow: showShadow
+          ? [
+              BoxShadow(
+                color: gradient
+                    ? AppColors.primary.withValues(alpha: 0.2)
+                    : AppColors.cardShadow,
+                blurRadius: gradient ? 26 : 18,
+                offset: Offset(0, gradient ? 14 : 8),
+              ),
+            ]
+          : const [],
     );
 
     final content = ClipRRect(
       borderRadius: BorderRadius.circular(_radiusValue),
       child: Stack(
         children: [
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: gradient
-                      ? [
-                          Colors.white.withValues(alpha: 0.14),
-                          Colors.transparent,
-                        ]
-                      : [
-                          Colors.white.withValues(alpha: 0.45),
-                          Colors.transparent,
-                        ],
+          if (showOverlay)
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: gradient
+                        ? [
+                            Colors.white.withValues(alpha: 0.14),
+                            Colors.transparent,
+                          ]
+                        : [
+                            Colors.white.withValues(
+                              alpha: isDark ? 0.08 : 0.14,
+                            ),
+                            Colors.transparent,
+                          ],
+                  ),
                 ),
               ),
             ),
-          ),
           Padding(padding: padding ?? EdgeInsets.zero, child: child),
         ],
       ),

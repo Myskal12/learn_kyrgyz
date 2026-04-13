@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/providers/learning_direction_provider.dart';
+import '../../core/localization/app_copy.dart';
 import '../../core/utils/app_colors.dart';
 import '../../core/utils/app_text_styles.dart';
 import '../../core/utils/learning_direction.dart';
@@ -12,12 +13,12 @@ enum LearningDirectionControlTone { light, dark }
 class LearningDirectionControl extends ConsumerWidget {
   const LearningDirectionControl({
     super.key,
-    this.title = 'Көнүгүү багыты',
+    this.title,
     this.subtitle,
     this.tone = LearningDirectionControlTone.light,
   });
 
-  final String title;
+  final String? title;
   final String? subtitle;
   final LearningDirectionControlTone tone;
 
@@ -46,7 +47,12 @@ class LearningDirectionControl extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title,
+            title ??
+                context.tr(
+                  ky: 'Көнүгүү багыты',
+                  en: 'Practice direction',
+                  ru: 'Направление практики',
+                ),
             style: AppTextStyles.body.copyWith(
               color: textColor,
               fontWeight: FontWeight.w700,
@@ -54,7 +60,7 @@ class LearningDirectionControl extends ConsumerWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            subtitle ?? direction.helperText,
+            subtitle ?? direction.helperTextOf(context),
             style: AppTextStyles.muted.copyWith(color: mutedColor),
           ),
           const SizedBox(height: 14),
@@ -169,7 +175,7 @@ class _DirectionOption extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        direction.label,
+                        direction.labelOf(context),
                         style: AppTextStyles.body.copyWith(
                           color: titleColor,
                           fontWeight: FontWeight.w700,
@@ -177,7 +183,11 @@ class _DirectionOption extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Суроо ${direction.promptLanguageLabel}',
+                        context.tr(
+                          ky: 'Суроо ${direction.promptLanguageLabelOf(context)}',
+                          en: 'Prompt in ${direction.promptLanguageLabelOf(context)}',
+                          ru: 'Вопрос на ${direction.promptLanguageLabelOf(context)}',
+                        ),
                         style: AppTextStyles.caption.copyWith(
                           color: subtitleColor,
                         ),

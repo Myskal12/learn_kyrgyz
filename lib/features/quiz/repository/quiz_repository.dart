@@ -15,7 +15,7 @@ class QuizRepository {
   Future<List<QuizQuestionModel>> fetchQuestions(
     String categoryId, {
     int limit = 20,
-    LearningDirection direction = LearningDirection.enToKy,
+    LearningDirection direction = LearningDirection.kyToEn,
   }) async {
     await _wordsRepository.ensureWordsLoaded(categoryId);
 

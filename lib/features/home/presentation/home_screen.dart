@@ -135,7 +135,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      recommendedAction.supportingText,
+                      recommendedAction.supportingTextOf(context),
                       style: AppTextStyles.body.copyWith(
                         color: AppColors.muted,
                       ),
@@ -193,7 +193,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      recommendedAction.subtitle,
+                      recommendedAction.subtitleOf(context),
                       style: AppTextStyles.body.copyWith(
                         color: Colors.white.withValues(alpha: 0.9),
                       ),
@@ -222,7 +222,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     const SizedBox(height: 20),
                     _HeroButton(
-                      label: recommendedAction.primaryLabel,
+                      label: recommendedAction.primaryLabelOf(context),
                       onTap: () => context.push(recommendedAction.primaryRoute),
                     ),
                   ],
@@ -251,21 +251,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Прогрессти сактап калгыңыз келеби?',
+                            context.tr(
+                              ky: 'Прогрессти сактап калгыңыз келеби?',
+                              en: 'Want to save your progress?',
+                              ru: 'Хотите сохранить прогресс?',
+                            ),
                             style: AppTextStyles.body.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Аккаунт ачсаңыз, жыйынтык аккаунтка байланат.',
+                            context.tr(
+                              ky: 'Аккаунт ачсаңыз, жыйынтык аккаунтка байланат.',
+                              en: 'Create an account to link results to it.',
+                              ru: 'Создайте аккаунт, чтобы привязать к нему результаты.',
+                            ),
                             style: AppTextStyles.muted,
                           ),
                           const SizedBox(height: 12),
                           AppButton(
                             size: AppButtonSize.sm,
                             onPressed: () => context.push('/signup'),
-                            child: const Text('Аккаунт ачуу'),
+                            child: Text(
+                              context.tr(
+                                ky: 'Аккаунт ачуу',
+                                en: 'Create account',
+                                ru: 'Создать аккаунт',
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -282,19 +296,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 icon: Icons.local_fire_department,
                 iconColor: AppColors.accent,
                 value: progress.streakDays.toString(),
-                label: 'Серия',
+                label: context.tr(ky: 'Серия', en: 'Streak', ru: 'Серия'),
               ),
               _StatCard(
                 icon: Icons.menu_book,
                 iconColor: AppColors.primary,
                 value: progress.totalWordsMastered.toString(),
-                label: 'Сөздөр',
+                label: context.tr(ky: 'Сөздөр', en: 'Words', ru: 'Слова'),
               ),
               _StatCard(
                 icon: Icons.flash_on_rounded,
                 iconColor: AppColors.warning,
                 value: 'Lv ${progress.journeyLevel}',
-                label: 'Деңгээл',
+                label: context.tr(ky: 'Деңгээл', en: 'Level', ru: 'Уровень'),
               ),
             ],
           ),
@@ -335,8 +349,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (categories.isEmpty) {
       return CategoryModel(
         id: 'basic',
-        title: 'Негизги сабак',
-        description: 'Биринчи сөздөр жана негизги конструкциялар.',
+        title: context.tr(
+          ky: 'Негизги сабак',
+          en: 'Core lesson',
+          ru: 'Базовый урок',
+        ),
+        description: context.tr(
+          ky: 'Биринчи сөздөр жана негизги конструкциялар.',
+          en: 'First words and core patterns.',
+          ru: 'Первые слова и базовые конструкции.',
+        ),
         wordsCount: 0,
       );
     }
@@ -585,10 +607,23 @@ class _DailyMomentumCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final allDone = nextQuest == null;
+    final isDark = AppColors.isDark;
+    final cardBackground = isDark
+        ? AppColors.accent.withValues(alpha: 0.05)
+        : Color.alphaBlend(
+            AppColors.accent.withValues(alpha: 0.035),
+            AppColors.surface,
+          );
+    final weeklyBackground = isDark
+        ? AppColors.primary.withValues(alpha: 0.06)
+        : Color.alphaBlend(
+            AppColors.primary.withValues(alpha: 0.045),
+            AppColors.surface,
+          );
     return AppCard(
       padding: const EdgeInsets.all(18),
-      backgroundColor: AppColors.accent.withValues(alpha: 0.05),
-      borderColor: AppColors.accent.withValues(alpha: 0.14),
+      backgroundColor: cardBackground,
+      borderColor: AppColors.accent.withValues(alpha: isDark ? 0.14 : 0.16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -600,7 +635,11 @@ class _DailyMomentumCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Бүгүнкү импульс',
+                      context.tr(
+                        ky: 'Бүгүнкү импульс',
+                        en: 'Today\'s momentum',
+                        ru: 'Импульс дня',
+                      ),
                       style: AppTextStyles.body.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
@@ -608,8 +647,16 @@ class _DailyMomentumCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       allDone
-                          ? 'Бүгүнкү квесттер толук жабылды. Темпти сактап калдыңыз.'
-                          : 'Кыска тапшырмалар менен күндү жандуу кармаңыз.',
+                          ? context.tr(
+                              ky: 'Бүгүнкү квесттер толук жабылды. Темпти сактап калдыңыз.',
+                              en: 'Today\'s quests are complete. You kept the pace.',
+                              ru: 'Сегодняшние квесты закрыты. Вы удержали темп.',
+                            )
+                          : context.tr(
+                              ky: 'Кыска тапшырмалар менен күндү жандуу кармаңыз.',
+                              en: 'Keep the day active with short tasks.',
+                              ru: 'Поддерживайте день в ритме короткими заданиями.',
+                            ),
                       style: AppTextStyles.muted,
                     ),
                   ],
@@ -617,7 +664,11 @@ class _DailyMomentumCard extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               AppChip(
-                label: '$completedCount/${quests.length} даяр',
+                label: context.tr(
+                  ky: '$completedCount/${quests.length} даяр',
+                  en: '$completedCount/${quests.length} done',
+                  ru: '$completedCount/${quests.length} готово',
+                ),
                 variant: allDone
                     ? AppChipVariant.success
                     : AppChipVariant.accent,
@@ -636,11 +687,22 @@ class _DailyMomentumCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.06),
+              color: weeklyBackground,
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
-                color: AppColors.primary.withValues(alpha: 0.12),
+                color: AppColors.primary.withValues(
+                  alpha: isDark ? 0.12 : 0.16,
+                ),
               ),
+              boxShadow: isDark
+                  ? const []
+                  : [
+                      BoxShadow(
+                        color: AppColors.cardShadow.withValues(alpha: 0.06),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
             ),
             child: Row(
               children: [
@@ -649,7 +711,7 @@ class _DailyMomentumCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Апталык толкун',
+                        weeklyChallenge.titleOf(context),
                         style: AppTextStyles.caption.copyWith(
                           fontWeight: FontWeight.w700,
                           color: AppColors.primary,
@@ -657,14 +719,18 @@ class _DailyMomentumCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${weeklyChallenge.activeDays}/${weeklyChallenge.targetActiveDays} күн · ${weeklyChallenge.weeklyXp}/${weeklyChallenge.targetXp} XP',
+                        context.tr(
+                          ky: '${weeklyChallenge.activeDays}/${weeklyChallenge.targetActiveDays} күн · ${weeklyChallenge.weeklyXp}/${weeklyChallenge.targetXp} XP',
+                          en: '${weeklyChallenge.activeDays}/${weeklyChallenge.targetActiveDays} days · ${weeklyChallenge.weeklyXp}/${weeklyChallenge.targetXp} XP',
+                          ru: '${weeklyChallenge.activeDays}/${weeklyChallenge.targetActiveDays} дней · ${weeklyChallenge.weeklyXp}/${weeklyChallenge.targetXp} XP',
+                        ),
                         style: AppTextStyles.caption,
                       ),
                     ],
                   ),
                 ),
                 AppChip(
-                  label: weeklyChallenge.isCompleted ? 'Жабылды' : 'Жумада',
+                  label: weeklyChallenge.statusLabelOf(context),
                   variant: weeklyChallenge.isCompleted
                       ? AppChipVariant.success
                       : AppChipVariant.primary,
@@ -677,7 +743,11 @@ class _DailyMomentumCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Бүгүн +$todayXp XP топтолду.',
+                  context.tr(
+                    ky: 'Бүгүн +$todayXp XP топтолду.',
+                    en: '+$todayXp XP earned today.',
+                    ru: 'Сегодня получено +$todayXp XP.',
+                  ),
                   style: AppTextStyles.caption,
                 ),
               ),
@@ -687,7 +757,19 @@ class _DailyMomentumCard extends StatelessWidget {
                     ? AppButtonVariant.outlined
                     : AppButtonVariant.primary,
                 onPressed: () => context.go(nextQuest?.route ?? '/progress'),
-                child: Text(allDone ? 'Прогрессти ачуу' : 'Кийинки квест'),
+                child: Text(
+                  allDone
+                      ? context.tr(
+                          ky: 'Прогрессти ачуу',
+                          en: 'Open progress',
+                          ru: 'Открыть прогресс',
+                        )
+                      : context.tr(
+                          ky: 'Кийинки квест',
+                          en: 'Next quest',
+                          ru: 'Следующий квест',
+                        ),
+                ),
               ),
             ],
           ),
@@ -706,12 +788,27 @@ class _MomentumQuestPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDone = quest.claimed;
     final tint = isDone ? AppColors.success : AppColors.primary;
+    final isDark = AppColors.isDark;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: tint.withValues(alpha: 0.08),
+        color: isDark
+            ? tint.withValues(alpha: 0.08)
+            : Color.alphaBlend(
+                tint.withValues(alpha: 0.045),
+                AppColors.surface,
+              ),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: tint.withValues(alpha: 0.14)),
+        border: Border.all(color: tint.withValues(alpha: isDark ? 0.14 : 0.16)),
+        boxShadow: isDark
+            ? const []
+            : [
+                BoxShadow(
+                  color: AppColors.cardShadow.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -727,7 +824,7 @@ class _MomentumQuestPill extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               Text(
-                quest.title,
+                quest.titleOf(context),
                 style: AppTextStyles.caption.copyWith(
                   fontWeight: FontWeight.w700,
                   color: tint,
@@ -736,12 +833,7 @@ class _MomentumQuestPill extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-          Text(
-            isDone
-                ? 'Аткарылды'
-                : '${quest.displayCurrent} / ${quest.displayTarget}',
-            style: AppTextStyles.caption,
-          ),
+          Text(quest.progressLabelOf(context), style: AppTextStyles.caption),
         ],
       ),
     );
@@ -775,14 +867,34 @@ class _FocusLessonCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  hasProgress ? 'Акыркы же негизги сабак' : 'Биринчи сабак',
+                  hasProgress
+                      ? context.tr(
+                          ky: 'Акыркы же негизги сабак',
+                          en: 'Latest or core lesson',
+                          ru: 'Последний или основной урок',
+                        )
+                      : context.tr(
+                          ky: 'Биринчи сабак',
+                          en: 'First lesson',
+                          ru: 'Первый урок',
+                        ),
                   style: AppTextStyles.body.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
               AppChip(
-                label: reviewDue > 0 ? '$reviewDue кайталоо' : 'Улантууга даяр',
+                label: reviewDue > 0
+                    ? context.tr(
+                        ky: '$reviewDue кайталоо',
+                        en: '$reviewDue reviews',
+                        ru: '$reviewDue повторений',
+                      )
+                    : context.tr(
+                        ky: 'Улантууга даяр',
+                        en: 'Ready to continue',
+                        ru: 'Готово к продолжению',
+                      ),
                 variant: reviewDue > 0
                     ? AppChipVariant.accent
                     : AppChipVariant.success,
@@ -801,11 +913,19 @@ class _FocusLessonCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '$masteredWords/$totalWords сөз',
+                context.tr(
+                  ky: '$masteredWords/$totalWords сөз',
+                  en: '$masteredWords/$totalWords words',
+                  ru: '$masteredWords/$totalWords слов',
+                ),
                 style: AppTextStyles.caption,
               ),
               Text(
-                '${(completion * 100).round()}% өздөштүрүлдү',
+                context.tr(
+                  ky: '${(completion * 100).round()}% өздөштүрүлдү',
+                  en: '${(completion * 100).round()}% mastered',
+                  ru: '${(completion * 100).round()}% освоено',
+                ),
                 style: AppTextStyles.caption,
               ),
             ],
@@ -815,8 +935,16 @@ class _FocusLessonCard extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             hasProgress
-                ? 'Бул сабакка кайтуу үчүн жогорку негизги аракетти колдонуңуз.'
-                : 'Бул теманы баштоо үчүн жогорку негизги аракетти колдонуңуз.',
+                ? context.tr(
+                    ky: 'Бул сабакка кайтуу үчүн жогорку негизги аракетти колдонуңуз.',
+                    en: 'Use the main action above to return to this lesson.',
+                    ru: 'Используйте основное действие выше, чтобы вернуться к этому уроку.',
+                  )
+                : context.tr(
+                    ky: 'Бул теманы баштоо үчүн жогорку негизги аракетти колдонуңуз.',
+                    en: 'Use the main action above to start this topic.',
+                    ru: 'Используйте основное действие выше, чтобы начать эту тему.',
+                  ),
             style: AppTextStyles.muted,
           ),
           const SizedBox(height: 12),
@@ -824,7 +952,13 @@ class _FocusLessonCard extends StatelessWidget {
             fullWidth: true,
             variant: AppButtonVariant.outlined,
             onPressed: () => context.go('/categories'),
-            child: const Text('Жол картасын көрүү'),
+            child: Text(
+              context.tr(
+                ky: 'Жол картасын көрүү',
+                en: 'View roadmap',
+                ru: 'Открыть дорожную карту',
+              ),
+            ),
           ),
         ],
       ),
@@ -865,18 +999,24 @@ class _LinearProgress extends StatelessWidget {
 
 class _RecommendedAction {
   const _RecommendedAction({
-    required this.title,
-    required this.subtitle,
-    required this.supportingText,
-    required this.primaryLabel,
+    required this.titleBuilder,
+    required this.subtitleBuilder,
+    required this.supportingTextBuilder,
+    required this.primaryLabelBuilder,
     required this.primaryRoute,
   });
 
-  final String title;
-  final String subtitle;
-  final String supportingText;
-  final String primaryLabel;
+  final String Function(BuildContext context) titleBuilder;
+  final String Function(BuildContext context) subtitleBuilder;
+  final String Function(BuildContext context) supportingTextBuilder;
+  final String Function(BuildContext context) primaryLabelBuilder;
   final String primaryRoute;
+
+  String titleOf(BuildContext context) => titleBuilder(context);
+  String subtitleOf(BuildContext context) => subtitleBuilder(context);
+  String supportingTextOf(BuildContext context) =>
+      supportingTextBuilder(context);
+  String primaryLabelOf(BuildContext context) => primaryLabelBuilder(context);
 
   factory _RecommendedAction.fromState({
     required int totalWordsMastered,
@@ -888,40 +1028,111 @@ class _RecommendedAction {
   }) {
     if (totalWordsMastered == 0) {
       return const _RecommendedAction(
-        title: 'Бүгүн биринчи сабакты баштаңыз',
-        subtitle: 'Категория тандап, биринчи циклди баштаңыз.',
-        supportingText: 'Бүгүнкү эң жакшы старт ушул.',
-        primaryLabel: 'Сабак тандаңыз',
+        titleBuilder: _titleStartFirstLesson,
+        subtitleBuilder: _subtitleStartFirstLesson,
+        supportingTextBuilder: _supportStartFirstLesson,
+        primaryLabelBuilder: _primaryChooseLesson,
         primaryRoute: '/categories',
       );
     }
 
     if (totalReviewDue > 0 && reviewCategoryId != null) {
       return _RecommendedAction(
-        title: 'Адегенде кайталоону жабыңыз',
-        subtitle: '$totalReviewDue сөз даяр турат.',
-        supportingText: 'Алгач кайталоо жакшыраак.',
-        primaryLabel: 'Кайталоону баштоо',
+        titleBuilder: _titleCloseReviews,
+        subtitleBuilder: (context) => context.tr(
+          ky: '$totalReviewDue сөз даяр турат.',
+          en: '$totalReviewDue words are ready.',
+          ru: 'Готово $totalReviewDue слов.',
+        ),
+        supportingTextBuilder: (context) => context.tr(
+          ky: 'Алгач кайталоо жакшыраак.',
+          en: 'Starting with review is better.',
+          ru: 'Сначала лучше закрыть повторение.',
+        ),
+        primaryLabelBuilder: (context) => context.tr(
+          ky: 'Кайталоону баштоо',
+          en: 'Start review',
+          ru: 'Начать повторение',
+        ),
         primaryRoute: '/flashcards/$reviewCategoryId?mode=review',
       );
     }
 
     if (!hasActivityToday) {
       return _RecommendedAction(
-        title: 'Бүгүнкү максатты ач',
-        subtitle: '$dailyGoalMinutes мүнөт үчүн сабакты улантыңыз.',
-        supportingText: 'Азыркы эң туура кадам ушул.',
-        primaryLabel: 'Практиканы улантуу',
+        titleBuilder: (context) => context.tr(
+          ky: 'Бүгүнкү максатты ач',
+          en: 'Unlock today\'s goal',
+          ru: 'Откройте цель на сегодня',
+        ),
+        subtitleBuilder: (context) => context.tr(
+          ky: '$dailyGoalMinutes мүнөт үчүн сабакты улантыңыз.',
+          en: 'Continue the lesson for $dailyGoalMinutes minutes.',
+          ru: 'Продолжайте урок $dailyGoalMinutes минут.',
+        ),
+        supportingTextBuilder: (context) => context.tr(
+          ky: 'Азыркы эң туура кадам ушул.',
+          en: 'This is the best next step right now.',
+          ru: 'Это лучший следующий шаг прямо сейчас.',
+        ),
+        primaryLabelBuilder: (context) => context.tr(
+          ky: 'Практиканы улантуу',
+          en: 'Continue practice',
+          ru: 'Продолжить практику',
+        ),
         primaryRoute: '/flashcards/$categoryId',
       );
     }
 
     return _RecommendedAction(
-      title: 'Бүгүн жакшы темптесиз',
-      subtitle: 'Кыска текшерүү же колдонуу режимине өтүңүз.',
-      supportingText: 'Темпти кармап туруңуз.',
-      primaryLabel: 'Экспресс-квиз',
+      titleBuilder: (context) => context.tr(
+        ky: 'Бүгүн жакшы темптесиз',
+        en: 'You have a good pace today',
+        ru: 'Сегодня у вас хороший темп',
+      ),
+      subtitleBuilder: (context) => context.tr(
+        ky: 'Кыска текшерүү же колдонуу режимине өтүңүз.',
+        en: 'Switch to a quick check or application mode.',
+        ru: 'Перейдите в короткую проверку или прикладной режим.',
+      ),
+      supportingTextBuilder: (context) => context.tr(
+        ky: 'Темпти кармап туруңуз.',
+        en: 'Keep the pace going.',
+        ru: 'Удерживайте темп.',
+      ),
+      primaryLabelBuilder: (context) => context.tr(
+        ky: 'Экспресс-квиз',
+        en: 'Quick quiz',
+        ru: 'Экспресс-квиз',
+      ),
       primaryRoute: '/quick-quiz',
     );
   }
 }
+
+String _titleStartFirstLesson(BuildContext context) => context.tr(
+  ky: 'Бүгүн биринчи сабакты баштаңыз',
+  en: 'Start your first lesson today',
+  ru: 'Начните первый урок сегодня',
+);
+
+String _titleCloseReviews(BuildContext context) => context.tr(
+  ky: 'Адегенде кайталоону жабыңыз',
+  en: 'Close review first',
+  ru: 'Сначала закройте повторение',
+);
+
+String _subtitleStartFirstLesson(BuildContext context) => context.tr(
+  ky: 'Категория тандап, биринчи циклди баштаңыз.',
+  en: 'Choose a category and start your first cycle.',
+  ru: 'Выберите категорию и начните первый цикл.',
+);
+
+String _supportStartFirstLesson(BuildContext context) => context.tr(
+  ky: 'Бүгүнкү эң жакшы старт ушул.',
+  en: 'This is the best start for today.',
+  ru: 'Это лучший старт на сегодня.',
+);
+
+String _primaryChooseLesson(BuildContext context) =>
+    context.tr(ky: 'Сабак тандаңыз', en: 'Choose lesson', ru: 'Выбрать урок');

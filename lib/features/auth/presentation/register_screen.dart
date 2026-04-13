@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/providers/app_providers.dart';
 import '../../../app/providers/onboarding_provider.dart';
+import '../../../core/localization/app_copy.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/constants.dart';
 import '../../../core/utils/app_text_styles.dart';
@@ -49,10 +50,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 
   Future<void> _finishAuthFlow() async {
-    await ref.read(localStorageServiceProvider).setString(
-      Constants.postLogoutRedirectKey,
-      'false',
-    );
+    await ref
+        .read(localStorageServiceProvider)
+        .setString(Constants.postLogoutRedirectKey, 'false');
     await ref.read(onboardingProvider).completeOnboarding();
     if (!mounted) return;
     context.go('/auth-complete');
@@ -111,7 +111,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              'Жаңы аккаунт',
+                              context.tr(
+                                ky: 'Жаңы аккаунт',
+                                en: 'Create account',
+                                ru: 'Новый аккаунт',
+                              ),
                               style: AppTextStyles.heading.copyWith(
                                 fontSize: 28,
                               ),
@@ -119,7 +123,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Катталып, окууну улантыңыз.',
+                              context.tr(
+                                ky: 'Катталып, окууну улантыңыз.',
+                                en: 'Sign up and continue learning.',
+                                ru: 'Зарегистрируйтесь и продолжайте учиться.',
+                              ),
                               style: AppTextStyles.muted,
                               textAlign: TextAlign.center,
                             ),
@@ -134,21 +142,37 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           children: [
                             _AuthField(
                               controller: _name,
-                              label: 'Толук аты',
+                              label: context.tr(
+                                ky: 'Толук аты',
+                                en: 'Full name',
+                                ru: 'Полное имя',
+                              ),
                               icon: Icons.person_outline,
-                              placeholder: 'Атыңыз',
+                              placeholder: context.tr(
+                                ky: 'Атыңыз',
+                                en: 'Your name',
+                                ru: 'Ваше имя',
+                              ),
                             ),
                             const SizedBox(height: 16),
                             _AuthField(
                               controller: _email,
-                              label: 'Электрондук почта',
+                              label: context.tr(
+                                ky: 'Электрондук почта',
+                                en: 'Email',
+                                ru: 'Электронная почта',
+                              ),
                               icon: Icons.mail_outline,
                               placeholder: 'name@example.com',
                             ),
                             const SizedBox(height: 16),
                             _AuthField(
                               controller: _password,
-                              label: 'Сыр сөз',
+                              label: context.tr(
+                                ky: 'Сыр сөз',
+                                en: 'Password',
+                                ru: 'Пароль',
+                              ),
                               icon: Icons.lock_outline,
                               placeholder: '********',
                               obscureText: !_showPassword,
@@ -169,7 +193,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             const SizedBox(height: 16),
                             _AuthField(
                               controller: _confirmPassword,
-                              label: 'Сыр сөздү кайталаңыз',
+                              label: context.tr(
+                                ky: 'Сыр сөздү кайталаңыз',
+                                en: 'Confirm password',
+                                ru: 'Повторите пароль',
+                              ),
                               icon: Icons.lock_reset,
                               placeholder: '********',
                               obscureText: !_showConfirm,
@@ -225,11 +253,23 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                               final nickname = _name.text.trim();
                               final email = _email.text.trim();
                               if (nickname.isEmpty) {
-                                _setLocalError('Толук атты жазыңыз.');
+                                _setLocalError(
+                                  context.tr(
+                                    ky: 'Толук атты жазыңыз.',
+                                    en: 'Enter your full name.',
+                                    ru: 'Введите полное имя.',
+                                  ),
+                                );
                                 return;
                               }
                               if (_password.text != _confirmPassword.text) {
-                                _setLocalError('Сыр сөздөр дал келбейт.');
+                                _setLocalError(
+                                  context.tr(
+                                    ky: 'Сыр сөздөр дал келбейт.',
+                                    en: 'Passwords do not match.',
+                                    ru: 'Пароли не совпадают.',
+                                  ),
+                                );
                                 return;
                               }
                               _setLocalError(null);
@@ -248,7 +288,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 _showMessage(error);
                               }
                             },
-                      child: Text(auth.isLoading ? '...' : 'Катталуу'),
+                      child: Text(
+                        auth.isLoading
+                            ? '...'
+                            : context.tr(
+                                ky: 'Катталуу',
+                                en: 'Sign up',
+                                ru: 'Регистрация',
+                              ),
+                      ),
                     ),
                     const SizedBox(height: 10),
                     AppButton(
@@ -270,7 +318,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 _showMessage(error);
                               }
                             },
-                      child: const Text('Google менен катталуу'),
+                      child: Text(
+                        context.tr(
+                          ky: 'Google менен катталуу',
+                          en: 'Sign up with Google',
+                          ru: 'Регистрация через Google',
+                        ),
+                      ),
                     ),
                     if (!googleSupported)
                       Padding(
@@ -285,7 +339,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     TextButton(
                       onPressed: () => context.push('/login'),
                       child: Text(
-                        'Аккаунтуңуз барбы? Кирүү',
+                        context.tr(
+                          ky: 'Аккаунтуңуз барбы? Кирүү',
+                          en: 'Already have an account? Sign in',
+                          ru: 'Уже есть аккаунт? Войти',
+                        ),
                         style: AppTextStyles.body.copyWith(
                           color: AppColors.link,
                           fontWeight: FontWeight.w600,

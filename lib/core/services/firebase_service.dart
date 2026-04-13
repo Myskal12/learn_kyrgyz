@@ -15,6 +15,7 @@ import '../../data/models/sentence_model.dart';
 import '../../data/models/user_progress_model.dart';
 import '../../data/models/user_profile_model.dart';
 import '../../data/models/word_model.dart';
+import '../utils/constants.dart';
 
 /// Firebase-powered data layer with local fallbacks for offline use.
 class FirebaseService {
@@ -1007,6 +1008,9 @@ class FirebaseService {
   }
 
   bool _requiresEmailVerification(User? user) {
+    if (Constants.disableEmailVerification) {
+      return false;
+    }
     if (user == null || user.emailVerified) return false;
     final email = user.email?.trim();
     if (email == null || email.isEmpty) return false;

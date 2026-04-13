@@ -9,17 +9,15 @@ import 'app_providers.dart';
 const _directionKey = 'learning_direction';
 
 final learningDirectionProvider =
-    StateNotifierProvider<LearningDirectionNotifier, LearningDirection>(
-  (ref) {
-    final storage = ref.read(localStorageServiceProvider);
-    final notifier = LearningDirectionNotifier(storage);
-    unawaited(notifier.load());
-    return notifier;
-  },
-);
+    StateNotifierProvider<LearningDirectionNotifier, LearningDirection>((ref) {
+      final storage = ref.read(localStorageServiceProvider);
+      final notifier = LearningDirectionNotifier(storage);
+      unawaited(notifier.load());
+      return notifier;
+    });
 
 class LearningDirectionNotifier extends StateNotifier<LearningDirection> {
-  LearningDirectionNotifier(this._storage) : super(LearningDirection.enToKy);
+  LearningDirectionNotifier(this._storage) : super(LearningDirection.kyToEn);
 
   final LocalStorageService _storage;
 

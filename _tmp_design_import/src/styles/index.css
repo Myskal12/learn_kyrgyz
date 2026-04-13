@@ -1,0 +1,160 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+/* ========================================
+   TYPOGRAPHY UTILITIES
+   Apply consistent text styles throughout the app
+======================================== */
+
+/* Headings */
+h1, .text-h1 {
+  font-size: var(--text-h1);
+  line-height: var(--text-h1-line);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+h2, .text-h2 {
+  font-size: var(--text-h2);
+  line-height: var(--text-h2-line);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+h3, .text-h3 {
+  font-size: var(--text-h3);
+  line-height: var(--text-h3-line);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+}
+
+/* Body Text */
+.text-body-lg {
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg-line);
+  font-weight: var(--font-regular);
+  color: var(--text-primary);
+}
+
+.text-body, body {
+  font-size: var(--text-body);
+  line-height: var(--text-body-line);
+  font-weight: var(--font-regular);
+  color: var(--text-primary);
+}
+
+.text-body-sm {
+  font-size: var(--text-body-sm);
+  line-height: var(--text-body-sm-line);
+  font-weight: var(--font-regular);
+  color: var(--text-primary);
+}
+
+/* Labels & Supporting Text */
+.text-label {
+  font-size: var(--text-label);
+  line-height: var(--text-label-line);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+}
+
+.text-caption {
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+  font-weight: var(--font-regular);
+  color: var(--text-secondary);
+}
+
+/* Learning Content - Specialized Typography */
+.text-sentence-display {
+  font-size: var(--text-sentence-display);
+  line-height: var(--text-sentence-display-line);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.text-word-breakdown {
+  font-size: var(--text-word-breakdown);
+  line-height: var(--text-word-breakdown-line);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+}
+
+.text-translation {
+  font-size: var(--text-translation);
+  line-height: var(--text-translation-line);
+  font-weight: var(--font-regular);
+  color: var(--text-secondary);
+}
+
+/* Font Weight Utilities */
+.font-regular {
+  font-weight: var(--font-regular);
+}
+
+.font-medium {
+  font-weight: var(--font-medium);
+}
+
+.font-bold {
+  font-weight: var(--font-bold);
+}
+
+/* Text Color Utilities */
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+/* Custom animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out;
+}
+
+/* Mobile viewport optimization */
+@media (min-width: 391px) {
+  body {
+    background: linear-gradient(to right, #e5e7eb 0%, var(--background) 10%, var(--background) 90%, #e5e7eb 100%);
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}

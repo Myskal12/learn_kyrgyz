@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/providers/app_providers.dart';
 import '../../../app/providers/onboarding_provider.dart';
+import '../../../core/localization/app_copy.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/constants.dart';
 import '../../../core/utils/app_text_styles.dart';
@@ -25,10 +26,9 @@ class WelcomeScreen extends ConsumerWidget {
     final googleSupported = auth.isGoogleSignInSupported;
 
     Future<void> continueAsGuest() async {
-      await ref.read(localStorageServiceProvider).setString(
-        Constants.postLogoutRedirectKey,
-        'false',
-      );
+      await ref
+          .read(localStorageServiceProvider)
+          .setString(Constants.postLogoutRedirectKey, 'false');
       await ref.read(onboardingProvider).completeOnboarding();
       if (!context.mounted) return;
       context.go('/home');
@@ -46,10 +46,9 @@ class WelcomeScreen extends ConsumerWidget {
         }
         return;
       }
-      await ref.read(localStorageServiceProvider).setString(
-        Constants.postLogoutRedirectKey,
-        'false',
-      );
+      await ref
+          .read(localStorageServiceProvider)
+          .setString(Constants.postLogoutRedirectKey, 'false');
       await ref.read(onboardingProvider).completeOnboarding();
       if (!context.mounted) return;
       context.go('/auth-complete');
@@ -93,7 +92,11 @@ class WelcomeScreen extends ConsumerWidget {
                                     ),
                                   ),
                                   child: Text(
-                                    'Биринчи күндөн баштаңыз',
+                                    context.tr(
+                                      ky: 'Биринчи күндөн баштаңыз',
+                                      en: 'Start from day one',
+                                      ru: 'Начните с первого дня',
+                                    ),
                                     style: AppTextStyles.caption.copyWith(
                                       color: Colors.white,
                                     ),
@@ -101,7 +104,11 @@ class WelcomeScreen extends ConsumerWidget {
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
-                                  'Кыргызчаны жеңил жана сулуу ритм менен үйрөнүңүз',
+                                  context.tr(
+                                    ky: 'Кыргызчаны жеңил жана сулуу ритм менен үйрөнүңүз',
+                                    en: 'Learn Kyrgyz with an easy, beautiful rhythm',
+                                    ru: 'Изучайте кыргызский в лёгком и красивом ритме',
+                                  ),
                                   style: AppTextStyles.heading.copyWith(
                                     color: Colors.white,
                                     fontSize: 30,
@@ -109,7 +116,11 @@ class WelcomeScreen extends ConsumerWidget {
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
-                                  'Максатты тандап, дароо баштаңыз.',
+                                  context.tr(
+                                    ky: 'Максатты тандап, дароо баштаңыз.',
+                                    en: 'Choose a goal and start right away.',
+                                    ru: 'Выберите цель и начните сразу.',
+                                  ),
                                   style: AppTextStyles.body.copyWith(
                                     color: Colors.white.withValues(alpha: 0.9),
                                   ),
@@ -118,33 +129,65 @@ class WelcomeScreen extends ConsumerWidget {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          const _ValueCard(
+                          _ValueCard(
                             icon: Icons.bolt,
-                            title: 'Тез башталат',
-                            subtitle: 'Биринчи сабакка түз өтөсүз.',
+                            title: context.tr(
+                              ky: 'Тез башталат',
+                              en: 'Starts fast',
+                              ru: 'Быстрый старт',
+                            ),
+                            subtitle: context.tr(
+                              ky: 'Биринчи сабакка түз өтөсүз.',
+                              en: 'You go straight to the first lesson.',
+                              ru: 'Вы сразу переходите к первому уроку.',
+                            ),
                           ),
                           const SizedBox(height: 12),
-                          const _ValueCard(
+                          _ValueCard(
                             icon: Icons.menu_book,
-                            title: 'Кыска практика',
-                            subtitle: 'Карточка, квиз, сүйлөм бир жерде.',
+                            title: context.tr(
+                              ky: 'Кыска практика',
+                              en: 'Short practice',
+                              ru: 'Короткая практика',
+                            ),
+                            subtitle: context.tr(
+                              ky: 'Карточка, квиз, сүйлөм бир жерде.',
+                              en: 'Flashcards, quiz, and sentences in one place.',
+                              ru: 'Карточки, квиз и предложения в одном месте.',
+                            ),
                           ),
                           const SizedBox(height: 12),
-                          const _ValueCard(
+                          _ValueCard(
                             icon: Icons.cloud_done,
-                            title: 'Конок режими',
-                            subtitle: 'Азыр баштап, кийин кире аласыз.',
+                            title: context.tr(
+                              ky: 'Конок режими',
+                              en: 'Guest mode',
+                              ru: 'Гостевой режим',
+                            ),
+                            subtitle: context.tr(
+                              ky: 'Азыр баштап, кийин кире аласыз.',
+                              en: 'Start now and sign in later.',
+                              ru: 'Начните сейчас, а войдёте позже.',
+                            ),
                           ),
                           const SizedBox(height: 20),
                           Text(
-                            'Күндүк максат',
+                            context.tr(
+                              ky: 'Күндүк максат',
+                              en: 'Daily goal',
+                              ru: 'Дневная цель',
+                            ),
                             style: AppTextStyles.body.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Күнүнө канча убакыт бөлгүңүз келет?',
+                            context.tr(
+                              ky: 'Күнүнө канча убакыт бөлгүңүз келет?',
+                              en: 'How much time do you want to spend per day?',
+                              ru: 'Сколько времени вы хотите уделять в день?',
+                            ),
                             style: AppTextStyles.muted,
                           ),
                           const SizedBox(height: 12),
@@ -157,7 +200,11 @@ class WelcomeScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Кааласаңыз кийин өзгөртөсүз.',
+                            context.tr(
+                              ky: 'Кааласаңыз кийин өзгөртөсүз.',
+                              en: 'You can change this later if you want.',
+                              ru: 'При желании это можно изменить позже.',
+                            ),
                             style: AppTextStyles.muted,
                             textAlign: TextAlign.center,
                           ),
@@ -174,14 +221,22 @@ class WelcomeScreen extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Кирүү жолдору',
+                                  context.tr(
+                                    ky: 'Кирүү жолдору',
+                                    en: 'Ways to continue',
+                                    ru: 'Способы входа',
+                                  ),
                                   style: AppTextStyles.body.copyWith(
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'Кааласаңыз Google менен кириңиз.',
+                                  context.tr(
+                                    ky: 'Кааласаңыз Google менен кириңиз.',
+                                    en: 'You can continue with Google if you want.',
+                                    ru: 'При желании можно продолжить через Google.',
+                                  ),
                                   style: AppTextStyles.muted,
                                 ),
                                 const SizedBox(height: 12),
@@ -192,7 +247,13 @@ class WelcomeScreen extends ConsumerWidget {
                                   onPressed: auth.isLoading || !googleSupported
                                       ? null
                                       : continueWithGoogle,
-                                  child: const Text('Google менен улантуу'),
+                                  child: Text(
+                                    context.tr(
+                                      ky: 'Google менен улантуу',
+                                      en: 'Continue with Google',
+                                      ru: 'Продолжить с Google',
+                                    ),
+                                  ),
                                 ),
                                 if (!googleSupported) ...[
                                   const SizedBox(height: 8),
@@ -232,7 +293,11 @@ class WelcomeScreen extends ConsumerWidget {
                             size: AppButtonSize.lg,
                             onPressed: auth.isLoading ? null : continueAsGuest,
                             child: Text(
-                              'Конок катары баштоо · $selectedGoal мүн',
+                              context.tr(
+                                ky: 'Конок катары баштоо · $selectedGoal мүн',
+                                en: 'Start as guest · $selectedGoal min',
+                                ru: 'Начать как гость · $selectedGoal мин',
+                              ),
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -245,13 +310,25 @@ class WelcomeScreen extends ConsumerWidget {
                                 fullWidth: true,
                                 variant: AppButtonVariant.outlined,
                                 onPressed: () => context.push('/login'),
-                                child: const Text('Кирүү'),
+                                child: Text(
+                                  context.tr(
+                                    ky: 'Кирүү',
+                                    en: 'Sign in',
+                                    ru: 'Войти',
+                                  ),
+                                ),
                               ),
                               AppButton(
                                 fullWidth: true,
                                 variant: AppButtonVariant.outlined,
                                 onPressed: () => context.push('/signup'),
-                                child: const Text('Катталуу'),
+                                child: Text(
+                                  context.tr(
+                                    ky: 'Катталуу',
+                                    en: 'Sign up',
+                                    ru: 'Регистрация',
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -328,7 +405,9 @@ class _GoalChoice extends ConsumerWidget {
     final selected = ref.watch(onboardingProvider).dailyGoalMinutes == minutes;
 
     return ChoiceChip(
-      label: Text('$minutes мүн'),
+      label: Text(
+        context.tr(ky: '$minutes мүн', en: '$minutes min', ru: '$minutes мин'),
+      ),
       selected: selected,
       onSelected: (_) =>
           ref.read(onboardingProvider).setDailyGoalMinutes(minutes),

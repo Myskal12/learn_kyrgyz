@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/providers/app_providers.dart';
 import '../../../app/providers/onboarding_provider.dart';
+import '../../../core/localization/app_copy.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_assets.dart';
 import '../../../core/utils/app_text_styles.dart';
@@ -29,14 +30,34 @@ class ProgressScreen extends ConsumerStatefulWidget {
 }
 
 class _ProgressScreenState extends ConsumerState<ProgressScreen> {
+  late final PageController _pageController;
+  int _activeSection = 0;
+
   @override
   void initState() {
     super.initState();
+    _pageController = PageController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(progressProvider).load();
       ref.read(categoriesProvider).load();
       ref.read(leaderboardProvider).load(limit: 10);
     });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _setSection(int index) {
+    if (_activeSection == index) return;
+    setState(() => _activeSection = index);
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 260),
+      curve: Curves.easeOutCubic,
+    );
   }
 
   @override
@@ -46,7 +67,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
     final categoriesState = ref.watch(categoriesProvider);
     final leaderboard = ref.watch(leaderboardProvider);
     final wordsRepo = ref.read(wordsRepositoryProvider);
-    final achievements = _buildAchievements(progress);
+    final achievements = _buildAchievements(progress, context);
     final unlockedCount = achievements.where((item) => item.unlocked).length;
     final hasProgress =
         progress.totalWordsReviewed > 0 ||
@@ -63,124 +84,185 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
       reviewCategory: reviewCategory,
     );
     final topPlayers = leaderboard.entries.take(10).toList();
-    final textScale = MediaQuery.textScalerOf(context).scale(16) / 16;
-    final achievementAspectRatio = textScale > 1.15
-        ? 0.74
-        : textScale > 1.0
-        ? 0.8
-        : 0.86;
 
     return AppShell(
-      title: 'Прогресс',
-      subtitle: 'Өсүш ритми жана кийинки кадам',
+      title: context.tr(ky: 'Прогресс', en: 'Progress', ru: 'Прогресс'),
+      subtitle: context.tr(
+        ky: 'Өсүш ритми жана кийинки кадам',
+        en: 'Growth rhythm and next step',
+        ru: 'Ритм роста и следующий шаг',
+      ),
       activeTab: AppTab.progress,
-      child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Column(
         children: [
-          Text('Прогресс', style: AppTextStyles.heading.copyWith(fontSize: 28)),
-          const SizedBox(height: 6),
-          Text(
-            'Өсүш, атаандаштык жана кийинки кадам ушул жерде.',
-            style: AppTextStyles.body.copyWith(color: AppColors.muted),
-          ),
-          const SizedBox(height: 10),
-          const _ProgressIntentStrip(),
-          const SizedBox(height: 20),
-          _HeroSummary(
-            progress: progress,
-            activeDaysThisWeek: progress.activeDaysThisWeek,
-            dailyGoalMinutes: onboarding.dailyGoalMinutes,
-            unlockedAchievements: unlockedCount,
-            totalAchievements: achievements.length,
-            hasProgress: hasProgress,
-          ),
-          const SizedBox(height: 14),
-          _ProgressSyncCard(progress: progress),
-          const SizedBox(height: 20),
-          if (!hasProgress)
-            SizedBox(
-              height: 300,
-              child: AppEmptyState(
-                title: 'Стартка даярсыз',
-                message:
-                    'Биринчи машыгуудан кийин бул жер ритм, убакыт жана өсүү менен толот.',
-                icon: Icons.insights_outlined,
-                actionLabel: 'Биринчи сабакты ачуу',
-                onAction: () => context.go('/categories'),
-              ),
-            )
-          else ...[
-            _GrowthSnapshotCard(
-              progress: progress,
-              activeDaysThisWeek: progress.activeDaysThisWeek,
-            ),
-            const SizedBox(height: 16),
-            _JourneyTrackCard(progress: progress),
-            const SizedBox(height: 16),
-            _WeeklyRhythmCard(
-              activity: progress.recentWeekActivity,
-              streakDays: progress.streakDays,
-              totalLearningSeconds: progress.totalLearningSeconds,
-              activeDaysThisWeek: progress.activeDaysThisWeek,
-            ),
-            const SizedBox(height: 16),
-            _DailyQuestCard(
-              quests: progress.dailyQuests,
-              completedCount: progress.completedDailyQuestsCount,
-              todayXp: progress.todayXp,
-            ),
-            const SizedBox(height: 16),
-            _FocusCard(focus: focus),
-            const SizedBox(height: 16),
-            AdaptivePanelGrid(
-              maxColumns: 2,
-              minItemWidth: 220,
-              spacing: 12,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _MilestoneCard(
-                  progress: progress,
-                  dailyGoalMinutes: onboarding.dailyGoalMinutes,
+                Text(
+                  context.tr(ky: 'Прогресс', en: 'Progress', ru: 'Прогресс'),
+                  style: AppTextStyles.heading.copyWith(fontSize: 28),
                 ),
-                _ReviewStatusCard(
-                  progress: progress,
-                  dailyGoalMinutes: onboarding.dailyGoalMinutes,
+                const SizedBox(height: 6),
+                Text(
+                  context.tr(
+                    ky: 'Өсүшүңүздү так бөлүмдөрдө көзөмөлдөңүз.',
+                    en: 'Track your growth in focused sections with less noise.',
+                    ru: 'Следите за ростом в понятных и сфокусированных разделах.',
+                  ),
+                  style: AppTextStyles.body.copyWith(color: AppColors.muted),
+                ),
+                const SizedBox(height: 10),
+                _ProgressIntentStrip(
+                  activeIndex: _activeSection,
+                  onSelect: _setSection,
                 ),
               ],
             ),
-            const SizedBox(height: 18),
-            _SectionHeader(
-              title: 'Лидерборд',
-              subtitle:
-                  'Бул жерде мыкты 10 оюнчу көрүнөт. Тереңирээк тизме үчүн 100 оюнчуга өтүңүз.',
-            ),
-            const SizedBox(height: 12),
-            _LeaderboardPreviewCard(
-              players: topPlayers,
-              isLoading: leaderboard.isLoading && topPlayers.isEmpty,
-              errorMessage: leaderboard.errorMessage,
-              onRetry: () =>
-                  ref.read(leaderboardProvider).load(force: true, limit: 10),
-            ),
-          ],
-          const SizedBox(height: 20),
-          _SectionHeader(
-            title: 'Жетишкендиктер',
-            subtitle:
-                '$unlockedCount / ${achievements.length} белги ачылды. Ар бири окуудагы чекитти көрсөтөт.',
           ),
-          const SizedBox(height: 12),
-          GridView.count(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            childAspectRatio: achievementAspectRatio,
-            children: achievements
-                .map(
-                  (achievement) => _AchievementTile(achievement: achievement),
-                )
-                .toList(),
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                if (_activeSection != index) {
+                  setState(() => _activeSection = index);
+                }
+              },
+              children: [
+                _ProgressSectionPage(
+                  children: [
+                    _HeroSummary(
+                      progress: progress,
+                      activeDaysThisWeek: progress.activeDaysThisWeek,
+                      dailyGoalMinutes: onboarding.dailyGoalMinutes,
+                      unlockedAchievements: unlockedCount,
+                      totalAchievements: achievements.length,
+                      hasProgress: hasProgress,
+                    ),
+                    const SizedBox(height: 12),
+                    if (!hasProgress)
+                      SizedBox(
+                        height: 280,
+                        child: AppEmptyState(
+                          title: context.tr(
+                            ky: 'Стартка даяр',
+                            en: 'Ready to start',
+                            ru: 'Готово к старту',
+                          ),
+                          message: context.tr(
+                            ky: 'Биринчи окуу циклинен кийин ритм жана чекиттер ушул жерде көрүнөт.',
+                            en: 'Your rhythm and milestones will appear after your first learning cycle.',
+                            ru: 'Ритм и ключевые этапы появятся после первого учебного цикла.',
+                          ),
+                          icon: Icons.insights_outlined,
+                          actionLabel: context.tr(
+                            ky: 'Практиканы баштоо',
+                            en: 'Start practice',
+                            ru: 'Начать практику',
+                          ),
+                          onAction: () => context.go('/practice'),
+                        ),
+                      )
+                    else ...[
+                      _FocusCard(focus: focus),
+                      const SizedBox(height: 12),
+                      AdaptivePanelGrid(
+                        maxColumns: 2,
+                        minItemWidth: 220,
+                        spacing: 12,
+                        children: [
+                          _MilestoneCard(
+                            progress: progress,
+                            dailyGoalMinutes: onboarding.dailyGoalMinutes,
+                          ),
+                          _ReviewStatusCard(
+                            progress: progress,
+                            dailyGoalMinutes: onboarding.dailyGoalMinutes,
+                          ),
+                        ],
+                      ),
+                    ],
+                    const SizedBox(height: 12),
+                    _AchievementWallEntryCard(
+                      unlockedCount: unlockedCount,
+                      totalCount: achievements.length,
+                    ),
+                  ],
+                ),
+                _ProgressSectionPage(
+                  children: [
+                    if (!hasProgress)
+                      SizedBox(
+                        height: 280,
+                        child: AppEmptyState(
+                          title: context.tr(
+                            ky: 'Ритм боюнча маалымат азырынча жок',
+                            en: 'No rhythm data yet',
+                            ru: 'Данных по ритму пока нет',
+                          ),
+                          message: context.tr(
+                            ky: 'Бир сабакты бүтүргөндөн кийин күнүмдүк ритм аналитикасы ушул жерде көрүнөт.',
+                            en: 'Complete one lesson and daily rhythm analytics will appear here.',
+                            ru: 'Завершите один урок, и здесь появится ежедневная аналитика ритма.',
+                          ),
+                          icon: Icons.auto_graph,
+                          actionLabel: context.tr(
+                            ky: 'Практиканы баштоо',
+                            en: 'Start practice',
+                            ru: 'Начать практику',
+                          ),
+                          onAction: () => context.go('/practice'),
+                        ),
+                      )
+                    else ...[
+                      _WeeklyRhythmCard(
+                        activity: progress.recentWeekActivity,
+                        streakDays: progress.streakDays,
+                        totalLearningSeconds: progress.totalLearningSeconds,
+                        activeDaysThisWeek: progress.activeDaysThisWeek,
+                      ),
+                      const SizedBox(height: 12),
+                      _DailyQuestCard(
+                        quests: progress.dailyQuests,
+                        completedCount: progress.completedDailyQuestsCount,
+                        todayXp: progress.todayXp,
+                      ),
+                      const SizedBox(height: 12),
+                      _GrowthSnapshotCard(
+                        progress: progress,
+                        activeDaysThisWeek: progress.activeDaysThisWeek,
+                      ),
+                    ],
+                  ],
+                ),
+                _ProgressSectionPage(
+                  children: [
+                    _SectionHeader(
+                      title: context.tr(
+                        ky: 'Лидерборд',
+                        en: 'Leaderboard',
+                        ru: 'Лидерборд',
+                      ),
+                      subtitle: context.tr(
+                        ky: 'Өсүш аналитикасынан өзүнчө эң мыкты оюнчулар ушул жерде көрсөтүлөт.',
+                        en: 'Top performers are isolated here to avoid mixing ranking with growth analytics.',
+                        ru: 'Лучшие участники вынесены отдельно, чтобы не смешивать рейтинг с аналитикой роста.',
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _LeaderboardPreviewCard(
+                      players: topPlayers,
+                      isLoading: leaderboard.isLoading && topPlayers.isEmpty,
+                      errorMessage: leaderboard.errorMessage,
+                      onRetry: () => ref
+                          .read(leaderboardProvider)
+                          .load(force: true, limit: 10),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -201,61 +283,116 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
     return null;
   }
 
-  List<_Achievement> _buildAchievements(ProgressProvider progress) {
+  List<_Achievement> _buildAchievements(
+    ProgressProvider progress,
+    BuildContext context,
+  ) {
     return [
       _Achievement(
-        title: 'Алгачкы кадам',
-        description: 'Биринчи сөздү ачтыңыз.',
+        title: context.tr(
+          ky: 'Алгачкы кадам',
+          en: 'First step',
+          ru: 'Первый шаг',
+        ),
+        description: context.tr(
+          ky: 'Биринчи сөздү ачтыңыз.',
+          en: 'You unlocked your first word.',
+          ru: 'Вы открыли первое слово.',
+        ),
         icon: Icons.play_circle_fill,
         colors: [const Color(0xFF1976D2), const Color(0xFF42A5F5)],
         unlocked: progress.totalWordsReviewed >= 1,
       ),
       _Achievement(
-        title: '5 сөз',
-        description: '5 сөздү бекем үйрөндүңүз.',
+        title: context.tr(ky: '5 сөз', en: '5 words', ru: '5 слов'),
+        description: context.tr(
+          ky: '5 сөздү бекем үйрөндүңүз.',
+          en: 'You firmly learned 5 words.',
+          ru: 'Вы уверенно выучили 5 слов.',
+        ),
         icon: Icons.gps_fixed,
         colors: [AppColors.primary, const Color(0xFFF7C15C)],
         unlocked: progress.totalWordsMastered >= 5,
       ),
       _Achievement(
-        title: '15 сөз',
-        description: '15 сөздү өздөштүрдүңүз.',
+        title: context.tr(ky: '15 сөз', en: '15 words', ru: '15 слов'),
+        description: context.tr(
+          ky: '15 сөздү өздөштүрдүңүз.',
+          en: 'You mastered 15 words.',
+          ru: 'Вы освоили 15 слов.',
+        ),
         icon: Icons.workspace_premium,
         colors: [AppColors.accent, const Color(0xFFE57373)],
         unlocked: progress.totalWordsMastered >= 15,
       ),
       _Achievement(
-        title: 'Серия оту',
-        description: '7 күн катары менен ритм сакталды.',
+        title: context.tr(
+          ky: 'Серия оту',
+          en: 'Streak fire',
+          ru: 'Огонь серии',
+        ),
+        description: context.tr(
+          ky: '7 күн катары менен ритм сакталды.',
+          en: 'You kept the rhythm for 7 days in a row.',
+          ru: 'Вы держали ритм 7 дней подряд.',
+        ),
         icon: Icons.local_fire_department_rounded,
         colors: [const Color(0xFFFF8A00), const Color(0xFFFFC15C)],
         unlocked: progress.streakDays >= 7,
       ),
       _Achievement(
-        title: 'Убакыт топтоочу',
-        description: '1 саат таза окуу убактысы чогулду.',
+        title: context.tr(
+          ky: 'Убакыт топтоочу',
+          en: 'Time collector',
+          ru: 'Коллекционер времени',
+        ),
+        description: context.tr(
+          ky: '1 саат таза окуу убактысы чогулду.',
+          en: 'You collected 1 hour of pure learning time.',
+          ru: 'Вы собрали 1 час чистого учебного времени.',
+        ),
         icon: Icons.timelapse_rounded,
         colors: [AppColors.link, const Color(0xFF6EC6FF)],
         unlocked: progress.totalLearningSeconds >= 60 * 60,
       ),
       _Achievement(
-        title: 'XP агымы',
-        description: '250 XP топтодуңуз.',
+        title: context.tr(ky: 'XP агымы', en: 'XP flow', ru: 'Поток XP'),
+        description: context.tr(
+          ky: '250 XP топтодуңуз.',
+          en: 'You earned 250 XP.',
+          ru: 'Вы набрали 250 XP.',
+        ),
         icon: Icons.flash_on_rounded,
         colors: [AppColors.warning, const Color(0xFFFFD180)],
         unlocked: progress.totalXp >= 250,
       ),
       _Achievement(
-        title: 'Так жооптор',
-        description: 'Тактык 80% же андан жогору.',
+        title: context.tr(
+          ky: 'Так жооптор',
+          en: 'Accurate answers',
+          ru: 'Точные ответы',
+        ),
+        description: context.tr(
+          ky: 'Тактык 80% же андан жогору.',
+          en: 'Accuracy is 80% or higher.',
+          ru: 'Точность 80% или выше.',
+        ),
         icon: Icons.verified,
         colors: [AppColors.success, const Color(0xFF81C784)],
         unlocked:
             progress.totalReviewSessions > 0 && progress.accuracyPercent >= 80,
       ),
       _Achievement(
-        title: 'Күн толук жабылды',
-        description: 'Бүгүнкү үч квест тең аткарылды.',
+        title: context.tr(
+          ky: 'Күн толук жабылды',
+          en: 'Day completed',
+          ru: 'День закрыт',
+        ),
+        description: context.tr(
+          ky: 'Бүгүнкү үч квест тең аткарылды.',
+          en: 'All three daily quests were completed today.',
+          ru: 'Сегодня выполнены все три ежедневных квеста.',
+        ),
         icon: Icons.flag_circle_rounded,
         colors: [AppColors.primary, AppColors.accent],
         unlocked: progress.completedDailyQuestsCount >= 3,
@@ -284,18 +421,34 @@ class _HeroSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = hasProgress
-        ? 'Lv ${progress.journeyLevel} · ${progress.journeyRank}'
-        : 'Стартка даяр';
+        ? 'Lv ${progress.journeyLevel} · ${progress.journeyRankOf(context)}'
+        : context.tr(
+            ky: 'Стартка даяр',
+            en: 'Ready to start',
+            ru: 'Готово к старту',
+          );
     final subtitle = hasProgress
-        ? _weeklyRhythmLabel(activeDaysThisWeek)
-        : 'Алгач бир кыска циклди бүтүрүп, ритмди ачып алыңыз.';
+        ? _weeklyRhythmLabel(context, activeDaysThisWeek)
+        : context.tr(
+            ky: 'Алгач бир кыска циклди бүтүрүп, ритмди ачып алыңыз.',
+            en: 'Complete your first short cycle to unlock rhythm insights.',
+            ru: 'Завершите первый короткий цикл, чтобы открыть аналитику ритма.',
+          );
     final milestoneText = hasProgress
-        ? '${progress.xpToNextLevel} XP кийин кийинки деңгээл ачылат.'
-        : 'Бүгүнкү чакан темп жаңы деңгээлдин башталышы болот.';
+        ? context.tr(
+            ky: '${progress.xpToNextLevel} XP кийин кийинки деңгээл ачылат.',
+            en: 'Next level unlocks in ${progress.xpToNextLevel} XP.',
+            ru: 'Следующий уровень откроется через ${progress.xpToNextLevel} XP.',
+          )
+        : context.tr(
+            ky: 'Бүгүнкү чакан темп жаңы деңгээлдин башталышы болот.',
+            en: 'Today\'s small pace is enough to start your next level.',
+            ru: 'Сегодняшнего небольшого темпа достаточно, чтобы начать следующий уровень.',
+          );
 
     return AppCard(
       gradient: true,
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -307,7 +460,11 @@ class _HeroSummary extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Кыргызча өсүшүңүз',
+                      context.tr(
+                        ky: 'Кыргызча өсүшүңүз',
+                        en: 'Your Kyrgyz growth',
+                        ru: 'Ваш прогресс в кыргызском',
+                      ),
                       style: AppTextStyles.caption.copyWith(
                         color: Colors.white70,
                         letterSpacing: 0.8,
@@ -336,7 +493,7 @@ class _HeroSummary extends StatelessWidget {
               _StreakOrb(streakDays: progress.streakDays),
             ],
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 14),
           _HeroProgressBar(
             value: hasProgress ? progress.nextMilestoneProgress : 0.04,
           ),
@@ -344,10 +501,14 @@ class _HeroSummary extends StatelessWidget {
           Text(
             hasProgress
                 ? milestoneText
-                : 'Бүгүн $dailyGoalMinutes мүнөттүк темпти баштасаңыз жетиштүү.',
+                : context.tr(
+                    ky: 'Бүгүн $dailyGoalMinutes мүнөттүк темпти баштасаңыз жетиштүү.',
+                    en: 'Starting a $dailyGoalMinutes-minute pace today is enough.',
+                    ru: 'Достаточно начать сегодня темп в $dailyGoalMinutes минут.',
+                  ),
             style: AppTextStyles.caption.copyWith(color: Colors.white70),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Wrap(
             spacing: 10,
             runSpacing: 10,
@@ -355,7 +516,7 @@ class _HeroSummary extends StatelessWidget {
               _HeroMetricPill(
                 icon: Icons.auto_stories_rounded,
                 value: progress.totalWordsMastered.toString(),
-                label: 'Сөз',
+                label: context.tr(ky: 'Сөз', en: 'Words', ru: 'Слова'),
               ),
               _HeroMetricPill(
                 icon: Icons.flash_on_rounded,
@@ -365,24 +526,25 @@ class _HeroSummary extends StatelessWidget {
               _HeroMetricPill(
                 icon: Icons.schedule_rounded,
                 value: _formatLearningTimeCompact(
+                  context,
                   progress.totalLearningSeconds,
                 ),
-                label: 'Убакыт',
+                label: context.tr(ky: 'Убакыт', en: 'Time', ru: 'Время'),
               ),
               _HeroMetricPill(
                 icon: Icons.calendar_today_rounded,
                 value: '$activeDaysThisWeek/7',
-                label: 'Апта',
+                label: context.tr(ky: 'Апта', en: 'Week', ru: 'Неделя'),
               ),
               _HeroMetricPill(
                 icon: Icons.flag_rounded,
                 value: '${progress.completedDailyQuestsCount}/3',
-                label: 'Квест',
+                label: context.tr(ky: 'Квест', en: 'Quest', ru: 'Квест'),
               ),
               _HeroMetricPill(
                 icon: Icons.workspace_premium_rounded,
                 value: '$unlockedAchievements/$totalAchievements',
-                label: 'Белги',
+                label: context.tr(ky: 'Белги', en: 'Badge', ru: 'Знак'),
               ),
             ],
           ),
@@ -391,17 +553,33 @@ class _HeroSummary extends StatelessWidget {
     );
   }
 
-  String _weeklyRhythmLabel(int activeDays) {
+  String _weeklyRhythmLabel(BuildContext context, int activeDays) {
     if (activeDays >= 6) {
-      return 'Ритм абдан бекем. Темпти мыкты кармап жатасыз.';
+      return context.tr(
+        ky: 'Ритм абдан бекем. Темпти мыкты кармап жатасыз.',
+        en: 'Your rhythm is very strong. You are holding the pace well.',
+        ru: 'Ритм очень крепкий. Вы отлично удерживаете темп.',
+      );
     }
     if (activeDays >= 4) {
-      return 'Апталык ритм жакшы. Дагы бир нече күн кошсоңуз күчөйт.';
+      return context.tr(
+        ky: 'Апталык ритм жакшы. Дагы бир нече күн кошсоңуз күчөйт.',
+        en: 'Weekly rhythm looks good. A few more days will strengthen it.',
+        ru: 'Недельный ритм хороший. Еще несколько дней сделают его сильнее.',
+      );
     }
     if (activeDays >= 2) {
-      return 'Ритм түзүлүп жатат. Серияны үзбөңүз.';
+      return context.tr(
+        ky: 'Ритм түзүлүп жатат. Серияны үзбөңүз.',
+        en: 'Your rhythm is forming. Do not break the streak.',
+        ru: 'Ритм формируется. Не прерывайте серию.',
+      );
     }
-    return 'Азыр темпти кайра чогултуу маанилүү.';
+    return context.tr(
+      ky: 'Азыр темпти кайра чогултуу маанилүү.',
+      en: 'It is important to rebuild the pace now.',
+      ru: 'Сейчас важно заново собрать темп.',
+    );
   }
 }
 
@@ -417,14 +595,21 @@ class _GrowthSnapshotCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionHeader(
-            title: 'Өсүш картасы',
-            subtitle:
-                'Ушул жерден деңгээл, сөз кору, убакыт жана жооп сапаты чогуу көрүнөт.',
+          _SectionHeader(
+            title: context.tr(
+              ky: 'Өсүш картасы',
+              en: 'Growth snapshot',
+              ru: 'Карта роста',
+            ),
+            subtitle: context.tr(
+              ky: 'Ушул жерден деңгээл, сөз кору, убакыт жана жооп сапаты чогуу көрүнөт.',
+              en: 'Level, vocabulary, time, and answer quality appear together here.',
+              ru: 'Здесь вместе видны уровень, словарь, время и качество ответов.',
+            ),
           ),
           const SizedBox(height: 16),
           AdaptivePanelGrid(
@@ -436,128 +621,78 @@ class _GrowthSnapshotCard extends StatelessWidget {
                 icon: Icons.trending_up_rounded,
                 accent: AppColors.primary,
                 value: 'Lv ${progress.journeyLevel}',
-                label: 'Саякат деңгээли',
-                helper:
-                    '${progress.journeyRank} · ${progress.xpToNextLevel} XP калды.',
+                label: context.tr(
+                  ky: 'Саякат деңгээли',
+                  en: 'Journey level',
+                  ru: 'Уровень пути',
+                ),
+                helper: context.tr(
+                  ky: '${progress.journeyRankOf(context)} · ${progress.xpToNextLevel} XP калды.',
+                  en: '${progress.journeyRankOf(context)} · ${progress.xpToNextLevel} XP left.',
+                  ru: '${progress.journeyRankOf(context)} · осталось ${progress.xpToNextLevel} XP.',
+                ),
               ),
               _InsightTile(
                 icon: Icons.auto_stories_rounded,
                 accent: AppColors.accent,
                 value: '${progress.totalWordsMastered}',
-                label: 'Үйрөнүлгөн сөз',
-                helper: 'Ар бир бекем сөз жалпы деңгээлди көтөрөт.',
+                label: context.tr(
+                  ky: 'Үйрөнүлгөн сөз',
+                  en: 'Learned words',
+                  ru: 'Выученные слова',
+                ),
+                helper: context.tr(
+                  ky: 'Ар бир бекем сөз жалпы деңгээлди көтөрөт.',
+                  en: 'Each solid word raises the overall level.',
+                  ru: 'Каждое закрепленное слово повышает общий уровень.',
+                ),
               ),
               _InsightTile(
                 icon: Icons.flash_on_rounded,
                 accent: AppColors.warning,
                 value: '${progress.totalXp}',
-                label: 'Жалпы XP',
-                helper: 'Квест, убакыт жана жооптор бул метриканы толтурат.',
+                label: context.tr(
+                  ky: 'Жалпы XP',
+                  en: 'Total XP',
+                  ru: 'Общий XP',
+                ),
+                helper: context.tr(
+                  ky: 'Квест, убакыт жана жооптор бул метриканы толтурат.',
+                  en: 'Quests, time, and answers fill this metric.',
+                  ru: 'Квесты, время и ответы наполняют эту метрику.',
+                ),
               ),
               _InsightTile(
                 icon: Icons.schedule_rounded,
                 accent: AppColors.success,
                 value: _formatLearningTimeCompact(
+                  context,
                   progress.totalLearningSeconds,
                 ),
-                label: 'Жалпы убакыт',
-                helper: 'Бул реалдуу практика менен топтолгон убакыт.',
+                label: context.tr(
+                  ky: 'Жалпы убакыт',
+                  en: 'Total time',
+                  ru: 'Общее время',
+                ),
+                helper: context.tr(
+                  ky: 'Бул реалдуу практика менен топтолгон убакыт.',
+                  en: 'This is time accumulated through real practice.',
+                  ru: 'Это время, накопленное в реальной практике.',
+                ),
               ),
               _InsightTile(
                 icon: Icons.gpp_good_rounded,
                 accent: AppColors.link,
                 value: '${progress.accuracyPercent}%',
-                label: 'Жооп сапаты',
-                helper: '$activeDaysThisWeek күн активдүүлүк менен эсептелди.',
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _JourneyTrackCard extends StatelessWidget {
-  const _JourneyTrackCard({required this.progress});
-
-  final ProgressProvider progress;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      padding: const EdgeInsets.all(20),
-      backgroundColor: AppColors.primary.withValues(alpha: 0.04),
-      borderColor: AppColors.primary.withValues(alpha: 0.14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Саякат жолу',
-                      style: AppTextStyles.body.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'XP темп, квест жана практика аркылуу топтолот.',
-                      style: AppTextStyles.muted,
-                    ),
-                  ],
+                label: context.tr(
+                  ky: 'Жооп сапаты',
+                  en: 'Answer quality',
+                  ru: 'Качество ответов',
                 ),
-              ),
-              const SizedBox(width: 12),
-              AppChip(
-                label: progress.journeyRank,
-                variant: AppChipVariant.primary,
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          AdaptivePanelGrid(
-            maxColumns: 3,
-            minItemWidth: 110,
-            spacing: 10,
-            children: [
-              _StatusTile(
-                label: 'Деңгээл',
-                value: 'Lv ${progress.journeyLevel}',
-                color: AppColors.primary,
-              ),
-              _StatusTile(
-                label: 'Бүгүн XP',
-                value: '+${progress.todayXp}',
-                color: AppColors.warning,
-              ),
-              _StatusTile(
-                label: 'Жалпы XP',
-                value: '${progress.totalXp}',
-                color: AppColors.accent,
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          _LinearProgress(value: progress.journeyLevelProgress),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '${progress.xpIntoCurrentLevel} XP ушул деңгээлде',
-                style: AppTextStyles.caption,
-              ),
-              Text(
-                '${progress.xpToNextLevel} XP калды',
-                style: AppTextStyles.caption.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w700,
+                helper: context.tr(
+                  ky: '$activeDaysThisWeek күн активдүүлүк менен эсептелди.',
+                  en: 'Based on $activeDaysThisWeek active days.',
+                  ru: 'Рассчитано по $activeDaysThisWeek активным дням.',
                 ),
               ),
             ],
@@ -597,7 +732,7 @@ class _WeeklyRhythmCard extends StatelessWidget {
     });
 
     return AppCard(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       backgroundColor: AppColors.secondary.withValues(alpha: 0.7),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -609,21 +744,29 @@ class _WeeklyRhythmCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Апталык ритм',
+                      context.tr(
+                        ky: 'Апталык ритм',
+                        en: 'Weekly rhythm',
+                        ru: 'Недельный ритм',
+                      ),
                       style: AppTextStyles.body.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      _rhythmNarrative(activeDaysThisWeek),
+                      _rhythmNarrative(context, activeDaysThisWeek),
                       style: AppTextStyles.muted,
                     ),
                   ],
                 ),
               ),
               AppChip(
-                label: '$streakDays күн серия',
+                label: context.tr(
+                  ky: '$streakDays күн серия',
+                  en: '$streakDays day streak',
+                  ru: 'Серия $streakDays дней',
+                ),
                 variant: streakDays >= 7
                     ? AppChipVariant.success
                     : AppChipVariant.primary,
@@ -654,13 +797,24 @@ class _WeeklyRhythmCard extends StatelessWidget {
             spacing: 12,
             children: [
               _StatusTile(
-                label: 'Бул апта',
-                value: _formatLearningTimeCompact(weeklySeconds),
+                label: context.tr(
+                  ky: 'Бул апта',
+                  en: 'This week',
+                  ru: 'Эта неделя',
+                ),
+                value: _formatLearningTimeCompact(context, weeklySeconds),
                 color: AppColors.primary,
               ),
               _StatusTile(
-                label: 'Жалпы убакыт',
-                value: _formatLearningTimeCompact(totalLearningSeconds),
+                label: context.tr(
+                  ky: 'Жалпы убакыт',
+                  en: 'Total time',
+                  ru: 'Общее время',
+                ),
+                value: _formatLearningTimeCompact(
+                  context,
+                  totalLearningSeconds,
+                ),
                 color: AppColors.success,
               ),
             ],
@@ -668,8 +822,16 @@ class _WeeklyRhythmCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             bestDay == null || !bestDay.isActive
-                ? 'Азырынча активдүү күндөр аз. Бир кыска цикл да ритмди жандандырат.'
-                : 'Эң күчтүү күн: ${_weekdayLabel(bestDay.date.weekday)}. Ушул темпти жумасына $activeDaysThisWeek күн кармап калуу маанилүү.',
+                ? context.tr(
+                    ky: 'Азырынча активдүү күндөр аз. Бир кыска цикл да ритмди жандандырат.',
+                    en: 'There are still few active days. Even one short cycle will wake the rhythm up.',
+                    ru: 'Активных дней пока мало. Даже один короткий цикл оживит ритм.',
+                  )
+                : context.tr(
+                    ky: 'Эң күчтүү күн: ${_weekdayLabel(bestDay.date.weekday)}. Ушул темпти жумасына $activeDaysThisWeek күн кармап калуу маанилүү.',
+                    en: 'Strongest day: ${_weekdayLabel(bestDay.date.weekday)}. It is important to hold this pace for $activeDaysThisWeek days a week.',
+                    ru: 'Самый сильный день: ${_weekdayLabel(bestDay.date.weekday)}. Важно удерживать такой темп $activeDaysThisWeek дней в неделю.',
+                  ),
             style: AppTextStyles.caption,
           ),
         ],
@@ -683,17 +845,33 @@ class _WeeklyRhythmCard extends StatelessWidget {
     return (day.interactions * 45).toDouble();
   }
 
-  String _rhythmNarrative(int activeDays) {
+  String _rhythmNarrative(BuildContext context, int activeDays) {
     if (activeDays >= 6) {
-      return 'Бул жумада практика дээрлик күн сайын жүрдү.';
+      return context.tr(
+        ky: 'Бул жумада практика дээрлик күн сайын жүрдү.',
+        en: 'Practice happened almost every day this week.',
+        ru: 'Практика была почти каждый день на этой неделе.',
+      );
     }
     if (activeDays >= 4) {
-      return 'Темп жакшы. Серияны дагы бир аз узартсаңыз күчөйт.';
+      return context.tr(
+        ky: 'Темп жакшы. Серияны дагы бир аз узартсаңыз күчөйт.',
+        en: 'The pace is good. Extend the streak a little more to strengthen it.',
+        ru: 'Темп хороший. Продлите серию ещё немного, и она станет крепче.',
+      );
     }
     if (activeDays >= 2) {
-      return 'Ритм жанданып жатат, бирок туруктуулук керек.';
+      return context.tr(
+        ky: 'Ритм жанданып жатат, бирок туруктуулук керек.',
+        en: 'The rhythm is waking up, but it still needs consistency.',
+        ru: 'Ритм оживает, но ему всё ещё нужна стабильность.',
+      );
     }
-    return 'Азырынча ритм бош. Бүгүнкү кыска практика маанилүү болот.';
+    return context.tr(
+      ky: 'Азырынча ритм бош. Бүгүнкү кыска практика маанилүү болот.',
+      en: 'The rhythm is still empty. A short practice today will matter.',
+      ru: 'Ритм пока пуст. Короткая практика сегодня будет важной.',
+    );
   }
 }
 
@@ -793,7 +971,7 @@ class _DailyQuestCard extends StatelessWidget {
     final allDone = nextQuest == null;
 
     return AppCard(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -805,7 +983,11 @@ class _DailyQuestCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Бүгүнкү квесттер',
+                      context.tr(
+                        ky: 'Бүгүнкү квесттер',
+                        en: 'Today\'s quests',
+                        ru: 'Квесты на сегодня',
+                      ),
                       style: AppTextStyles.body.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
@@ -813,8 +995,16 @@ class _DailyQuestCard extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       allDone
-                          ? 'Бүгүнкү үч квест тең жабылды. Темп мыкты.'
-                          : 'Кыска тапшырмалар бүгүнкү ритмди кармап турат.',
+                          ? context.tr(
+                              ky: 'Бүгүнкү үч квест тең жабылды. Темп мыкты.',
+                              en: 'All three quests are closed today. Great pace.',
+                              ru: 'Все три квеста на сегодня закрыты. Отличный темп.',
+                            )
+                          : context.tr(
+                              ky: 'Кыска тапшырмалар бүгүнкү ритмди кармап турат.',
+                              en: 'Short tasks are holding today\'s rhythm.',
+                              ru: 'Короткие задания поддерживают ритм сегодняшнего дня.',
+                            ),
                       style: AppTextStyles.muted,
                     ),
                   ],
@@ -822,7 +1012,11 @@ class _DailyQuestCard extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               AppChip(
-                label: '$completedCount/${quests.length} аткарылды',
+                label: context.tr(
+                  ky: '$completedCount/${quests.length} аткарылды',
+                  en: '$completedCount/${quests.length} completed',
+                  ru: '$completedCount/${quests.length} выполнено',
+                ),
                 variant: allDone
                     ? AppChipVariant.success
                     : AppChipVariant.primary,
@@ -836,7 +1030,11 @@ class _DailyQuestCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Бүгүн +$todayXp XP топтолду.',
+                  context.tr(
+                    ky: 'Бүгүн +$todayXp XP топтолду.',
+                    en: '+$todayXp XP earned today.',
+                    ru: 'Сегодня получено +$todayXp XP.',
+                  ),
                   style: AppTextStyles.caption,
                 ),
               ),
@@ -844,14 +1042,27 @@ class _DailyQuestCard extends StatelessWidget {
                 AppButton(
                   size: AppButtonSize.sm,
                   onPressed: () => context.go(nextQuest!.route),
-                  child: const Text('Кийинки квест'),
+                  child: Text(
+                    context.tr(
+                      ky: 'Кийинки квест',
+                      en: 'Next quest',
+                      ru: 'Следующий квест',
+                    ),
+                  ),
                 )
               else
                 AppButton(
                   size: AppButtonSize.sm,
                   variant: AppButtonVariant.outlined,
-                  onPressed: () => context.go('/achievements'),
-                  child: const Text('Белгилерди көрүү'),
+                  onPressed: () =>
+                      context.push('/achievements?returnTo=/progress'),
+                  child: Text(
+                    context.tr(
+                      ky: 'Белгилерди көрүү',
+                      en: 'View badges',
+                      ru: 'Посмотреть достижения',
+                    ),
+                  ),
                 ),
             ],
           ),
@@ -889,13 +1100,16 @@ class _QuestProgressRow extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        quest.title,
+                        quest.titleOf(context),
                         style: AppTextStyles.body.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(quest.description, style: AppTextStyles.caption),
+                      Text(
+                        quest.descriptionOf(context),
+                        style: AppTextStyles.caption,
+                      ),
                     ],
                   ),
                 ),
@@ -921,7 +1135,13 @@ class _QuestProgressRow extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  quest.claimed ? 'Аткарылды' : '${quest.rewardXp} XP',
+                  quest.claimed
+                      ? context.tr(
+                          ky: 'Аткарылды',
+                          en: 'Completed',
+                          ru: 'Выполнено',
+                        )
+                      : '${quest.rewardXp} XP',
                   style: AppTextStyles.caption.copyWith(
                     color: accent,
                     fontWeight: FontWeight.w700,
@@ -946,9 +1166,11 @@ class _FocusCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      padding: const EdgeInsets.all(20),
-      backgroundColor: AppColors.primary.withValues(alpha: 0.05),
-      borderColor: AppColors.primary.withValues(alpha: 0.14),
+      padding: const EdgeInsets.all(18),
+      showShadow: false,
+      showOverlay: false,
+      backgroundColor: AppColors.surface,
+      borderColor: AppColors.outline,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -956,23 +1178,31 @@ class _FocusCard extends StatelessWidget {
             spacing: 8,
             runSpacing: 8,
             children: [
-              AppChip(label: focus.badge, variant: focus.badgeVariant),
-              if (focus.helperChip != null)
+              AppChip(
+                label: focus.badgeOf(context),
+                variant: focus.badgeVariant,
+              ),
+              if (focus.helperChipOf(context) != null)
                 AppChip(
-                  label: focus.helperChip!,
+                  label: focus.helperChipOf(context)!,
                   variant: AppChipVariant.defaultChip,
                 ),
             ],
           ),
           const SizedBox(height: 12),
-          Text(focus.title, style: AppTextStyles.title.copyWith(fontSize: 22)),
+          Text(
+            focus.titleOf(context),
+            style: AppTextStyles.title.copyWith(fontSize: 22),
+          ),
           const SizedBox(height: 8),
-          Text(focus.message, style: AppTextStyles.body),
+          Text(focus.messageOf(context), style: AppTextStyles.body),
           const SizedBox(height: 14),
           AppButton(
             fullWidth: true,
+            showShadow: false,
+            showSheen: false,
             onPressed: () => context.go(focus.primaryRoute),
-            child: Text(focus.primaryLabel),
+            child: Text(focus.primaryLabelOf(context)),
           ),
         ],
       ),
@@ -996,24 +1226,42 @@ class _MilestoneCard extends StatelessWidget {
     final percent = (progress.nextMilestoneProgress * 100).round();
 
     return AppCard(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Кийинки бийиктик',
+            context.tr(
+              ky: 'Кийинки бийиктик',
+              en: 'Next milestone',
+              ru: 'Следующая высота',
+            ),
             style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 10),
           Text(
-            isMaxed ? 'Roadmap ачык' : '${progress.wordsToNextMilestone}',
+            isMaxed
+                ? context.tr(
+                    ky: 'Чекиттер ачылды',
+                    en: 'Milestones unlocked',
+                    ru: 'Этапы открыты',
+                  )
+                : '${progress.wordsToNextMilestone}',
             style: AppTextStyles.heading.copyWith(fontSize: 30),
           ),
           const SizedBox(height: 4),
           Text(
             isMaxed
-                ? 'Учурдагы негизги чекиттер толук ачылган.'
-                : 'сөз калды · максат ${progress.nextMilestoneLabel}',
+                ? context.tr(
+                    ky: 'Учурдагы негизги чекиттер толук бүттү.',
+                    en: 'Current key milestones are fully completed.',
+                    ru: 'Текущие ключевые этапы полностью завершены.',
+                  )
+                : context.tr(
+                    ky: 'сөз калды · максат ${progress.nextMilestoneLabelOf(context)}',
+                    en: 'words left · target ${progress.nextMilestoneLabelOf(context)}',
+                    ru: 'слов осталось · цель ${progress.nextMilestoneLabelOf(context)}',
+                  ),
             style: AppTextStyles.muted,
           ),
           const SizedBox(height: 14),
@@ -1021,8 +1269,16 @@ class _MilestoneCard extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             isMaxed
-                ? 'Эми темпти, тактыкты жана серияны бекемдесеңиз болот.'
-                : '$percent% өттү. Бүгүнкү $dailyGoalMinutes мүн темп бул чекитке жакындатат.',
+                ? context.tr(
+                    ky: 'Эми темпти, тактыкты жана серияны бекемдесеңиз болот.',
+                    en: 'Now you can strengthen pace, accuracy, and streak.',
+                    ru: 'Теперь можно укреплять темп, точность и серию.',
+                  )
+                : context.tr(
+                    ky: '$percent% өттү. Бүгүнкү $dailyGoalMinutes мүн темп бул чекитке жакындатат.',
+                    en: '$percent% completed. Today\'s $dailyGoalMinutes-minute pace moves you closer.',
+                    ru: '$percent% пройдено. Сегодняшний темп в $dailyGoalMinutes минут приблизит вас к цели.',
+                  ),
             style: AppTextStyles.caption,
           ),
         ],
@@ -1043,12 +1299,16 @@ class _ReviewStatusCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Практика пульсу',
+            context.tr(
+              ky: 'Практика пульсу',
+              en: 'Practice pulse',
+              ru: 'Пульс практики',
+            ),
             style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 12),
@@ -1058,18 +1318,34 @@ class _ReviewStatusCard extends StatelessWidget {
             spacing: 10,
             children: [
               _StatusTile(
-                label: 'Кайталоо',
+                label: context.tr(
+                  ky: 'Кайталоо',
+                  en: 'Review',
+                  ru: 'Повторение',
+                ),
                 value: progress.reviewDueWordsCount.toString(),
                 color: AppColors.accent,
               ),
               _StatusTile(
-                label: 'Алсыз сөз',
+                label: context.tr(
+                  ky: 'Алсыз сөз',
+                  en: 'Weak words',
+                  ru: 'Слабые слова',
+                ),
                 value: progress.weakWordsCount.toString(),
                 color: AppColors.primary,
               ),
               _StatusTile(
-                label: 'Күндүк максат',
-                value: '$dailyGoalMinutes мүн',
+                label: context.tr(
+                  ky: 'Күндүк максат',
+                  en: 'Daily goal',
+                  ru: 'Дневная цель',
+                ),
+                value: context.tr(
+                  ky: '$dailyGoalMinutes мүн',
+                  en: '$dailyGoalMinutes min',
+                  ru: '$dailyGoalMinutes мин',
+                ),
                 color: AppColors.success,
               ),
             ],
@@ -1077,8 +1353,16 @@ class _ReviewStatusCard extends StatelessWidget {
           const SizedBox(height: 14),
           Text(
             progress.hasReviewFocus
-                ? 'Азыркы эң чоң кайтарым кайталоодо жатат.'
-                : 'Кайталоо таза. Жаңы цикл же квиз үчүн жакшы учур.',
+                ? context.tr(
+                    ky: 'Азыркы эң чоң кайтарым кайталоодо жатат.',
+                    en: 'The biggest payoff right now is in review.',
+                    ru: 'Самая большая отдача сейчас находится в повторении.',
+                  )
+                : context.tr(
+                    ky: 'Кайталоо таза. Жаңы цикл же квиз үчүн жакшы учур.',
+                    en: 'Review is clean. Good time for a new cycle or quiz.',
+                    ru: 'Повторение чистое. Хорошее время для нового цикла или квиза.',
+                  ),
             style: AppTextStyles.caption,
           ),
         ],
@@ -1087,18 +1371,141 @@ class _ReviewStatusCard extends StatelessWidget {
   }
 }
 
+class _ProgressSectionPage extends StatelessWidget {
+  const _ProgressSectionPage({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+      children: children,
+    );
+  }
+}
+
+class _AchievementWallEntryCard extends StatelessWidget {
+  const _AchievementWallEntryCard({
+    required this.unlockedCount,
+    required this.totalCount,
+  });
+
+  final int unlockedCount;
+  final int totalCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      padding: const EdgeInsets.all(16),
+      showShadow: false,
+      showOverlay: false,
+      backgroundColor: AppColors.surface,
+      borderColor: AppColors.outline,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: AppColors.accent.withValues(alpha: 0.16),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.workspace_premium_rounded,
+              color: AppColors.textDark,
+              size: 22,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.tr(
+                    ky: 'Жетишкендиктер дубалы',
+                    en: 'Achievement wall',
+                    ru: 'Стена достижений',
+                  ),
+                  style: AppTextStyles.body.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  context.tr(
+                    ky: '$unlockedCount/$totalCount ачылды. Толук маалымат жана жабык максаттар үчүн өзүнчө дубалды ачыңыз.',
+                    en: '$unlockedCount of $totalCount unlocked. Open the dedicated wall for full details and locked targets.',
+                    ru: 'Открыто $unlockedCount из $totalCount. Откройте отдельную стену для подробностей и закрытых целей.',
+                  ),
+                  style: AppTextStyles.caption,
+                ),
+                const SizedBox(height: 10),
+                AppButton(
+                  size: AppButtonSize.sm,
+                  showShadow: false,
+                  showSheen: false,
+                  onPressed: () =>
+                      context.push('/achievements?returnTo=/progress'),
+                  child: Text(
+                    context.tr(
+                      ky: 'Жетишкендиктер дубалын ачуу',
+                      en: 'Open achievement wall',
+                      ru: 'Открыть стену достижений',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _ProgressIntentStrip extends StatelessWidget {
-  const _ProgressIntentStrip();
+  const _ProgressIntentStrip({
+    required this.activeIndex,
+    required this.onSelect,
+  });
+
+  final int activeIndex;
+  final ValueChanged<int> onSelect;
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
-      children: const [
-        AppChip(label: 'Өсүш', variant: AppChipVariant.primary),
-        AppChip(label: 'Top 10', variant: AppChipVariant.accent),
-        AppChip(label: 'Кийинки кадам', variant: AppChipVariant.success),
+      children: [
+        AppChip(
+          label: context.tr(ky: 'Обзор', en: 'Overview', ru: 'Обзор'),
+          variant: activeIndex == 0
+              ? AppChipVariant.primary
+              : AppChipVariant.defaultChip,
+          onTap: () => onSelect(0),
+        ),
+        AppChip(
+          label: context.tr(ky: 'Ритм', en: 'Rhythm', ru: 'Ритм'),
+          variant: activeIndex == 1
+              ? AppChipVariant.success
+              : AppChipVariant.defaultChip,
+          onTap: () => onSelect(1),
+        ),
+        AppChip(
+          label: context.tr(
+            ky: 'Лидерборд',
+            en: 'Leaderboard',
+            ru: 'Лидерборд',
+          ),
+          variant: activeIndex == 2
+              ? AppChipVariant.accent
+              : AppChipVariant.defaultChip,
+          onTap: () => onSelect(2),
+        ),
       ],
     );
   }
@@ -1120,11 +1527,19 @@ class _LeaderboardPreviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const SizedBox(
+      return SizedBox(
         height: 220,
         child: AppLoadingState(
-          title: 'Лидерборд жүктөлүүдө',
-          message: 'Топ оюнчулар даярдалып жатат.',
+          title: context.tr(
+            ky: 'Лидерборд жүктөлүүдө',
+            en: 'Leaderboard is loading',
+            ru: 'Лидерборд загружается',
+          ),
+          message: context.tr(
+            ky: 'Топ оюнчулар даярдалып жатат.',
+            en: 'Top players are being prepared.',
+            ru: 'Подготавливаются лучшие игроки.',
+          ),
         ),
       );
     }
@@ -1148,7 +1563,11 @@ class _LeaderboardPreviewCard extends StatelessWidget {
           ],
           if (players.isEmpty)
             Text(
-              'Азырынча оюнчулар көрүнбөй жатат.',
+              context.tr(
+                ky: 'Азырынча оюнчулар көрүнбөй жатат.',
+                en: 'No players are visible yet.',
+                ru: 'Игроки пока не отображаются.',
+              ),
               style: AppTextStyles.muted,
             ),
           const SizedBox(height: 14),
@@ -1156,7 +1575,13 @@ class _LeaderboardPreviewCard extends StatelessWidget {
             fullWidth: true,
             variant: AppButtonVariant.outlined,
             onPressed: () => context.push('/leaderboard?limit=100'),
-            child: const Text('Алгачкы 100 оюнчуну ачуу'),
+            child: Text(
+              context.tr(
+                ky: 'Алгачкы 100 оюнчуну ачуу',
+                en: 'Open top 100 players',
+                ru: 'Открыть топ-100 игроков',
+              ),
+            ),
           ),
         ],
       ),
@@ -1204,7 +1629,11 @@ class _LeaderboardPreviewRow extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                '${player.journeyRank} · ${player.streakDays} күн',
+                context.tr(
+                  ky: '${localizedJourneyRank(context, player.journeyLevel)} · ${player.streakDays} күн',
+                  en: '${localizedJourneyRank(context, player.journeyLevel)} · ${player.streakDays} days',
+                  ru: '${localizedJourneyRank(context, player.journeyLevel)} · ${player.streakDays} дней',
+                ),
                 style: AppTextStyles.caption,
               ),
             ],
@@ -1226,49 +1655,6 @@ class _LeaderboardPreviewRow extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-class _ProgressSyncCard extends StatelessWidget {
-  const _ProgressSyncCard({required this.progress});
-
-  final ProgressProvider progress;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (progress.syncState) {
-      case ProgressSyncState.localOnly:
-        return AppSyncBanner(
-          title: progress.syncTitle,
-          message: progress.syncSubtitle,
-          icon: Icons.save_outlined,
-          accentColor: AppColors.primary,
-        );
-      case ProgressSyncState.pending:
-      case ProgressSyncState.syncing:
-        return AppSyncBanner(
-          title: progress.syncTitle,
-          message: progress.syncSubtitle,
-          icon: Icons.sync,
-          accentColor: AppColors.accent,
-        );
-      case ProgressSyncState.synced:
-        return AppSyncBanner(
-          title: progress.syncTitle,
-          message: progress.syncSubtitle,
-          icon: Icons.cloud_done,
-          accentColor: AppColors.success,
-        );
-      case ProgressSyncState.failed:
-        return AppSyncBanner(
-          title: progress.syncTitle,
-          message: progress.syncSubtitle,
-          icon: Icons.cloud_off,
-          accentColor: AppColors.accent,
-          actionLabel: 'Кайра синк кылуу',
-          onAction: progress.canRetrySync ? progress.retrySync : null,
-        );
-    }
   }
 }
 
@@ -1559,71 +1945,6 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-class _AchievementTile extends StatelessWidget {
-  const _AchievementTile({required this.achievement});
-
-  final _Achievement achievement;
-
-  @override
-  Widget build(BuildContext context) {
-    final locked = !achievement.unlocked;
-    return AppCard(
-      padding: const EdgeInsets.all(16),
-      backgroundColor: locked
-          ? AppColors.surface.withValues(alpha: 0.78)
-          : AppColors.surface,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: achievement.colors,
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                child: Icon(
-                  achievement.icon,
-                  color: Colors.white.withValues(alpha: locked ? 0.7 : 1),
-                  size: 28,
-                ),
-              ),
-              const Spacer(),
-              Icon(
-                locked ? Icons.lock_outline : Icons.check_circle,
-                size: 18,
-                color: locked ? AppColors.muted : AppColors.success,
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Text(
-            achievement.title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 6),
-          Expanded(
-            child: Text(
-              achievement.description,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.muted,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _Achievement {
   const _Achievement({
     required this.title,
@@ -1642,22 +1963,29 @@ class _Achievement {
 
 class _ProgressFocus {
   const _ProgressFocus({
-    required this.title,
-    required this.message,
-    required this.primaryLabel,
+    required this.titleBuilder,
+    required this.messageBuilder,
+    required this.primaryLabelBuilder,
     required this.primaryRoute,
-    required this.badge,
+    required this.badgeBuilder,
     required this.badgeVariant,
-    this.helperChip,
+    this.helperChipBuilder,
   });
 
-  final String title;
-  final String message;
-  final String primaryLabel;
+  final String Function(BuildContext context) titleBuilder;
+  final String Function(BuildContext context) messageBuilder;
+  final String Function(BuildContext context) primaryLabelBuilder;
   final String primaryRoute;
-  final String badge;
+  final String Function(BuildContext context) badgeBuilder;
   final AppChipVariant badgeVariant;
-  final String? helperChip;
+  final String Function(BuildContext context)? helperChipBuilder;
+
+  String titleOf(BuildContext context) => titleBuilder(context);
+  String messageOf(BuildContext context) => messageBuilder(context);
+  String primaryLabelOf(BuildContext context) => primaryLabelBuilder(context);
+  String badgeOf(BuildContext context) => badgeBuilder(context);
+  String? helperChipOf(BuildContext context) =>
+      helperChipBuilder?.call(context);
 
   factory _ProgressFocus.fromState({
     required ProgressProvider progress,
@@ -1666,60 +1994,139 @@ class _ProgressFocus {
   }) {
     if (progress.reviewDueWordsCount > 0 && reviewCategory != null) {
       return _ProgressFocus(
-        title: 'Алгач кайталоону жабыңыз',
-        message: '${reviewCategory.title} ичинде мөөнөтү жеткен сөздөр бар.',
-        primaryLabel: 'Кайталоону баштоо',
+        titleBuilder: (context) => context.tr(
+          ky: 'Алгач кайталоону жабыңыз',
+          en: 'Close review first',
+          ru: 'Сначала закройте повторение',
+        ),
+        messageBuilder: (context) => context.tr(
+          ky: '${reviewCategory.title} ичинде мөөнөтү жеткен сөздөр бар.',
+          en: 'There are due words inside ${reviewCategory.title}.',
+          ru: 'Внутри ${reviewCategory.title} есть слова с истекшим сроком.',
+        ),
+        primaryLabelBuilder: (context) => context.tr(
+          ky: 'Кайталоону баштоо',
+          en: 'Start review',
+          ru: 'Начать повторение',
+        ),
         primaryRoute: '/flashcards/${reviewCategory.id}?mode=review',
-        badge: '${progress.reviewDueWordsCount} кайталоо',
+        badgeBuilder: (context) => context.tr(
+          ky: '${progress.reviewDueWordsCount} кайталоо',
+          en: '${progress.reviewDueWordsCount} reviews',
+          ru: '${progress.reviewDueWordsCount} повторений',
+        ),
         badgeVariant: AppChipVariant.accent,
-        helperChip: '$dailyGoalMinutes мүн максат',
+        helperChipBuilder: (context) => context.tr(
+          ky: '$dailyGoalMinutes мүн максат',
+          en: '$dailyGoalMinutes min goal',
+          ru: 'Цель $dailyGoalMinutes мин',
+        ),
       );
     }
 
     if (progress.weakWordsCount > 0) {
       return _ProgressFocus(
-        title: 'Алсыз сөздөрдү бекемдеңиз',
-        message: '${progress.weakWordsCount} сөз дагы эле туруксуз.',
-        primaryLabel: 'Практикага өтүү',
+        titleBuilder: (context) => context.tr(
+          ky: 'Алсыз сөздөрдү бекемдеңиз',
+          en: 'Strengthen weak words',
+          ru: 'Укрепите слабые слова',
+        ),
+        messageBuilder: (context) => context.tr(
+          ky: '${progress.weakWordsCount} сөз дагы эле туруксуз.',
+          en: '${progress.weakWordsCount} words are still unstable.',
+          ru: '${progress.weakWordsCount} слов всё ещё нестабильны.',
+        ),
+        primaryLabelBuilder: (context) => context.tr(
+          ky: 'Практикага өтүү',
+          en: 'Go to practice',
+          ru: 'Перейти к практике',
+        ),
         primaryRoute: '/practice',
-        badge: 'Алсыз фокус',
+        badgeBuilder: (context) => context.tr(
+          ky: 'Алсыз фокус',
+          en: 'Weak-word focus',
+          ru: 'Фокус на слабых словах',
+        ),
         badgeVariant: AppChipVariant.primary,
-        helperChip: '${progress.weakWordsCount} сөз',
+        helperChipBuilder: (context) => context.tr(
+          ky: '${progress.weakWordsCount} сөз',
+          en: '${progress.weakWordsCount} words',
+          ru: '${progress.weakWordsCount} слов',
+        ),
       );
     }
 
     if (progress.totalWordsReviewed == 0) {
       return _ProgressFocus(
-        title: 'Биринчи циклди баштаңыз',
-        message: 'Алгач бир кыска машыгууну бүтүрүңүз.',
-        primaryLabel: 'Жол картасын ачуу',
-        primaryRoute: '/categories',
-        badge: 'Старт',
+        titleBuilder: (context) => context.tr(
+          ky: 'Биринчи циклди баштаңыз',
+          en: 'Start the first cycle',
+          ru: 'Начните первый цикл',
+        ),
+        messageBuilder: (context) => context.tr(
+          ky: 'Алгач бир кыска машыгууну бүтүрүңүз.',
+          en: 'Complete one short practice first.',
+          ru: 'Сначала завершите одну короткую практику.',
+        ),
+        primaryLabelBuilder: (context) => context.tr(
+          ky: 'Практиканы баштоо',
+          en: 'Start practice',
+          ru: 'Начать практику',
+        ),
+        primaryRoute: '/practice',
+        badgeBuilder: (context) =>
+            context.tr(ky: 'Старт', en: 'Start', ru: 'Старт'),
         badgeVariant: AppChipVariant.primary,
       );
     }
 
     return _ProgressFocus(
-      title: 'Темпти сактап туруңуз',
-      message: '$dailyGoalMinutes мүнөттүк темпти сактаңыз.',
-      primaryLabel: 'Практикага өтүү',
+      titleBuilder: (context) => context.tr(
+        ky: 'Темпти сактап туруңуз',
+        en: 'Keep the pace',
+        ru: 'Сохраняйте темп',
+      ),
+      messageBuilder: (context) => context.tr(
+        ky: '$dailyGoalMinutes мүнөттүк темпти сактаңыз.',
+        en: 'Keep the $dailyGoalMinutes-minute pace.',
+        ru: 'Сохраняйте темп в $dailyGoalMinutes минут.',
+      ),
+      primaryLabelBuilder: (context) => context.tr(
+        ky: 'Практикага өтүү',
+        en: 'Go to practice',
+        ru: 'Перейти к практике',
+      ),
       primaryRoute: '/practice',
-      badge: 'Таза темп',
+      badgeBuilder: (context) =>
+          context.tr(ky: 'Таза темп', en: 'Clean pace', ru: 'Чистый темп'),
       badgeVariant: AppChipVariant.success,
-      helperChip: progress.nextMilestoneLabel,
+      helperChipBuilder: (context) => progress.nextMilestoneLabelOf(context),
     );
   }
 }
 
-String _formatLearningTimeCompact(int totalSeconds) {
-  if (totalSeconds <= 0) return '0 мүн';
+String _formatLearningTimeCompact(BuildContext context, int totalSeconds) {
+  if (totalSeconds <= 0) {
+    return context.tr(ky: '0 мүн', en: '0 min', ru: '0 мин');
+  }
   final duration = Duration(seconds: totalSeconds);
   final hours = duration.inHours;
   final minutes = duration.inMinutes.remainder(60);
   if (hours > 0) {
-    return minutes > 0 ? '$hours с $minutes м' : '$hours с';
+    if (minutes > 0) {
+      return context.tr(
+        ky: '$hours с $minutes м',
+        en: '$hours h $minutes m',
+        ru: '$hours ч $minutes м',
+      );
+    }
+    return context.tr(ky: '$hours с', en: '$hours h', ru: '$hours ч');
   }
-  return '${duration.inMinutes.clamp(1, 999)} мүн';
+  return context.tr(
+    ky: '${duration.inMinutes.clamp(1, 999)} мүн',
+    en: '${duration.inMinutes.clamp(1, 999)} min',
+    ru: '${duration.inMinutes.clamp(1, 999)} мин',
+  );
 }
 
 String _weekdayLabel(int weekday) {

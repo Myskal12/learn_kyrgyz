@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers/app_providers.dart';
+import '../../../core/localization/app_copy.dart';
 import '../../../core/services/firebase_service.dart';
 import '../../../core/services/local_storage_service.dart';
 import '../../../data/models/user_progress_model.dart';
@@ -54,6 +55,56 @@ class DailyQuestSnapshot {
   bool get isCompleted => current >= target;
 
   double get progress => target <= 0 ? 1 : (current / target).clamp(0, 1);
+
+  String titleOf(BuildContext context) {
+    switch (id) {
+      case 'time_bloom':
+        return context.tr(
+          ky: 'Темпти ач',
+          en: 'Unlock the pace',
+          ru: 'Открой темп',
+        );
+      case 'steady_hands':
+        return context.tr(ky: '12 аракет', en: '12 actions', ru: '12 действий');
+      case 'sharp_focus':
+        return context.tr(
+          ky: 'Так жооп сериясы',
+          en: 'Correct-answer streak',
+          ru: 'Серия точных ответов',
+        );
+      default:
+        return title;
+    }
+  }
+
+  String descriptionOf(BuildContext context) {
+    switch (id) {
+      case 'time_bloom':
+        return context.tr(
+          ky: 'Бүгүн 10 мүнөт практика жаса.',
+          en: 'Practice for 10 minutes today.',
+          ru: 'Позанимайтесь сегодня 10 минут.',
+        );
+      case 'steady_hands':
+        return context.tr(
+          ky: 'Бүгүн 12 жооп же аракет топто.',
+          en: 'Complete 12 answers or actions today.',
+          ru: 'Сделайте сегодня 12 ответов или действий.',
+        );
+      case 'sharp_focus':
+        return context.tr(
+          ky: 'Бүгүн 8 туура жооп ал.',
+          en: 'Get 8 correct answers today.',
+          ru: 'Дайте сегодня 8 правильных ответов.',
+        );
+      default:
+        return description;
+    }
+  }
+
+  String progressLabelOf(BuildContext context) => isCompleted
+      ? context.tr(ky: 'Аткарылды', en: 'Completed', ru: 'Выполнено')
+      : '$displayCurrent / $displayTarget';
 }
 
 class WeeklyChallengeSnapshot {
@@ -85,6 +136,22 @@ class WeeklyChallengeSnapshot {
       targetXp <= 0 ? 1 : (weeklyXp / targetXp).clamp(0, 1);
 
   double get progress => ((activeDaysProgress + xpProgress) / 2).clamp(0, 1);
+
+  String titleOf(BuildContext context) => context.tr(
+    ky: 'Апталык толкун',
+    en: 'Weekly wave',
+    ru: 'Недельная волна',
+  );
+
+  String descriptionOf(BuildContext context) => context.tr(
+    ky: '5 актив күн жана 180 XP менен жуманы жап.',
+    en: 'Close the week with 5 active days and 180 XP.',
+    ru: 'Закройте неделю с 5 активными днями и 180 XP.',
+  );
+
+  String statusLabelOf(BuildContext context) => isCompleted
+      ? context.tr(ky: 'Жабылды', en: 'Completed', ru: 'Закрыто')
+      : context.tr(ky: 'Жумада', en: 'This week', ru: 'На неделе');
 }
 
 class ProgressProvider extends ChangeNotifier {
@@ -121,6 +188,72 @@ class ProgressProvider extends ChangeNotifier {
   String? get syncError => _syncError;
   bool get canRetrySync =>
       _remoteUid != null && _syncState == ProgressSyncState.failed;
+
+  String syncTitleOf(BuildContext context) {
+    switch (_syncState) {
+      case ProgressSyncState.localOnly:
+        return context.tr(ky: 'Түзмөктө', en: 'On device', ru: 'На устройстве');
+      case ProgressSyncState.pending:
+        return context.tr(ky: 'Кезекте', en: 'Queued', ru: 'В очереди');
+      case ProgressSyncState.syncing:
+        return context.tr(
+          ky: 'Жөнөтүлүүдө',
+          en: 'Syncing',
+          ru: 'Синхронизация',
+        );
+      case ProgressSyncState.synced:
+        return context.tr(ky: 'Аккаунтта', en: 'In account', ru: 'В аккаунте');
+      case ProgressSyncState.failed:
+        return context.tr(
+          ky: 'Жеткирилген жок',
+          en: 'Not delivered',
+          ru: 'Не доставлено',
+        );
+    }
+  }
+
+  String syncSubtitleOf(BuildContext context) {
+    switch (_syncState) {
+      case ProgressSyncState.localOnly:
+        return context.tr(
+          ky: 'Маалымат ушул түзмөктө сакталат.',
+          en: 'Data is stored on this device.',
+          ru: 'Данные хранятся на этом устройстве.',
+        );
+      case ProgressSyncState.pending:
+        return context.tr(
+          ky: 'Өзгөрүү сакталды.',
+          en: 'Changes were saved.',
+          ru: 'Изменения сохранены.',
+        );
+      case ProgressSyncState.syncing:
+        return context.tr(
+          ky: 'Аккаунтка көчүрмө кетип жатат.',
+          en: 'A copy is being sent to your account.',
+          ru: 'Копия отправляется в аккаунт.',
+        );
+      case ProgressSyncState.synced:
+        if (_lastSyncedAt == null) {
+          return context.tr(
+            ky: 'Түзмөк жана аккаунт даяр.',
+            en: 'Device and account are in sync.',
+            ru: 'Устройство и аккаунт синхронизированы.',
+          );
+        }
+        return context.tr(
+          ky: 'Акыркы көчүрмө: ${_formatTime(_lastSyncedAt!)}.',
+          en: 'Last sync: ${_formatTime(_lastSyncedAt!)}.',
+          ru: 'Последняя синхронизация: ${_formatTime(_lastSyncedAt!)}.',
+        );
+      case ProgressSyncState.failed:
+        return _syncError ??
+            context.tr(
+              ky: 'Кийин кайра аракет кылыңыз.',
+              en: 'Please try again later.',
+              ru: 'Попробуйте позже.',
+            );
+    }
+  }
 
   String get syncTitle {
     switch (_syncState) {
@@ -309,6 +442,22 @@ class ProgressProvider extends ChangeNotifier {
     return ((totalWordsMastered - previous) / span).clamp(0, 1);
   }
 
+  String nextMilestoneLabelOf(BuildContext context) {
+    final target = nextMilestoneTarget;
+    if (target == null) {
+      return context.tr(
+        ky: 'Ачык практика этабы',
+        en: 'Open practice stage',
+        ru: 'Этап свободной практики',
+      );
+    }
+    return context.tr(
+      ky: '$target сөз',
+      en: '$target words',
+      ru: '$target слов',
+    );
+  }
+
   String get nextMilestoneLabel {
     final target = nextMilestoneTarget;
     if (target == null) return 'Ачык практика этабы';
@@ -334,6 +483,9 @@ class ProgressProvider extends ChangeNotifier {
     }
     return level;
   }
+
+  String journeyRankOf(BuildContext context) =>
+      localizedJourneyRank(context, journeyLevel);
 
   String get journeyRank {
     final level = journeyLevel;
@@ -507,6 +659,25 @@ class ProgressProvider extends ChangeNotifier {
         .where((word) => _progress.seenByWordId.containsKey(word.id))
         .length;
     return (seen / words.length).clamp(0, 1);
+  }
+
+  String levelOf(BuildContext context) {
+    final mastered = totalWordsMastered;
+    if (mastered >= 30) {
+      return context.tr(
+        ky: 'Алдыңкы деңгээл',
+        en: 'Advanced level',
+        ru: 'Продвинутый уровень',
+      );
+    }
+    if (mastered >= 15) {
+      return context.tr(
+        ky: 'Орто деңгээл',
+        en: 'Intermediate level',
+        ru: 'Средний уровень',
+      );
+    }
+    return context.tr(ky: 'Башталгыч', en: 'Beginner', ru: 'Начальный уровень');
   }
 
   String get level {
@@ -1041,3 +1212,35 @@ final progressProvider = ChangeNotifierProvider<ProgressProvider>((ref) {
   unawaited(provider.load());
   return provider;
 });
+
+String localizedJourneyRank(BuildContext context, int level) {
+  if (level >= 8) {
+    return context.tr(
+      ky: 'Тоо чебери',
+      en: 'Peak master',
+      ru: 'Мастер вершины',
+    );
+  }
+  if (level >= 6) {
+    return context.tr(
+      ky: 'Ритм устаты',
+      en: 'Rhythm master',
+      ru: 'Мастер ритма',
+    );
+  }
+  if (level >= 4) {
+    return context.tr(
+      ky: 'Туруктуу саякатчы',
+      en: 'Steady traveler',
+      ru: 'Уверенный путешественник',
+    );
+  }
+  if (level >= 2) {
+    return context.tr(
+      ky: 'Өсүп жаткан тилчи',
+      en: 'Growing learner',
+      ru: 'Растущий ученик',
+    );
+  }
+  return context.tr(ky: 'Алгачкы от', en: 'First spark', ru: 'Первый огонь');
+}

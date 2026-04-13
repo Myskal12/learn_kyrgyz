@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,6 +16,7 @@ class CategoriesProvider extends ChangeNotifier {
 
   List<CategoryModel> _categories = [];
   bool _loading = false;
+  bool _refreshingInBackground = false;
   String? _errorMessage;
 
   List<CategoryModel> get categories => _categories;
@@ -22,7 +25,10 @@ class CategoriesProvider extends ChangeNotifier {
 
   Future<void> load({bool force = false}) async {
     if (_loading) return;
-    if (!force && _categories.isNotEmpty) return;
+    if (!force && _categories.isNotEmpty) {
+      unawaited(_refreshInBackground());
+      return;
+    }
     _loading = true;
     _errorMessage = null;
     notifyListeners();
@@ -39,6 +45,43 @@ class CategoriesProvider extends ChangeNotifier {
       _loading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> _refreshInBackground() async {
+    if (_refreshingInBackground) return;
+    _refreshingInBackground = true;
+    try {
+      final refreshed = await _repository.fetchCategories(forceRefresh: true);
+      if (_isEquivalent(_categories, refreshed)) {
+        return;
+      }
+
+      _categories = refreshed;
+      notifyListeners();
+      await _wordsRepository.prefetchCategories(
+        _categories.map((category) => category.id),
+      );
+    } catch (_) {
+      // Keep current categories when refresh fails.
+    } finally {
+      _refreshingInBackground = false;
+    }
+  }
+
+  bool _isEquivalent(List<CategoryModel> a, List<CategoryModel> b) {
+    if (identical(a, b)) return true;
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      final left = a[i];
+      final right = b[i];
+      if (left.id != right.id ||
+          left.wordsCount != right.wordsCount ||
+          left.title != right.title ||
+          left.description != right.description) {
+        return false;
+      }
+    }
+    return true;
   }
 }
 

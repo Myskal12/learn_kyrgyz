@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/providers/app_providers.dart';
+import '../../../core/localization/app_copy.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
 import '../../../core/utils/constants.dart';
@@ -79,7 +80,14 @@ class _EmailVerificationScreenState
       return;
     }
     if (!silent) {
-      _showMessage(auth.error ?? 'Email дареги али ырастала элек.');
+      _showMessage(
+        auth.error ??
+            context.tr(
+              ky: 'Email дареги али ырастала элек.',
+              en: 'The email address is not verified yet.',
+              ru: 'Email адрес ещё не подтверждён.',
+            ),
+      );
     }
   }
 
@@ -88,7 +96,13 @@ class _EmailVerificationScreenState
     final ok = await auth.sendEmailVerification();
     if (!mounted) return;
     if (ok) {
-      _showMessage('Ырастоо каты кайра жөнөтүлдү.');
+      _showMessage(
+        context.tr(
+          ky: 'Ырастоо каты кайра жөнөтүлдү.',
+          en: 'Verification email was sent again.',
+          ru: 'Письмо для подтверждения отправлено повторно.',
+        ),
+      );
       return;
     }
     final error = auth.error;
@@ -169,7 +183,11 @@ class _EmailVerificationScreenState
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              'Email даректи ырастаңыз',
+                              context.tr(
+                                ky: 'Email даректи ырастаңыз',
+                                en: 'Verify your email',
+                                ru: 'Подтвердите email',
+                              ),
                               style: AppTextStyles.heading.copyWith(
                                 fontSize: 28,
                               ),
@@ -178,14 +196,26 @@ class _EmailVerificationScreenState
                             const SizedBox(height: 8),
                             Text(
                               email == null || email.isEmpty
-                                  ? 'Firebase ырастоо каты жөнөтүлдү. Почтаңызды ачып, шилтемени басыңыз.'
-                                  : '$email дарегине кат жөнөтүлдү. Шилтемени ачып, кайра бул жерге келиңиз.',
+                                  ? context.tr(
+                                      ky: 'Firebase ырастоо каты жөнөтүлдү. Почтаңызды ачып, шилтемени басыңыз.',
+                                      en: 'A Firebase verification email was sent. Open your inbox and tap the link.',
+                                      ru: 'Письмо подтверждения Firebase отправлено. Откройте почту и нажмите ссылку.',
+                                    )
+                                  : context.tr(
+                                      ky: '$email дарегине кат жөнөтүлдү. Шилтемени ачып, кайра бул жерге келиңиз.',
+                                      en: 'An email was sent to $email. Open the link and return here.',
+                                      ru: 'Письмо отправлено на $email. Откройте ссылку и вернитесь сюда.',
+                                    ),
                               style: AppTextStyles.muted,
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              'Бул кадамды кийин да бүтүрсөңүз болот.',
+                              context.tr(
+                                ky: 'Бул кадамды кийин да бүтүрсөңүз болот.',
+                                en: 'You can also finish this step later.',
+                                ru: 'Этот шаг можно завершить и позже.',
+                              ),
                               style: AppTextStyles.body.copyWith(
                                 color: AppColors.link,
                                 fontSize: 13,
@@ -202,27 +232,47 @@ class _EmailVerificationScreenState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Эмне кылуу керек?',
+                              context.tr(
+                                ky: 'Эмне кылуу керек?',
+                                en: 'What should you do?',
+                                ru: 'Что нужно сделать?',
+                              ),
                               style: AppTextStyles.body,
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              '1. Почтаңыздагы катты ачыңыз.',
+                              context.tr(
+                                ky: '1. Почтаңыздагы катты ачыңыз.',
+                                en: '1. Open the email in your inbox.',
+                                ru: '1. Откройте письмо в почте.',
+                              ),
                               style: AppTextStyles.muted,
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              '2. Ырастоо шилтемесин басыңыз.',
+                              context.tr(
+                                ky: '2. Ырастоо шилтемесин басыңыз.',
+                                en: '2. Tap the verification link.',
+                                ru: '2. Нажмите ссылку подтверждения.',
+                              ),
                               style: AppTextStyles.muted,
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              '3. Колдонмого кайтып келип текшерүү баскычын басыңыз.',
+                              context.tr(
+                                ky: '3. Колдонмого кайтып келип текшерүү баскычын басыңыз.',
+                                en: '3. Return to the app and tap the check button.',
+                                ru: '3. Вернитесь в приложение и нажмите кнопку проверки.',
+                              ),
                               style: AppTextStyles.muted,
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              'Кат көрүнбөсө, Spam же Promotions папкасын текшериңиз.',
+                              context.tr(
+                                ky: 'Кат көрүнбөсө, Spam же Promotions папкасын текшериңиз.',
+                                en: 'If you cannot see the email, check Spam or Promotions.',
+                                ru: 'Если письма не видно, проверьте папки Spam или Promotions.',
+                              ),
                               style: AppTextStyles.body.copyWith(
                                 color: AppColors.link,
                                 fontSize: 13,
@@ -257,8 +307,16 @@ class _EmailVerificationScreenState
                           : () => _refreshVerification(),
                       child: Text(
                         auth.isLoading
-                            ? 'Текшерилип жатат...'
-                            : 'Мен ырастап койдум',
+                            ? context.tr(
+                                ky: 'Текшерилип жатат...',
+                                en: 'Checking...',
+                                ru: 'Проверяем...',
+                              )
+                            : context.tr(
+                                ky: 'Мен ырастап койдум',
+                                en: 'I have verified it',
+                                ru: 'Я уже подтвердил',
+                              ),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -267,7 +325,13 @@ class _EmailVerificationScreenState
                       size: AppButtonSize.lg,
                       variant: AppButtonVariant.outlined,
                       onPressed: auth.isLoading ? null : _resendVerification,
-                      child: const Text('Катты кайра жөнөтүү'),
+                      child: Text(
+                        context.tr(
+                          ky: 'Катты кайра жөнөтүү',
+                          en: 'Resend email',
+                          ru: 'Отправить письмо снова',
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 10),
                     AppButton(
@@ -275,13 +339,19 @@ class _EmailVerificationScreenState
                       size: AppButtonSize.lg,
                       variant: AppButtonVariant.outlined,
                       onPressed: auth.isLoading ? null : _skipForNow,
-                      child: const Text('Кийинчерээк'),
+                      child: Text(
+                        context.tr(ky: 'Кийинчерээк', en: 'Later', ru: 'Позже'),
+                      ),
                     ),
                     const SizedBox(height: 8),
                     TextButton(
                       onPressed: auth.isLoading ? null : _logout,
                       child: Text(
-                        'Башка аккаунт менен кирүү',
+                        context.tr(
+                          ky: 'Башка аккаунт менен кирүү',
+                          en: 'Sign in with another account',
+                          ru: 'Войти с другим аккаунтом',
+                        ),
                         style: AppTextStyles.body.copyWith(
                           color: AppColors.link,
                           fontWeight: FontWeight.w600,

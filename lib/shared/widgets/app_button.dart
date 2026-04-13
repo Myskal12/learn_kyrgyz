@@ -16,6 +16,8 @@ class AppButton extends StatefulWidget {
     this.size = AppButtonSize.md,
     this.fullWidth = false,
     this.disabled = false,
+    this.showShadow = true,
+    this.showSheen = true,
   });
 
   final Widget child;
@@ -24,6 +26,8 @@ class AppButton extends StatefulWidget {
   final AppButtonSize size;
   final bool fullWidth;
   final bool disabled;
+  final bool showShadow;
+  final bool showSheen;
 
   @override
   State<AppButton> createState() => _AppButtonState();
@@ -73,7 +77,7 @@ class _AppButtonState extends State<AppButton> {
     Color foregroundColor;
     Color depthColor;
     Border? border;
-    bool showSheen = true;
+    var showSheen = widget.showSheen;
     List<BoxShadow> outerShadow = [];
 
     switch (widget.variant) {
@@ -148,6 +152,16 @@ class _AppButtonState extends State<AppButton> {
     );
     final pressOffset = !isDisabled && _pressed ? 4.0 : 0.0;
     final baseDepth = !isDisabled && _pressed ? 2.0 : 8.0;
+    final boxShadow = widget.showShadow
+        ? [
+            BoxShadow(
+              color: depthColor,
+              blurRadius: 0,
+              offset: Offset(0, baseDepth),
+            ),
+            ...outerShadow,
+          ]
+        : const <BoxShadow>[];
 
     return Opacity(
       opacity: isDisabled ? 0.5 : 1,
@@ -157,14 +171,7 @@ class _AppButtonState extends State<AppButton> {
         transform: Matrix4.translationValues(0, pressOffset, 0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(_radius),
-          boxShadow: [
-            BoxShadow(
-              color: depthColor,
-              blurRadius: 0,
-              offset: Offset(0, baseDepth),
-            ),
-            ...outerShadow,
-          ],
+          boxShadow: boxShadow,
         ),
         child: Material(
           color: Colors.transparent,

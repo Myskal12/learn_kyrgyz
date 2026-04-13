@@ -15,6 +15,7 @@ This folder contains helper scripts to prepare and upload the 500 words / senten
 - `validate_dataset.js` – validates required schema, uniqueness, and minimum dataset size.
 - `generate_collections.js` – generates `sentences.json` and `quiz.json` from `words.json`.
 - `upload.js` – pushes `words.json`, `sentences.json`, `quiz.json`, and optional `app_config.json` to Firestore using Firebase Admin credentials (service account file/env JSON/ADC).
+- `reset_seed_demo_data.js` – clears Firestore demo collections, builds capped demo data (default: max 10 words per category), generates quiz/sentences, and seeds fake leaderboard users.
 - `words.sample.json` – short example showing the expected structure (replace with your full data set).
 - `app_config.sample.json` – optional sample for dynamic app config documents (`onboarding`, `achievements`, `resources`).
 - `dataset_targets.json` – target totals and per-category minimums for production dataset planning.
@@ -108,3 +109,37 @@ If `app_config.json` is present, `upload.js` writes each item to the `app_config
 - empty or missing files are skipped with explicit logs
 
 Both scripts are idempotent: rerunning them overwrites the same documents by document ID. Use a staging project if you want to inspect the generated content first.
+
+## Investor Demo Reset + Seed
+
+Use this workflow when you want a clean Firebase dataset for demos:
+
+1. Preview what will be generated (no Firebase writes):
+   ```bash
+   npm run demo:seed:dry
+   ```
+2. Reset Firestore and upload fresh demo data:
+   ```bash
+   npm run demo:seed
+   ```
+
+Defaults:
+
+- max words per category: `10`
+- fake leaderboard users: `24`
+- fake users use preset image avatars only (no emoji)
+- each fake user contains both `avatar` and `avatarProfile` (`{ type, value }`)
+- source input: `words.json`
+- collections cleared: `userProgress`, `users`, `quiz`, `sentences`, `words`, `app_config`
+
+Optional flags:
+
+```bash
+node reset_seed_demo_data.js --max-per-category 10 --fake-users 30 --source words.json
+```
+
+Keep existing `app_config` documents:
+
+```bash
+node reset_seed_demo_data.js --keep-app-config
+```

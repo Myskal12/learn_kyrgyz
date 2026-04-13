@@ -7,10 +7,11 @@ class AppPatternBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alpha = AppColors.isDark ? 0.055 : 0.022;
     return IgnorePointer(
       child: CustomPaint(
         painter: _AppPatternPainter(
-          color: AppColors.primary.withValues(alpha: 0.045),
+          color: AppColors.primary.withValues(alpha: alpha),
         ),
         size: Size.infinite,
       ),

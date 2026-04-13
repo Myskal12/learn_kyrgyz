@@ -5,13 +5,9 @@ import 'package:go_router/go_router.dart';
 import '../../../core/localization/app_copy.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_styles.dart';
-import '../../../shared/widgets/adaptive_panel_grid.dart';
 import '../../../shared/widgets/app_button.dart';
-import '../../../shared/widgets/app_card.dart';
-import '../../../shared/widgets/app_chip.dart';
-import '../../../shared/widgets/profile_avatar.dart';
 import '../../../shared/widgets/app_shell.dart';
-import '../../../shared/widgets/app_state_views.dart';
+import '../../../shared/widgets/profile_avatar.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../providers/progress_provider.dart';
 import '../providers/user_profile_provider.dart';
@@ -26,14 +22,7 @@ class ProfileScreen extends ConsumerWidget {
     final profileProvider = ref.watch(userProfileProvider);
     final profile = profileProvider.profile;
     final progress = ref.watch(progressProvider);
-    final weeklyChallenge = progress.weeklyChallenge;
     final auth = ref.watch(authProvider);
-    final rankingTitle = profileProvider.isGuest
-        ? 'Конок режиминде рейтинг жок'
-        : 'Рейтингди ачыңыз';
-    final rankingSubtitle = profileProvider.isGuest
-        ? 'Кирсеңиз, орун көрүнөт.'
-        : 'Ордуңузду ушул жерден көрөсүз.';
 
     return AppShell(
       title: context.tr(ky: 'Профиль', en: 'Profile', ru: 'Профиль'),
@@ -43,332 +32,401 @@ class ProfileScreen extends ConsumerWidget {
         ru: 'Личный обзор',
       ),
       activeTab: AppTab.profile,
+      showTopNav: false,
       child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
         children: [
-          Text(
-            context.tr(ky: 'Профиль', en: 'Profile', ru: 'Профиль'),
-            style: AppTextStyles.heading.copyWith(fontSize: 28),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            context.tr(
-              ky: 'Жеке баракчаңыз',
-              en: 'Your personal page',
-              ru: 'Ваша личная страница',
-            ),
-            style: AppTextStyles.body.copyWith(color: AppColors.muted),
-          ),
-          const SizedBox(height: 20),
-          AppCard(
-            gradient: true,
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    ProfileAvatar(avatar: profile.avatar),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            profile.nickname,
-                            style: AppTextStyles.title.copyWith(
-                              color: Colors.white,
-                              fontSize: 24,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Lv ${progress.journeyLevel} · ${progress.journeyRank}',
-                            style: AppTextStyles.body.copyWith(
-                              color: Colors.white.withValues(alpha: 0.88),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    AppChip(
-                      label: '${progress.streakDays} күн',
-                      variant: AppChipVariant.defaultChip,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 18),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    _HeroStatPill(
-                      value: '${progress.totalXp} XP',
-                      label: 'Жалпы күч',
-                    ),
-                    _HeroStatPill(
-                      value: '${progress.completedDailyQuestsCount}/3',
-                      label: 'Күндүк квест',
-                    ),
-                    _HeroStatPill(
-                      value:
-                          '${weeklyChallenge.activeDays}/${weeklyChallenge.targetActiveDays}',
-                      label: 'Апталык ритм',
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          if (!profileProvider.isGuest && auth.requiresEmailVerification) ...[
-            AppCard(
-              padding: const EdgeInsets.all(16),
-              backgroundColor: AppColors.accent.withValues(alpha: 0.08),
-              borderColor: AppColors.accent.withValues(alpha: 0.2),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Email али ырастала элек',
-                    style: AppTextStyles.body.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Бул милдеттүү тоскоолдук эмес. Кааласаңыз азыр, болбосо кийин жөндөөлөрдөн бүтүрөсүз.',
-                    style: AppTextStyles.muted,
-                  ),
-                  const SizedBox(height: 12),
-                  AppButton(
-                    variant: AppButtonVariant.outlined,
-                    fullWidth: true,
-                    onPressed: () =>
-                        context.push('/verify-email?returnTo=/profile'),
-                    child: const Text('Email ырастоо'),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-          ],
-          Text(
-            context.tr(ky: 'Статистика', en: 'Stats', ru: 'Статистика'),
-            style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
+          _ProfileHero(
+            nickname: profile.nickname,
+            avatar: profile.avatar,
+            rank: progress.journeyRankOf(context),
+            level: progress.journeyLevel,
+            streakDays: progress.streakDays,
           ),
           const SizedBox(height: 12),
-          AdaptivePanelGrid(
-            maxColumns: 3,
-            minItemWidth: 92,
-            children: [
-              _StatCard(
-                value: progress.totalWordsMastered.toString(),
-                label: 'Сөздөр',
-              ),
-              _StatCard(value: '${progress.totalXp}', label: 'XP'),
-              _StatCard(value: progress.streakDays.toString(), label: 'Серия'),
-            ],
+          _StatsGrid(
+            streak: progress.streakDays,
+            totalXp: progress.totalXp,
+            lessons: progress.totalWordsMastered,
+            rankIndex: profileProvider.isGuest
+                ? null
+                : '#${progress.journeyLevel}',
           ),
-          const SizedBox(height: 16),
-          AppCard(
-            padding: const EdgeInsets.all(16),
-            backgroundColor: AppColors.accent.withValues(alpha: 0.06),
-            borderColor: AppColors.accent.withValues(alpha: 0.14),
+          if (!profileProvider.isGuest && auth.requiresEmailVerification) ...[
+            const SizedBox(height: 12),
+            _ProfileStatusBanner(
+              title: context.tr(
+                ky: 'Email али ырастала элек',
+                en: 'Email is not verified yet',
+                ru: 'Email еще не подтвержден',
+              ),
+              message: context.tr(
+                ky: 'Кааласаңыз азыр бүтүрүп коюңуз. Бул кадамды кийин жөндөөлөрдөн да ачасыз.',
+                en: 'You can finish this now, or complete it later from settings.',
+                ru: 'Можно завершить это сейчас или позже в настройках.',
+              ),
+              icon: Icons.mark_email_unread_outlined,
+              accentColor: AppColors.accent,
+              actionLabel: context.tr(
+                ky: 'Email ырастоо',
+                en: 'Verify email',
+                ru: 'Подтвердить email',
+              ),
+              onAction: () => context.push('/verify-email?returnTo=/profile'),
+            ),
+          ],
+          const SizedBox(height: 14),
+          Text(
+            context.tr(ky: 'Жөндөөлөр', en: 'Settings', ru: 'Настройки'),
+            style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: AppColors.border),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 14,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            weeklyChallenge.title,
-                            style: AppTextStyles.body.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            weeklyChallenge.description,
-                            style: AppTextStyles.muted,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    AppChip(
-                      label: weeklyChallenge.isCompleted ? 'Даяр' : 'Жумада',
-                      variant: weeklyChallenge.isCompleted
-                          ? AppChipVariant.success
-                          : AppChipVariant.accent,
-                    ),
-                  ],
+                _SettingsTile(
+                  icon: Icons.person_outline_rounded,
+                  title: context.tr(
+                    ky: 'Профилди оңдоо',
+                    en: 'Edit profile',
+                    ru: 'Редактировать профиль',
+                  ),
+                  subtitle: context.tr(
+                    ky: 'Аватар, аккаунт жана email башкаруу',
+                    en: 'Manage avatar, account and email',
+                    ru: 'Управление аватаром, аккаунтом и email',
+                  ),
+                  onTap: () => context.push('/settings/profile'),
                 ),
-                const SizedBox(height: 14),
-                _ProfileProgressBar(value: weeklyChallenge.progress),
-                const SizedBox(height: 10),
-                Text(
-                  '${weeklyChallenge.activeDays}/${weeklyChallenge.targetActiveDays} күн · ${weeklyChallenge.weeklyXp}/${weeklyChallenge.targetXp} XP',
-                  style: AppTextStyles.caption,
+                _SettingsTile(
+                  icon: Icons.shield_outlined,
+                  title: context.tr(
+                    ky: 'Коопсуздук жана купуялык',
+                    en: 'Security and privacy',
+                    ru: 'Безопасность и приватность',
+                  ),
+                  subtitle: context.tr(
+                    ky: 'Купуялык документтери жана маанилүү аракеттер',
+                    en: 'Privacy docs and critical actions',
+                    ru: 'Документы приватности и важные действия',
+                  ),
+                  onTap: () => context.push('/settings/security'),
                 ),
-                const SizedBox(height: 12),
-                AppButton(
-                  variant: AppButtonVariant.outlined,
-                  fullWidth: true,
-                  onPressed: () => context.push('/leaderboard'),
-                  child: const Text('Рейтинг жана апта барагы'),
+                _SettingsTile(
+                  icon: Icons.palette_outlined,
+                  title: context.tr(
+                    ky: 'Интерфейс',
+                    en: 'Interface',
+                    ru: 'Интерфейс',
+                  ),
+                  subtitle: context.tr(
+                    ky: 'Тема жана тил',
+                    en: 'Theme and language',
+                    ru: 'Тема и язык',
+                  ),
+                  onTap: () => context.push('/settings/interface'),
+                  showDivider: false,
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
-          AppCard(
-            padding: const EdgeInsets.all(16),
-            backgroundColor: AppColors.primary.withValues(alpha: 0.05),
-            borderColor: AppColors.primary.withValues(alpha: 0.18),
+          const SizedBox(height: 14),
+          _ProfileSyncNotice(progress: progress),
+          const SizedBox(height: 12),
+          AppButton(
+            fullWidth: true,
+            variant: profileProvider.isGuest
+                ? AppButtonVariant.primary
+                : AppButtonVariant.outlined,
+            onPressed: () async {
+              if (profileProvider.isGuest) {
+                context.go('/login');
+                return;
+              }
+              await ref.read(authProvider).logout();
+              if (context.mounted) {
+                context.go('/login');
+              }
+            },
+            child: Text(
+              profileProvider.isGuest
+                  ? context.tr(ky: 'Кирүү', en: 'Sign in', ru: 'Войти')
+                  : context.tr(ky: 'Чыгуу', en: 'Log out', ru: 'Выйти'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProfileHero extends StatelessWidget {
+  const _ProfileHero({
+    required this.nickname,
+    required this.avatar,
+    required this.rank,
+    required this.level,
+    required this.streakDays,
+  });
+
+  final String nickname;
+  final String avatar;
+  final String rank;
+  final int level;
+  final int streakDays;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(28),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppColors.primary,
+            Color.lerp(AppColors.primary, AppColors.accent, 0.25)!,
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withValues(alpha: 0.22),
+            blurRadius: 24,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          ProfileAvatar(avatar: avatar, size: 80),
+          const SizedBox(height: 10),
+          Text(
+            nickname,
+            style: AppTextStyles.title.copyWith(color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Lv $level · $rank',
+            style: AppTextStyles.body.copyWith(
+              color: Colors.white.withValues(alpha: 0.85),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.16),
+              borderRadius: BorderRadius.circular(999),
+            ),
+            child: Text(
+              context.tr(
+                ky: '$streakDays күндүк серия',
+                en: '$streakDays day streak',
+                ru: 'Серия $streakDays дней',
+              ),
+              style: AppTextStyles.caption.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatsGrid extends StatelessWidget {
+  const _StatsGrid({
+    required this.streak,
+    required this.totalXp,
+    required this.lessons,
+    required this.rankIndex,
+  });
+
+  final int streak;
+  final int totalXp;
+  final int lessons;
+  final String? rankIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: GridView.count(
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 1.9,
+        children: [
+          _StatItem(
+            icon: Icons.local_fire_department,
+            label: context.tr(ky: 'Серия', en: 'Streak', ru: 'Серия'),
+            value: '$streak',
+            iconColor: AppColors.accent,
+          ),
+          _StatItem(
+            icon: Icons.workspace_premium,
+            label: context.tr(ky: 'XP', en: 'XP', ru: 'XP'),
+            value: '$totalXp',
+            iconColor: AppColors.primary,
+          ),
+          _StatItem(
+            icon: Icons.menu_book,
+            label: context.tr(ky: 'Сөздөр', en: 'Words', ru: 'Слова'),
+            value: '$lessons',
+            iconColor: AppColors.success,
+          ),
+          _StatItem(
+            icon: Icons.emoji_events,
+            label: context.tr(ky: 'Ранг', en: 'Rank', ru: 'Ранг'),
+            value:
+                rankIndex ?? context.tr(ky: 'Конок', en: 'Guest', ru: 'Гость'),
+            iconColor: AppColors.primary,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatItem extends StatelessWidget {
+  const _StatItem({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.iconColor,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.mutedSurface,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 34,
+            height: 34,
+            decoration: BoxDecoration(
+              color: iconColor.withValues(alpha: 0.14),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            alignment: Alignment.center,
+            child: Icon(icon, size: 18, color: iconColor),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Окуу snapshot',
+                  value,
                   style: AppTextStyles.body.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 10),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    AppChip(
-                      label: '${progress.reviewDueWordsCount} кайталоо',
-                      variant: progress.reviewDueWordsCount > 0
-                          ? AppChipVariant.accent
-                          : AppChipVariant.success,
-                    ),
-                    AppChip(
-                      label: '${progress.weakWordsCount} алсыз сөз',
-                      variant: AppChipVariant.defaultChip,
-                    ),
-                    AppChip(
-                      label: progress.nextMilestoneLabel,
-                      variant: AppChipVariant.primary,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  progress.reviewDueWordsCount > 0
-                      ? 'Адегенде кайталоону жабыңыз.'
-                      : progress.wordsToNextMilestone > 0
-                      ? 'Дагы ${progress.wordsToNextMilestone} сөз калды.'
-                      : 'Темпти кармап туруңуз.',
-                  style: AppTextStyles.muted,
-                ),
-                const SizedBox(height: 12),
-                AppButton(
-                  variant: AppButtonVariant.outlined,
-                  fullWidth: true,
-                  onPressed: () => context.push('/progress'),
-                  child: const Text('Толук прогрессти көрүү'),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          _ProfileSyncNotice(progress: progress),
-          const SizedBox(height: 20),
-          Text(
-            context.tr(ky: 'Рейтинг', en: 'Leaderboard', ru: 'Рейтинг'),
-            style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 12),
-          AppCard(
-            padding: const EdgeInsets.all(16),
-            onTap: () => context.push('/leaderboard'),
-            child: Row(
-              children: [
-                _CircleIcon(icon: Icons.emoji_events, color: AppColors.primary),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        rankingTitle,
-                        style: AppTextStyles.body.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(rankingSubtitle, style: AppTextStyles.muted),
-                    ],
-                  ),
-                ),
-                Icon(Icons.chevron_right, color: AppColors.muted),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            context.tr(
-              ky: 'Аккаунт жана купуялык',
-              en: 'Account and privacy',
-              ru: 'Аккаунт и приватность',
-            ),
-            style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 12),
-          AppCard(
-            padding: const EdgeInsets.all(16),
-            onTap: () => context.push('/settings'),
-            child: Row(
-              children: [
-                _CircleIcon(
-                  icon: Icons.shield_outlined,
-                  color: AppColors.accent,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Профиль, email жана жөндөөлөр',
-                        style: AppTextStyles.body.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Жеке маалымат, тема, окуу багыты жана укуктук документтер ушул жерде.',
-                        style: AppTextStyles.muted,
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(Icons.chevron_right, color: AppColors.muted),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          AppButton(
-            variant: AppButtonVariant.outlined,
-            fullWidth: true,
-            onPressed: () => context.push('/settings'),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.settings, size: 18),
-                SizedBox(width: 8),
-                Text('Жөндөөлөрдү ачуу'),
+                Text(label, style: AppTextStyles.caption),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SettingsTile extends StatelessWidget {
+  const _SettingsTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    this.showDivider = true,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+  final bool showDivider;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        decoration: BoxDecoration(
+          border: showDivider
+              ? Border(bottom: BorderSide(color: AppColors.border))
+              : null,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+        child: Row(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: AppColors.mutedSurface,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              alignment: Alignment.center,
+              child: Icon(icon, size: 18, color: AppColors.muted),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyles.body.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(subtitle, style: AppTextStyles.caption),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            Icon(Icons.chevron_right, color: AppColors.muted),
+          ],
+        ),
       ),
     );
   }
@@ -383,145 +441,146 @@ class _ProfileSyncNotice extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (progress.syncState) {
       case ProgressSyncState.localOnly:
-        return AppSyncBanner(
-          title: progress.syncTitle,
-          message: progress.syncSubtitle,
+        return _ProfileStatusBanner(
+          title: progress.syncTitleOf(context),
+          message: progress.syncSubtitleOf(context),
           icon: Icons.save_outlined,
           accentColor: AppColors.primary,
         );
       case ProgressSyncState.pending:
       case ProgressSyncState.syncing:
-        return AppSyncBanner(
-          title: progress.syncTitle,
-          message: progress.syncSubtitle,
+        return _ProfileStatusBanner(
+          title: progress.syncTitleOf(context),
+          message: progress.syncSubtitleOf(context),
           icon: Icons.sync,
           accentColor: AppColors.accent,
         );
       case ProgressSyncState.synced:
-        return AppSyncBanner(
-          title: progress.syncTitle,
-          message: progress.syncSubtitle,
+        return _ProfileStatusBanner(
+          title: progress.syncTitleOf(context),
+          message: progress.syncSubtitleOf(context),
           icon: Icons.cloud_done,
           accentColor: AppColors.success,
         );
       case ProgressSyncState.failed:
-        return AppSyncBanner(
-          title: progress.syncTitle,
-          message: progress.syncSubtitle,
+        return _ProfileStatusBanner(
+          title: progress.syncTitleOf(context),
+          message: progress.syncSubtitleOf(context),
           icon: Icons.cloud_off,
           accentColor: AppColors.accent,
-          actionLabel: 'Кайра синк кылуу',
+          actionLabel: context.tr(
+            ky: 'Кайра синк',
+            en: 'Retry sync',
+            ru: 'Повторить синхронизацию',
+          ),
           onAction: progress.canRetrySync ? progress.retrySync : null,
         );
     }
   }
 }
 
-class _HeroStatPill extends StatelessWidget {
-  const _HeroStatPill({required this.value, required this.label});
+class _ProfileStatusBanner extends StatelessWidget {
+  const _ProfileStatusBanner({
+    required this.title,
+    required this.message,
+    required this.icon,
+    required this.accentColor,
+    this.actionLabel,
+    this.onAction,
+  });
 
-  final String value;
-  final String label;
+  final String title;
+  final String message;
+  final IconData icon;
+  final Color accentColor;
+  final String? actionLabel;
+  final VoidCallback? onAction;
 
   @override
   Widget build(BuildContext context) {
+    final hasAction = actionLabel != null && onAction != null;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+        color: accentColor.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: accentColor.withValues(alpha: 0.22)),
+        boxShadow: [
+          BoxShadow(
+            color: accentColor.withValues(alpha: 0.1),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            value,
-            style: AppTextStyles.body.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: AppTextStyles.caption.copyWith(color: Colors.white70),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  const _StatCard({required this.value, required this.label});
-
-  final String value;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      padding: const EdgeInsets.all(14),
-      child: Column(
-        children: [
-          Text(value, style: AppTextStyles.title.copyWith(fontSize: 20)),
-          const SizedBox(height: 4),
-          Text(label, style: AppTextStyles.muted),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProfileProgressBar extends StatelessWidget {
-  const _ProfileProgressBar({required this.value});
-
-  final double value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 8,
-      decoration: BoxDecoration(
-        color: AppColors.mutedSurface,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: FractionallySizedBox(
-          widthFactor: value.clamp(0, 1),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.primary, const Color(0xFFF7C15C)],
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: accentColor.withValues(alpha: 0.14),
+                ),
+                alignment: Alignment.center,
+                child: Icon(icon, size: 19, color: accentColor),
               ),
-              borderRadius: BorderRadius.circular(999),
-            ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: AppTextStyles.body.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: accentColor,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(message, style: AppTextStyles.muted),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ),
+          if (hasAction) ...[
+            const SizedBox(height: 10),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: InkWell(
+                onTap: onAction,
+                borderRadius: BorderRadius.circular(14),
+                child: Ink(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 9,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white.withValues(alpha: 0.94),
+                    border: Border.all(
+                      color: accentColor.withValues(alpha: 0.24),
+                    ),
+                  ),
+                  child: Text(
+                    actionLabel!,
+                    style: AppTextStyles.caption.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: accentColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ],
       ),
-    );
-  }
-}
-
-class _CircleIcon extends StatelessWidget {
-  const _CircleIcon({required this.icon, required this.color});
-
-  final IconData icon;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color.withValues(alpha: 0.15),
-      ),
-      child: Icon(icon, color: color, size: 20),
     );
   }
 }

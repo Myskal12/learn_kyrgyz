@@ -1,0 +1,226 @@
+@custom-variant sky-sun (&:is(.sky-sun *));
+@custom-variant sunset-nomad (&:is(.sunset-nomad *));
+@custom-variant earth-nature (&:is(.earth-nature *));
+@custom-variant night-gold (&:is(.night-gold *));
+
+:root {
+  --font-size: 16px;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --radius: 1rem;
+  
+  /* ========================================
+     TYPOGRAPHY SYSTEM
+     Clean, minimal, premium
+  ======================================== */
+  
+  /* Font Weights */
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-bold: 600;
+  
+  /* Heading Sizes */
+  --text-h1: 32px;
+  --text-h1-line: 40px;
+  
+  --text-h2: 24px;
+  --text-h2-line: 32px;
+  
+  --text-h3: 20px;
+  --text-h3-line: 28px;
+  
+  /* Body Text */
+  --text-body-lg: 18px;
+  --text-body-lg-line: 28px;
+  
+  --text-body: 16px;
+  --text-body-line: 24px;
+  
+  --text-body-sm: 14px;
+  --text-body-sm-line: 20px;
+  
+  /* Labels & Supporting Text */
+  --text-label: 14px;
+  --text-label-line: 20px;
+  
+  --text-caption: 12px;
+  --text-caption-line: 16px;
+  
+  /* Learning Content - Specific Sizes */
+  --text-sentence-display: 28px;
+  --text-sentence-display-line: 40px;
+  
+  --text-word-breakdown: 16px;
+  --text-word-breakdown-line: 24px;
+  
+  --text-translation: 14px;
+  --text-translation-line: 20px;
+}
+
+/* ========================================
+   THEME 1: Sky + Sun (Blue + Yellow)
+   Light, airy, inspiring
+======================================== */
+.sky-sun {
+  --primary-blue: #2F80ED;
+  --accent-yellow: #F2C94C;
+  --warm-beige: #FAF8F4;
+  --dark-blue: #1E3A5F;
+  --background: #FAF8F4;
+  --surface: #FFFFFF;
+  --text-primary: #1A202C;
+  --text-secondary: #64748B;
+  
+  /* UI Variables */
+  --foreground: var(--text-primary);
+  --card: var(--surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--surface);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--primary-blue);
+  --primary-foreground: #ffffff;
+  --secondary: var(--warm-beige);
+  --secondary-foreground: var(--text-primary);
+  --muted: #F1F5F9;
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--accent-yellow);
+  --accent-foreground: #ffffff;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 0, 0, 0.08);
+  --input: transparent;
+  --input-background: #F1F5F9;
+  --switch-background: #CBD5E1;
+  --ring: var(--primary-blue);
+  --chart-1: var(--primary-blue);
+  --chart-2: var(--accent-yellow);
+  --chart-3: var(--warm-beige);
+  --chart-4: var(--dark-blue);
+  --chart-5: #10B981;
+}
+
+/* ========================================
+   THEME 2: Sunset Nomad (Violet + Orange)
+   Warm, cultural, mystical
+======================================== */
+.sunset-nomad {
+  --primary-blue: #7C3AED; /* Violet */
+  --accent-yellow: #F97316; /* Orange */
+  --warm-beige: #FFECD1;
+  --dark-blue: #4C1D95;
+  --background: #FFF7ED;
+  --surface: #FFFFFF;
+  --text-primary: #1F1B2E;
+  --text-secondary: #6B5B95;
+  
+  /* UI Variables */
+  --foreground: var(--text-primary);
+  --card: var(--surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--surface);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--primary-blue);
+  --primary-foreground: #ffffff;
+  --secondary: var(--warm-beige);
+  --secondary-foreground: var(--text-primary);
+  --muted: #F3E8FF;
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--accent-yellow);
+  --accent-foreground: #ffffff;
+  --destructive: #DC2626;
+  --destructive-foreground: #ffffff;
+  --border: rgba(124, 58, 237, 0.1);
+  --input: transparent;
+  --input-background: #FAF5FF;
+  --switch-background: #DDD6FE;
+  --ring: var(--primary-blue);
+  --chart-1: var(--primary-blue);
+  --chart-2: var(--accent-yellow);
+  --chart-3: var(--warm-beige);
+  --chart-4: var(--dark-blue);
+  --chart-5: #EC4899;
+}
+
+/* ========================================
+   THEME 3: Earth + Nature (Green + Beige)
+   Calm, organic, grounded
+======================================== */
+.earth-nature {
+  --primary-blue: #059669; /* Emerald green */
+  --accent-yellow: #D97706; /* Amber */
+  --warm-beige: #F5E9DA;
+  --dark-blue: #064E3B;
+  --background: #F9F7F4;
+  --surface: #FFFFFF;
+  --text-primary: #1C1917;
+  --text-secondary: #78716C;
+  
+  /* UI Variables */
+  --foreground: var(--text-primary);
+  --card: var(--surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--surface);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--primary-blue);
+  --primary-foreground: #ffffff;
+  --secondary: var(--warm-beige);
+  --secondary-foreground: var(--text-primary);
+  --muted: #F5F5F4;
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--accent-yellow);
+  --accent-foreground: #ffffff;
+  --destructive: #DC2626;
+  --destructive-foreground: #ffffff;
+  --border: rgba(5, 150, 105, 0.08);
+  --input: transparent;
+  --input-background: #F7FEF9;
+  --switch-background: #D1FAE5;
+  --ring: var(--primary-blue);
+  --chart-1: var(--primary-blue);
+  --chart-2: var(--accent-yellow);
+  --chart-3: var(--warm-beige);
+  --chart-4: var(--dark-blue);
+  --chart-5: #10B981;
+}
+
+/* ========================================
+   THEME 4: Night + Gold (Dark Mode)
+   Premium, focused, elegant
+======================================== */
+.night-gold {
+  --primary-blue: #3B82F6; /* Bright blue for dark bg */
+  --accent-yellow: #FBBF24; /* Gold */
+  --warm-beige: #FEF3C7;
+  --dark-blue: #1E40AF;
+  --background: #0F172A;
+  --surface: #1E293B;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  
+  /* UI Variables */
+  --foreground: var(--text-primary);
+  --card: var(--surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--surface);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--primary-blue);
+  --primary-foreground: #ffffff;
+  --secondary: #334155;
+  --secondary-foreground: var(--text-primary);
+  --muted: #334155;
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--accent-yellow);
+  --accent-foreground: #0F172A;
+  --destructive: #EF4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: transparent;
+  --input-background: #334155;
+  --switch-background: #475569;
+  --ring: var(--primary-blue);
+  --chart-1: var(--primary-blue);
+  --chart-2: var(--accent-yellow);
+  --chart-3: var(--warm-beige);
+  --chart-4: #3B82F6;
+  --chart-5: #10B981;
+}

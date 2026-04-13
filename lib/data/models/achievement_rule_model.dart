@@ -1,3 +1,7 @@
+import 'package:flutter/widgets.dart';
+
+import '../../core/localization/app_copy.dart';
+
 enum AchievementMetric {
   totalWordsMastered,
   accuracyPercent,
@@ -102,6 +106,100 @@ class AchievementRuleModel {
         return totalLearningSeconds >= target;
       case AchievementMetric.totalXp:
         return totalXp >= target;
+    }
+  }
+
+  String titleOf(BuildContext context) {
+    switch (id) {
+      case 'first_star':
+        return context.tr(
+          ky: 'Алгачкы жылдыз',
+          en: 'First star',
+          ru: 'Первая звезда',
+        );
+      case 'steady_learner':
+        return context.tr(
+          ky: 'Туруктуу үйрөнүүчү',
+          en: 'Steady learner',
+          ru: 'Стабильный ученик',
+        );
+      case 'big_jump':
+        return context.tr(
+          ky: 'Чоң секирик',
+          en: 'Big jump',
+          ru: 'Большой скачок',
+        );
+      case 'accurate_answers':
+        return context.tr(
+          ky: 'Так жооптор',
+          en: 'Accurate answers',
+          ru: 'Точные ответы',
+        );
+      case 'streak_fire':
+        return context.tr(
+          ky: 'Серия оту',
+          en: 'Streak fire',
+          ru: 'Огонь серии',
+        );
+      case 'time_keeper':
+        return context.tr(
+          ky: 'Убакыт сакчысы',
+          en: 'Time keeper',
+          ru: 'Хранитель времени',
+        );
+      case 'xp_flow':
+        return context.tr(ky: 'XP агымы', en: 'XP flow', ru: 'Поток XP');
+      default:
+        return title;
+    }
+  }
+
+  String descriptionOf(BuildContext context) {
+    switch (id) {
+      case 'first_star':
+        return context.tr(
+          ky: '5 сөздү жаттадыңыз.',
+          en: 'You memorized 5 words.',
+          ru: 'Вы запомнили 5 слов.',
+        );
+      case 'steady_learner':
+        return context.tr(
+          ky: '15 сөздү үйрөндүңүз.',
+          en: 'You learned 15 words.',
+          ru: 'Вы выучили 15 слов.',
+        );
+      case 'big_jump':
+        return context.tr(
+          ky: '30 сөздү топтодуңуз.',
+          en: 'You collected 30 words.',
+          ru: 'Вы собрали 30 слов.',
+        );
+      case 'accurate_answers':
+        return context.tr(
+          ky: 'Тактык 80% же андан жогору.',
+          en: 'Accuracy is 80% or higher.',
+          ru: 'Точность 80% или выше.',
+        );
+      case 'streak_fire':
+        return context.tr(
+          ky: '7 күн катары менен практикага келдиңиз.',
+          en: 'You practiced 7 days in a row.',
+          ru: 'Вы практиковались 7 дней подряд.',
+        );
+      case 'time_keeper':
+        return context.tr(
+          ky: '1 саат окуу убактысын топтодуңуз.',
+          en: 'You accumulated 1 hour of study time.',
+          ru: 'Вы накопили 1 час учебного времени.',
+        );
+      case 'xp_flow':
+        return context.tr(
+          ky: '250 XP топтодуңуз.',
+          en: 'You earned 250 XP.',
+          ru: 'Вы набрали 250 XP.',
+        );
+      default:
+        return description;
     }
   }
 

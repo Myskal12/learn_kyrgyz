@@ -4,26 +4,20 @@ import 'app_colors.dart';
 import 'app_typography.dart';
 
 class AppTheme {
-  static ThemeData light = _buildTheme(isDark: false);
-  static ThemeData dark = _buildTheme(isDark: true);
+  static ThemeData light() => _buildTheme(isDark: false);
+  static ThemeData dark() => _buildTheme(isDark: true);
 
   static ThemeData _buildTheme({required bool isDark}) {
+    AppColors.setDark(isDark);
+
     final brightness = isDark ? Brightness.dark : Brightness.light;
-    final background = isDark
-        ? AppColors.backgroundDark
-        : AppColors.backgroundLight;
-    final surface = isDark ? AppColors.surfaceDark : AppColors.surfaceLight;
-    final textColor = isDark
-        ? AppColors.textLightDark
-        : AppColors.textDarkLight;
-    final muted = isDark ? AppColors.mutedDark : AppColors.mutedLight;
-    final outlineColor = isDark ? AppColors.borderDark : AppColors.borderLight;
-    final outlineVariantColor = isDark
-        ? AppColors.borderDark
-        : AppColors.borderLight;
-    final inputBackground = isDark
-        ? AppColors.inputBackgroundDark
-        : AppColors.inputBackgroundLight;
+    final background = AppColors.background;
+    final surface = AppColors.surface;
+    final textColor = AppColors.textDark;
+    final muted = AppColors.muted;
+    final outlineColor = AppColors.border;
+    final outlineVariantColor = AppColors.border;
+    final inputBackground = AppColors.inputBackground;
 
     final baseTextTheme = AppTypography.baseTextTheme();
     final textTheme = baseTextTheme.apply(
@@ -41,10 +35,8 @@ class AppTheme {
       return Color.lerp(color, Colors.black, amount)!;
     }
 
-    final primary = isDark ? AppColors.royalBlueDark : AppColors.royalBlueLight;
-    final secondary = isDark
-        ? AppColors.sunsetOrangeDark
-        : AppColors.sunsetOrangeLight;
+    final primary = AppColors.primary;
+    final secondary = AppColors.accent;
     final onSecondary = Colors.white;
     final colorScheme =
         ColorScheme.fromSeed(
@@ -54,7 +46,7 @@ class AppTheme {
           surface: surface,
           outline: outlineColor,
           outlineVariant: outlineVariantColor,
-          error: isDark ? AppColors.errorDark : AppColors.errorLight,
+          error: AppColors.error,
         ).copyWith(
           primary: primary,
           secondary: secondary,
@@ -66,9 +58,7 @@ class AppTheme {
 
     final inputHover = tint(inputBackground, 0.04);
     final primaryHover = tint(colorScheme.primary, 0.08);
-    final primaryPressed = isDark
-        ? AppColors.royalBluePressedDark
-        : AppColors.royalBluePressedLight;
+    final primaryPressed = AppColors.primaryPressed;
     final textHover = tint(colorScheme.primary, 0.08);
     final textPressed = shade(colorScheme.primary, 0.06);
 
@@ -161,9 +151,12 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-          minimumSize: const WidgetStatePropertyAll(Size.fromHeight(44)),
+          // Avoid infinite-width constraints for inline TextButton usage in Row/Wrap.
+          minimumSize: const WidgetStatePropertyAll(Size(0, 36)),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: VisualDensity.compact,
           padding: const WidgetStatePropertyAll(
-            EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           ),
           textStyle: WidgetStatePropertyAll(
             labelMedium.copyWith(fontWeight: FontWeight.w600),
@@ -208,9 +201,7 @@ class AppTheme {
         ),
       ),
       chipTheme: ChipThemeData(
-        backgroundColor: isDark
-            ? AppColors.mutedSurfaceDark
-            : AppColors.mutedSurfaceLight,
+        backgroundColor: AppColors.mutedSurface,
         selectedColor: colorScheme.secondary.withValues(alpha: 0.16),
         labelStyle: labelMedium.copyWith(color: textColor),
         secondaryLabelStyle: labelMedium.copyWith(color: colorScheme.secondary),

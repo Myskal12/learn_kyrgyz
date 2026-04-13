@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/providers/app_providers.dart';
 import '../../../app/providers/onboarding_provider.dart';
+import '../../../core/localization/app_copy.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/constants.dart';
 import '../../../core/utils/app_text_styles.dart';
@@ -34,14 +35,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<void> _handlePasswordReset(AuthProvider auth) async {
     final email = _email.text.trim();
     if (email.isEmpty) {
-      _showMessage('Адегенде email дарегиңизди жазыңыз.');
+      _showMessage(
+        context.tr(
+          ky: 'Адегенде email дарегиңизди жазыңыз.',
+          en: 'Enter your email address first.',
+          ru: 'Сначала введите email.',
+        ),
+      );
       return;
     }
 
     final ok = await auth.sendPasswordResetEmail(email);
     if (!mounted) return;
     if (ok) {
-      _showMessage('Сыр сөздү жаңыртуу шилтемеси email дарегине жөнөтүлдү.');
+      _showMessage(
+        context.tr(
+          ky: 'Сыр сөздү жаңыртуу шилтемеси email дарегине жөнөтүлдү.',
+          en: 'A password reset link was sent to your email.',
+          ru: 'Ссылка для сброса пароля отправлена на ваш email.',
+        ),
+      );
       return;
     }
     final error = auth.error;
@@ -51,10 +64,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _finishAuthFlow() async {
-    await ref.read(localStorageServiceProvider).setString(
-      Constants.postLogoutRedirectKey,
-      'false',
-    );
+    await ref
+        .read(localStorageServiceProvider)
+        .setString(Constants.postLogoutRedirectKey, 'false');
     await ref.read(onboardingProvider).completeOnboarding();
     if (!mounted) return;
     context.go('/auth-complete');
@@ -146,7 +158,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              'Кош келиңиз!',
+                              context.tr(
+                                ky: 'Кош келиңиз!',
+                                en: 'Welcome back!',
+                                ru: 'С возвращением!',
+                              ),
                               style: AppTextStyles.heading.copyWith(
                                 fontSize: 28,
                               ),
@@ -154,7 +170,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Улантуу үчүн кириңиз.',
+                              context.tr(
+                                ky: 'Улантуу үчүн кириңиз.',
+                                en: 'Sign in to continue.',
+                                ru: 'Войдите, чтобы продолжить.',
+                              ),
                               style: AppTextStyles.muted,
                               textAlign: TextAlign.center,
                             ),
@@ -169,14 +189,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           children: [
                             _AuthField(
                               controller: _email,
-                              label: 'Электрондук почта',
+                              label: context.tr(
+                                ky: 'Электрондук почта',
+                                en: 'Email',
+                                ru: 'Электронная почта',
+                              ),
                               icon: Icons.mail_outline,
                               placeholder: 'name@example.com',
                             ),
                             const SizedBox(height: 16),
                             _AuthField(
                               controller: _password,
-                              label: 'Сыр сөз',
+                              label: context.tr(
+                                ky: 'Сыр сөз',
+                                en: 'Password',
+                                ru: 'Пароль',
+                              ),
                               icon: Icons.lock_outline,
                               placeholder: '********',
                               obscureText: !_showPassword,
@@ -202,7 +230,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     ? null
                                     : () => _handlePasswordReset(auth),
                                 child: Text(
-                                  'Сыр сөздү унуттуңузбу?',
+                                  context.tr(
+                                    ky: 'Сыр сөздү унуттуңузбу?',
+                                    en: 'Forgot password?',
+                                    ru: 'Забыли пароль?',
+                                  ),
                                   style: AppTextStyles.body.copyWith(
                                     color: AppColors.link,
                                     fontSize: 13,
@@ -238,7 +270,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onPressed: auth.isLoading
                           ? null
                           : () => _handleEmailLogin(auth),
-                      child: const Text('Кирүү'),
+                      child: Text(
+                        context.tr(ky: 'Кирүү', en: 'Sign in', ru: 'Войти'),
+                      ),
                     ),
                     const SizedBox(height: 10),
                     AppButton(
@@ -248,7 +282,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onPressed: auth.isLoading || !googleSupported
                           ? null
                           : () => _handleGoogleLogin(auth),
-                      child: const Text('Google менен кирүү'),
+                      child: Text(
+                        context.tr(
+                          ky: 'Google менен кирүү',
+                          en: 'Continue with Google',
+                          ru: 'Войти через Google',
+                        ),
+                      ),
                     ),
                     if (!googleSupported)
                       Padding(
@@ -263,7 +303,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     TextButton(
                       onPressed: () => context.push('/signup'),
                       child: Text(
-                        'Аккаунтуңуз жокпу? Катталуу',
+                        context.tr(
+                          ky: 'Аккаунтуңуз жокпу? Катталуу',
+                          en: 'No account? Sign up',
+                          ru: 'Нет аккаунта? Зарегистрируйтесь',
+                        ),
                         style: AppTextStyles.body.copyWith(
                           color: AppColors.link,
                           fontWeight: FontWeight.w600,

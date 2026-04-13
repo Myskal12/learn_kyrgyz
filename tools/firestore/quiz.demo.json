@@ -1,0 +1,842 @@
+[
+  {
+    "id": "quiz_basics_good_morning",
+    "type": "choose_translation",
+    "question": "good morning",
+    "correct": "Кутман таң",
+    "options": [
+      "Салам",
+      "Рахмат",
+      "Суранам",
+      "Кутман таң"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "basics_good_morning"
+  },
+  {
+    "id": "quiz_basics_hello",
+    "type": "choose_translation",
+    "question": "hello",
+    "correct": "Салам",
+    "options": [
+      "Рахмат",
+      "Жок",
+      "суу",
+      "Салам"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "basics_hello"
+  },
+  {
+    "id": "quiz_basics_no",
+    "type": "choose_translation",
+    "question": "no",
+    "correct": "Жок",
+    "options": [
+      "Ооба",
+      "Жок",
+      "салам",
+      "Кутман таң"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "basics_no"
+  },
+  {
+    "id": "quiz_basics_please",
+    "type": "choose_translation",
+    "question": "please",
+    "correct": "Суранам",
+    "options": [
+      "салам",
+      "Ооба",
+      "Суранам",
+      "Салам"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "basics_please"
+  },
+  {
+    "id": "quiz_basics_thanks",
+    "type": "choose_translation",
+    "question": "thank you",
+    "correct": "Рахмат",
+    "options": [
+      "Суранам",
+      "Рахмат",
+      "Кутман таң",
+      "Жок"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "basics_thanks"
+  },
+  {
+    "id": "quiz_basics_yes",
+    "type": "choose_translation",
+    "question": "yes",
+    "correct": "Ооба",
+    "options": [
+      "Салам",
+      "суу",
+      "салам",
+      "Ооба"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "basics_yes"
+  },
+  {
+    "id": "quiz_hello",
+    "type": "choose_translation",
+    "question": "hello",
+    "correct": "салам",
+    "options": [
+      "Кутман таң",
+      "салам",
+      "суу",
+      "Ооба"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "hello"
+  },
+  {
+    "id": "quiz_water",
+    "type": "choose_translation",
+    "question": "water",
+    "correct": "суу",
+    "options": [
+      "Салам",
+      "Суранам",
+      "суу",
+      "Ооба"
+    ],
+    "level": 1,
+    "category": "basic",
+    "wordId": "water"
+  },
+  {
+    "id": "quiz_family",
+    "type": "choose_translation",
+    "question": "family",
+    "correct": "үй-бүлө",
+    "options": [
+      "Карындашым",
+      "Чоң апа",
+      "үй-бүлө",
+      "Агам"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family"
+  },
+  {
+    "id": "quiz_family_brother",
+    "type": "choose_translation",
+    "question": "elder brother",
+    "correct": "Агам",
+    "options": [
+      "Чоң апа",
+      "Агам",
+      "үй-бүлө",
+      "Карындашым"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family_brother"
+  },
+  {
+    "id": "quiz_family_child",
+    "type": "choose_translation",
+    "question": "child",
+    "correct": "Бала",
+    "options": [
+      "Агам",
+      "үй-бүлө",
+      "Карындашым",
+      "Бала"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family_child"
+  },
+  {
+    "id": "quiz_family_father",
+    "type": "choose_translation",
+    "question": "father",
+    "correct": "Атам",
+    "options": [
+      "Апам",
+      "Карындашым",
+      "Атам",
+      "Чоң апа"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family_father"
+  },
+  {
+    "id": "quiz_family_grandma",
+    "type": "choose_translation",
+    "question": "grandmother",
+    "correct": "Чоң апа",
+    "options": [
+      "Апам",
+      "үй-бүлө",
+      "Чоң апа",
+      "Атам"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family_grandma"
+  },
+  {
+    "id": "quiz_family_mother",
+    "type": "choose_translation",
+    "question": "mother",
+    "correct": "Апам",
+    "options": [
+      "Апам",
+      "Агам",
+      "Бала",
+      "Чоң апа"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family_mother"
+  },
+  {
+    "id": "quiz_family_sister",
+    "type": "choose_translation",
+    "question": "sister",
+    "correct": "Карындашым",
+    "options": [
+      "Атам",
+      "Чоң апа",
+      "Апам",
+      "Карындашым"
+    ],
+    "level": 1,
+    "category": "family",
+    "wordId": "family_sister"
+  },
+  {
+    "id": "quiz_bread",
+    "type": "choose_translation",
+    "question": "bread",
+    "correct": "нан",
+    "options": [
+      "Нан",
+      "Алма",
+      "Чай",
+      "нан"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "bread"
+  },
+  {
+    "id": "quiz_food_apple",
+    "type": "choose_translation",
+    "question": "apple",
+    "correct": "Алма",
+    "options": [
+      "Алма",
+      "Нан",
+      "Шорпо",
+      "нан"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "food_apple"
+  },
+  {
+    "id": "quiz_food_bread",
+    "type": "choose_translation",
+    "question": "bread",
+    "correct": "Нан",
+    "options": [
+      "Алма",
+      "Чай",
+      "Нан",
+      "Суу"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "food_bread"
+  },
+  {
+    "id": "quiz_food_meat",
+    "type": "choose_translation",
+    "question": "meat",
+    "correct": "Эт",
+    "options": [
+      "Алма",
+      "Суу",
+      "Нан",
+      "Эт"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "food_meat"
+  },
+  {
+    "id": "quiz_food_soup",
+    "type": "choose_translation",
+    "question": "soup",
+    "correct": "Шорпо",
+    "options": [
+      "Алма",
+      "нан",
+      "Чай",
+      "Шорпо"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "food_soup"
+  },
+  {
+    "id": "quiz_food_tea",
+    "type": "choose_translation",
+    "question": "tea",
+    "correct": "Чай",
+    "options": [
+      "нан",
+      "Эт",
+      "Чай",
+      "Нан"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "food_tea"
+  },
+  {
+    "id": "quiz_food_water",
+    "type": "choose_translation",
+    "question": "water",
+    "correct": "Суу",
+    "options": [
+      "Суу",
+      "Шорпо",
+      "Эт",
+      "Алма"
+    ],
+    "level": 1,
+    "category": "food",
+    "wordId": "food_water"
+  },
+  {
+    "id": "quiz_mountain",
+    "type": "choose_translation",
+    "question": "mountain",
+    "correct": "тоо",
+    "options": [
+      "тоо",
+      "Кар",
+      "Шамал",
+      "Күн"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "mountain"
+  },
+  {
+    "id": "quiz_nature_lake",
+    "type": "choose_translation",
+    "question": "lake",
+    "correct": "Көл",
+    "options": [
+      "Көл",
+      "Дарыя",
+      "Кар",
+      "Тоолор"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "nature_lake"
+  },
+  {
+    "id": "quiz_nature_mountain",
+    "type": "choose_translation",
+    "question": "mountain",
+    "correct": "Тоолор",
+    "options": [
+      "тоо",
+      "Шамал",
+      "Тоолор",
+      "Кар"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "nature_mountain"
+  },
+  {
+    "id": "quiz_nature_river",
+    "type": "choose_translation",
+    "question": "river",
+    "correct": "Дарыя",
+    "options": [
+      "Тоолор",
+      "Кар",
+      "Күн",
+      "Дарыя"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "nature_river"
+  },
+  {
+    "id": "quiz_nature_snow",
+    "type": "choose_translation",
+    "question": "snow",
+    "correct": "Кар",
+    "options": [
+      "тоо",
+      "Дарыя",
+      "Көл",
+      "Кар"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "nature_snow"
+  },
+  {
+    "id": "quiz_nature_sun",
+    "type": "choose_translation",
+    "question": "sun",
+    "correct": "Күн",
+    "options": [
+      "Шамал",
+      "Күн",
+      "Кар",
+      "Тоолор"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "nature_sun"
+  },
+  {
+    "id": "quiz_nature_wind",
+    "type": "choose_translation",
+    "question": "wind",
+    "correct": "Шамал",
+    "options": [
+      "Күн",
+      "Шамал",
+      "Дарыя",
+      "Кар"
+    ],
+    "level": 1,
+    "category": "nature",
+    "wordId": "nature_wind"
+  },
+  {
+    "id": "quiz_animals_bird",
+    "type": "choose_translation",
+    "question": "bird",
+    "correct": "Куш",
+    "options": [
+      "Ит",
+      "Куш",
+      "Мышык",
+      "Ат"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "animals_bird"
+  },
+  {
+    "id": "quiz_animals_cat",
+    "type": "choose_translation",
+    "question": "cat",
+    "correct": "Мышык",
+    "options": [
+      "Ат",
+      "Куш",
+      "Мышык",
+      "Бүркүт"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "animals_cat"
+  },
+  {
+    "id": "quiz_animals_dog",
+    "type": "choose_translation",
+    "question": "dog",
+    "correct": "Ит",
+    "options": [
+      "Мышык",
+      "Куш",
+      "Ат",
+      "Ит"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "animals_dog"
+  },
+  {
+    "id": "quiz_animals_eagle",
+    "type": "choose_translation",
+    "question": "eagle",
+    "correct": "Бүркүт",
+    "options": [
+      "Бүркүт",
+      "Ат",
+      "ат",
+      "Куш"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "animals_eagle"
+  },
+  {
+    "id": "quiz_animals_horse",
+    "type": "choose_translation",
+    "question": "horse",
+    "correct": "Ат",
+    "options": [
+      "ат",
+      "Ат",
+      "Куш",
+      "Кой"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "animals_horse"
+  },
+  {
+    "id": "quiz_animals_sheep",
+    "type": "choose_translation",
+    "question": "sheep",
+    "correct": "Кой",
+    "options": [
+      "Кой",
+      "ат",
+      "Бүркүт",
+      "Ит"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "animals_sheep"
+  },
+  {
+    "id": "quiz_horse",
+    "type": "choose_translation",
+    "question": "horse",
+    "correct": "ат",
+    "options": [
+      "Ат",
+      "Куш",
+      "ат",
+      "Кой"
+    ],
+    "level": 1,
+    "category": "animals",
+    "wordId": "horse"
+  },
+  {
+    "id": "quiz_travel_airport",
+    "type": "choose_translation",
+    "question": "airport",
+    "correct": "Абамайдан",
+    "options": [
+      "Жол",
+      "Поезд",
+      "Шаар",
+      "Абамайдан"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "travel_airport"
+  },
+  {
+    "id": "quiz_travel_bus",
+    "type": "choose_translation",
+    "question": "bus",
+    "correct": "Автобус",
+    "options": [
+      "Шаар",
+      "Автобус",
+      "Поезд",
+      "Жол"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "travel_bus"
+  },
+  {
+    "id": "quiz_travel_city",
+    "type": "choose_translation",
+    "question": "city",
+    "correct": "Шаар",
+    "options": [
+      "Шаар",
+      "Поезд",
+      "Жол",
+      "Билет"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "travel_city"
+  },
+  {
+    "id": "quiz_travel_road",
+    "type": "choose_translation",
+    "question": "road",
+    "correct": "Жол",
+    "options": [
+      "Жол",
+      "Поезд",
+      "Билет",
+      "Автобус"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "travel_road"
+  },
+  {
+    "id": "quiz_travel_ticket",
+    "type": "choose_translation",
+    "question": "ticket",
+    "correct": "Билет",
+    "options": [
+      "Абамайдан",
+      "Поезд",
+      "Билет",
+      "Шаар"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "travel_ticket"
+  },
+  {
+    "id": "quiz_travel_train",
+    "type": "choose_translation",
+    "question": "train",
+    "correct": "Поезд",
+    "options": [
+      "Жол",
+      "Шаар",
+      "Абамайдан",
+      "Поезд"
+    ],
+    "level": 1,
+    "category": "travel",
+    "wordId": "travel_train"
+  },
+  {
+    "id": "quiz_book",
+    "type": "choose_translation",
+    "question": "book",
+    "correct": "китеп",
+    "options": [
+      "жаңы",
+      "үй-бүлө",
+      "мектеп",
+      "китеп"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "book"
+  },
+  {
+    "id": "quiz_school",
+    "type": "choose_translation",
+    "question": "school",
+    "correct": "мектеп",
+    "options": [
+      "мектеп",
+      "Эт",
+      "Ооба",
+      "китеп"
+    ],
+    "level": 1,
+    "category": "education",
+    "wordId": "school"
+  },
+  {
+    "id": "quiz_friend",
+    "type": "choose_translation",
+    "question": "friend",
+    "correct": "дос",
+    "options": [
+      "Кой",
+      "чоң",
+      "Жол",
+      "дос"
+    ],
+    "level": 1,
+    "category": "emotion",
+    "wordId": "friend"
+  },
+  {
+    "id": "quiz_draft_adjectives_big_1",
+    "type": "choose_translation",
+    "question": "big",
+    "correct": "чоң",
+    "options": [
+      "кичине",
+      "жаңы",
+      "чоң",
+      "жаш"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_big_1"
+  },
+  {
+    "id": "quiz_draft_adjectives_easy_10",
+    "type": "choose_translation",
+    "question": "easy",
+    "correct": "жеңил",
+    "options": [
+      "жаңы",
+      "тез",
+      "жеңил",
+      "жай"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_easy_10"
+  },
+  {
+    "id": "quiz_draft_adjectives_fast_8",
+    "type": "choose_translation",
+    "question": "fast",
+    "correct": "тез",
+    "options": [
+      "тез",
+      "жаңы",
+      "узун",
+      "жаш"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_fast_8"
+  },
+  {
+    "id": "quiz_draft_adjectives_long_3",
+    "type": "choose_translation",
+    "question": "long",
+    "correct": "узун",
+    "options": [
+      "жай",
+      "узун",
+      "чоң",
+      "кыска"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_long_3"
+  },
+  {
+    "id": "quiz_draft_adjectives_new_5",
+    "type": "choose_translation",
+    "question": "new",
+    "correct": "жаңы",
+    "options": [
+      "чоң",
+      "кыска",
+      "жаңы",
+      "тез"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_new_5"
+  },
+  {
+    "id": "quiz_draft_adjectives_old_6",
+    "type": "choose_translation",
+    "question": "old",
+    "correct": "эски",
+    "options": [
+      "узун",
+      "жеңил",
+      "эски",
+      "чоң"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_old_6"
+  },
+  {
+    "id": "quiz_draft_adjectives_short_4",
+    "type": "choose_translation",
+    "question": "short",
+    "correct": "кыска",
+    "options": [
+      "тез",
+      "узун",
+      "кыска",
+      "кичине"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_short_4"
+  },
+  {
+    "id": "quiz_draft_adjectives_slow_9",
+    "type": "choose_translation",
+    "question": "slow",
+    "correct": "жай",
+    "options": [
+      "узун",
+      "тез",
+      "жай",
+      "чоң"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_slow_9"
+  },
+  {
+    "id": "quiz_draft_adjectives_small_2",
+    "type": "choose_translation",
+    "question": "small",
+    "correct": "кичине",
+    "options": [
+      "тез",
+      "узун",
+      "эски",
+      "кичине"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_small_2"
+  },
+  {
+    "id": "quiz_draft_adjectives_young_7",
+    "type": "choose_translation",
+    "question": "young",
+    "correct": "жаш",
+    "options": [
+      "жаш",
+      "кичине",
+      "тез",
+      "кыска"
+    ],
+    "level": 1,
+    "category": "adjectives",
+    "wordId": "draft_adjectives_young_7"
+  },
+  {
+    "id": "quiz_sun",
+    "type": "choose_translation",
+    "question": "sun",
+    "correct": "күн",
+    "options": [
+      "Күн",
+      "эски",
+      "күн",
+      "Рахмат"
+    ],
+    "level": 1,
+    "category": "weather",
+    "wordId": "sun"
+  }
+]

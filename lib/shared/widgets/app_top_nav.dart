@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ class AppTopNav extends StatelessWidget {
     this.subtitle = 'Кыргызча / English',
     required this.onLeadingTap,
     this.onActionTap,
+    this.trailing,
+    this.trailingWidth = 40,
     this.tone = AppTopNavTone.light,
     this.leadingType = AppTopNavLeadingType.menu,
   });
@@ -24,6 +27,8 @@ class AppTopNav extends StatelessWidget {
   final String subtitle;
   final VoidCallback onLeadingTap;
   final VoidCallback? onActionTap;
+  final Widget? trailing;
+  final double trailingWidth;
   final AppTopNavTone tone;
   final AppTopNavLeadingType leadingType;
 
@@ -41,6 +46,7 @@ class AppTopNav extends StatelessWidget {
         ? Colors.white.withValues(alpha: 0.7)
         : AppColors.muted;
     final textScale = MediaQuery.textScalerOf(context).scale(16) / 16;
+    final sideSlotWidth = math.max(40.0, trailingWidth);
 
     return ClipRect(
       child: BackdropFilter(
@@ -74,12 +80,18 @@ class AppTopNav extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      _NavIconButton(
-                        icon: leadingType == AppTopNavLeadingType.back
-                            ? Icons.arrow_back
-                            : Icons.menu,
-                        onTap: onLeadingTap,
-                        isDark: isDark,
+                      SizedBox(
+                        width: sideSlotWidth,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: _NavIconButton(
+                            icon: leadingType == AppTopNavLeadingType.back
+                                ? Icons.arrow_back
+                                : Icons.menu,
+                            onTap: onLeadingTap,
+                            isDark: isDark,
+                          ),
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -131,14 +143,21 @@ class AppTopNav extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      if (onActionTap != null)
-                        _NavIconButton(
-                          icon: Icons.notifications_none,
-                          onTap: onActionTap,
-                          isDark: isDark,
-                        )
-                      else
-                        const SizedBox(width: 40, height: 40),
+                      SizedBox(
+                        width: sideSlotWidth,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child:
+                              trailing ??
+                              (onActionTap != null
+                                  ? _NavIconButton(
+                                      icon: Icons.notifications_none,
+                                      onTap: onActionTap,
+                                      isDark: isDark,
+                                    )
+                                  : const SizedBox(width: 40, height: 40)),
+                        ),
+                      ),
                     ],
                   ),
                 );
