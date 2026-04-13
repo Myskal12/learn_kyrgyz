@@ -1,12 +1,10 @@
 # Test Report
 
-Обновлено: 2026-04-01
+## 1. Purpose
 
-## 1. Цель
+This report documents the current minimum verification scope after UX, offline-first foundation, learning-flow, and stabilization work.
 
-Этот отчет фиксирует текущий минимальный проверочный контур проекта после завершения этапов UX, offline-first foundation, learning-flow и stabilization work.
-
-## 2. Основные команды проверки
+## 2. Core Validation Commands
 
 ```bash
 flutter analyze
@@ -14,52 +12,52 @@ flutter test
 git diff --check
 ```
 
-## 3. Что покрыто
+## 3. Covered Areas
 
-### Provider / logic tests
+### Provider and logic tests
 
 - learning direction persistence
 - progress provider milestone/review logic
-- flashcard provider reveal and review mode behavior
+- flashcard provider reveal and review-mode behavior
 - quiz provider session analytics lifecycle
-- sentence builder session analytics lifecycle
+- sentence builder provider session analytics lifecycle
 
-### Repository / service tests
+### Repository and service tests
 
 - offline catalog cache service
 - words repository
 - quiz repository
 - local analytics service
 
-### Widget / UX smoke tests
+### Widget and UX smoke tests
 
 - auth CTA visibility on short screens
 - adaptive mobile shell stability
 - learning direction control behavior
 
-## 4. Последний статус
+## 4. Last Known Full-Run Status
 
-На последнем полном прогоне:
+In the latest full run:
 
-- `flutter analyze` -> passed
-- `flutter test` -> passed
-- `git diff --check` -> passed without whitespace errors
+- flutter analyze -> passed
+- flutter test -> passed
+- git diff --check -> passed without whitespace errors
 
-## 5. Что еще не закрыто полностью
+## 5. Remaining Gaps
 
-- full integration tests for complete study cycle
+- full integration tests for the complete learning cycle
 - guest/cloud merge edge cases under sync pressure
 - golden tests for key mobile screens
-- manual device audit for all main flows on multiple form factors
+- manual device audit for all primary flows on multiple form factors
 
-## 6. Рекомендованный следующий тестовый этап
+## 6. Recommended Next Test Stage
 
-1. integration test:
+1. Add integration test coverage for:
    onboarding -> home -> flashcards -> quiz -> sentence builder -> progress
 
-2. offline/online transition tests
+2. Add offline-to-online transition tests.
 
-3. golden tests for:
+3. Add golden tests for:
    - home
    - practice
    - categories

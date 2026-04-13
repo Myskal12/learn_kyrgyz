@@ -1,17 +1,15 @@
 # Engineering Quality
 
-Обновлено: 2026-04-01
+## 1. Purpose
 
-## 1. Цель этого документа
+This file describes the current engineering quality rules for the project:
 
-Этот файл фиксирует не "идеальное будущее", а текущие инженерные правила проекта:
+- how code is validated
+- what is considered a quality gate
+- what tests already exist
+- where real technical risks still remain
 
-- как проверять код
-- что считается quality gate
-- какие тесты уже есть
-- где остаются реальные технические риски
-
-## 2. Обязательные команды перед завершением работы
+## 2. Required Commands Before Finishing Work
 
 ```bash
 dart format .
@@ -20,13 +18,13 @@ flutter test
 git diff --check
 ```
 
-Если правки касаются только части файлов, допускается форматировать только измененные файлы, но `flutter analyze`, `flutter test` и `git diff --check` остаются обязательными.
+If changes affect only part of the codebase, formatting can be scoped to modified files, but flutter analyze, flutter test, and git diff --check remain mandatory.
 
-## 3. Что уже покрыто тестами
+## 3. Existing Test Coverage
 
 ### Unit / provider / repository
 
-В проекте уже есть тесты для:
+Current test coverage includes:
 
 - learning direction persistence
 - progress provider logic
@@ -38,95 +36,95 @@ git diff --check
 
 ### Widget / UX smoke tests
 
-Есть проверки для:
+Current smoke coverage includes:
 
-- visibility primary CTA на коротких экранах
-- adaptive mobile shell на нескольких ширинах и text scale
+- primary CTA visibility on short screens
+- adaptive mobile shell behavior across widths and text scales
 - learning direction control
 
-## 4. Что проверяет этап 6
+## 4. Stage-6 Stabilization Additions
 
-Финальный этап стабилизации добавил:
+The latest stabilization stage added:
 
-- локальную аналитику учебных событий
-- тесты на lifecycle учебных сессий
-- `git diff --check` как обязательную hygiene-проверку
-- cleanup whitespace / formatting issues
+- local analytics events for learning sessions
+- lifecycle tests for learning sessions
+- git diff --check as a mandatory hygiene gate
+- whitespace and formatting cleanup
 
-## 5. Текущие quality gates
+## 5. Current Quality Gates
 
-Изменение считается приемлемым, если:
+A change is acceptable only when:
 
-1. код читается без лишних комментариев и без дублирующей логики
-2. нет новых analyzer warnings
-3. существующие тесты проходят
-4. для нового сложного поведения есть тест
-5. нет obvious UX regression на мобильном экране
-6. `git diff --check` не падает на whitespace / merge мусоре
+1. Code remains readable without redundant comments and duplicated logic.
+2. No new analyzer warnings are introduced.
+3. Existing tests stay green.
+4. New non-trivial behavior has test coverage.
+5. No obvious mobile UX regression is introduced.
+6. git diff --check passes without whitespace or merge-noise errors.
 
-## 6. Security и operational notes
+## 6. Security and Operational Notes
 
-### Что важно понимать
+### Important baseline
 
-- Firebase client config в мобильном приложении не является полноценным секретом.
-- Безопасность должна строиться на auth, Firestore rules и server-side ограничениях.
-- Service-account ключи не должны лежать в репозитории.
+- Firebase client config in a mobile app is not a secret by itself.
+- Security must be enforced through auth, Firestore rules, and server-side limits.
+- Service-account keys must never be committed.
 
-### Что в проекте еще желательно довести
+### Work still recommended
 
-- versioned Firestore rules в репозитории
-- отдельный review Firebase security posture перед production release
-- ревизия Google Sign-In конфигурации по платформам
+- Maintain versioned Firestore rules in the repository.
+- Run a dedicated Firebase security posture review before production.
+- Complete platform-by-platform Google Sign-In configuration review.
 
-## 7. Реальные технические риски на сегодня
+## 7. Current Technical Risks
 
 ### High
 
-- sync и merge guest/cloud still need additional hardening
-- remote analytics пока не подключены
+- guest/cloud sync and merge flows still need additional hardening
+- remote analytics pipeline is not connected yet
 
 ### Medium
 
-- нет полноценной local DB
-- `FirebaseService` остается слишком широким по ответственности
-- нет end-to-end integration tests для полного учебного цикла
+- no full local database yet
+- FirebaseService remains too broad in responsibility
+- no end-to-end integration tests for the complete learning loop
 
 ### Low
 
-- часть документации и tooling раньше была разрозненной; теперь это очищено, но нужно поддерживать дисциплину обновления
+- documentation and tooling are now cleaner, but update discipline must be maintained
 
-## 8. Рекомендованный следующий quality backlog
+## 8. Recommended Next Quality Backlog
 
-1. добавить integration tests для сценария:
+1. Add integration tests for this flow:
    onboarding -> home -> flashcards -> quiz -> sentence builder -> progress
 
-2. добавить smoke tests для sync/offline transitions
+2. Add smoke tests for sync/offline transitions.
 
-3. ввести golden tests для ключевых mobile screens
+3. Add golden tests for key mobile screens.
 
-4. вынести Firebase responsibilities в более узкие services
+4. Split Firebase responsibilities into narrower services.
 
-5. подготовить local DB migration plan
+5. Prepare a local DB migration plan.
 
-## 9. Release checklist
+## 9. Release Verification List
 
-Перед релизом проверить:
+Before release, verify:
 
-- `flutter analyze`
-- `flutter test`
-- ручной smoke pass на mobile
+- flutter analyze
+- flutter test
+- manual mobile smoke pass
 - auth scenarios: guest, email, Google
 - offline open and continue behavior
 - progress sync and conflict edge cases
-- no fake CTA or broken external links
+- no fake CTA and no broken links
 
-## 10. Правило поддержки качества
+## 10. Quality Maintenance Rule
 
-Если новый код требует длинного пояснения, значит архитектурная граница выбрана плохо или логика перегружена.
+If new code requires long explanations to understand, boundaries are likely wrong or logic is overloaded.
 
-Предпочтение проекта:
+Project preference:
 
-- меньше магии
-- явные зависимости через providers
-- короткие и тестируемые сервисы
-- честные empty/error/offline states
+- less magic
+- explicit dependencies through providers
+- short, testable services
+- honest empty/error/offline states

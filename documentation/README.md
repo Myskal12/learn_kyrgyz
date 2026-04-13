@@ -1,57 +1,56 @@
 # Learn Kyrgyz Documentation
 
-Обновлено: 2026-04-01
+This directory contains active documentation for the current codebase only.
+Outdated drafts, one-off summaries, and duplicate notes are intentionally removed so the repository has one source of truth.
 
-Эта папка теперь хранит только актуальную документацию по текущему состоянию проекта. Старые черновики про wireframes, follow-up backlog, PDF summary и разрозненные заметки удалены, чтобы в репозитории не было нескольких противоречащих друг другу источников правды.
+## Documentation Set
 
-## Состав документации
+1. PRODUCT_AND_UX.md
+   Current product positioning, screen roles, learning loop, and UX principles.
 
-1. `PRODUCT_AND_UX.md`
-   Текущее продуктовое позиционирование, роли экранов, учебный цикл и UX-принципы.
+2. ARCHITECTURE.md
+   Current application architecture, data layer, offline-first foundation, sync, and analytics.
 
-2. `ARCHITECTURE.md`
-   Текущая архитектура приложения, слой данных, offline-first foundation, sync и analytics.
+3. ENGINEERING_QUALITY.md
+   Engineering quality rules, testing standards, operational notes, and open technical debt.
 
-3. `ENGINEERING_QUALITY.md`
-   Правила качества, тестирование, операционные заметки, команды разработки и оставшийся техдолг.
+4. USER_GUIDE.md
+   End-user guide for the core app flows.
 
-4. `USER_GUIDE.md`
-   Краткая пользовательская документация по основным сценариям приложения.
+5. TEST_REPORT.md
+   Current testing report and verified coverage areas.
 
-5. `TEST_REPORT.md`
-   Текущий отчет по тестированию и покрытию проверочных сценариев.
+6. PRODUCTION_CHECKLIST.md
+   Mandatory checklist to move the project to full release readiness.
 
-6. `PRODUCTION_CHECKLIST.md`
-   Список обязательных шагов, чтобы довести проект до полноценного релизного состояния.
+7. RELEASE_EXECUTION_CHECKLIST.md
+   Ordered release runbook with concrete execution steps and current blockers.
 
-7. `RELEASE_EXECUTION_CHECKLIST.md`
-   Пошаговый релизный runbook с очередностью, статусами и командами для доведения проекта до 100% готовности.
+8. STATIC_PARTS_IMPLEMENTATION_PLAN.md
+   Migration plan for static app parts to data-driven configuration.
 
-8. `STATIC_PARTS_IMPLEMENTATION_PLAN.md`
-   Карта статических частей проекта и поэтапный план перевода их в data-driven реализацию.
+## Current Project Status
 
-## Текущее состояние проекта
+- Stage 1. Product structure and CTA hierarchy: baseline completed.
+- Stage 2. Per-word progress model and review logic: foundation completed.
+- Stage 3. Offline-first foundation: catalog cache and local-first repositories implemented.
+- Stage 4. Learning loop: review mode and linked mode transitions added.
+- Stage 5. Motivation and personalization: progress, milestone, and study snapshot improved.
+- Stage 6. Quality and stabilization: local analytics, tests, and hygiene checks added.
 
-- Этап 1. Продуктовая структура и CTA-иерархия: базово завершен.
-- Этап 2. Per-word progress model и review logic: фундамент заложен.
-- Этап 3. Offline-first foundation: реализован catalog cache и local-first repositories.
-- Этап 4. Учебный цикл: добавлены review mode и связанный переход между learning modes.
-- Этап 5. Мотивация и персонализация: усилены progress, milestone и study snapshot.
-- Этап 6. Качество и стабилизация: добавлены локальная аналитика, тесты и hygiene-проверки.
+## Documentation Update Rule
 
-## Правило обновления документации
+Documentation must describe only what exists in code now.
 
-Документация должна описывать только то, что реально есть в коде сейчас.
+If one of these areas changes, update the matching file:
 
-Если меняется одно из направлений ниже, обновляется соответствующий файл:
+- Product flow, screen behavior, or UX rule -> PRODUCT_AND_UX.md
+- Architecture, data state, sync, offline, analytics -> ARCHITECTURE.md
+- Tests, quality gates, release process, security notes -> ENGINEERING_QUALITY.md
 
-- продуктовый сценарий, экран или UX-правило -> `PRODUCT_AND_UX.md`
-- архитектура, состояние данных, sync, offline, analytics -> `ARCHITECTURE.md`
-- тесты, quality gates, release-процесс, security notes -> `ENGINEERING_QUALITY.md`
+## Intentionally Excluded
 
-## Что намеренно не хранится здесь
-
-- старые wireframe-спеки, если они уже не соответствуют коду
-- разовые отчеты вида "последние 5 изменений"
-- закоммиченные generated PDF-файлы
-- параллельные backlog-файлы с дублирующими списками улучшений
+- Outdated wireframe specs that no longer match implementation
+- One-off change summaries
+- Generated PDF artifacts committed to source control
+- Parallel backlog files that duplicate the same improvement lists

@@ -1,19 +1,17 @@
 # Architecture
 
-Обновлено: 2026-04-01
+## 1. Overview
 
-## 1. Общая схема
+The app is built as a Flutter client-first project with Riverpod for dependency injection and state wiring, Firebase as the remote backend, and local persistence layers for offline-friendly behavior.
 
-Приложение построено как Flutter client-first проект с Riverpod для DI и state wiring, Firebase как remote backend и локальными persistence-слоями для offline-friendly работы.
-
-Текущая архитектурная формула:
+Current architecture formula:
 
 - presentation -> screens and shared widgets
-- state -> providers / notifiers
+- state -> providers and notifiers
 - data access -> repositories
-- platform / remote / local -> services
+- platform and backend integration -> services
 
-## 2. Основной стек
+## 2. Core Stack
 
 - Flutter / Dart
 - flutter_riverpod
@@ -22,81 +20,81 @@
 - Cloud Firestore
 - SharedPreferences
 
-Важно:
-полноценная локальная БД еще не внедрена. Сейчас offline foundation построен поверх `SharedPreferences` и dedicated cache services.
+Important note:
+A full local database is not implemented yet. The current offline foundation is based on SharedPreferences and dedicated cache services.
 
-## 3. Ключевые директории
+## 3. Key Directories
 
-- `lib/app`
-  app bootstrap, router, global providers
+- lib/app
+  app bootstrap, router, app-level providers
 
-- `lib/core`
+- lib/core
   shared services, utilities, session helpers
 
-- `lib/data/models`
-  app models: words, categories, quiz questions, progress, profile
+- lib/data/models
+  core models: words, categories, quiz questions, progress, profile
 
-- `lib/features`
-  feature-first модули: auth, home, categories, learning, quiz, progress, profile, extras
+- lib/features
+  feature-first modules: auth, home, categories, learning, quiz, progress, profile, extras
 
-- `lib/shared/widgets`
+- lib/shared/widgets
   reusable UI blocks, shell, cards, buttons, layout helpers
 
-## 4. Routing и shell
+## 4. Routing and Shell
 
-Навигация собирается через `GoRouter` в `lib/app/router.dart`.
+Navigation is composed with GoRouter in lib/app/router.dart.
 
-Основные свойства текущего navigation layer:
+Current navigation characteristics:
 
-- единый shell для основных экранов
-- secondary flows на тех же shared UI patterns
-- query-param support для review entry points в flashcards
+- unified shell for primary screens
+- secondary flows built on the same shared UI patterns
+- query parameter support for review entry points in flashcards
 
-## 5. Provider graph
+## 5. Provider Graph
 
 ### App-level providers
 
-В `lib/app/providers/app_providers.dart` находятся базовые зависимости:
+Base dependencies are wired in lib/app/providers/app_providers.dart:
 
-- `sharedPreferencesProvider`
-- `firebaseServiceProvider`
-- `localStorageServiceProvider`
-- `analyticsServiceProvider`
-- `offlineCatalogCacheServiceProvider`
+- sharedPreferencesProvider
+- firebaseServiceProvider
+- localStorageServiceProvider
+- analyticsServiceProvider
+- offlineCatalogCacheServiceProvider
 - repository providers
 
-### User/session related providers
+### User and session providers
 
-- `authProvider`
-- `onboardingProvider`
-- `learningDirectionProvider`
-- `themeModeProvider`
-- `learningSessionProvider`
+- authProvider
+- onboardingProvider
+- learningDirectionProvider
+- themeModeProvider
+- learningSessionProvider
 
 ### Feature providers
 
-- `categoriesProvider`
-- `progressProvider`
-- `userProfileProvider`
-- `leaderboardProvider`
-- `flashcardProvider`
-- `quizProvider`
-- `sentenceBuilderProvider`
+- categoriesProvider
+- progressProvider
+- userProfileProvider
+- leaderboardProvider
+- flashcardProvider
+- quizProvider
+- sentenceBuilderProvider
 
-## 6. Data flow
+## 6. Data Flow
 
 ### 6.1 Startup
 
-1. App initializes Firebase and SharedPreferences.
+1. The app initializes Firebase and SharedPreferences.
 2. Riverpod wires base services and repositories.
-3. Onboarding / auth / theme / direction providers hydrate local state.
-4. Home and other screens read feature providers on demand.
+3. Onboarding, auth, theme, and direction providers hydrate local state.
+4. Home and other screens consume feature providers on demand.
 
 ### 6.2 Content loading
 
-Категории, слова, предложения и quiz data проходят через repository layer.
+Categories, words, sentences, and quiz data flow through repositories.
 
-Типовой путь:
+Typical path:
 
 1. screen -> provider
 2. provider -> repository
@@ -107,7 +105,7 @@
 
 ### 6.3 Progress
 
-`ProgressProvider` - центральная точка для:
+ProgressProvider is the central point for:
 
 - streak
 - attempts
@@ -117,24 +115,24 @@
 - sync state
 - next milestone helpers
 
-Per-word progress хранится через `WordProgressRecord`, а не только через простые counters.
+Per-word progress is stored with WordProgressRecord instead of simple aggregate counters.
 
 ### 6.4 Learning cycle
 
-Flashcards, quiz и sentence builder обновляют progress через `recordWordAttempt`.
+Flashcards, quiz, and sentence builder update progress through recordWordAttempt.
 
-Сейчас это обеспечивает:
+This currently provides:
 
 - unified attempt tracking
-- review due calculation
+- review-due calculation
 - mastery progression foundation
 - session analytics events
 
 ### 6.5 Sync
 
-Remote sync сейчас строится вокруг `ProgressProvider` и `FirebaseService`.
+Remote sync is currently centered around ProgressProvider and FirebaseService.
 
-Текущие состояния:
+Current sync states:
 
 - local only
 - pending
@@ -142,57 +140,57 @@ Remote sync сейчас строится вокруг `ProgressProvider` и `Fi
 - synced
 - failed
 
-Важно:
-sync foundation есть, но полноценная conflict resolution и queue backed by local DB еще не завершены.
+Important note:
+Sync foundation is in place, but full conflict resolution and a queue backed by a local database are not complete yet.
 
-## 7. Offline-first foundation
+## 7. Offline-first Foundation
 
-Текущее offline-решение состоит из двух слоев:
+Current offline behavior is implemented with two layers:
 
-1. `LocalStorageService`
-   хранение lightweight state и serialized payloads
+1. LocalStorageService
+   stores lightweight state and serialized payloads
 
-2. `OfflineCatalogCacheService`
-   кэширует:
+2. OfflineCatalogCacheService
+   caches:
    - categories
    - words by category
    - sentences by category
    - quiz questions by category and direction
 
-Это уже делает приложение заметно устойчивее без сети, но это еще не "full offline-first architecture" в смысле локальной БД и полноценной sync queue.
+This already improves resiliency without network access, but it is not yet a full offline-first architecture with local DB + durable sync queue.
 
 ## 8. Analytics
 
-В проекте есть локальный analytics layer:
+The project includes a local analytics layer:
 
-- `AnalyticsService`
-- `LocalAnalyticsService`
+- AnalyticsService
+- LocalAnalyticsService
 
-Сейчас логируются ключевые учебные события:
+Tracked learning events include:
 
 - flashcards started / completed
 - quiz started / completed
 - sentence builder started / completed
 
-Пока это локальное наблюдение и debugging/quality layer. Отправка в remote analytics еще не подключена.
+At this stage analytics are local for quality/debug visibility; remote analytics export is not connected.
 
-## 9. Текущие архитектурные плюсы
+## 9. Current Architecture Strengths
 
-- feature-first структура понятна и масштабируема
-- providers и repositories уже разведены достаточно чисто
-- UX-изменения последних этапов внедрялись без полного архитектурного слома
-- offline и analytics foundation уже встроены в app-level graph
+- Feature-first structure is clear and scalable.
+- Providers and repositories are separated with reasonable boundaries.
+- Recent UX changes were integrated without major architectural breakage.
+- Offline and analytics foundations are already part of the app-level dependency graph.
 
-## 10. Текущие ограничения
+## 10. Current Limitations
 
-- нет полноценной local DB
-- FirebaseService все еще слишком крупный и многофункциональный
-- часть sync-сценариев требует дальнейшего hardening
-- integration-test layer пока не покрывает end-to-end learning cycle
+- No full local database.
+- FirebaseService is still too broad in responsibility.
+- Some sync scenarios still need hardening.
+- Integration test coverage does not yet include a full end-to-end learning cycle.
 
-## 11. Следующий архитектурный приоритет
+## 11. Next Architecture Priorities
 
-1. local DB for content and sync queue
-2. safer guest/cloud merge strategy
-3. smaller service boundaries around Firebase-related responsibilities
-4. integration-test coverage for full learning flow
+1. Add local DB support for content and sync queue.
+2. Implement safer guest/cloud merge strategy.
+3. Split Firebase responsibilities into smaller services.
+4. Add integration test coverage for the full learning flow.

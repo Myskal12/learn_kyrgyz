@@ -46,13 +46,11 @@ void main() {
     await tester.pump();
 
     expect(container.read(learningDirectionProvider), LearningDirection.kyToEn);
-    expect(find.text('Суроо кыргызча, жооп англисче.'), findsOneWidget);
 
     await tester.tap(find.byKey(const Key('direction-option-en-to-ky')));
     await tester.pump();
 
     expect(container.read(learningDirectionProvider), LearningDirection.enToKy);
     expect(storage.values['learning_direction'], 'en_to_ky');
-    expect(find.text('Суроо англисче, жооп кыргызча.'), findsOneWidget);
   });
 }

@@ -1,38 +1,36 @@
 # User Guide
 
-Обновлено: 2026-04-01
+## 1. App Purpose
 
-## 1. Для чего приложение
+Learn Kyrgyz helps users practice Kyrgyz daily through short study sessions:
 
-Learn Kyrgyz помогает ежедневно практиковать кыргызский язык через короткие учебные сессии:
-
-- карточки
-- квизы
+- flashcards
+- quizzes
 - sentence builder
-- дорожку категорий
-- повторение сложных слов
+- category-based learning path
+- review of difficult words
 
-## 2. С чего начать
+## 2. Getting Started
 
-1. Откройте приложение.
-2. Пройдите welcome flow.
-3. Выберите дневную цель.
-4. Продолжите как гость или войдите в аккаунт.
-5. На Home нажмите основной CTA и начните занятие.
+1. Open the app.
+2. Complete the welcome flow.
+3. Choose your daily goal.
+4. Continue as a guest or sign in.
+5. On Home, tap the main CTA to begin a session.
 
-## 3. Основные экраны
+## 3. Main Screens
 
 ### Home
 
-Показывает лучший следующий шаг:
+Shows the best next action:
 
-- продолжить прошлое занятие
-- повторить review due слова
-- выполнить дневную цель
+- continue last session
+- review due words
+- complete daily goal
 
 ### Practice
 
-Экран выбора режима практики:
+Mode selection screen:
 
 - flashcards
 - quick quiz
@@ -40,61 +38,61 @@ Learn Kyrgyz помогает ежедневно практиковать кыр
 
 ### Categories
 
-Дорожка тем и уроков.
+Topic and lesson roadmap.
 
-Здесь можно:
+From here users can:
 
-- выбрать категорию
-- посмотреть прогресс по теме
-- перейти в урок или обзор урока
+- select a category
+- check category progress
+- open a lesson or lesson overview
 
 ### Progress
 
-Показывает:
+Shows:
 
 - streak
 - mastered words
 - weak words
 - review due
-- следующий milestone
-- состояние синхронизации
+- next milestone
+- sync state
 
 ### Profile / Settings
 
-Здесь находятся:
+Contains:
 
-- тема
-- дневная цель
-- направление обучения
-- состояние аккаунта и синка
+- theme
+- daily goal
+- learning direction
+- account and sync status
 
-## 4. Как проходит учебная сессия
+## 4. Typical Learning Session
 
-Обычный цикл выглядит так:
+A normal cycle is:
 
-1. изучение слов через flashcards
-2. проверка понимания через quiz
-3. закрепление через sentence builder
-4. возврат к ошибкам и словам на повторении
+1. learn or review with flashcards
+2. verify understanding with quiz
+3. reinforce with sentence builder
+4. return to mistakes and due-review words
 
-## 5. Направление обучения
+## 5. Learning Direction
 
-Направление обучения меняется в settings.
+Learning direction is controlled in Settings.
 
-Эта настройка влияет на задания, но не должна перегружать сами учебные экраны.
+This setting affects exercises but should not overload learning screens.
 
-## 6. Работа без интернета
+## 6. Offline Behavior
 
-Приложение частично поддерживает offline usage:
+The app supports partial offline usage:
 
-- локально сохраняются настройки и прогресс
-- контент может читаться из локального кеша
-- синхронизация выполняется позже, когда сеть снова доступна
+- settings and progress are saved locally
+- content can load from local cache
+- sync resumes later when network returns
 
-Если интернет недоступен, cloud-dependent функции могут быть ограничены.
+When internet is unavailable, cloud-dependent features may be limited.
 
-## 7. Что делать, если что-то пошло не так
+## 7. Troubleshooting
 
-- если контент не загрузился, проверьте сеть и попробуйте снова
-- если синхронизация не прошла, приложение сохранит локальные изменения и попробует повторить позже
-- если Google Sign-In не работает на Android, проверьте Firebase setup и SHA keys
+- If content does not load, check network and retry.
+- If sync fails, local changes are kept and retried later.
+- If Google Sign-In fails on Android, verify Firebase setup and SHA keys.

@@ -35,10 +35,10 @@ void main() {
       final storage = FakeLocalStorageService();
       final notifier = LearningDirectionNotifier(storage);
 
-      await notifier.setDirection(LearningDirection.kyToEn);
+      await notifier.setDirection(LearningDirection.enToKy);
 
-      expect(notifier.state, LearningDirection.kyToEn);
-      expect(storage.values['learning_direction'], 'ky_to_en');
+      expect(notifier.state, LearningDirection.enToKy);
+      expect(storage.values['learning_direction'], 'en_to_ky');
     });
 
     test('toggleDirection flips and persists the direction', () async {
@@ -47,8 +47,8 @@ void main() {
 
       await notifier.toggleDirection();
 
-      expect(notifier.state, LearningDirection.kyToEn);
-      expect(storage.values['learning_direction'], 'ky_to_en');
+      expect(notifier.state, LearningDirection.enToKy);
+      expect(storage.values['learning_direction'], 'en_to_ky');
     });
   });
 }

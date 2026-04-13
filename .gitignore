@@ -76,17 +76,6 @@ redmi_google_signin*.log
 # Node / tooling
 **/node_modules/
 
-# Internal documentation drafts
-documentation/ARCHITECTURE.md
-documentation/ENGINEERING_QUALITY.md
-documentation/PRODUCT_AND_UX.md
-documentation/PRODUCTION_CHECKLIST.md
-documentation/README.md
-documentation/RELEASE_EXECUTION_CHECKLIST.md
-documentation/STATIC_PARTS_IMPLEMENTATION_PLAN.md
-documentation/TEST_REPORT.md
-documentation/USER_GUIDE.md
-
 # Symbolication related
 app.*.symbols
 
